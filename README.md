@@ -52,3 +52,8 @@ Développer une application de bureau permettant à un élève de gérer et suiv
 | <img src="Images/Logos_Icones/PenpotLogo.svg" width="48"/> | **Penpot** | Outil de conception d’interfaces (UI/UX) utilisé pour la création des maquettes. | MPL 2.0 | https://penpot.app |
 | <img src="Images/Logos_Icones/JetBrainRider.svg" width="48"/> | **JetBrains Rider** | Environnement de développement (IDE) utilisé pour le développement et le débogage des applications .NET. | Propriétaire | https://www.jetbrains.com/rider/ |
 
+## Police d'écriture
+| Logo      | Nom       | Lien                                      | Utilité               | 
+| ---       | ---       | ---                                       | ---                   |
+| <img src="Images/Logos_Icones/Phosphor.svg" width="48"/> | Hevletica | https://font.download/font/helvetica-255  | Textes                |
+| <img src="Images/Logos_Icones/Helvetica.svg" width="48"/>       | Phosphor  | https://phosphoricons.com/                | Affichage des icones  |
