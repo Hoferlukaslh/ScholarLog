@@ -12,6 +12,8 @@
 # ScholarLog
 Logiciel GUI (mono-utilisateur) d'inscription de notes et de journal de travail
 
+Voir interface -> [README Interface](./Interface/README.md)
+
 ## Objectif
 Développer une application de bureau permettant à un élève de gérer et suivre ses résultats scolaires de manière locale et autonome.
 
