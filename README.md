@@ -55,5 +55,5 @@ Développer une application de bureau permettant à un élève de gérer et suiv
 ## Police d'écriture
 | Logo      | Nom       | Lien                                      | Utilité               | 
 | ---       | ---       | ---                                       | ---                   |
-| <img src="Images/Logos_Icones/Phosphor.svg" width="48"/> | Hevletica | https://font.download/font/helvetica-255  | Textes                |
-| <img src="Images/Logos_Icones/Helvetica.svg" width="48"/>       | Phosphor  | https://phosphoricons.com/                | Affichage des icones  |
+| <img src="Images/Logos_Icones/Helvetica.svg" width="48"/> | Hevletica | https://font.download/font/helvetica-255  | Textes                |
+| <img src="Images/Logos_Icones/Phosphor.svg" width="48"/>       | Phosphor  | https://phosphoricons.com/                | Affichage des icones  |
