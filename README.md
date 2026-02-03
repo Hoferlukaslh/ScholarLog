@@ -9,6 +9,7 @@
   <a href="https://www.debian.org/index.fr.html"><img src="Images/Logos_Icones/Badges/Debian.svg" height="25" alt="Debian" /></a>
   <a href="https://www.jetbrains.com/fr-fr/rider/"><img src="Images/Logos_Icones/Badges/jetbrains.svg" height="25" alt="JetBrains Rider" /></a>
   <a href="https://penpot.app/"><img src="Images/Logos_Icones/Badges/penpot.svg" height="25" alt="Penpot" /></a>
+  <a href="https://avaloniaui.net/"><img src="Images/Logos_Icones/Badges/AvaloniaUI.svg" height="25" alt="Avalonia UI/" /></a>
 </div>
 
 ## Table des matières
