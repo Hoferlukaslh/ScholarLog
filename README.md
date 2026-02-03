@@ -1,6 +1,7 @@
  <!-- Shields (badges) -->
 <div align="center">
   <!-- https://github.com/Ileriayo/markdown-badges - MIT License - 2020 Ileriayo Adebiyi -->
+  <a href="https://www.gnu.org/licenses/gpl-3.0.html"><img src="Images/Logos_Icones/Badges/License-GPLv3.svg" height="25" alt="GPLv3" /></a>
   <a href="https://learn.microsoft.com/fr-fr/dotnet/csharp/"><img src="Images/Logos_Icones/Badges/cs.svg" height="25" alt="C#" /></a>
   <a href="https://dotnet.microsoft.com/fr-fr/"><img src="Images/Logos_Icones/Badges/DotNET.svg" height="25" alt=".NET" /></a>
   <a href="https://avaloniaui.net/"><img src="Images/Logos_Icones/Badges/AvaloniaUI.svg" height="25" alt="Avalonia UI/" /></a>
