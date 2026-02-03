@@ -1,5 +1,5 @@
-ScholarLog
-Copyright (C) 2026 - Lukas Hofer
+ScholarLog    
+Copyright (C) 2026 Lukas Hofer
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 -------------------------------------------------------------------------
 
-  GNU GENERAL PUBLIC LICENSE
+
+GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>

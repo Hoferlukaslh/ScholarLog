@@ -1,3 +1,14 @@
+<div align="center">
+  <img src="Images/Logos_Icones/Badges/cs.svg" height="25" alt="C#" />
+  <img src="Images/Logos_Icones/Badges/DotNET.svg" height="25" alt=".NET" />
+  <img src="Images/Logos_Icones/Badges/sqlite.svg" height="25" alt="SQLite" />
+  <img src="Images/Logos_Icones/Badges/Windows.svg" height="25" alt="Windows" />
+  <img src="Images/Logos_Icones/Badges/macOS.svg" height="25" alt="macOS" />
+  <img src="Images/Logos_Icones/Badges/Debian.svg" height="25" alt="Debian" />
+  <img src="Images/Logos_Icones/Badges/jetbrains.svg" height="25" alt="JetBrains" />
+  <img src="Images/Logos_Icones/Badges/penpot.svg" height="25" alt="Penpot" />
+  <img src="Images/Logos_Icones/Badges/LibreOffice.svg" height="25" alt="LibreOffice" />
+</div>
 
 ## Table des matières
 
