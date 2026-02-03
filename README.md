@@ -27,7 +27,8 @@
 # ScholarLog
 Logiciel GUI (mono-utilisateur) d'inscription de notes et de journal de travail
 
-Voir interface -> [README Interface](./Interface)
+Voir interface -> [README Interface](./Interface)     
+Lien vers maquette interractif -> [Penpot/Maquette](https://penpot.kreativcam.ch/#/view?file-id=255dee3d-9464-811c-8007-7cee81528364&page-id=255dee3d-9464-811c-8007-7cee81528365&section=interactions&index=0&share-id=6f19317a-c44f-8084-8007-84b8385845b2) 
 
 ## Objectif
 Développer une application de bureau permettant à un élève de gérer et suivre ses résultats scolaires de manière locale et autonome.
