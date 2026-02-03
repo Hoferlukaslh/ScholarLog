@@ -1,0 +1,5 @@
+# Fichier mega ignore pour éviter la synchronisation des fichiers inutiles
+# Dossiers de build (Exclure récursivement) ---
+-d:bin
+-d:.git
++sync:.megaignore
