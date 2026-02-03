@@ -3,13 +3,12 @@
   <!-- https://github.com/Ileriayo/markdown-badges - MIT License - 2020 Ileriayo Adebiyi -->
   <a href="https://learn.microsoft.com/fr-fr/dotnet/csharp/"><img src="Images/Logos_Icones/Badges/cs.svg" height="25" alt="C#" /></a>
   <a href="https://dotnet.microsoft.com/fr-fr/"><img src="Images/Logos_Icones/Badges/DotNET.svg" height="25" alt=".NET" /></a>
+  <a href="https://avaloniaui.net/"><img src="Images/Logos_Icones/Badges/AvaloniaUI.svg" height="25" alt="Avalonia UI/" /></a>
   <a href="https://www.sqlite.org/index.html"><img src="Images/Logos_Icones/Badges/sqlite.svg" height="25" alt="SQLite" /></a>
   <a href="https://www.microsoft.com/fr-ch/windows/"><img src="Images/Logos_Icones/Badges/Windows.svg" height="25" alt="Windows" /></a>
   <a href="https://www.apple.com/chfr/macos/"><img src="Images/Logos_Icones/Badges/macOS.svg" height="25" alt="macOS" /></a>
   <a href="https://www.debian.org/index.fr.html"><img src="Images/Logos_Icones/Badges/Debian.svg" height="25" alt="Debian" /></a>
-  <a href="https://www.jetbrains.com/fr-fr/rider/"><img src="Images/Logos_Icones/Badges/jetbrains.svg" height="25" alt="JetBrains Rider" /></a>
   <a href="https://penpot.app/"><img src="Images/Logos_Icones/Badges/penpot.svg" height="25" alt="Penpot" /></a>
-  <a href="https://avaloniaui.net/"><img src="Images/Logos_Icones/Badges/AvaloniaUI.svg" height="25" alt="Avalonia UI/" /></a>
 </div>
 
 ## Table des matières
