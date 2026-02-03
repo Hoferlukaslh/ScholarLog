@@ -1,12 +1,14 @@
 
-  ## Table des matières
+## Table des matières
 
 - [ScholarLog](#scholarlog)
 - [Objectif](#objectif)
 - [Technologies](#technologies)
 - [Utilisateurs cibles](#utilisateurs-cibles)
 - [Fonctionnalités principales](#fonctionnalités-principales)
-- [Ressources utilisés](#Ressources utilisés)
+- [Ressources utilisés](#ressources-utilisés)
+  - [Logiciels](#logiciels)
+  - [Police d'écriture](#police-décriture)
 
 
 # ScholarLog
