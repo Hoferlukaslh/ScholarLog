@@ -1,0 +1,59 @@
+cff-version: 1.2.0
+message: "Si vous utilisez ce logiciel, merci de le citer comme suit."
+title: "ScholarLog"
+abstract: "ScholarLog - Logiciel de gestion de notes et de journal de travail."
+authors: 
+  - family-names: "Hofer"
+    given-names: "Lukas"
+    # lukas.hofer.ju@gmail.com
+    alias: "LHO"
+version: 1.0.0
+date-released: 2026-06-11
+repository-code: "https://github.com/Hoferlukaslh/ScholarLog"
+license: GPL-3.0-only
+type: software
+
+references:
+  # --- Logiciels ---
+  - type: software
+    title: "LazyGit"
+    abstract: "Interface graphique en terminal pour la gestion des dépôts Git."
+    repository-code: "https://github.com/jesseduffield/lazygit"
+    license: MIT
+
+  - type: software
+    title: "OnlyOffice"
+    abstract: "Suite bureautique utilisée pour la rédaction et l’édition des documents."
+    url: "https://www.onlyoffice.com"
+    license: AGPL-3.0-only
+
+  - type: software
+    title: "Penpot"
+    abstract: "Outil de conception d’interfaces (UI/UX)."
+    url: "https://penpot.app"
+    license: MPL-2.0
+
+  - type: software
+    title: "draw.io"
+    abstract: "Outil de conception de diagrammes UML."
+    repository-code: "https://github.com/jgraph/drawio"
+    url: "https://www.drawio.com"
+    license: Apache-2.0
+
+  - type: software
+    title: "JetBrains Rider"
+    abstract: "IDE pour le développement .NET."
+    url: "https://www.jetbrains.com/rider/"
+    # license : Propriétaire
+
+  # --- Polices et Icones ---
+  - type: generic
+    title: "Helvetica"
+    abstract: "Police d'écriture utilisée pour les textes."
+    url: "https://font.download/font/helvetica-255"
+
+  - type: generic
+    title: "Phosphor Icons"
+    abstract: "Librairie utilisée pour l'affichage des icônes."
+    url: "https://phosphoricons.com/"
+    license: MIT
