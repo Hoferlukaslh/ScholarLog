@@ -41,6 +41,15 @@ references:
     license: Apache-2.0
 
   - type: software
+    title: "Looping"
+    abstract: "Logiciel de modélisation conceptuelle de données (MCD)."
+    authors:
+      - family-names: "Bergougnoux"
+        given-names: "Patrick"
+    url: "https://www.looping-mcd.fr/"
+    # license: Freeware
+
+  - type: software
     title: "JetBrains Rider"
     abstract: "IDE pour le développement .NET."
     url: "https://www.jetbrains.com/rider/"
