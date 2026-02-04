@@ -13,6 +13,9 @@
 # DrawIo
 *.bkp
 
+# Looping 
+*.lo1
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
