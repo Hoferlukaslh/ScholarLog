@@ -10,6 +10,9 @@
 .idea/
 *.sln.iml
 
+# DrawIo
+*.bkp
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

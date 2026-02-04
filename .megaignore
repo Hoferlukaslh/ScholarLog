@@ -2,4 +2,5 @@
 # Dossiers de build (Exclure récursivement) ---
 -d:bin
 -d:.git
+-d:.bkp
 +sync:.megaignore
