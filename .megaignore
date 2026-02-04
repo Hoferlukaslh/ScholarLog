@@ -1,6 +1,19 @@
 # Fichier mega ignore pour éviter la synchronisation des fichiers inutiles
-# Dossiers de build (Exclure récursivement) ---
--d:bin
 -d:.git
 -d:.bkp
+
+# Synchroniser le fichier ignore
 +sync:.megaignore
+
+# Résultat de compilation
+-d:bin
+-d:Debug
+-d:Release
+-d:Releases
+-d:obj
+
+# DrawIo
+-f:.bkp
+
+# Looping 
+-f:.lo1
