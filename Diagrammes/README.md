@@ -5,3 +5,6 @@
 
 ## MCD
 ![MCD SGBD](../Images/Diagrammes/MCD.avif)
+
+## Classes
+![MCD SGBD](../Images/Diagrammes/Classes.svg)
