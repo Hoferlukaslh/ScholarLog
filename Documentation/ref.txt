@@ -1,0 +1,2 @@
+SQLite ACID :
+https://www.tencentcloud.com/techpedia/102680

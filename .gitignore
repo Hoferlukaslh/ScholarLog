@@ -20,6 +20,7 @@
 
 # OnlyOffice
 *.xlsx#
+*.docx#
 
 # Build results
 [Dd]ebug/
