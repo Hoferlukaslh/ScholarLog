@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6" pages="3">
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6" pages="4">
   <diagram name="Cas d&#39;Utilisation" id="cKXuMtjNqiQMvHMKVA9j">
     <mxGraphModel dx="1181" dy="1294" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
@@ -156,8 +156,8 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="oSkqWg4yYeoGEqKcMiun" name="Classe">
-    <mxGraphModel dx="2066" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <diagram id="oSkqWg4yYeoGEqKcMiun" name="Classe manipulation de données">
+    <mxGraphModel dx="1425" dy="828" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -205,7 +205,7 @@
         </mxCell>
         <mxCell id="GEDjzR1hgh04v-O5zpm0-69" connectable="0" parent="GEDjzR1hgh04v-O5zpm0-31" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="contient" vertex="1">
           <mxGeometry relative="1" x="-0.2552" y="3" as="geometry">
-            <mxPoint x="-22" as="offset" />
+            <mxPoint x="-27" y="-25" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="GEDjzR1hgh04v-O5zpm0-61" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-weight: 400; text-align: left;&quot;&gt;TypeTravail&lt;/span&gt;" vertex="1">
@@ -252,7 +252,7 @@
         </mxCell>
         <mxCell id="s22zIbrwkCM682lCoDNX-21" connectable="0" parent="s22zIbrwkCM682lCoDNX-18" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="contient" vertex="1">
           <mxGeometry relative="1" x="-0.2552" y="3" as="geometry">
-            <mxPoint x="24" y="10" as="offset" />
+            <mxPoint x="169" y="20" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="s22zIbrwkCM682lCoDNX-22" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Note" vertex="1">
@@ -287,7 +287,7 @@
         </mxCell>
         <mxCell id="s22zIbrwkCM682lCoDNX-29" connectable="0" parent="s22zIbrwkCM682lCoDNX-26" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="contient" vertex="1">
           <mxGeometry relative="1" x="-0.2552" y="3" as="geometry">
-            <mxPoint x="-27" y="-10" as="offset" />
+            <mxPoint x="-27" y="-61" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="3ySS8n0W1FN-y5sHeEdy-1" edge="1" parent="1" source="GEDjzR1hgh04v-O5zpm0-62" style="endArrow=openThin;dashed=1;html=1;rounded=0;exitX=1.001;exitY=0.99;exitDx=0;exitDy=0;entryX=-0.001;entryY=0.419;entryDx=0;entryDy=0;entryPerimeter=0;dashPattern=8 8;exitPerimeter=0;endFill=0;" target="GEDjzR1hgh04v-O5zpm0-28" value="">
@@ -297,8 +297,16 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="3ySS8n0W1FN-y5sHeEdy-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="utilise" vertex="1">
-          <mxGeometry height="19" width="60" x="730" y="550" as="geometry" />
+          <mxGeometry height="19" width="60" x="750" y="550" as="geometry" />
         </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="7KhRWZZHphgESJj8-qel" name="Classe acces aux données">
+    <mxGraphModel dx="2066" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
       </root>
     </mxGraphModel>
   </diagram>
