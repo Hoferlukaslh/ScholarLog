@@ -19,3 +19,12 @@ Au clique sur un module, les moyennes des branches et le journal de travail lié
 | Accueil - Ouverture de l'application                              | Accueil - Clique sur module                                                       |
 | ---                                                               | ---                                                                               |
 | ![Accueil - Base](../Images/Interface/Accueil/AccueilBase.avif)   | ![Accueil - Clique sur module](../Images/Interface/Accueil/AccueilDetaillé.avif)  |
+
+
+## Note
+Le menu Notes permet à l'utilisateur de gérer l'ensemble de ses résultats scolaires en assurant la saisie, la modification et la suppression des notes.
+
+
+| Note - Accueil                                                    | Note - Clique ajouter/modifier note                                               |
+| ---                                                               | ---                                                                               |
+| ![Note - Accueil](../Images/Interface/Note/NoteBase.avif)         | ![Note - Clique ajouter/modifier note ](../Images/Interface/Note/NoteAddEdit.avif)|
