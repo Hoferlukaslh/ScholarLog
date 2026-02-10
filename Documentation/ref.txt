@@ -1,2 +1,5 @@
 SQLite ACID :
 https://www.tencentcloud.com/techpedia/102680
+
+The Seven Phases of the Software Development Life Cycle :
+https://www.harness.io/blog/software-development-life-cycle-phases
