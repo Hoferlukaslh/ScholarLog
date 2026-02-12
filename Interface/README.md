@@ -34,9 +34,9 @@ Le menu Journal permet à l'utilisateur de gérer le suivit du module/travail en
 L'utilisateur peut également éditer les catégories d'entrées. L'exportation est également compris dans ce menu
 
 
-| Note - Accueil                                                                    | Note - Clique ajouter/modifier note                                               |
-| ---                                                                               | ---                                                                               |
-| ![Note - Accueil](../Images/Interface/Journal/JournalBase.webp)                   | ![Note - Clique modules](../Images/Interface/Journal/JournalModules.webp)         |
-| ![Note - Édition entrée](../Images/Interface/Journal/JournalEditEntree.webp)      | ![Note - Édition catégorie](../Images/Interface/Journal/JournalEditCat.webp)      |
-| ![Note - Export MD](../Images/Interface/Journal/JournalExportMD.webp)             | ![Note - Export CSV](../Images/Interface/Journal/JournalExportCSV.webp)           |
-| ![Note - Export JSON](../Images/Interface/Journal/JournalExportJSON.webp)         |                                                                                   |
+|                                                                                         |                                                                    |
+| ---                                                                                                   | ---                                                                                                   |
+| Accueil<br>![Note - Accueil](../Images/Interface/Journal/JournalBase.webp)                        | Clique modules<br>![Note - Clique modules](../Images/Interface/Journal/JournalModules.webp)       |
+| Édition entrée<br>![Note - Édition entrée](../Images/Interface/Journal/JournalEditEntree.webp)    | Édition catégorie<br>![Note - Édition catégorie](../Images/Interface/Journal/JournalEditCat.webp) |
+| Export MD<br>![Note - Export MD](../Images/Interface/Journal/JournalExportMD.webp)                | Export CSV<br>![Note - Export CSV](../Images/Interface/Journal/JournalExportCSV.webp)             |
+| Export JSON<br>![Note - Export JSON](../Images/Interface/Journal/JournalExportJSON.webp)          |                                                                                                       |
