@@ -18,7 +18,7 @@ Au clique sur un module, les moyennes des branches et le journal de travail lié
 
 | Accueil - Ouverture de l'application                              | Accueil - Clique sur module                                                       |
 | ---                                                               | ---                                                                               |
-| ![Accueil - Base](../Images/Interface/Accueil/AccueilBase.avif)   | ![Accueil - Clique sur module](../Images/Interface/Accueil/AccueilDetaillé.avif)  |
+| ![Accueil - Base](../Images/Interface/Accueil/AccueilBase.webp)   | ![Accueil - Clique sur module](../Images/Interface/Accueil/AccueilDetaillé.webp)  |
 
 
 ## Note
@@ -27,4 +27,16 @@ Le menu Notes permet à l'utilisateur de gérer l'ensemble de ses résultats sco
 
 | Note - Accueil                                                    | Note - Clique ajouter/modifier note                                               |
 | ---                                                               | ---                                                                               |
-| ![Note - Accueil](../Images/Interface/Note/NoteBase.avif)         | ![Note - Clique ajouter/modifier note ](../Images/Interface/Note/NoteAddEdit.avif)|
+| ![Note - Accueil](../Images/Interface/Note/NoteBase.webp)         | ![Note - Clique ajouter/modifier note ](../Images/Interface/Note/NoteAddEdit.webp)|
+
+## Journal
+Le menu Journal permet à l'utilisateur de gérer le suivit du module/travail en assurant la saisie, la modification et la suppression des notes. 
+L'utilisateur peut également éditer les catégories d'entrées. L'exportation est également compris dans ce menu
+
+
+| Note - Accueil                                                                    | Note - Clique ajouter/modifier note                                               |
+| ---                                                                               | ---                                                                               |
+| ![Note - Accueil](../Images/Interface/Journal/JournalBase.webp)                   | ![Note - Clique modules](../Images/Interface/Journal/JournalModules.webp)         |
+| ![Note - Édition entrée](../Images/Interface/Journal/JournalEditEntree.webp)      | ![Note - Édition catégorie](../Images/Interface/Journal/JournalEditCat.webp)      |
+| ![Note - Export MD](../Images/Interface/Journal/JournalExportMD.webp)             | ![Note - Export CSV](../Images/Interface/Journal/JournalExportCSV.webp)           |
+| ![Note - Export JSON](../Images/Interface/Journal/JournalExportJSON.webp)         |                                                                                   |
