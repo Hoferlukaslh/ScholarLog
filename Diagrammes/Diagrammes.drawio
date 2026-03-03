@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6" pages="3">
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.5.2 Chrome/142.0.7444.265 Electron/39.6.1 Safari/537.36" version="29.5.2" pages="3">
   <diagram name="Cas d&#39;Utilisation" id="cKXuMtjNqiQMvHMKVA9j">
     <mxGraphModel dx="1181" dy="1294" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
@@ -157,26 +157,26 @@
     </mxGraphModel>
   </diagram>
   <diagram id="oSkqWg4yYeoGEqKcMiun" name="Models Classes">
-    <mxGraphModel dx="1732" dy="1011" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1181" dy="686" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="GEDjzR1hgh04v-O5zpm0-19" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Module" vertex="1">
-          <mxGeometry height="240" width="240" x="800" y="171" as="geometry">
+          <mxGeometry height="270" width="260" x="790" y="171" as="geometry">
             <mxRectangle height="30" width="100" x="260" y="220" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="GEDjzR1hgh04v-O5zpm0-20" parent="GEDjzR1hgh04v-O5zpm0-19" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- id : uint&lt;div&gt;&lt;div&gt;&lt;div&gt;- entrées : List &amp;lt;Entrée&amp;gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;- branches : List &amp;lt;Branche&amp;gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="84" width="240" y="26" as="geometry" />
+        <mxCell id="GEDjzR1hgh04v-O5zpm0-20" parent="GEDjzR1hgh04v-O5zpm0-19" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- id : uint&lt;div&gt;&lt;div&gt;&lt;div&gt;- entrées : List &amp;lt;Entrée&amp;gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;- branches : List &amp;lt;Branche&amp;gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(12, 13, 14); font-size: 13px;&quot;&gt;-&lt;/span&gt;&lt;span style=&quot;color: rgb(12, 13, 14); font-size: 13px;&quot;&gt; TypesTravail : List&amp;lt;TypeTravail&amp;gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="84" width="260" y="26" as="geometry" />
         </mxCell>
         <mxCell id="GEDjzR1hgh04v-O5zpm0-21" parent="GEDjzR1hgh04v-O5zpm0-19" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
-          <mxGeometry height="8" width="240" y="110" as="geometry" />
+          <mxGeometry height="8" width="260" y="110" as="geometry" />
         </mxCell>
-        <mxCell id="GEDjzR1hgh04v-O5zpm0-22" parent="GEDjzR1hgh04v-O5zpm0-19" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ AjouterEntrée(Entrée) : void&lt;/div&gt;&lt;div&gt;+&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;&amp;nbsp;RetirerEntrée(Entrée) : void&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ ModifierEntrée(Entrée) : void&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ CalculerTotalHeures() : float&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ CalculerTotalHeures(TypeTravail) : float&lt;/div&gt;&lt;div&gt;+ CalculerMoyenne() : float&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="122" width="240" y="118" as="geometry" />
+        <mxCell id="GEDjzR1hgh04v-O5zpm0-22" parent="GEDjzR1hgh04v-O5zpm0-19" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ AjouterEntrée(Entrée) : void&lt;/div&gt;&lt;div&gt;+&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;&amp;nbsp;RetirerEntrée(Entrée) : void&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ ModifierEntrée(Entrée) : void&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ CalculerTotalHeures() : float&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ CalculerTotalHeures(TypeTravail) : float&lt;/div&gt;&lt;div&gt;+ CalculerMoyenne() : float&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+ GetTypesTravail() :&amp;nbsp;&lt;span style=&quot;color: rgb(12, 13, 14); font-size: 13px;&quot;&gt;List&amp;lt;TypeTravail&amp;gt;&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;+ AjouterTypesTravail() :&amp;nbsp;&lt;/span&gt;&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;List&amp;lt;TypeTravail&amp;gt;&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;+ RetirerTypeTravail(TypeTravail) : void&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="152" width="260" y="118" as="geometry" />
         </mxCell>
         <mxCell id="GEDjzR1hgh04v-O5zpm0-27" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-weight: 400; text-align: left;&quot;&gt;Entrée&lt;/span&gt;" vertex="1">
-          <mxGeometry height="136" width="230" x="805" y="480" as="geometry" />
+          <mxGeometry height="136" width="230" x="805" y="520.43" as="geometry" />
         </mxCell>
         <mxCell id="GEDjzR1hgh04v-O5zpm0-28" parent="GEDjzR1hgh04v-O5zpm0-27" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- id : uint {&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;div&gt;- Date : DateTime&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;{&lt;/span&gt;&lt;font color=&quot;#0c0d0e&quot; style=&quot;background-color: transparent;&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;- Durée : float {&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;br&gt;- Type : TypeTravail&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;{&lt;/span&gt;&lt;font color=&quot;#0c0d0e&quot; style=&quot;background-color: transparent;&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;- Description : string&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;{&lt;/span&gt;&lt;font color=&quot;#0c0d0e&quot; style=&quot;background-color: transparent;&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="94" width="230" y="26" as="geometry" />
@@ -189,6 +189,10 @@
         </mxCell>
         <mxCell id="GEDjzR1hgh04v-O5zpm0-31" edge="1" parent="1" source="GEDjzR1hgh04v-O5zpm0-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1.007;entryDx=0;entryDy=0;endArrow=diamond;endFill=1;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="GEDjzR1hgh04v-O5zpm0-22">
           <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="920" y="450" />
+              <mxPoint x="920" y="450" />
+            </Array>
             <mxPoint x="647.85" y="231" as="sourcePoint" />
             <mxPoint x="557.85" y="231" as="targetPoint" />
           </mxGeometry>
@@ -209,16 +213,13 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="GEDjzR1hgh04v-O5zpm0-61" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-weight: 400; text-align: left;&quot;&gt;TypeTravail&lt;/span&gt;" vertex="1">
-          <mxGeometry height="160" width="260" x="460" y="456" as="geometry" />
+          <mxGeometry height="140" width="260" x="470" y="520.43" as="geometry" />
         </mxCell>
-        <mxCell id="GEDjzR1hgh04v-O5zpm0-62" parent="GEDjzR1hgh04v-O5zpm0-61" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- id : uint {&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;br&gt;- Nom : string {&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;div&gt;&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;&lt;u&gt;- TypesTravail : List&amp;lt;TypeTravail&amp;gt;&lt;/u&gt;&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;div&gt;&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="64" width="260" y="26" as="geometry" />
+        <mxCell id="GEDjzR1hgh04v-O5zpm0-62" parent="GEDjzR1hgh04v-O5zpm0-61" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- id : uint {&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;br&gt;- Nom : string {&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;div&gt;&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;div&gt;&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="94" width="260" y="26" as="geometry" />
         </mxCell>
         <mxCell id="GEDjzR1hgh04v-O5zpm0-63" parent="GEDjzR1hgh04v-O5zpm0-61" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
-          <mxGeometry height="8" width="260" y="90" as="geometry" />
-        </mxCell>
-        <mxCell id="GEDjzR1hgh04v-O5zpm0-64" parent="GEDjzR1hgh04v-O5zpm0-61" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ GetTypesTravail() :&amp;nbsp;&lt;font&gt;&lt;span style=&quot;color: rgb(12, 13, 14); font-size: 13px;&quot;&gt;List&amp;lt;TypeTravail&amp;gt;&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;+ AjouterTypesTravail() :&amp;nbsp;&lt;/span&gt;&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;List&amp;lt;TypeTravail&amp;gt;&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;+ RetirerTypeTravail(TypeTravail) : void&lt;/span&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="62" width="260" y="98" as="geometry" />
+          <mxGeometry height="20" width="260" y="120" as="geometry" />
         </mxCell>
         <mxCell id="s22zIbrwkCM682lCoDNX-14" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Branche" vertex="1">
           <mxGeometry height="110" width="240" x="180" y="171" as="geometry">
@@ -252,22 +253,22 @@
         </mxCell>
         <mxCell id="s22zIbrwkCM682lCoDNX-21" connectable="0" parent="s22zIbrwkCM682lCoDNX-18" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="contient" vertex="1">
           <mxGeometry relative="1" x="-0.2552" y="3" as="geometry">
-            <mxPoint x="169" y="20" as="offset" />
+            <mxPoint x="159" y="10" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="s22zIbrwkCM682lCoDNX-22" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Note" vertex="1">
-          <mxGeometry height="160" width="240" x="170" y="456" as="geometry">
+          <mxGeometry height="140" width="240" x="170" y="520.43" as="geometry">
             <mxRectangle height="30" width="100" x="260" y="220" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
         <mxCell id="s22zIbrwkCM682lCoDNX-23" parent="s22zIbrwkCM682lCoDNX-22" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- id : uint&amp;nbsp;&amp;nbsp;{&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;- date : DateTime&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;{&lt;/span&gt;&lt;font color=&quot;#0c0d0e&quot; style=&quot;background-color: transparent;&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;- description : string&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;{&lt;/span&gt;&lt;font color=&quot;#0c0d0e&quot; style=&quot;background-color: transparent;&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;- valeur : float&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;{&lt;/span&gt;&lt;font color=&quot;#0c0d0e&quot; style=&quot;background-color: transparent;&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;get}&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="114" width="240" y="26" as="geometry" />
+          <mxGeometry height="94" width="240" y="26" as="geometry" />
         </mxCell>
         <mxCell id="s22zIbrwkCM682lCoDNX-24" parent="s22zIbrwkCM682lCoDNX-22" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
-          <mxGeometry height="8" width="240" y="140" as="geometry" />
+          <mxGeometry height="8" width="240" y="120" as="geometry" />
         </mxCell>
         <mxCell id="s22zIbrwkCM682lCoDNX-25" parent="s22zIbrwkCM682lCoDNX-22" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="12" width="240" y="148" as="geometry" />
+          <mxGeometry height="12" width="240" y="128" as="geometry" />
         </mxCell>
         <mxCell id="s22zIbrwkCM682lCoDNX-26" edge="1" parent="1" source="s22zIbrwkCM682lCoDNX-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.456;entryY=1.006;entryDx=0;entryDy=0;endArrow=diamond;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryPerimeter=0;" target="s22zIbrwkCM682lCoDNX-17">
           <mxGeometry relative="1" as="geometry">
@@ -290,20 +291,32 @@
             <mxPoint x="-27" y="-61" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="3ySS8n0W1FN-y5sHeEdy-1" edge="1" parent="1" source="GEDjzR1hgh04v-O5zpm0-62" style="endArrow=openThin;dashed=1;html=1;rounded=0;exitX=1.001;exitY=0.99;exitDx=0;exitDy=0;entryX=-0.001;entryY=0.419;entryDx=0;entryDy=0;entryPerimeter=0;dashPattern=8 8;exitPerimeter=0;endFill=0;" target="GEDjzR1hgh04v-O5zpm0-28" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="710" y="770" as="sourcePoint" />
-            <mxPoint x="760" y="720" as="targetPoint" />
+        <mxCell id="XxqG2ozA-AWqUybl8J90-1" edge="1" parent="1" source="GEDjzR1hgh04v-O5zpm0-61" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=diamond;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=-0.002;entryY=0.309;entryDx=0;entryDy=0;entryPerimeter=0;" target="GEDjzR1hgh04v-O5zpm0-22">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="230" as="sourcePoint" />
+            <mxPoint x="941" y="230" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="3ySS8n0W1FN-y5sHeEdy-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="utilise" vertex="1">
-          <mxGeometry height="19" width="60" x="750" y="550" as="geometry" />
+        <mxCell id="XxqG2ozA-AWqUybl8J90-2" connectable="0" parent="XxqG2ozA-AWqUybl8J90-1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.7664" y="1" as="geometry">
+            <mxPoint x="19" y="9" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XxqG2ozA-AWqUybl8J90-3" connectable="0" parent="XxqG2ozA-AWqUybl8J90-1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="*" vertex="1">
+          <mxGeometry relative="1" x="-0.3865" y="-1" as="geometry">
+            <mxPoint x="7" y="88" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XxqG2ozA-AWqUybl8J90-4" connectable="0" parent="XxqG2ozA-AWqUybl8J90-1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="contient" vertex="1">
+          <mxGeometry relative="1" x="-0.2552" y="3" as="geometry">
+            <mxPoint x="122" y="-37" as="offset" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="o-OGfWCJeUmZpapjotmO" name="MCD">
-    <mxGraphModel dx="2066" dy="373" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="2037" dy="373" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -677,7 +690,7 @@
         </mxCell>
         <mxCell id="zdlzHmlXfwnAcTGnTC1w-171" connectable="0" parent="zdlzHmlXfwnAcTGnTC1w-137" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;spacingLeft=6;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=none;" value="1, 1" vertex="1">
           <mxGeometry relative="1" x="-0.1054" y="-1" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint x="-4" y="-4" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="zdlzHmlXfwnAcTGnTC1w-138" edge="1" parent="1" source="zdlzHmlXfwnAcTGnTC1w-110" style="endArrow=none;html=1;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;exitX=1;exitY=0.82;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zdlzHmlXfwnAcTGnTC1w-132" value="">
@@ -746,8 +759,33 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="zdlzHmlXfwnAcTGnTC1w-179" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;" value="&lt;div&gt;CREATE TABLE type_travail(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;typ_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;typ_nom TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(typ_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;UNIQUE(typ_nom)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE module_groupe(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_nom TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(mod_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;UNIQUE(mod_nom)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE entree(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_duree NUMERIC(6,4)&amp;nbsp; &amp;nbsp;NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_description TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_date NUMERIC NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;typ_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(ent_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(mod_id) REFERENCES module_groupe(mod_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(typ_id) REFERENCES type_travail(typ_id)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE branche(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;bra_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;bra_nom TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(bra_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(mod_id) REFERENCES module_groupe(mod_id)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE note(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_date NUMERIC NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_description TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_valeur NUMERIC(2,1)&amp;nbsp; &amp;nbsp;NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;bra_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(not_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(bra_id) REFERENCES branche(bra_id)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="zdlzHmlXfwnAcTGnTC1w-179" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;" value="&lt;div&gt;&lt;div&gt;CREATE TABLE module_groupe(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_nom TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(mod_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;UNIQUE(mod_nom)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE type_travail(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;typ_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;typ_nom TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(typ_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;UNIQUE(typ_nom),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(mod_id) REFERENCES module_groupe(mod_id)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE branche(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;bra_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;bra_nom TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(bra_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(mod_id) REFERENCES module_groupe(mod_id)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE entree(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_duree NUMERIC(6,4)&amp;nbsp; &amp;nbsp;NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_description TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_date NUMERIC NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;typ_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(ent_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(mod_id) REFERENCES module_groupe(mod_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(typ_id) REFERENCES type_travail(typ_id)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE note(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_date NUMERIC NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_description TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_valeur NUMERIC(2,1)&amp;nbsp; &amp;nbsp;NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;bra_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(not_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(bra_id) REFERENCES branche(bra_id)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;汐&lt;/div&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="620" width="650" x="1210" y="970" as="geometry" />
+        </mxCell>
+        <mxCell id="GR0vL3mvjDImDe_Aq2cD-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;strokeColor=default;verticalAlign=middle;spacingLeft=6;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=none;" value="classer" vertex="1">
+          <mxGeometry height="40" width="100" x="540" y="1221" as="geometry" />
+        </mxCell>
+        <mxCell id="GR0vL3mvjDImDe_Aq2cD-2" edge="1" parent="1" source="GR0vL3mvjDImDe_Aq2cD-1" style="endArrow=none;html=1;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;entryX=0.529;entryY=0.969;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryPerimeter=0;exitPerimeter=0;" target="zdlzHmlXfwnAcTGnTC1w-91" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="584" y="1221" as="sourcePoint" />
+            <mxPoint x="584" y="1154" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GR0vL3mvjDImDe_Aq2cD-3" connectable="0" parent="GR0vL3mvjDImDe_Aq2cD-2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;spacingLeft=6;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=none;" value="0, n" vertex="1">
+          <mxGeometry relative="1" x="0.3895" y="2" as="geometry">
+            <mxPoint x="1" y="8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GR0vL3mvjDImDe_Aq2cD-6" edge="1" parent="1" source="zdlzHmlXfwnAcTGnTC1w-43" style="endArrow=none;html=1;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="GR0vL3mvjDImDe_Aq2cD-1" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="600" y="1370" as="sourcePoint" />
+            <mxPoint x="601" y="1290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GR0vL3mvjDImDe_Aq2cD-7" connectable="0" parent="GR0vL3mvjDImDe_Aq2cD-6" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=default;spacingLeft=6;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=none;" value="1, 1" vertex="1">
+          <mxGeometry relative="1" x="-0.1054" y="-1" as="geometry">
+            <mxPoint x="-6" as="offset" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>

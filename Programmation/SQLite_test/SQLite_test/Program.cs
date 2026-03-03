@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SQLite_test;
 
@@ -6,106 +8,92 @@ class Program
 {
     static void Main(string[] args)
     {
-        // 1. On instancie le repository unique
         var repo = new DataRepository();
 
-        // Création des modules
-        List<Module> modules = new List<Module>();
-        /*modules.Add(new Module { Nom = "M0 - Connaissances fondamentales" });
-        modules.Add(new Module { Nom = "M1 - Management" });
-        modules.Add(new Module { Nom = "M2 - Automatisation et robotique" });
-        modules.Add(new Module { Nom = "M3 - Informatique industrielle" });
-        modules.Add(new Module { Nom = "M4 - Réseaux et protocoles de communication" });
-        
-        foreach (Module module in modules)
+        Console.WriteLine(" DÉMARRAGE DES TESTS DE LA BASE DE DONNÉES ");
+
+        // initialisation des modules
+        var modules = repo.GetModules(); //
+        if (modules.Count == 0)
         {
-            repo.AjouterModule(module);
-            Console.WriteLine($"Module : {module.Nom} ajouté a la BDD");
+            Console.WriteLine("Création du module initial...");
+            repo.AjouterModule(new Module { Nom = "M0 - Connaissances fondamentales" }); //
+            modules = repo.GetModules(); // Actualisation pour récupérer l'ID généré
+        }
+
+        Module moduleCible = modules[0];
+        Console.WriteLine($"\n TRAVAIL SUR LE MODULE : {moduleCible.Nom} (ID: {moduleCible.Id}) ");
+
+        // ajout du type de travail sur les module cibles
+        Console.WriteLine("Ajout des types de travail (Théorie et Pratique)...");
+        TypeTravail typeTheorie = new TypeTravail { Nom = "Programmation", ModuleId = moduleCible.Id };
+        TypeTravail typePratique = new TypeTravail { Nom = "Documentation", ModuleId = moduleCible.Id };
+        
+        repo.AjouterTypeTravail(typeTheorie); //
+        repo.AjouterTypeTravail(typePratique); //
+
+        // Branches et notes
+        Console.WriteLine("Ajout d'une branche (Mathématiques) et de notes...");
+        Branche math = new Branche { Nom = "Mathématiques", ModuleId = moduleCible.Id };
+        repo.AjouterBranche(math); //
+
+        // Ajout de notes liées à l'ID de la branche fraîchement créée
+        repo.AjouterNote(new Note { Valeur = 4.5f, Description = "Test 1", Date = DateTime.Now, BrancheId = math.Id }); //
+        repo.AjouterNote(new Note { Valeur = 5.5f, Description = "Test 2", Date = DateTime.Now, BrancheId = math.Id }); //
+
+        // Entrée du temps
+        Console.WriteLine("Ajout d'entrées de temps (liées aux types de travail)...");
+        repo.AjouterEntree(new Entree { //
+            Date = DateTime.Now, 
+            Duree = 2.5f, 
+            Description = "Lecture du cours", 
+            TypeTravailId = typeTheorie.Id, // Lien avec le type de travail
+            ModuleId = moduleCible.Id       // Lien avec le module
+        });
+
+        repo.AjouterEntree(new Entree { //
+            Date = DateTime.Now.AddDays(-1), 
+            Duree = 4.0f, 
+            Description = "Exercices du chapitre 2", 
+            TypeTravailId = typePratique.Id, 
+            ModuleId = moduleCible.Id 
+        });
+
+        // affichage et calculs
+        Console.WriteLine("\n RÉSUMÉ DES DONNÉES ENREGISTRÉES ");
+        
+        // On recharge tout depuis la BDD pour s'assurer qu'Entity Framework a bien fait les liaisons
+        var modulesAJour = repo.GetModules(); //
+        var mod = modulesAJour.First(m => m.Id == moduleCible.Id);
+
+        //  Affichage des Notes et Moyennes 
+        Console.WriteLine($"\n>> Branches ({mod.Branches.Count}) :");
+        foreach (var b in mod.Branches)
+        {
+            Console.WriteLine($"  - {b.Nom} : {b.Notes.Count} note(s). Moyenne de la branche = {b.CalculerMoyenne():0.00}"); //
+        }
+        Console.WriteLine($"  => MOYENNE GÉNÉRALE DU MODULE : {mod.CalculerMoyenne():0.00}"); //
+
+        //  Affichage des Temps et Cumuls 
+        Console.WriteLine($"\n>> Entrées de travail ({mod.Entrees.Count}) :");
+        foreach (var e in mod.Entrees)
+        {
+            // Sécurité : on affiche le type géré par Entity Framework
+            string nomType = e.Type != null ? e.Type.Nom : "Type Inconnu"; //
+            Console.WriteLine($"  - {e.Date:dd.MM.yyyy} | {nomType} | {e.Duree}h : {e.Description}");
         }
         
+        Console.WriteLine($"\n  => TEMPS TOTAL SUR LE MODULE : {mod.CalculerTotalHeures()} heures"); //
         
-        // Ajouter un module, mais pas dans la BDD
-        foreach (Module module in modules)
+        // Détail des heures par type de travail
+        if (mod.TypesTravail.Any())
         {
-            Console.WriteLine($"Module : {module.Nom} dans la liste");
+            foreach (var type in mod.TypesTravail)
+            {
+                Console.WriteLine($"     (Dont {type.Nom} : {mod.CalculerTotalHeures(type)} heures)"); //
+            }
         }
         
-        */
-        
-        modules = repo.GetModules(); // Actualisation
-         
-        // Affichage
-        Console.WriteLine($"Voici les {modules.Count} modules dans la BDD : ");
-        foreach (Module module in modules) Console.WriteLine($"Module : {module.Id} - {module.Nom}");
-        
-
-        /*
-        Branche maBranche = new Branche();
-        maBranche = modules[3].Branches[0];
-  
-
-        var note = new Note
-        {
-            Date =  DateTime.Now,
-            Description = " ",
-            Valeur = 7.8f,
-            BrancheId = maBranche.Id,
-        };
-        
-        repo.AjouterNote(note);
-        
-        
-        modules = repo.GetModules(); // Actualisation
-        
-        
-        foreach (var m in modules)
-        {
-            Console.WriteLine($"Module : {m.Nom} - Moyenne : {m.CalculerMoyenne()}");
-        }*/
-        
-        /*
-        TypeTravail travail = new TypeTravail
-        {
-            Nom = "COUCOU"
-        };
-        
-        repo.AjouterTypeTravail(travail);
-
-        Entree entree = new Entree
-        {
-            Date = DateTime.Now,
-            Duree = 2.5f,
-            TypeTravailId =  travail.Id,
-            ModuleId = modules[0].Id,
-            Description = "test de déploiement",
-
-        };
-        
-        repo.AjouterEntree(entree);
-        
-        
-        */
-       
-        
-       
-        
-        TypeTravail newType =  new TypeTravail { Nom = "wow" };
-        
-        repo.AjouterTypeTravail(newType);
-        
-        List<TypeTravail> typesTravails = repo.GetTypeTravail();
-        modules = repo.GetModules(); // Actualisation
-        
-        foreach (TypeTravail t in typesTravails)
-        {
-            Console.WriteLine($"{t.Id} -  {t.Nom}");
-        }
-        
-        
-        // afficher les entrées du module 0 :
-        foreach (Entree e in modules[0].Entrees)
-        {
-            Console.WriteLine($"{e.Id} - {e.Date} - {typesTravails[e.TypeTravailId-1].Nom}: {e.Description}");
-        }
+        Console.WriteLine("\nTests terminés avec succès !");
     }
 }

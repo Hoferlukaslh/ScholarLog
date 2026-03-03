@@ -16,7 +16,11 @@ public class MonDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        // Créera un fichier "app.db" à côté de ton .exec
-        options.UseSqlite("Data Source=/home/lukas/ES/Cours/TINF2/M5 - Génie Logiciel - Projet/Test/SQLite_test/SQLite_test/app.db");
+        // Récupère le dossier où se trouve l'exécutable (ton dossier bin/.../net10.0/)
+        string dbPath = Path.Combine(AppContext.BaseDirectory, "app.db");
+    
+        Console.WriteLine($"Base de données située à : {dbPath}");
+    
+        options.UseSqlite($"Data Source={dbPath}");
     }
 }

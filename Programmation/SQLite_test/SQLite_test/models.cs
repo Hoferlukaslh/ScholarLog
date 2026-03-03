@@ -4,19 +4,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
-
 public class TypeTravail
 {
     public int Id { get; set; }
     public string Nom { get; set; }
+    
+    public int ModuleId { get; set; }
+    public Module Module { get; set; } 
 }
 
 public class Entree
 {
     public int Id { get; set; }
     public DateTime Date { get; set; }
-    public float Duree { get; set; } // Float comme dans l'UML
+    public float Duree { get; set; } 
     public string Description { get; set; }
     
     public int TypeTravailId { get; set; }
@@ -24,7 +25,6 @@ public class Entree
     
     public int ModuleId { get; set; }
 }
-
 
 public class Note
 {
@@ -36,14 +36,12 @@ public class Note
     public int BrancheId { get; set; }
 }
 
-
 public class Branche
 {
     public int Id { get; set; }
     public string Nom { get; set; }
     public int ModuleId { get; set; }
-
-    // Relation "contient *"
+    
     public List<Note> Notes { get; set; } = new List<Note>();
     
     public float CalculerMoyenne()
@@ -53,17 +51,16 @@ public class Branche
     }
 }
 
-
 public class Module
 {
     public int Id { get; set; }
     public string Nom { get; set; }
     
-
     public List<Entree> Entrees { get; set; } = new List<Entree>();
     public List<Branche> Branches { get; set; } = new List<Branche>();
-
-
+    
+    // CORRECTION : Instanciation de la liste et respect de la casse UML
+    public List<TypeTravail> TypesTravail { get; set; } = new List<TypeTravail>();
 
     public void AjouterEntree(Entree entree)
     {
@@ -72,17 +69,43 @@ public class Module
 
     public void RetirerEntree(Entree entree)
     {
-        Entrees.Remove(entree);
+        if (Entrees.Contains(entree))
+        {
+            Entrees.Remove(entree);
+        }
+    }
+    
+    public void ModifierEntree(Entree entree)
+    {
+        var index = Entrees.FindIndex(e => e.Id == entree.Id);
+        if (index != -1)
+        {
+            Entrees[index] = entree;
+        }
+    }
+    public List<TypeTravail> GetTypesTravail()
+    {
+        return TypesTravail;
     }
 
-    
+    public void AjouterTypeTravail(TypeTravail typeTravail)
+    {
+        TypesTravail.Add(typeTravail);
+    }
+
+    public void RetirerTypeTravail(TypeTravail typeTravail)
+    {
+        if (TypesTravail.Contains(typeTravail))
+        {
+            TypesTravail.Remove(typeTravail);
+        }
+    }
 
     public float CalculerTotalHeures()
     {
         if (Entrees == null) return 0f;
         return Entrees.Sum(e => e.Duree);
     }
-
 
     public float CalculerTotalHeures(TypeTravail type)
     {
@@ -92,13 +115,14 @@ public class Module
             .Sum(e => e.Duree);
     }
 
-
-    // Moyenne des branches (pas définitif)
     public float CalculerMoyenne()
     {
         if (Branches == null || !Branches.Any()) return 0f;
         
-        var moyennesBranches = Branches.Select(b => b.CalculerMoyenne());
+        var moyennesBranches = Branches.Select(b => b.CalculerMoyenne()).ToList();
+        
+        // Sécurité si aucune branche n'a de note
+        if (!moyennesBranches.Any()) return 0f; 
         
         return (float)moyennesBranches.Average();
     }
