@@ -1,0 +1,49 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="ScholarLog.App"
+             xmlns:local="using:ScholarLog"
+             RequestedThemeVariant="Dark">  
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="Styles/AppDefaultStyle.axaml"></StyleInclude>
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+                 
+    </Application.Styles>
+             
+    <Application.Resources>
+        <SolidColorBrush x:Key="PrimaryBackground">#14172D</SolidColorBrush>
+        <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
+            <GradientStop Offset="0" Color="#111214"></GradientStop>
+            <GradientStop Offset="1" Color="#151E3E"></GradientStop>
+        </LinearGradientBrush>
+                    
+                
+        <RadialGradientBrush  x:Key="SecondaryBackgroundGradient"  Center="50%, 50%" >
+            <GradientStop Offset="0" Color="#111214"></GradientStop>
+            <GradientStop Offset="1" Color="#151E3E"></GradientStop>
+        </RadialGradientBrush>
+                
+                
+        <!-- Fonts Chemin : avares://ScholarLog/Assets/... #Nom de la police-->
+        <!-- <FontFamily x:Key="Helvetica">avares://ScholarLog/Assets/Phosphor.ttf#Phosphor</FontFamily>-->
+        <!-- Helvetica -->
+        <!-- Helvetica-BoldOblique.ttf  Helvetica-Bold.ttf  helvetica-light-587ebe5a59211.ttf  Helvetica-Oblique.ttf  Helvetica.ttf -->
+        <FontFamily x:Key="Helvetica">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica.ttf#Helvetica</FontFamily>
+        <FontFamily x:Key="HelveticaLight">avares://ScholarLog/Assets/Fonts/Helvetica/helvetica-light-587ebe5a59211.ttf#Helvetica</FontFamily>
+        <FontFamily x:Key="HelveticaBold">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica-Bold.ttf#Helvetica</FontFamily>
+        <FontFamily x:Key="HelveticaOblique">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica-Oblique.ttf#Helvetica</FontFamily>
+        <FontFamily x:Key="HelveticaBoldOblique">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica-BoldOblique.ttf#Helvetica</FontFamily>
+
+        <FontFamily x:Key="Phosphor">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor.ttf#Phosphor</FontFamily>
+        <FontFamily x:Key="PhosphorBold">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Bold.ttf#Phosphor</FontFamily>
+        <FontFamily x:Key="PhosphorDuotone">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Duotone.ttf#Phosphor</FontFamily>
+        <FontFamily x:Key="PhosphorFill">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Fill.ttf#Phosphor</FontFamily>
+        <FontFamily x:Key="PhosphorLight">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Light.ttf#Phosphor</FontFamily>
+        <FontFamily x:Key="PhosphorThin">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Thin.ttf#Phosphor</FontFamily>
+    </Application.Resources>
+</Application>

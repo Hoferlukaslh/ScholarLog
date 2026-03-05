@@ -1,0 +1,96 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ScholarLog.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" 
+        
+        d:DesignWidth="1280" 
+        d:DesignHeight="720"
+        MinWidth="1280"
+        MinHeight="720"
+        x:Class="ScholarLog.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="ScholarLog">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+<Grid ColumnDefinitions="Auto, *">
+    <Border Grid.Column="0" 
+            Background="{DynamicResource PrimaryBackgroundGradient}"
+            BorderBrush="#25ffffff" 
+            BorderThickness="0,0,1,0"
+            Padding="10"> <Grid x:Name="Sidebar" Width="250" RowDefinitions="Auto, *, Auto">
+            <Grid.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Width" Duration="0:0:5.3" Easing="CubicEaseOut"/>
+                </Transitions>
+            </Grid.Transitions>
+
+                <StackPanel Grid.Row="0" Spacing="20">
+                   
+
+                    <Grid ColumnDefinitions="40, *">
+                        <Label Grid.Column="0" FontFamily="{DynamicResource Phosphor}" 
+                               FontSize="32" HorizontalAlignment="Center" Content="&#xE62C;" />
+                        <Label x:Name="TextLogo" Grid.Column="1" 
+                               FontFamily="{DynamicResource HelveticaBold}" FontSize="22" 
+                               VerticalAlignment="Center" Margin="10,0,0,0" Content="ScholarLog">
+                            <Label.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity" Duration="0:0:3.2"/>
+                                </Transitions>
+                            </Label.Transitions>
+                        </Label>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Spacing="5" Margin="0,30,0,0">
+                    <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Map">
+                        <Grid ColumnDefinitions="40, *">
+                            <Label Grid.Column="0" FontFamily="{DynamicResource PhosphorDuotone}" 
+                                   FontSize="22" HorizontalAlignment="Center" Content="&#xE316;" />
+                            <TextBlock x:Name="TextMap" Grid.Column="1" 
+                                       Text="Carte" VerticalAlignment="Center" Margin="10,0,0,0" />
+                        </Grid>
+                    </Button>
+                </StackPanel>
+                
+            <!-- Boutons du bas -->
+                <StackPanel Grid.Row="2" Margin="0,0,0,10">
+                    <!-- Retracter -->
+                    <Button HorizontalAlignment="Stretch" Background="Transparent" Click="ToggleSidebar_Click">
+                        <Grid ColumnDefinitions="40, *">
+                            <Label x:Name="ToggleIcon" Grid.Column="0" 
+                                   FontFamily="{DynamicResource Phosphor}" FontSize="24" 
+                                   HorizontalAlignment="Center" Content="&#xE128;" />
+                            <TextBlock x:Name="TextCollapse" Grid.Column="1" 
+                                       Text="Fermer Menu" VerticalAlignment="Center" Margin="10,0,0,0" />
+                        </Grid>
+                    </Button>
+                    
+                    <!-- Paramètres -->
+                    <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Setting">
+                        <Grid ColumnDefinitions="40, *">
+                            <Label Grid.Column="0" FontFamily="{DynamicResource PhosphorDuotone}" 
+                                   FontSize="22" HorizontalAlignment="Center" Content="&#xE272;" />
+                            <TextBlock x:Name="TextSettings" Grid.Column="1" 
+                                       Text="Paramètres" VerticalAlignment="Center" Margin="10,0,0,0" />
+                        </Grid>
+                    </Button>
+                </StackPanel>
+                
+                
+            </Grid>
+        </Border>
+
+        <ContentControl Grid.Column="1" Name="MainContentControler" Padding="20">
+            </ContentControl>
+    </Grid>
+</Window>
+
