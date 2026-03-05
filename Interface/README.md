@@ -34,9 +34,17 @@ Le menu Journal permet à l'utilisateur de gérer le suivit du module/travail en
 L'utilisateur peut également éditer les catégories d'entrées. L'exportation est également compris dans ce menu
 
 
-|                                                                                         |                                                                    |
-| ---                                                                                                   | ---                                                                                                   |
+|                                                                                                   |                                                                                                   |
+| ---                                                                                               | ---                                                                                               |
 | Accueil<br>![Note - Accueil](../Images/Interface/Journal/JournalBase.webp)                        | Clique modules<br>![Note - Clique modules](../Images/Interface/Journal/JournalModules.webp)       |
 | Édition entrée<br>![Note - Édition entrée](../Images/Interface/Journal/JournalEditEntree.webp)    | Édition catégorie<br>![Note - Édition catégorie](../Images/Interface/Journal/JournalEditCat.webp) |
 | Export MD<br>![Note - Export MD](../Images/Interface/Journal/JournalExportMD.webp)                | Export CSV<br>![Note - Export CSV](../Images/Interface/Journal/JournalExportCSV.webp)             |
-| Export JSON<br>![Note - Export JSON](../Images/Interface/Journal/JournalExportJSON.webp)          |                                                                                                       |
+| Export JSON<br>![Note - Export JSON](../Images/Interface/Journal/JournalExportJSON.webp)          | Gaphique<br>![Note - Graph JSON](../Images/Interface/Journal/JournalGraph.webp)                   |
+
+
+## Paramètres
+Le menu Paramètres permet à l'utilisateur de configurer l'emplacement de sauvegarde de la base de données (SQLite). Il permet également de structurer l'environnement d'apprentissage en assurant l'ajout, la modification et l'organisation des modules et de leurs branches associées.
+
+| Paramètres - Accueil                                                    | Paramètres - Clique ajouter/modifier                                                |
+| ---                                                               | ---                                                                               |
+| ![Paramètres - Accueil](../Images/Interface/Parametres/ParametresBase.webp)         | ![Paramètres - Clique ajouter/modifier note ](../Images/Interface/Parametres/ParametreEdit.webp)|
