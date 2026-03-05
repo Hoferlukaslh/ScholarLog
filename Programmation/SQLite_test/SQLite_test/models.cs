@@ -24,6 +24,7 @@ public class Entree
     public TypeTravail Type { get; set; }
     
     public int ModuleId { get; set; }
+    public Module Module { get; set; }
 }
 
 public class Note
@@ -34,6 +35,7 @@ public class Note
     public float Valeur { get; set; }
 
     public int BrancheId { get; set; }
+    public Branche Branche { get; set; }
 }
 
 public class Branche
@@ -41,6 +43,7 @@ public class Branche
     public int Id { get; set; }
     public string Nom { get; set; }
     public int ModuleId { get; set; }
+    public Module Module { get; set; }
     
     public List<Note> Notes { get; set; } = new List<Note>();
     

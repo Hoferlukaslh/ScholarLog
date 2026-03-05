@@ -17,7 +17,7 @@ public class MonDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         // Récupère le dossier où se trouve l'exécutable (ton dossier bin/.../net10.0/)
-        string dbPath = Path.Combine(AppContext.BaseDirectory, "app.db");
+        string dbPath = Path.Combine(AppContext.BaseDirectory, "BDD.db");
     
         Console.WriteLine($"Base de données située à : {dbPath}");
     
