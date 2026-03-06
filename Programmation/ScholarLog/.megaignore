@@ -1,0 +1,5 @@
+# Dossiers de build (Exclure récursivement) ---
+-d:bin
+-d:obj/Debug
+-d:obj/Release
++sync:.megaignore

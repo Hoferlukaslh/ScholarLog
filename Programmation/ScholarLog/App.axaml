@@ -2,7 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ScholarLog.App"
              xmlns:local="using:ScholarLog"
-             RequestedThemeVariant="Dark">  
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             RequestedThemeVariant="Default">  
 
     <Application.DataTemplates>
         <local:ViewLocator/>
@@ -12,38 +13,87 @@
         <FluentTheme />
         <StyleInclude Source="Styles/AppDefaultStyle.axaml"></StyleInclude>
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
-                 
     </Application.Styles>
              
     <Application.Resources>
-        <SolidColorBrush x:Key="PrimaryBackground">#14172D</SolidColorBrush>
-        <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
-            <GradientStop Offset="0" Color="#111214"></GradientStop>
-            <GradientStop Offset="1" Color="#151E3E"></GradientStop>
-        </LinearGradientBrush>
-                    
-                
-        <RadialGradientBrush  x:Key="SecondaryBackgroundGradient"  Center="50%, 50%" >
-            <GradientStop Offset="0" Color="#111214"></GradientStop>
-            <GradientStop Offset="1" Color="#151E3E"></GradientStop>
-        </RadialGradientBrush>
-                
-                
-        <!-- Fonts Chemin : avares://ScholarLog/Assets/... #Nom de la police-->
-        <!-- <FontFamily x:Key="Helvetica">avares://ScholarLog/Assets/Phosphor.ttf#Phosphor</FontFamily>-->
-        <!-- Helvetica -->
-        <!-- Helvetica-BoldOblique.ttf  Helvetica-Bold.ttf  helvetica-light-587ebe5a59211.ttf  Helvetica-Oblique.ttf  Helvetica.ttf -->
-        <FontFamily x:Key="Helvetica">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica.ttf#Helvetica</FontFamily>
-        <FontFamily x:Key="HelveticaLight">avares://ScholarLog/Assets/Fonts/Helvetica/helvetica-light-587ebe5a59211.ttf#Helvetica</FontFamily>
-        <FontFamily x:Key="HelveticaBold">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica-Bold.ttf#Helvetica</FontFamily>
-        <FontFamily x:Key="HelveticaOblique">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica-Oblique.ttf#Helvetica</FontFamily>
-        <FontFamily x:Key="HelveticaBoldOblique">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica-BoldOblique.ttf#Helvetica</FontFamily>
+        <ResourceDictionary>
+            
+            <!-- Police d'écriture -->
+            <FontFamily x:Key="Helvetica">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica.ttf#Helvetica</FontFamily>
+            <FontFamily x:Key="Phosphor">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor.ttf#Phosphor</FontFamily>
+            <FontFamily x:Key="PhosphorDuotone">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Duotone.ttf#Phosphor</FontFamily> 
+            <FontFamily x:Key="HelveticaBold">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica-Bold.ttf#Helvetica</FontFamily>
+            
+            <!-- Taille des textes -->
+            <System:Double x:Key="FontSizeLarge">22</System:Double>
+            <System:Double x:Key="FontSizeMedium">18</System:Double>
+            <System:Double x:Key="FontSizeNormal">16</System:Double> 
+            <System:Double x:Key="FontSizeSmall">13</System:Double>
+            <System:Double x:Key="FontSizeLogo">25</System:Double>
+            
+            <!-- Taille des icones -->
+            <System:Double x:Key="IconSizeLarge">32</System:Double> 
+            <System:Double x:Key="IconSizeMedium">28</System:Double>
+            <System:Double x:Key="IconSizeNormal">25</System:Double> 
+            <System:Double x:Key="IconSizeSmall">20</System:Double>
+            <System:Double x:Key="IconSizeLogo">35</System:Double> 
+            
+            <!-- Bords arrondies -->
+            <CornerRadius x:Key="CardCornerRadius">12</CornerRadius>
+            
+            
+            <!-- Les icones dans l'application, des caracter UTF dans la police phophorIcone -->
+            <x:String x:Key="IconeScholarHat">&#xE62C;</x:String>
+            <x:String x:Key="IconeHome">&#xE2C2;</x:String>
+            <x:String x:Key="IconeHashtag">&#xE3AC;</x:String>
+            <x:String x:Key="IconePen">&#xE2A2;</x:String>
+            <x:String x:Key="IconeRetract">&#xE128;</x:String>
+            <x:String x:Key="IconeGear">&#xE272;</x:String>
 
-        <FontFamily x:Key="Phosphor">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor.ttf#Phosphor</FontFamily>
-        <FontFamily x:Key="PhosphorBold">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Bold.ttf#Phosphor</FontFamily>
-        <FontFamily x:Key="PhosphorDuotone">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Duotone.ttf#Phosphor</FontFamily>
-        <FontFamily x:Key="PhosphorFill">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Fill.ttf#Phosphor</FontFamily>
-        <FontFamily x:Key="PhosphorLight">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Light.ttf#Phosphor</FontFamily>
-        <FontFamily x:Key="PhosphorThin">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Thin.ttf#Phosphor</FontFamily>
+            
+            <!-- Ressources en fonction du thème de l'appareil -->
+            <ResourceDictionary.ThemeDictionaries>
+                
+                <!-- Thème sombre -->
+                <ResourceDictionary x:Key="Dark"> 
+                    <SolidColorBrush x:Key="PrimaryBackground">#DD14172D</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryBackgroundLinux">#F714172D</SolidColorBrush>
+                    
+                    <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
+                        <GradientStop Offset="0" Color="#CC111214"></GradientStop>
+                        <GradientStop Offset="1" Color="#CC151E3E"></GradientStop>
+                    </LinearGradientBrush>
+                    
+                    <WindowIcon x:Key="AppIcon">/Assets/Images/ScholarLogLogoTSombre.ico</WindowIcon>
+                    
+                    <!-- Couleur du texte -->
+                    <SolidColorBrush x:Key="PrimaryForeground">#F5F5F7</SolidColorBrush> 
+                    <SolidColorBrush x:Key="SecondaryForeground">#A0A0AB</SolidColorBrush>
+                    
+                    <SolidColorBrush x:Key="CardBackground">#15FFFFFF</SolidColorBrush> 
+                    <SolidColorBrush x:Key="CardBorder">#20FFFFFF</SolidColorBrush>
+                </ResourceDictionary>
+
+                <!-- Thème claire -->
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="PrimaryBackground">#DDF0F2F8</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryBackgroundLinux">#F7F0F2F8</SolidColorBrush>
+                    
+                    <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
+                        <GradientStop Offset="0" Color="#CCDDE1F0"></GradientStop>
+                        <GradientStop Offset="1" Color="#CCFFFFFF"></GradientStop>
+                    </LinearGradientBrush>
+                    
+                    <WindowIcon x:Key="AppIcon">/Assets/Images/ScholarLogLogoTClaire.ico</WindowIcon>
+                    
+                    <!-- Couleur du texte -->
+                    <SolidColorBrush x:Key="PrimaryForeground">#1C1E26</SolidColorBrush> 
+                    <SolidColorBrush x:Key="SecondaryForeground">#6E7681</SolidColorBrush>
+                    
+                    <SolidColorBrush x:Key="CardBackground">#AAFFFFFF</SolidColorBrush> 
+                    <SolidColorBrush x:Key="CardBorder">#80D1D5DB</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
