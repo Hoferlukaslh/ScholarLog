@@ -5,6 +5,7 @@ using Avalonia.Controls.Shapes;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using System;
+using ScholarLog.Component;
 
 namespace ScholarLog.Views
 {
@@ -99,6 +100,31 @@ namespace ScholarLog.Views
                     control.Opacity = opacity;
                 }
             }
+        }
+
+        private void Setting_OnClick(object? sender, RoutedEventArgs e)
+        {
+            MainContentControler.Content = new SettingsPage();
+        }
+
+        private void Buttonjournaux_OnClick(object? sender, RoutedEventArgs e)
+        {
+            MainContentControler.Content = new JournalPage();
+        }
+
+        private void ButtonNotes_OnClick(object? sender, RoutedEventArgs e)
+        {
+            MainContentControler.Content = new NotesPage();
+        }
+
+        private void ButtonAccueil_OnClick(object? sender, RoutedEventArgs e)
+        {
+            MainContentControler.Content = new HomePage();
+        }
+
+        private async void ButtonExemple_OnClick(object? sender, RoutedEventArgs e)
+        {
+                MainContentControler.Content = new ExemplePage();
         }
     }
 }

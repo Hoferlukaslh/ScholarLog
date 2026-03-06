@@ -22,7 +22,7 @@
             <FontFamily x:Key="Helvetica">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica.ttf#Helvetica</FontFamily>
             <FontFamily x:Key="Phosphor">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor.ttf#Phosphor</FontFamily>
             <FontFamily x:Key="PhosphorDuotone">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Duotone.ttf#Phosphor</FontFamily> 
-            <FontFamily x:Key="HelveticaBold">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica-Bold.ttf#Helvetica</FontFamily>
+            <!--<FontFamily x:Key="HelveticaBold">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica-Bold.ttf#Helvetica</FontFamily>-->
             
             <!-- Taille des textes -->
             <System:Double x:Key="FontSizeLarge">22</System:Double>
@@ -40,15 +40,31 @@
             
             <!-- Bords arrondies -->
             <CornerRadius x:Key="CardCornerRadius">12</CornerRadius>
+            <CornerRadius x:Key="FieldCornerRadius">7</CornerRadius>
             
             
             <!-- Les icones dans l'application, des caracter UTF dans la police phophorIcone -->
             <x:String x:Key="IconeScholarHat">&#xE62C;</x:String>
+            
             <x:String x:Key="IconeHome">&#xE2C2;</x:String>
-            <x:String x:Key="IconeHashtag">&#xE3AC;</x:String>
-            <x:String x:Key="IconePen">&#xE2A2;</x:String>
+            <x:String x:Key="IconeHashtag">&#xE2A2;</x:String>
+            <x:String x:Key="IconePen">&#xE3AC;</x:String>
             <x:String x:Key="IconeRetract">&#xE128;</x:String>
             <x:String x:Key="IconeGear">&#xE272;</x:String>
+            
+            <x:String x:Key="IconeBDD">&#xE1DE;</x:String>
+            <x:String x:Key="IconeHDD">&#xE29E;</x:String>
+            <x:String x:Key="IconeSearch">&#xE30C;</x:String>
+            <x:String x:Key="IconeSave">&#xEAF4;</x:String>
+            
+            <x:String x:Key="IconePalette">&#xE6C8;</x:String>
+            <x:String x:Key="IconeMoon">&#xE58E;</x:String>
+            <x:String x:Key="IconeSun">&#xE472;</x:String>
+            
+            <x:String x:Key="IconeDanger">&#xE4E0;</x:String>
+            
+            <!-- Couleurs tes-->
+            <SolidColorBrush x:Key="ErrorForeground">Red</SolidColorBrush>
 
             
             <!-- Ressources en fonction du thème de l'appareil -->

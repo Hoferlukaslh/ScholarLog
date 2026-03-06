@@ -6,8 +6,8 @@
         mc:Ignorable="d" 
         d:DesignWidth="1280" d:DesignHeight="720"
         
-        MinWidth="850" 
-        MinHeight="480"
+        MinWidth="960" 
+        MinHeight="550"
         
         x:Class="ScholarLog.Views.MainWindow"
         TransparencyLevelHint="AcrylicBlur"
@@ -123,7 +123,8 @@
                     <StackPanel Grid.Row="1" Spacing="5" Margin="0,30,0,0">
                         
                         <!-- Button Accueil -->
-                        <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonAccueil">
+                        <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonAccueil"
+                                Click="ButtonAccueil_OnClick">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" 
                                        FontFamily="{DynamicResource Phosphor}" 
@@ -139,13 +140,14 @@
                         </Button>
                         
                         <!-- Button Notes -->
-                        <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonNotes">
+                        <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonNotes"
+                                Click="ButtonNotes_OnClick">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" 
                                        FontFamily="{DynamicResource Phosphor}" 
                                        Foreground="{DynamicResource PrimaryForeground}"
                                        FontSize="{DynamicResource IconSizeMedium}" 
-                                       HorizontalAlignment="Center" Content="{DynamicResource IconePen}" />
+                                       HorizontalAlignment="Center" Content="{DynamicResource IconeHashtag}" />
                                 <TextBlock x:Name="TextNotes" Classes="menu-text" Grid.Column="1" 
                                            FontFamily="{DynamicResource Helvetica}" 
                                            Foreground="{DynamicResource PrimaryForeground}"
@@ -156,16 +158,32 @@
                         </Button>
                         
                         <!-- Button journaux -->
-                        <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Buttonjournaux">
+                        <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Buttonjournaux"
+                                Click="Buttonjournaux_OnClick">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" FontFamily="{DynamicResource Phosphor}" 
                                        FontSize="{DynamicResource IconSizeMedium}" Foreground="{DynamicResource PrimaryForeground}"
-                                       HorizontalAlignment="Center" Content="{DynamicResource IconeHashtag}" />
+                                       HorizontalAlignment="Center" Content="{DynamicResource IconePen}" />
                                 <TextBlock x:Name="TextJournaux" Classes="menu-text" Grid.Column="1" 
                                            FontFamily="{DynamicResource Helvetica}" 
                                            Foreground="{DynamicResource PrimaryForeground}"
                                            FontSize="{DynamicResource FontSizeNormal}" 
                                            Text="Journaux" 
+                                           VerticalAlignment="Center" Margin="10,0,0,0" />
+                            </Grid>
+                        </Button>
+                        
+                        <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonExemple"
+                                Click="ButtonExemple_OnClick">
+                            <Grid ColumnDefinitions="40, *">
+                                <Label Grid.Column="0" FontFamily="{DynamicResource Phosphor}" 
+                                       FontSize="{DynamicResource IconSizeMedium}" Foreground="{DynamicResource SecondaryForeground}"
+                                       HorizontalAlignment="Center" Content="{DynamicResource IconeScholarHat}" />
+                                <TextBlock x:Name="TextExemple" Classes="menu-text" Grid.Column="1" 
+                                           FontFamily="{DynamicResource Helvetica}" 
+                                           Foreground="{DynamicResource SecondaryForeground}"
+                                           FontSize="{DynamicResource FontSizeNormal}" 
+                                           Text="Exemple" 
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
                         </Button>
@@ -197,7 +215,8 @@
                         </Button>
                         
                         <!-- Bouton paramètres -->
-                        <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Setting">
+                        <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Setting"
+                                Click="Setting_OnClick" >
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" 
                                        FontFamily="{DynamicResource PhosphorDuotone}" 
@@ -219,75 +238,7 @@
             </Border>
 
             <!-- Controleur de contenu -->
-            <!-- <ContentControl Grid.Column="1" Name="MainContentControler" Padding="20" /> -->
-            <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Disabled">
-                <StackPanel Margin="40,30" Spacing="30" MaxWidth="1000" HorizontalAlignment="Left">
-                    
-                    <StackPanel Spacing="5">
-                        <TextBlock Text="Bonjour," 
-                                   FontSize="{DynamicResource FontSizeLarge}" 
-                                   FontFamily="{DynamicResource HelveticaBold}" 
-                                   Foreground="{DynamicResource PrimaryForeground}"/>
-                        <TextBlock Text="Ceci est un test d'affichage" 
-                                   FontSize="{DynamicResource FontSizeNormal}" 
-                                   Foreground="{DynamicResource SecondaryForeground}"/>
-                    </StackPanel>
-
-                    <UniformGrid Columns="2" Rows="1" Margin="0,10">
-                        <Border Margin="0,0,10,0" Padding="20" CornerRadius="{DynamicResource CardCornerRadius}" 
-                                Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1">
-                            <StackPanel Spacing="15">
-                                <Label Content="{DynamicResource IconePen}" 
-                                       FontFamily="{DynamicResource Phosphor}" 
-                                       FontSize="{DynamicResource IconSizeLarge}" 
-                                       Foreground="#804A90E2"/>
-                                <TextBlock Text="Notes Récentes" FontWeight="Bold" Foreground="{DynamicResource PrimaryForeground}"/>
-                                <TextBlock Text="12 notes ajoutés cette semaine" 
-                                           FontSize="{DynamicResource FontSizeSmall}" 
-                                           Foreground="{DynamicResource SecondaryForeground}"/>
-                            </StackPanel>
-                        </Border>
-
-                        <Border Margin="10,0,0,0" Padding="20" CornerRadius="{DynamicResource CardCornerRadius}" 
-                                Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1">
-                            <StackPanel Spacing="15">
-                                <Label Content="{DynamicResource IconeHashtag}" 
-                                       FontFamily="{DynamicResource Phosphor}" 
-                                       FontSize="{DynamicResource IconSizeLarge}" 
-                                       Foreground="#809B59B6"/>
-                                <TextBlock Text="Derniers Journaux" FontWeight="Bold" Foreground="{DynamicResource PrimaryForeground}"/>
-                                <TextBlock Text="Module 5 - Hier" 
-                                           FontSize="{DynamicResource FontSizeSmall}" 
-                                           Foreground="{DynamicResource SecondaryForeground}"/>
-                            </StackPanel>
-                        </Border>
-                    </UniformGrid>
-
-                    <Border Padding="25" CornerRadius="{DynamicResource CardCornerRadius}" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1">
-                        <Grid RowDefinitions="Auto, Auto">
-                            <TextBlock Grid.Row="0" Text="Activités récentes" 
-                                       FontSize="{DynamicResource FontSizeMedium}" 
-                                       FontFamily="{DynamicResource HelveticaBold}" 
-                                       Foreground="{DynamicResource PrimaryForeground}" Margin="0,0,0,20"/>
-                            
-                            <StackPanel Grid.Row="1" Spacing="15">
-                                <Grid ColumnDefinitions="Auto, *, Auto">
-                                    <Ellipse Grid.Column="0" Width="8" Height="8" Fill="#804A90E2"/>
-                                    <TextBlock Grid.Column="1" Text="Synthèse de cours sur l'UI/UX" Margin="15,0" Foreground="{DynamicResource PrimaryForeground}"/>
-                                    <TextBlock Grid.Column="2" Text="Il y a 2h" Foreground="{DynamicResource SecondaryForeground}" FontSize="{DynamicResource FontSizeSmall}"/>
-                                </Grid>
-                                <Rectangle Height="1" Fill="#10ffffff"/>
-                                <Grid ColumnDefinitions="Auto, *, Auto">
-                                    <Ellipse Grid.Column="0" Width="8" Height="8" Fill="#809B59B6"/>
-                                    <TextBlock Grid.Column="1" Text="Réflexion sur les structures XAML" Margin="15,0" Foreground="{DynamicResource PrimaryForeground}"/>
-                                    <TextBlock Grid.Column="2" Text="Hier" Foreground="{DynamicResource SecondaryForeground}" FontSize="{DynamicResource FontSizeSmall}"/>
-                                </Grid>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                    
-                </StackPanel>
-            </ScrollViewer>
+           <ContentControl Grid.Column="1" Name="MainContentControler" Padding="20" /> 
         </Grid>
     </Grid>
 </Window>
