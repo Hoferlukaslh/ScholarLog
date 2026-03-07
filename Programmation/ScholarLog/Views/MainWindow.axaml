@@ -14,10 +14,8 @@
 
         x:DataType="vm:MainWindowViewModel"
         Icon="{DynamicResource AppIcon}"
-        Title="ScholarLog"
-        >
-    <!-- Background="{DynamicResource PrimaryBackground}" -->
-    
+        Title="ScholarLog">
+        
     
     
     <Window.Styles>
@@ -87,6 +85,8 @@
             </Ellipse>
         </Canvas>
 
+        
+        
         <Grid ColumnDefinitions="Auto, *">
             <!-- Bar de navigation -->
             <Border Grid.Column="0" 
@@ -229,7 +229,7 @@
                                            FontFamily="{DynamicResource Helvetica}" 
                                            Foreground="{DynamicResource PrimaryForeground}"
                                            FontSize="{DynamicResource FontSizeNormal}" 
-                                           Text="Paramètres" 
+                                           Text="Paramètres"
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
                         </Button>

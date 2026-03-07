@@ -2,7 +2,124 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:ScholarLog.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="ScholarLog.Views.HomePage">
-    Welcome to Home !
+             x:Class="ScholarLog.Views.HomePage"
+             x:DataType="views:HomePage">
+    
+    <UserControl.Styles>
+        
+            <!-- Voir pour implémenter ce genre de style de page dans l'app -->
+            <Style Selector="TextBlock.trendIcon">
+                <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+                <Setter Property="FontFamily" Value="{DynamicResource Phosphor}"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+            
+    <!-- Couleur et Icone en fonction de la trend -->
+            <Style Selector="TextBlock.trendIcon[Tag=Up]">
+                <Setter Property="Text" Value="{DynamicResource IconeUp}"/>
+                <Setter Property="Foreground" Value="#4caf50"/>
+            </Style>
+
+            <Style Selector="TextBlock.trendIcon[Tag=Down]">
+                <Setter Property="Text" Value="{DynamicResource IconeDown}"/>
+                <Setter Property="Foreground" Value="#f44336"/>
+            </Style>
+
+            <Style Selector="TextBlock.trendIcon[Tag=Stable]">
+                <Setter Property="Text" Value="{DynamicResource IconeStable}"/>
+                <Setter Property="Foreground" Value="#ff9800"/>
+            </Style>
+        
+        <Style Selector="Border.moduleCard">
+            <Setter Property="RenderTransform" Value="scale(1)"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" Easing="QuadraticEaseOut"/>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="Border.moduleCard:pointerover">
+            <Setter Property="RenderTransform" Value="scale(1.02)"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <!-- Voir pour wrapper tout ça dans une autre balise -> animation dépliage -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding Modules}" Margin="10">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="views:HomePage+Module"> 
+                    
+                    <!-- Voir pour retract, car pour l'instant ça se rétracte pas ... -->
+                    <Border Classes="moduleCard"
+                            MinWidth="300" MaxWidth="380" 
+                            BorderBrush="{DynamicResource CardBorder}"
+                            Background="{DynamicResource CardBackground}"
+                            MinHeight="120" MaxHeight="140"
+                            Margin="5" Padding="20" 
+                            BorderThickness="1"
+                            CornerRadius="8" >
+                        
+                        <Grid ColumnDefinitions="Auto, *, Auto">
+                            
+                            <TextBlock Grid.Column="0" 
+                                       Text="{Binding Name}" 
+                                       Foreground="{DynamicResource PrimaryForeground}" 
+                                       FontSize="{DynamicResource FontSizeNormal}"
+                                       FontFamily="{DynamicResource Helvetica}"
+                                       VerticalAlignment="Center"/>
+                            
+                            <Grid Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto">
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="0" 
+                                           Text="{Binding AvgTheory, StringFormat=\{0:0.0\}}" 
+                                           Foreground="{DynamicResource PrimaryForeground}" 
+                                           FontFamily="{DynamicResource Helvetica}"
+                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           Margin="0,0,20,15" 
+                                           TextAlignment="Right" />
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="1" 
+                                           Classes="trendIcon"
+                                           Tag="{Binding TheoryTrend}"
+                                           Margin="0,0,0,15"/> 
+
+                                
+                                
+                                <TextBlock Grid.Row="1" Grid.Column="0" 
+                                           Text="{Binding AvgPractice, StringFormat=\{0:0.0\}}" 
+                                           Foreground="{DynamicResource PrimaryForeground}" 
+                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           FontFamily="{DynamicResource Helvetica}"
+                                           Margin="0,0,20,0" 
+                                           TextAlignment="Right" />
+                                
+                                <TextBlock Grid.Row="1" Grid.Column="1" 
+                                           Classes="trendIcon"
+                                           Tag="{Binding PracticeTrend}"/>
+                            </Grid>
+
+                            <TextBlock Grid.Column="2" 
+                                       Text="{Binding GlobalAverage, StringFormat=\{0:0.0\}}" 
+                                       Foreground="{DynamicResource PrimaryForeground}" 
+                                       FontSize="{DynamicResource FontSizeNormal}"
+                                       FontFamily="{DynamicResource Helvetica}"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
 </UserControl>

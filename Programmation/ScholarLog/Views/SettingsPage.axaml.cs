@@ -37,7 +37,7 @@ public partial class SettingsPage : UserControl
 
     private void ApplyTheme(bool isDark)
     {
-        Application app = Application.Current;
+        var app = Application.Current;
         if (app != null)
             app.RequestedThemeVariant = isDark ? ThemeVariant.Dark : ThemeVariant.Light;
     }

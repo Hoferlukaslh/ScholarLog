@@ -27,7 +27,7 @@
             <!-- Taille des textes -->
             <System:Double x:Key="FontSizeLarge">22</System:Double>
             <System:Double x:Key="FontSizeMedium">18</System:Double>
-            <System:Double x:Key="FontSizeNormal">16</System:Double> 
+            <System:Double x:Key="FontSizeNormal">16</System:Double>
             <System:Double x:Key="FontSizeSmall">13</System:Double>
             <System:Double x:Key="FontSizeLogo">25</System:Double>
             
@@ -63,7 +63,11 @@
             
             <x:String x:Key="IconeDanger">&#xE4E0;</x:String>
             
-            <!-- Couleurs tes-->
+            <x:String x:Key="IconeUp">&#xE4AE;</x:String>
+            <x:String x:Key="IconeDown">&#xE4AC;</x:String>
+            <x:String x:Key="IconeStable">&#xE06C;</x:String>
+            
+            <!-- Couleurs text-->
             <SolidColorBrush x:Key="ErrorForeground">Red</SolidColorBrush>
 
             
@@ -80,6 +84,7 @@
                         <GradientStop Offset="1" Color="#CC151E3E"></GradientStop>
                     </LinearGradientBrush>
                     
+                    <!-- ReSharper disable once Xaml.UnexpectedTextToken -->
                     <WindowIcon x:Key="AppIcon">/Assets/Images/ScholarLogLogoTSombre.ico</WindowIcon>
                     
                     <!-- Couleur du texte -->
@@ -100,6 +105,7 @@
                         <GradientStop Offset="1" Color="#CCFFFFFF"></GradientStop>
                     </LinearGradientBrush>
                     
+                    <!-- ReSharper disable once Xaml.UnexpectedTextToken -->
                     <WindowIcon x:Key="AppIcon">/Assets/Images/ScholarLogLogoTClaire.ico</WindowIcon>
                     
                     <!-- Couleur du texte -->

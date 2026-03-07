@@ -22,10 +22,9 @@ namespace ScholarLog.Views
 
         private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
         {
-            if (OperatingSystem.IsLinux())
-            {
+            // Les gestionnaire de fenêtres linux gère mal le flou -> opacité ++
+            if (OperatingSystem.IsLinux()) 
                 this.Classes.Add("linux");
-            }
             
             // Le timer s'active toutes les 7.5 secondes
             _lightTimer = new DispatcherTimer
@@ -61,8 +60,8 @@ namespace ScholarLog.Views
         
         private void ToggleSidebar_Click(object? sender, RoutedEventArgs e)
         {
-            Grid sidebar = this.FindControl<Grid>("Sidebar");
-            Label toggleIcon = this.FindControl<Label>("ToggleIcon");
+            var sidebar = this.FindControl<Grid>("Sidebar");
+            var toggleIcon = this.FindControl<Label>("ToggleIcon");
  
             if (sidebar == null || toggleIcon == null) return;
  
@@ -77,6 +76,7 @@ namespace ScholarLog.Views
                 sidebar.Width = 60;
                 if (!toggleIcon.Classes.Contains("rotated")) 
                     toggleIcon.Classes.Add("rotated");
+                
                 SetMenuTextOpacity(0);
             }
         }
@@ -94,7 +94,7 @@ namespace ScholarLog.Views
  
             foreach (var name in controlNames)
             {
-                Control control = this.FindControl<Control>(name);
+                var control = this.FindControl<Control>(name);
                 if (control != null)
                 {
                     control.Opacity = opacity;
