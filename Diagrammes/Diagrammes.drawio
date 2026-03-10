@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.5.2 Chrome/142.0.7444.265 Electron/39.6.1 Safari/537.36" version="29.5.2" pages="3">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1" pages="3">
   <diagram name="Cas d&#39;Utilisation" id="cKXuMtjNqiQMvHMKVA9j">
     <mxGraphModel dx="1181" dy="1294" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
@@ -157,12 +157,12 @@
     </mxGraphModel>
   </diagram>
   <diagram id="oSkqWg4yYeoGEqKcMiun" name="Models Classes">
-    <mxGraphModel dx="1181" dy="686" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1554" dy="914" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="GEDjzR1hgh04v-O5zpm0-19" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Module" vertex="1">
-          <mxGeometry height="270" width="260" x="790" y="171" as="geometry">
+          <mxGeometry height="280" width="260" x="790" y="150" as="geometry">
             <mxRectangle height="30" width="100" x="260" y="220" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
@@ -173,7 +173,7 @@
           <mxGeometry height="8" width="260" y="110" as="geometry" />
         </mxCell>
         <mxCell id="GEDjzR1hgh04v-O5zpm0-22" parent="GEDjzR1hgh04v-O5zpm0-19" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ AjouterEntrée(Entrée) : void&lt;/div&gt;&lt;div&gt;+&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;&amp;nbsp;RetirerEntrée(Entrée) : void&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ ModifierEntrée(Entrée) : void&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ CalculerTotalHeures() : float&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ CalculerTotalHeures(TypeTravail) : float&lt;/div&gt;&lt;div&gt;+ CalculerMoyenne() : float&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+ GetTypesTravail() :&amp;nbsp;&lt;span style=&quot;color: rgb(12, 13, 14); font-size: 13px;&quot;&gt;List&amp;lt;TypeTravail&amp;gt;&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;+ AjouterTypesTravail() :&amp;nbsp;&lt;/span&gt;&lt;font color=&quot;#0c0d0e&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;List&amp;lt;TypeTravail&amp;gt;&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;+ RetirerTypeTravail(TypeTravail) : void&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="152" width="260" y="118" as="geometry" />
+          <mxGeometry height="162" width="260" y="118" as="geometry" />
         </mxCell>
         <mxCell id="GEDjzR1hgh04v-O5zpm0-27" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-weight: 400; text-align: left;&quot;&gt;Entrée&lt;/span&gt;" vertex="1">
           <mxGeometry height="136" width="230" x="805" y="520.43" as="geometry" />
@@ -222,7 +222,7 @@
           <mxGeometry height="20" width="260" y="120" as="geometry" />
         </mxCell>
         <mxCell id="s22zIbrwkCM682lCoDNX-14" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Branche" vertex="1">
-          <mxGeometry height="110" width="240" x="180" y="171" as="geometry">
+          <mxGeometry height="130" width="240" x="180" y="171" as="geometry">
             <mxRectangle height="30" width="100" x="260" y="220" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
@@ -232,10 +232,10 @@
         <mxCell id="s22zIbrwkCM682lCoDNX-16" parent="s22zIbrwkCM682lCoDNX-14" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
           <mxGeometry height="8" width="240" y="70" as="geometry" />
         </mxCell>
-        <mxCell id="s22zIbrwkCM682lCoDNX-17" parent="s22zIbrwkCM682lCoDNX-14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ CalculerMoyenne() : float&lt;/div&gt;" vertex="1">
-          <mxGeometry height="32" width="240" y="78" as="geometry" />
+        <mxCell id="s22zIbrwkCM682lCoDNX-17" parent="s22zIbrwkCM682lCoDNX-14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ CalculerMoyenne() : float&lt;br&gt;+ GetTendance() : Enum&lt;/div&gt;" vertex="1">
+          <mxGeometry height="52" width="240" y="78" as="geometry" />
         </mxCell>
-        <mxCell id="s22zIbrwkCM682lCoDNX-18" edge="1" parent="1" source="s22zIbrwkCM682lCoDNX-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=diamond;endFill=1;exitX=0.994;exitY=0.365;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.002;entryY=0.196;entryDx=0;entryDy=0;entryPerimeter=0;" target="GEDjzR1hgh04v-O5zpm0-20">
+        <mxCell id="s22zIbrwkCM682lCoDNX-18" edge="1" parent="1" source="s22zIbrwkCM682lCoDNX-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=diamond;endFill=1;exitX=0.994;exitY=0.365;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.031;entryY=0.448;entryDx=0;entryDy=0;entryPerimeter=0;" target="GEDjzR1hgh04v-O5zpm0-20">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="730" y="550" as="sourcePoint" />
             <mxPoint x="730" y="213" as="targetPoint" />
@@ -316,7 +316,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="o-OGfWCJeUmZpapjotmO" name="MCD">
-    <mxGraphModel dx="2037" dy="373" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1554" dy="87" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -563,7 +563,7 @@
             <mxRectangle height="20" width="110" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="zdlzHmlXfwnAcTGnTC1w-87" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" value="module_groupe" vertex="1">
+        <mxCell id="zdlzHmlXfwnAcTGnTC1w-87" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" value="module" vertex="1">
           <mxGeometry height="80" width="210" x="480" y="1044.5" as="geometry" />
         </mxCell>
         <mxCell id="zdlzHmlXfwnAcTGnTC1w-88" parent="zdlzHmlXfwnAcTGnTC1w-87" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" value="" vertex="1">
@@ -759,10 +759,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="zdlzHmlXfwnAcTGnTC1w-179" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;" value="&lt;div&gt;&lt;div&gt;CREATE TABLE module_groupe(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_nom TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(mod_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;UNIQUE(mod_nom)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE type_travail(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;typ_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;typ_nom TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(typ_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;UNIQUE(typ_nom),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(mod_id) REFERENCES module_groupe(mod_id)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE branche(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;bra_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;bra_nom TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(bra_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(mod_id) REFERENCES module_groupe(mod_id)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE entree(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_duree NUMERIC(6,4)&amp;nbsp; &amp;nbsp;NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_description TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;ent_date NUMERIC NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;mod_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;typ_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(ent_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(mod_id) REFERENCES module_groupe(mod_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(typ_id) REFERENCES type_travail(typ_id)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;CREATE TABLE note(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_id INTEGER,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_date NUMERIC NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_description TEXT NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;not_valeur NUMERIC(2,1)&amp;nbsp; &amp;nbsp;NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;bra_id INTEGER NOT NULL,&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;PRIMARY KEY(not_id),&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;FOREIGN KEY(bra_id) REFERENCES branche(bra_id)&lt;/div&gt;&lt;div&gt;);&lt;/div&gt;&lt;div&gt;汐&lt;/div&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="620" width="650" x="1210" y="970" as="geometry" />
-        </mxCell>
-        <mxCell id="GR0vL3mvjDImDe_Aq2cD-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;strokeColor=default;verticalAlign=middle;spacingLeft=6;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=none;" value="classer" vertex="1">
+        <mxCell id="GR0vL3mvjDImDe_Aq2cD-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;strokeColor=default;verticalAlign=middle;spacingLeft=6;fontFamily=Helvetica;fontSize=12;fontColor=default;fillColor=none;" value="appartient" vertex="1">
           <mxGeometry height="40" width="100" x="540" y="1221" as="geometry" />
         </mxCell>
         <mxCell id="GR0vL3mvjDImDe_Aq2cD-2" edge="1" parent="1" source="GR0vL3mvjDImDe_Aq2cD-1" style="endArrow=none;html=1;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;entryX=0.529;entryY=0.969;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryPerimeter=0;exitPerimeter=0;" target="zdlzHmlXfwnAcTGnTC1w-91" value="">

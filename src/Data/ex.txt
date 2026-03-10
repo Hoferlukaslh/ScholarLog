@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace SQLite_test;
 
+// Fichier d'exemple d'utilisation de Data
+
 class Program
 {
     static void Main(string[] args)

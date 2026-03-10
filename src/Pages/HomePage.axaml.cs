@@ -67,7 +67,5 @@ public partial class HomePage : UserControl
         public Trend PracticeTrend { get; set; }
 
         public double GlobalAverage => (AvgPractice + AvgTheory) / 2;
-        
-        
     }
 }

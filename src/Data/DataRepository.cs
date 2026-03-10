@@ -1,4 +1,4 @@
-namespace ScholarLog.DataAccess;
+namespace ScholarLog.Data;
 
 using System;
 using System.ComponentModel.DataAnnotations;
