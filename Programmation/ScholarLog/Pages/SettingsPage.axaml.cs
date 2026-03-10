@@ -2,7 +2,7 @@
     Fichier      :  SettingsPage.axaml.cs
     Projet       :  ScholarLog
 
-    Description  : 
+    Description  :
         Code-behind de la vue SettingsPage.
 
         Ce fichier gère la logique associée aux paramètres affichés dans l'interface, notamment :
@@ -23,7 +23,17 @@
         - Un Flyout est affiché en cas d'erreur de chemin.
 */
 
-namespace ScholarLog.Views;
+namespace ScholarLog.Pages;
+
+using System;
+using System.IO;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
+using Avalonia.Styling;
+using Avalonia.Platform.Storage;
+using Avalonia.Controls.Primitives;
 
 public partial class SettingsPage : UserControl
 {

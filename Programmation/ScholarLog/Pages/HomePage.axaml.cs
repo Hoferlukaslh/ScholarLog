@@ -2,7 +2,7 @@
     Fichier      :  HomePage.axaml.cs
     Projet       :  ScholarLog
 
-    Description  : 
+    Description  :
         Code-behind de la vue HomePage.
         Initialise la collection de modules affichés dans la page
         principale et fournit les données utilisées pour l'interface.
@@ -17,7 +17,12 @@
         - La classe Module représente un module scolaire avec ses statistiques.
 */
 
-namespace ScholarLog.Views;
+namespace ScholarLog.Pages;
+
+using Avalonia.Controls;
+using System;
+using System.Collections.ObjectModel; 
+using CommunityToolkit.Mvvm.ComponentModel;
 
 public partial class HomePage : UserControl
 {

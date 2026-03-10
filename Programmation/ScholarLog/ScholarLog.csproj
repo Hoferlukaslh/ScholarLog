@@ -25,6 +25,14 @@
         </PackageReference>
         <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.1.1" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.4" />
+        <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.4">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Svg.Controls.Avalonia" Version="11.3.9.2" />
     </ItemGroup>
 </Project>

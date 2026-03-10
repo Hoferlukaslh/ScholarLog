@@ -23,10 +23,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:views="using:ScholarLog.Views"
+             xmlns:Pages="clr-namespace:ScholarLog.Pages"
              mc:Ignorable="d" d:DesignWidth="740" d:DesignHeight="450"
-             x:Class="ScholarLog.Views.SettingsPage"
-             x:DataType="views:SettingsPage">
+             x:Class="ScholarLog.Pages.SettingsPage"
+             x:DataType="Pages:SettingsPage">
+    
     
     <UserControl.Styles>
         <Style Selector="FlyoutPresenter.alerteDanger">

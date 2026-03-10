@@ -8,7 +8,11 @@
     Date         :  10.03.2026
 */
 
-namespace ScholarLog.Views;
+namespace ScholarLog.Pages;
+
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
 
 public partial class ExemplePage : UserControl
 {
