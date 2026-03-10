@@ -1,8 +1,4 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-using Avalonia.Controls;
-using Avalonia.Controls.Templates;
-using ScholarLog.ViewModels;
+
 
 namespace ScholarLog;
 

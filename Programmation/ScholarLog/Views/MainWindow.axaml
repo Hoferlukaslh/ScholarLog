@@ -1,3 +1,25 @@
+<!--
+    Fichier      :  MainWindow.axaml
+    Projet       :  ScholarLog
+   
+    Description  :  
+        Gère la fenêtre principale de l'application, y compris :
+            - Styles spécifiques aux contrôles et transitions
+            - Gestion du thème (clair/sombre pour cas Linux)
+            - Barre de navigation latérale avec boutons et icônes
+            - Fond dynamique avec effets de lumière ambiante
+            - ContentControl principal pour l'affichage du contenu
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  10.03.2026
+
+    Remarques    :
+        - Les transitions de style sont définies pour les labels et icônes.
+        - Cas spécial pour Linux : gestion d'AcrylicBlur mal supportée.
+        - La barre de navigation contient le logo, les boutons principaux et les actions secondaires.
+        - Les icônes utilisent des caractères Unicode des polices Phosphor -> voir ressources dynamic dans App.axaml
+-->
+
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:ScholarLog.ViewModels"
@@ -15,8 +37,6 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="{DynamicResource AppIcon}"
         Title="ScholarLog">
-        
-    
     
     <Window.Styles>
         <Style Selector="Label.menu-text, TextBlock.menu-text">
@@ -36,6 +56,7 @@
             <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"/>
         </Style>
         
+        <!-- Cas exceptionnel pour Linux -> gère mal AcrylicBlur -->
         <Style Selector="Window.linux">
             <Setter Property="Background" Value="{DynamicResource PrimaryBackgroundLinux}"/>
         </Style>

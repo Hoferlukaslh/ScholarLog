@@ -1,12 +1,27 @@
-using System;
-using System.IO;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using Avalonia.Styling;
-using Avalonia.Platform.Storage;
-using Avalonia.Controls.Primitives;
+/*
+    Fichier      :  SettingsPage.axaml.cs
+    Projet       :  ScholarLog
+
+    Description  : 
+        Code-behind de la vue SettingsPage.
+
+        Ce fichier gère la logique associée aux paramètres affichés dans l'interface, notamment :
+            - La gestion du thème de l'application (mode clair / sombre)
+            - La sélection du fichier de base de données SQLite
+            - La validation du chemin fourni par l'utilisateur
+            - L'affichage d'un message d'erreur si le fichier est introuvable
+
+        Le fichier utilise les API de stockage Avalonia pour ouvrir un
+        sélecteur de fichier compatible multiplateforme.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  10.03.2026
+
+    Remarques    :
+        - Le thème est appliqué via Application.Current.RequestedThemeVariant.
+        - Le chemin de la base de données est validé à l'aide de File.Exists().
+        - Un Flyout est affiché en cas d'erreur de chemin.
+*/
 
 namespace ScholarLog.Views;
 

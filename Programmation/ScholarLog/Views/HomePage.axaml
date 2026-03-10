@@ -1,3 +1,30 @@
+<!--
+    Fichier      :  JournalPage.axaml
+    Projet       :  ScholarLog
+    
+    Description  :
+        Vue principale affichant un aperçu des modules de l'utilisateur.
+        Chaque module est présenté sous forme de carte contenant :
+            - Le nom du module
+            - La moyenne théorique
+            - La moyenne pratique
+            - La moyenne globale
+            - L'évolution (trend) des notes
+
+       Les cartes sont générées dynamiquement à partir d'une
+       collection liée au ViewModel.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  10.03.2026
+
+    Remarques    :
+        - Utilise un ItemsControl avec WrapPanel pour afficher les modules.
+        - Les styles "trendIcon" adaptent automatiquement l'icône et la couleur 
+          en fonction de la tendance (Up, Down, Stable).
+        - Les cartes de module possèdent une animation au survol.
+        - Les ressources globales (polices, tailles, couleurs) proviennent de App.axaml.
+-->
+
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"

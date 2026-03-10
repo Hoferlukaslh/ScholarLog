@@ -1,7 +1,4 @@
-﻿using Avalonia;
-using System;
-
-namespace ScholarLog;
+﻿namespace ScholarLog;
 
 sealed class Program
 {

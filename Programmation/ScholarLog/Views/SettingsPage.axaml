@@ -1,3 +1,24 @@
+<!--
+    Fichier      :  SettingsPage.axaml
+    Projet       :  ScholarLog
+    
+    Description  :
+        Définit l'interface de la page des paramètres de l'application.
+        Cette vue permet à l'utilisateur de configurer certains éléments
+        globaux du programme, notamment :
+            - Le chemin du fichier de base de données SQLite
+            - La sélection du thème de l'application (clair / sombre)
+
+        La page contient également :
+            - Un message d'erreur via Flyout si le fichier n'existe pas
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  10.03.2026
+
+    Remarques    :
+        - Les ressources visuelles (polices, couleurs, tailles) proviennent de App.axaml.
+-->
+
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"

@@ -1,7 +1,21 @@
-using Avalonia.Controls;
-using System;
-using System.Collections.ObjectModel; // Changement ici !
-using CommunityToolkit.Mvvm.ComponentModel;
+/*
+    Fichier      :  HomePage.axaml.cs
+    Projet       :  ScholarLog
+
+    Description  : 
+        Code-behind de la vue HomePage.
+        Initialise la collection de modules affichés dans la page
+        principale et fournit les données utilisées pour l'interface.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  10.03.2026
+
+    Remarques    :
+        - /!\ Le code-behind est exclusivement du test, pas d'implémentation final actuellement. /!\
+        - Les données sont actuellement générées aléatoirement pour les tests.
+        - La collection Modules est liée à l'ItemsControl du XAML.
+        - La classe Module représente un module scolaire avec ses statistiques.
+*/
 
 namespace ScholarLog.Views;
 

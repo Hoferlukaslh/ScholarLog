@@ -1,11 +1,23 @@
-using Avalonia.Media;
-using System.Runtime.InteropServices;
-using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
-using Avalonia.Interactivity;
-using Avalonia.Threading;
-using System;
-using ScholarLog.Component;
+/*
+    Fichier      :  MainWindow.axaml.cs
+    Projet       :  ScholarLog
+
+    Description  : 
+        Code-behind de la fenêtre principale. Contient :
+            - Gestion du déplacement aléatoire des lumières ambiantes
+            - Gestion de la barre latérale (ouverture / fermeture)
+            - Gestion des boutons de navigation et chargement des pages
+            - Adaptation spécifique à Linux pour les effets de flou
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  10.03.2026
+
+    Remarques    :
+        - Les lumières sont déplacées toutes les 7,5 secondes via DispatcherTimer.
+        - Les transitions de largeur et d'opacité de la barre latérale sont gérées manuellement.
+        - Le contenu principal est mis à jour via MainContentControler.
+        - Classes "linux" et "rotated" utilisées pour ajuster le style.
+*/
 
 namespace ScholarLog.Views
 {

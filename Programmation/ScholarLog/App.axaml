@@ -1,3 +1,20 @@
+<!-- 
+    Fichier      :  App.axaml
+    Projet       :  ScholarLog
+
+    Description  :  Définit les styles globaux, ressources et thèmes de l'application.
+                    Contient les polices, tailles de texte, tailles d'icônes, couleurs,
+                    coins arrondis et icônes utilisées dans tout le projet.
+
+    Auteur       : Lukas Hofer - TINF2
+    Date         : 10.03.2026
+
+    Remarques    : 
+        - Les polices sont chargées depuis le dossier Assets/Fonts.
+        - Les thèmes Light et Dark sont définis avec leurs ressources respectives.
+        - Les icônes utilisent des caractères Unicode spécifiques à la police Phosphor.
+-->
+
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ScholarLog.App"
@@ -95,7 +112,7 @@
                     <SolidColorBrush x:Key="CardBorder">#20FFFFFF</SolidColorBrush>
                 </ResourceDictionary>
 
-                <!-- Thème claire -->
+                <!-- Thème clair -->
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="PrimaryBackground">#DDF0F2F8</SolidColorBrush>
                     <SolidColorBrush x:Key="PrimaryBackgroundLinux">#F7F0F2F8</SolidColorBrush>
@@ -106,7 +123,7 @@
                     </LinearGradientBrush>
                     
                     <!-- ReSharper disable once Xaml.UnexpectedTextToken -->
-                    <WindowIcon x:Key="AppIcon">/Assets/Images/ScholarLogLogoTClaire.ico</WindowIcon>
+                    <WindowIcon x:Key="AppIcon">/Assets/Images/ScholarLogLogoTClair.ico</WindowIcon>
                     
                     <!-- Couleur du texte -->
                     <SolidColorBrush x:Key="PrimaryForeground">#1C1E26</SolidColorBrush> 

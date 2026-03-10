@@ -1,3 +1,17 @@
+<!--
+    Fichier      :  NotesPage.axaml
+    Projet       :  ScholarLog
+    
+    Description  :
+        Vue permettant à l'utilisateur de voir/editer ces notes.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  10.03.2026
+
+    Remarques    :
+        Non-commencé.
+-->
+
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"

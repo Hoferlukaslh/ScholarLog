@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <ApplicationIcon>Assets\Images\ScholarLogLogoTClaire.ico</ApplicationIcon>
+        <ApplicationIcon>Assets\Images\ScholarLogLogoTClair.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>

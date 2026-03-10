@@ -1,3 +1,18 @@
+<!--
+    Fichier      :  ExemplePage.axaml
+    Projet       :  ScholarLog
+    
+    Description  :
+        Page d'exemple utilisée pour tester l'affichage et les composants
+        de l'interface utilisateur.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  10.03.2026
+
+    Remarques    :
+        - Cette page sert principalement de démonstration UI pour le projet.
+-->
+
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
