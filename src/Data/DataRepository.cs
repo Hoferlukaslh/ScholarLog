@@ -1,10 +1,9 @@
 namespace ScholarLog.Data;
 
 using System;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 public class DataRepository : IDisposable
@@ -14,68 +13,68 @@ public class DataRepository : IDisposable
     public DataRepository()
     {
         _context = new MonDbContext();
+        InitialiserBaseDeDonnees();
+    }
 
-        // 1. On s'assure que le fichier existe et que les tables de base sont là
-        // Si le fichier n'existe pas, il le crée. S'il existe, il ne fait rien.
+    private void InitialiserBaseDeDonnees()
+    {
         _context.Database.EnsureCreated();
 
-        // 2. Sécurité spécifique pour SQLite : 
-        // On vérifie si la table 'Module' existe vraiment dans le fichier
         using (var command = _context.Database.GetDbConnection().CreateCommand())
         {
-            command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='Module';";
+            command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='module';";
             _context.Database.OpenConnection();
         
             var result = command.ExecuteScalar();
         
             if (result == null)
             {
-                // La table n'existe pas (le fichier était vide ou vieux)
-                // On utilise le "Generator" pour créer les tables manquantes sans supprimer le fichier
                 var databaseCreator = (Microsoft.EntityFrameworkCore.Storage.RelationalDatabaseCreator)_context.Database.GetService<Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator>();
                 databaseCreator.CreateTables();
                 Console.WriteLine("Tables créées dans la base existante.");
             }
         }
     }
-    // Lecture 
-    public List<Module> GetModules()
+
+    //  Lecture Asynchrone 
+    public async Task<List<Module>> GetModulesAsync()
     {
-        return _context.Module
+        return await _context.Module
             .Include(m => m.Branches).ThenInclude(b => b.Notes)
-            .Include(m => m.Entrees).ThenInclude(e => e.Type)
-            .Include(m => m.TypesTravail)
-            .ToList();
+            .Include(m => m.JournalDeTravail).ThenInclude(e => e.Type) 
+            .Include(m => m.TypesDeTravail)
+            .ToListAsync();
     }
 
-    // Création 
-    public void AjouterModule(Module m) { _context.Module.Add(m); _context.SaveChanges(); }
-    public void AjouterEntree(Entree e) { _context.Entree.Add(e); _context.SaveChanges(); }
-    public void AjouterNote(Note n) { _context.Note.Add(n); _context.SaveChanges(); }
-    public void AjouterBranche(Branche b) { _context.Branche.Add(b); _context.SaveChanges(); }
+    //  Création Asynchrone 
+    public async Task AjouterModuleAsync(Module m) { _context.Module.Add(m); await _context.SaveChangesAsync(); }
+    public async Task AjouterEntreeAsync(Entree e) { _context.Entree.Add(e); await _context.SaveChangesAsync(); }
+    public async Task AjouterNoteAsync(Note n) { _context.Note.Add(n); await _context.SaveChangesAsync(); }
+    public async Task AjouterBrancheAsync(Branche b) { _context.Branche.Add(b); await _context.SaveChangesAsync(); }
     
-    public void AjouterTypeTravail(TypeTravail t)
+    public async Task AjouterTypeTravailAsync(TypeTravail t)
     {
-        if (!_context.TypeTravail.Any(type => type.Nom == t.Nom && type.ModuleId == t.ModuleId))
+        bool existe = await _context.TypeTravail.AnyAsync(type => type.Nom == t.Nom && type.ModuleId == t.ModuleId);
+        if (!existe)
         {
             _context.TypeTravail.Add(t);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 
-    // Modification 
-    public void ModifierModule(Module m) { _context.Module.Update(m); _context.SaveChanges(); }
-    public void ModifierBranche(Branche b) { _context.Branche.Update(b); _context.SaveChanges(); }
-    public void ModifierTypeTravail(TypeTravail t) { _context.TypeTravail.Update(t); _context.SaveChanges(); }
-    public void ModifierNote(Note n) { _context.Note.Update(n); _context.SaveChanges(); }
-    public void ModifierEntree(Entree e) { _context.Entree.Update(e); _context.SaveChanges(); }
+    //  Modification Asynchrone 
+    public async Task ModifierModuleAsync(Module m) { _context.Module.Update(m); await _context.SaveChangesAsync(); }
+    public async Task ModifierBrancheAsync(Branche b) { _context.Branche.Update(b); await _context.SaveChangesAsync(); }
+    public async Task ModifierTypeTravailAsync(TypeTravail t) { _context.TypeTravail.Update(t); await _context.SaveChangesAsync(); }
+    public async Task ModifierNoteAsync(Note n) { _context.Note.Update(n); await _context.SaveChangesAsync(); }
+    public async Task ModifierEntreeAsync(Entree e) { _context.Entree.Update(e); await _context.SaveChangesAsync(); }
 
-    // Suppression 
-    public void SupprimerModule(Module m) { _context.Module.Remove(m); _context.SaveChanges(); }
-    public void SupprimerBranche(Branche b) { _context.Branche.Remove(b); _context.SaveChanges(); }
-    public void SupprimerTypeTravail(TypeTravail t) { _context.TypeTravail.Remove(t); _context.SaveChanges(); }
-    public void SupprimerNote(Note n) { _context.Note.Remove(n); _context.SaveChanges(); }
-    public void SupprimerEntree(Entree e) { _context.Entree.Remove(e); _context.SaveChanges(); }
+    //  Suppression Asynchrone 
+    public async Task SupprimerModuleAsync(Module m) { _context.Module.Remove(m); await _context.SaveChangesAsync(); }
+    public async Task SupprimerBrancheAsync(Branche b) { _context.Branche.Remove(b); await _context.SaveChangesAsync(); }
+    public async Task SupprimerTypeTravailAsync(TypeTravail t) { _context.TypeTravail.Remove(t); await _context.SaveChangesAsync(); }
+    public async Task SupprimerNoteAsync(Note n) { _context.Note.Remove(n); await _context.SaveChangesAsync(); }
+    public async Task SupprimerEntreeAsync(Entree e) { _context.Entree.Remove(e); await _context.SaveChangesAsync(); }
 
     public void Dispose()
     {

@@ -6,14 +6,17 @@
         <!-- Optimisation de la compilation -->
         <InvariantGlobalization>true</InvariantGlobalization>
 	    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+        <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
+        <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+        <EnableUnsafeAssemblyLoadSupport>false</EnableUnsafeAssemblyLoadSupport>
         <DebugSymbols>false</DebugSymbols>
         <DebugType>none</DebugType>
         <StackTraceSupport>false</StackTraceSupport>
         <DebuggerSupport>false</DebuggerSupport>
         <!-- Voir pour désactiver TRIM en cas de problèmes -->
         <PublishTrimmed>true</PublishTrimmed> 
-        <TrimMode>link</TrimMode>
-        
+        <!--<TrimMode>link</TrimMode> EF core fonctionne mal -->
+        <TrimMode>partial</TrimMode>
 
         <Nullable>enable</Nullable>
         <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -52,6 +55,5 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Svg.Controls.Avalonia" Version="11.3.9.2" />
     </ItemGroup>
 </Project>

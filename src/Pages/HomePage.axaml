@@ -84,7 +84,7 @@
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="Pages:HomePage+Module"> 
+                <DataTemplate x:DataType="Pages:HomePage+ModuleViewModel">
                     
                     <!-- Voir pour retract, car pour l'instant ça se rétracte pas ... -->
                     <Border Classes="moduleCard"
@@ -99,7 +99,7 @@
                         <Grid ColumnDefinitions="Auto, *, Auto">
                             
                             <TextBlock Grid.Column="0" 
-                                       Text="{Binding Name}" 
+                                       Text="{Binding ShortName}" 
                                        Foreground="{DynamicResource PrimaryForeground}" 
                                        FontSize="{DynamicResource FontSizeNormal}"
                                        FontFamily="{DynamicResource Helvetica}"
