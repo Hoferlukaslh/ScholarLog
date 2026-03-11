@@ -21,8 +21,6 @@
 
 namespace ScholarLog.Views;
 
-using Avalonia.Media;
-using System.Runtime.InteropServices;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Interactivity;

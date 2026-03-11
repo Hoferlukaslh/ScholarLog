@@ -2,14 +2,36 @@
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net10.0</TargetFramework>
+
+        <!-- Optimisation de la compilation -->
+        <InvariantGlobalization>true</InvariantGlobalization>
+	    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>none</DebugType>
+        <StackTraceSupport>false</StackTraceSupport>
+        <DebuggerSupport>false</DebuggerSupport>
+        <!-- Voir pour désactiver TRIM en cas de problèmes -->
+        <PublishTrimmed>true</PublishTrimmed> 
+        <TrimMode>link</TrimMode>
+        
+
         <Nullable>enable</Nullable>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <ApplicationIcon>Assets\Images\ScholarLogLogoTClair.ico</ApplicationIcon>
+        <ApplicationIcon>Assets\Images\ScholarLogLogoEx.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**" />
+        <!--<AvaloniaResource Include="Assets\**" /> avec : 84Mo --> 
+
+        <!-- Avec optimisation avec déclaration des ressources : 20Mo -->
+        <AvaloniaResource Include="Assets\Fonts\Helvetica\Helvetica.ttf" />
+        <AvaloniaResource Include="Assets\Fonts\Phosphor\Phosphor.ttf" />
+        <AvaloniaResource Include="Assets\Fonts\Phosphor\Phosphor-Duotone.ttf" />
+
+        <AvaloniaResource Include="Assets\Images\ScholarLogLogoTSombre.ico" />
+        <AvaloniaResource Include="Assets\Images\ScholarLogLogoTClair.ico" />
+        <AvaloniaResource Include="Assets\Images\ScholarLogLogoEx.ico" />
     </ItemGroup>
 
     <ItemGroup>
@@ -17,7 +39,6 @@
         <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.11" />
         <PackageReference Include="Avalonia.Desktop" Version="11.3.11" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.11" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.11" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Include="Avalonia.Diagnostics" Version="11.3.11">
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
@@ -25,8 +46,6 @@
         </PackageReference>
         <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.1.1" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-        <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.4" />
-        <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.4">

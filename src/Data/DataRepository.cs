@@ -1,15 +1,11 @@
 namespace ScholarLog.Data;
 
 using System;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
-using System.Linq;
-using System.Collections.Generic;
 
 public class DataRepository : IDisposable
 {
