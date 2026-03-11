@@ -67,8 +67,8 @@
                         Foreground="{DynamicResource PrimaryForeground}" 
                         Padding="12,7" Cursor="Hand">
                     <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                        <TextBlock Padding="0,1,0,0" FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource FontSizeMedium}" Text="{DynamicResource IconeSave}"/>
-                        <TextBlock Padding="0,2,0,0" FontFamily="{DynamicResource HelveticaBold}" FontSize="{DynamicResource FontSizeNormal}" Text="sauvegarder" />
+                        <TextBlock Padding="0,5,0,0" FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource FontSizeMedium}" Text="{DynamicResource IconeSave}"/>
+                        <TextBlock Padding="0,1,0,0" FontFamily="{DynamicResource HelveticaBold}" FontSize="{DynamicResource FontSizeNormal}" Text="sauvegarder" />
                     </StackPanel>
                 </Button>
             </StackPanel>
