@@ -13,6 +13,9 @@
 
        Les cartes sont générées dynamiquement à partir d'une
        collection liée au ViewModel.
+       
+       A l'ouverture de la page, aucun module est sélectionné. L'utilisateur voit uniquement les cartes
+       Dès que l'utilisateur clique sur un module (carte) -> affiche le Journal, moy. branche et diagramme.
 
     Auteur       :  Lukas Hofer - TINF2
     Date         :  10.03.2026
@@ -33,31 +36,26 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ScholarLog.Pages.HomePage"
              x:DataType="Pages:HomePage">
-    
-    <UserControl.Styles>
+
+<UserControl.Styles>
+        <Style Selector="TextBlock.trendIcon">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+            <Setter Property="FontFamily" Value="{DynamicResource Phosphor}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
         
-            <!-- Voir pour implémenter ce genre de style de page dans l'app -->
-            <Style Selector="TextBlock.trendIcon">
-                <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
-                <Setter Property="FontFamily" Value="{DynamicResource Phosphor}"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-            </Style>
-            
-    <!-- Couleur et Icone en fonction de la trend -->
-            <Style Selector="TextBlock.trendIcon[Tag=Up]">
-                <Setter Property="Text" Value="{DynamicResource IconeUp}"/>
-                <Setter Property="Foreground" Value="#4caf50"/>
-            </Style>
-
-            <Style Selector="TextBlock.trendIcon[Tag=Down]">
-                <Setter Property="Text" Value="{DynamicResource IconeDown}"/>
-                <Setter Property="Foreground" Value="#f44336"/>
-            </Style>
-
-            <Style Selector="TextBlock.trendIcon[Tag=Stable]">
-                <Setter Property="Text" Value="{DynamicResource IconeStable}"/>
-                <Setter Property="Foreground" Value="#ff9800"/>
-            </Style>
+        <Style Selector="TextBlock.trendIcon[Tag=Up]">
+            <Setter Property="Text" Value="{DynamicResource IconeUp}"/>
+            <Setter Property="Foreground" Value="#4caf50"/>
+        </Style>
+        <Style Selector="TextBlock.trendIcon[Tag=Down]">
+            <Setter Property="Text" Value="{DynamicResource IconeDown}"/>
+            <Setter Property="Foreground" Value="#f44336"/>
+        </Style>
+        <Style Selector="TextBlock.trendIcon[Tag=Stable]">
+            <Setter Property="Text" Value="{DynamicResource IconeStable}"/>
+            <Setter Property="Foreground" Value="#ff9800"/>
+        </Style>
         
         <Style Selector="Border.moduleCard">
             <Setter Property="RenderTransform" Value="scale(1)"/>
@@ -68,85 +66,156 @@
                 </Transitions>
             </Setter>
         </Style>
-
         <Style Selector="Border.moduleCard:pointerover">
             <Setter Property="RenderTransform" Value="scale(1.02)"/>
         </Style>
+
+        <Style Selector="ListBox">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
     </UserControl.Styles>
     
-    <!-- Voir pour wrapper tout ça dans une autre balise -> animation dépliage -->
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <ItemsControl ItemsSource="{Binding Modules}" Margin="10">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="Pages:HomePage+ModuleViewModel">
+    <Grid Name="MJETBrancheGraph" ColumnDefinitions="7*, 0*" Margin="0"> <!-- Fait le code qui permet de passer le 0 à 3 au clique sur module-->
+        
+        <Grid Name="ModuleEtJournal" Grid.Column="0" RowDefinitions="60*, 0*" Margin="0"> <!-- Fait le code qui permet de passer le 0 à 40 au clique sur module-->
+            
+            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+                <ListBox ItemsSource="{Binding Modules}" 
+                         SelectedItem="{Binding SelectedModule, Mode=TwoWay}"
+                         BorderThickness="0"
+                         SelectionChanged="OnModuleSelectionChanged"
+                         Margin="10">
                     
-                    <!-- Voir pour retract, car pour l'instant ça se rétracte pas ... -->
-                    <Border Classes="moduleCard"
-                            MinWidth="300" MaxWidth="380" 
-                            BorderBrush="{DynamicResource CardBorder}"
-                            Background="{DynamicResource CardBackground}"
-                            MinHeight="120" MaxHeight="140"
-                            Margin="5" Padding="20" 
-                            BorderThickness="1"
-                            CornerRadius="8" >
-                        
-                        <Grid ColumnDefinitions="Auto, *, Auto">
-                            
-                            <TextBlock Grid.Column="0" 
-                                       Text="{Binding ShortName}" 
-                                       Foreground="{DynamicResource PrimaryForeground}" 
-                                       FontSize="{DynamicResource FontSizeNormal}"
-                                       FontFamily="{DynamicResource Helvetica}"
-                                       VerticalAlignment="Center"/>
-                            
-                            <Grid Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                  RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto">
-                                
-                                <TextBlock Grid.Row="0" Grid.Column="0" 
-                                           Text="{Binding AvgTheory, StringFormat=\{0:0.0\}}" 
-                                           Foreground="{DynamicResource PrimaryForeground}" 
-                                           FontFamily="{DynamicResource Helvetica}"
-                                           FontSize="{DynamicResource FontSizeNormal}"
-                                           Margin="0,0,20,15" 
-                                           TextAlignment="Right" />
-                                
-                                <TextBlock Grid.Row="0" Grid.Column="1" 
-                                           Classes="trendIcon"
-                                           Tag="{Binding TheoryTrend}"
-                                           Margin="0,0,0,15"/> 
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="3"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    
 
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="Pages:HomePage+ModuleViewModel">
+                            <Border Classes="moduleCard"
+                                    MinWidth="150" 
+                                    BorderBrush="{DynamicResource CardBorder}"
+                                    Background="{DynamicResource CardBackground}"
+                                    MinHeight="50" 
+                                    Margin="5" Padding="20" 
+                                    BorderThickness="1"
+                                    CornerRadius="8" 
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch">
                                 
-                                
-                                <TextBlock Grid.Row="1" Grid.Column="0" 
-                                           Text="{Binding AvgPractice, StringFormat=\{0:0.0\}}" 
-                                           Foreground="{DynamicResource PrimaryForeground}" 
-                                           FontSize="{DynamicResource FontSizeNormal}"
-                                           FontFamily="{DynamicResource Helvetica}"
-                                           Margin="0,0,20,0" 
-                                           TextAlignment="Right" />
-                                
-                                <TextBlock Grid.Row="1" Grid.Column="1" 
-                                           Classes="trendIcon"
-                                           Tag="{Binding PracticeTrend}"/>
-                            </Grid>
+                                <Grid ColumnDefinitions="Auto, *, Auto" >
+                                    
+                                    <TextBlock Grid.Column="0" 
+                                               Text="{Binding ShortName}" 
+                                               Foreground="{DynamicResource PrimaryForeground}" 
+                                               FontSize="{DynamicResource FontSizeNormal}"
+                                               FontFamily="{DynamicResource Helvetica}"
+                                               VerticalAlignment="Center"/>
+                                    
+                                    <Grid Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto">
+                                        
+                                        <TextBlock Grid.Row="0" Grid.Column="0" 
+                                                   Text="{Binding AvgTheory, StringFormat=\{0:0.0\}}" 
+                                                   Foreground="{DynamicResource PrimaryForeground}" 
+                                                   FontFamily="{DynamicResource Helvetica}"
+                                                   FontSize="{DynamicResource FontSizeNormal}"
+                                                   Margin="0,0,20,15" 
+                                                   TextAlignment="Right" />
+                                        
+                                        <TextBlock Grid.Row="0" Grid.Column="1" 
+                                                   Classes="trendIcon"
+                                                   Tag="{Binding TheoryTrend}"
+                                                   Margin="0,0,0,15"/> 
 
-                            <TextBlock Grid.Column="2" 
-                                       Text="{Binding GlobalAverage, StringFormat=\{0:0.0\}}" 
-                                       Foreground="{DynamicResource PrimaryForeground}" 
-                                       FontSize="{DynamicResource FontSizeNormal}"
-                                       FontFamily="{DynamicResource Helvetica}"
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
+                                        <TextBlock Grid.Row="1" Grid.Column="0" 
+                                                   Text="{Binding AvgPractice, StringFormat=\{0:0.0\}}" 
+                                                   Foreground="{DynamicResource PrimaryForeground}" 
+                                                   FontSize="{DynamicResource FontSizeNormal}"
+                                                   FontFamily="{DynamicResource Helvetica}"
+                                                   Margin="0,0,20,0" 
+                                                   TextAlignment="Right" />
+                                        
+                                        <TextBlock Grid.Row="1" Grid.Column="1" 
+                                                   Classes="trendIcon"
+                                                   Tag="{Binding PracticeTrend}"/>
+                                    </Grid>
+
+                                    <TextBlock Grid.Column="2" 
+                                               Text="{Binding GlobalAverage, StringFormat=\{0:0.0\}}" 
+                                               Foreground="{DynamicResource PrimaryForeground}" 
+                                               FontSize="{DynamicResource FontSizeNormal}"
+                                               FontFamily="{DynamicResource Helvetica}"
+                                               FontWeight="Bold"
+                                               VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+            
+            <Border Grid.Row="1" 
+                    IsVisible="{Binding SelectedModule, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Margin="10" VerticalAlignment="Stretch"
+                    BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
+                    CornerRadius="{DynamicResource CardCornerRadius}" 
+                    Background="red">
+                
+                <TextBlock TextAlignment="Center"
+                           Text="JOURNAL" 
+                           Foreground="{DynamicResource PrimaryForeground}" 
+                           FontSize="{DynamicResource FontSizeNormal}"
+                           FontFamily="{DynamicResource Helvetica}"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Stretch"/>
+            </Border>
+        </Grid>
+        
+        <Grid Grid.Column="1" 
+              IsVisible="{Binding SelectedModule, Converter={x:Static ObjectConverters.IsNotNull}}"
+              HorizontalAlignment="Stretch"
+              RowDefinitions="65*, 35*" Margin="0,10,10,10" >
+            
+            <Border Grid.Row="0" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
+                    CornerRadius="{DynamicResource CardCornerRadius}" 
+                    Background="GreenYellow">
+                <TextBlock TextAlignment="Center"
+                           Text=" MOY. BRANCHE" 
+                           Foreground="{DynamicResource PrimaryForeground}" 
+                           FontSize="{DynamicResource FontSizeNormal}"
+                           FontFamily="{DynamicResource Helvetica}"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Stretch"/>
+            </Border>
+            
+            <Border Grid.Row="1" Margin="0,10,0,0" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
+                    CornerRadius="{DynamicResource CardCornerRadius}" 
+                    Background="Violet">
+                <TextBlock TextAlignment="Center"
+                           Text=" DIAGRAMME" 
+                           Foreground="{DynamicResource PrimaryForeground}" 
+                           FontSize="{DynamicResource FontSizeNormal}"
+                           FontFamily="{DynamicResource Helvetica}"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Stretch"/>
+            </Border>
+        </Grid>
+    </Grid>
 </UserControl>

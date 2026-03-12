@@ -46,8 +46,6 @@
     </UserControl.Styles>
 
     <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Disabled">
-        
-        
         <StackPanel Margin="40,30" Spacing="30" MaxWidth="1000" HorizontalAlignment="Left">
             
             <StackPanel Spacing="5" >
@@ -127,7 +125,8 @@
                     </StackPanel>
                 </Grid>
             </Border>
-            
         </StackPanel>
     </ScrollViewer>
+    
+    
 </UserControl>

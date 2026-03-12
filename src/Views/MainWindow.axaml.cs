@@ -19,12 +19,15 @@
         - Classes "linux" et "rotated" utilisées pour ajuster le style.
 */
 
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace ScholarLog.Views;
 
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm;
 using System;
 using ScholarLog.Pages;
 
@@ -33,6 +36,8 @@ public partial class MainWindow : Window
 {
     private DispatcherTimer? _lightTimer;
     private readonly Random _random = new Random();
+    
+   
 
     public MainWindow()
     {

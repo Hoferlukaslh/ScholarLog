@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel; 
 using System.Linq;
 using System.Threading.Tasks; 
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity; 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -25,10 +26,81 @@ namespace ScholarLog.Pages;
 
 public partial class HomePage : UserControl
 {
+    public static readonly StyledProperty<ModuleViewModel?> SelectedModuleProperty =
+        AvaloniaProperty.Register<HomePage, ModuleViewModel?>(nameof(SelectedModule));
+
+    public ModuleViewModel? SelectedModule
+    {
+        get => GetValue(SelectedModuleProperty);
+        set => SetValue(SelectedModuleProperty, value);
+    }
     
     public enum Trend {Up, Down, Stable}
     
     public ObservableCollection<ModuleViewModel> Modules { get; set; } = new ObservableCollection<ModuleViewModel>();
+    
+    
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        // On vérifie si la propriété modifiée est notre module sélectionné
+        if (change.Property == SelectedModuleProperty)
+        {
+            var oldVal = change.GetOldValue<ModuleViewModel?>();
+            var newVal = change.GetNewValue<ModuleViewModel?>();
+
+            // Si on passe de "rien" à un "module" -> on ouvre les panneaux
+            if (oldVal == null && newVal != null)
+            {
+                AnimateGridsAsync(true);
+            }
+            // Si l'utilisateur désélectionne le module -> on referme les panneaux
+            else if (oldVal != null && newVal == null)
+            {
+                AnimateGridsAsync(false);
+            }
+        }
+    }
+    private async void AnimateGridsAsync(bool open)
+    {
+        // Valeurs cibles demandées dans tes commentaires XAML
+        double targetCol = open ? 3.0 : 0.0;
+        double targetRow = open ? 40.0 : 0.0;
+
+        // Valeurs actuelles de départ
+        double startCol = MJETBrancheGraph.ColumnDefinitions[1].Width.Value;
+        double startRow = ModuleEtJournal.RowDefinitions[1].Height.Value;
+
+        // Configuration de l'animation
+        int durationMs = 300; // Durée de l'animation (300ms)
+        int fps = 60;
+        int steps = durationMs * fps / 1000;
+        int delay = 1000 / fps;
+
+        for (int i = 1; i <= steps; i++)
+        {
+            double progress = (double)i / steps;
+        
+            // Fonction d'assouplissement "Quadratic Ease Out" pour un mouvement naturel (ralentit à la fin)
+            double ease = 1 - (1 - progress) * (1 - progress);
+        
+            double currentCol = startCol + (targetCol - startCol) * ease;
+            double currentRow = startRow + (targetRow - startRow) * ease;
+
+            // Application aux définitions de la grille avec l'unité "Star" (*)
+            MJETBrancheGraph.ColumnDefinitions[1].Width = new GridLength(currentCol, GridUnitType.Star);
+            ModuleEtJournal.RowDefinitions[1].Height = new GridLength(currentRow, GridUnitType.Star);
+
+            // Pause asynchrone n'impactant pas le thread UI
+            await Task.Delay(delay);
+        }
+    
+        // Par sécurité, on force les valeurs exactes de fin pour éviter les erreurs d'arrondis
+        MJETBrancheGraph.ColumnDefinitions[1].Width = new GridLength(targetCol, GridUnitType.Star);
+        ModuleEtJournal.RowDefinitions[1].Height = new GridLength(targetRow, GridUnitType.Star);
+    }
+   
     
     public HomePage()
     {
@@ -160,6 +232,7 @@ public partial class HomePage : UserControl
 
     public class ModuleViewModel : ObservableObject
     {
+        
         public string Name { get; set; } = string.Empty;
         public string ShortName => Name.Length <= 3 ? Name : Name.Substring(0, 3).ToUpper();
         public double AvgPractice { get; set; }
@@ -182,5 +255,10 @@ public partial class HomePage : UserControl
                 return moyenne;
             }
         }
+    }
+
+    private void OnModuleSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        Console.WriteLine($"module : {SelectedModule.Name}");
     }
 }
