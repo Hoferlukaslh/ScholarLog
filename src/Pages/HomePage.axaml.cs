@@ -25,6 +25,9 @@ namespace ScholarLog.Pages;
 
 public partial class HomePage : UserControl
 {
+    
+    public enum Trend {Up, Down, Stable}
+    
     public ObservableCollection<ModuleViewModel> Modules { get; set; } = new ObservableCollection<ModuleViewModel>();
     
     public HomePage()
@@ -78,6 +81,7 @@ public partial class HomePage : UserControl
                     double avgTM = ObtenirMoyenne(branchesTM);
                     double avgPM = ObtenirMoyenne(branchesPM);
 
+
                     nouveauxModules.Add(new ModuleViewModel
                     {
                         Name = mod.Nom,
@@ -90,9 +94,9 @@ public partial class HomePage : UserControl
             }
         });
 
+        // nettoyage et actualisation
         Modules.Clear();
-        foreach (var mod in nouveauxModules)
-            Modules.Add(mod);
+        foreach (var mod in nouveauxModules) Modules.Add(mod);
     }
     
     public double ObtenirMoyenne(List<Branche> liste)
@@ -153,10 +157,6 @@ public partial class HomePage : UserControl
             await repo.AjouterModuleAsync(new ScholarLog.Data.Module { Nom = name });
     }
 
-    public enum Trend
-    {
-        Up, Down, Stable
-    }
 
     public class ModuleViewModel : ObservableObject
     {
