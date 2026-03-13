@@ -143,7 +143,7 @@
                                                    Margin="0,0,0,15"/> 
 
                                         <TextBlock Grid.Row="1" Grid.Column="0" 
-                                                   Text="{Binding AvgPractice, StringFormat=\{0:0.0\}}" 
+                                                   Text="{Binding TravailModule, StringFormat=\{0:0.0\}}" 
                                                    Foreground="{DynamicResource PrimaryForeground}" 
                                                    FontSize="{DynamicResource FontSizeNormal}"
                                                    FontFamily="{DynamicResource Helvetica}"
@@ -151,8 +151,9 @@
                                                    TextAlignment="Right" />
                                         
                                         <TextBlock Grid.Row="1" Grid.Column="1" 
+                                                   Foreground="#00000000"
                                                    Classes="trendIcon"
-                                                   Tag="{Binding PracticeTrend}"/>
+                                                   Tag=" "/>
                                     </Grid>
 
                                     <TextBlock Grid.Column="2" 
@@ -220,7 +221,8 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-
+                            
+                            <!--
                             <Separator Height="1" Background="{DynamicResource CardBorder}" Margin="0,5"/>
 
                             <TextBlock Text="PRATIQUE" FontSize="10" Foreground="{DynamicResource SecondaryForeground}" FontWeight="Bold"/>
@@ -234,7 +236,7 @@
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                            </ItemsControl>-->
 
                             <Separator Height="1" Background="{DynamicResource CardBorder}" Margin="0,5"/>
 

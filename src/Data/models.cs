@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ScholarLog.Data;
@@ -24,51 +25,6 @@ public class Module : ObservableObject
     public List<Branche> Branches { get; set; } = new List<Branche>();
     public List<Entree> JournalDeTravail { get; set; } = new List<Entree>();
     public List<TypeTravail> TypesDeTravail { get; set; } = new List<TypeTravail>();
-
-    public double CalculerNoteFinale()
-    {
-        double sommeMoyennesTM = 0;
-        int compteurTM = 0;
-
-        double sommeMoyennesPM = 0;
-        int compteurPM = 0;
-
-        // parcours de toutes les branches du module
-        foreach (Branche branche in Branches)
-        {
-            // traitement seulement  s'il y a des notes
-            if (branche.Notes != null && branche.Notes.Count > 0)
-            {
-                double moyenneBranche = branche.CalculerMoyenne();
-
-                // trie par type de cours (TM ou PM)
-                if (branche.Type == TypeCours.TM)
-                {
-                    sommeMoyennesTM += moyenneBranche;
-                    compteurTM++;
-                }
-                else if (branche.Type == TypeCours.PM)
-                {
-                    sommeMoyennesPM += moyenneBranche;
-                    compteurPM++;
-                }
-            }
-        }
-
-        // Calcul des moyennes intermédiaires pour chaque groupe
-        double noteFinaleTM = (compteurTM > 0) ? (sommeMoyennesTM / compteurTM) : 0;
-        double noteFinalePM = (compteurPM > 0) ? (sommeMoyennesPM / compteurPM) : 0;
-
-        // calcul de la note finale du module
-        // Si les deux types existent, on fait la moyenne des deux
-        if (compteurTM > 0 && compteurPM > 0)
-            return (noteFinaleTM + noteFinalePM) / 2.0;
-
-        // Sinon, on retourne l'une ou l'autre (si l'une est à 0, l'addition fonctionne)
-        return noteFinaleTM + noteFinalePM;
-    }
-
-  
 }
 
 [Table("type_travail")]
@@ -193,7 +149,7 @@ public class BrancheViewModel : Branche
 }
 
 
-public class TypeTravailViewModel : TypeTravail
+public class TypeTravailViewModel() : TypeTravail
 {
     public double Somme { get; set; }
 }
@@ -202,22 +158,30 @@ public class ModuleViewModel : Module
 {
 
     public string ShortName => Nom.Length <= 3 ? Nom : Nom.Substring(0, 3).ToUpper();
-    public double AvgPractice { get; set; }
     public double AvgTheory { get; set; }
+    public double TravailModule { get; set; }
     public Trend TheoryTrend { get; set; }
-    public Trend PracticeTrend { get; set; }
 
     public double GlobalAverage
     {
         get
         {
             double moyenne;
+            double noteProjetModule = 0;
+            
+            foreach (var branche in base.Branches)
+            {
+                if (branche.Type == TypeCours.M)
+                    noteProjetModule = branche.Notes.First().Valeur;
+            }
+
+            TravailModule = noteProjetModule;
                 
             // Si les deux moyennes sont présentes, on fait la moyenne des deux
-            if (AvgPractice > 0 && AvgTheory > 0)
-                moyenne =  (AvgPractice + AvgTheory) / 2.0;
+            if (noteProjetModule > 0 && AvgTheory > 0)
+                moyenne =  (noteProjetModule + AvgTheory) / 2.0;
             else // Sinon, on retourne celle qui n'est pas à zéro (ou 0 si aucune n'a de note)
-                moyenne =  AvgPractice + AvgTheory; 
+                moyenne =  noteProjetModule + AvgTheory; 
                 
             return moyenne;
         }

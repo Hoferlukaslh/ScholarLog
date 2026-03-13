@@ -27,8 +27,6 @@ namespace ScholarLog.Pages;
 
 public partial class HomePage : UserControl
 {
-    
-    
     public static readonly StyledProperty<ModuleViewModel?> SelectedModuleProperty =
         AvaloniaProperty.Register<HomePage, ModuleViewModel?>(nameof(SelectedModule));
     
@@ -54,13 +52,15 @@ public partial class HomePage : UserControl
     }
     
     
+    
     public ObservableCollection<ModuleViewModel> Modules { get; set; } = new ObservableCollection<ModuleViewModel>();
     public ObservableCollection<BrancheViewModel> BranchesTM { get; set; } = new ObservableCollection<BrancheViewModel>();
-    public ObservableCollection<BrancheViewModel> BranchesPM { get; set; } = new ObservableCollection<BrancheViewModel>();
     public ObservableCollection<BrancheViewModel> BranchesM { get; set; } = new ObservableCollection<BrancheViewModel>();
     public ObservableCollection<TypeTravailViewModel> TypesTravail { get; set; } = new ObservableCollection<TypeTravailViewModel>();
-    
     public ObservableCollection<Entree> Journal { get; set; } = new ObservableCollection<Entree>();
+    
+    
+    
     
     // Clique sur un model de module (carte)
     private void OnModuleSelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -69,19 +69,56 @@ public partial class HomePage : UserControl
 
         // nettoyage 
         BranchesTM.Clear();
-        BranchesPM.Clear();
         BranchesM.Clear();
         Journal.Clear();
         TypesTravail.Clear();
+        
+        var typestravail = new List<TypeTravailViewModel>();
+        
+        // parcours de chaque entrée du journal
+        foreach (var entree in SelectedModule.JournalDeTravail)
+        {
+            bool existeDeja = false;
 
+            // Recherche manuelle par identifiant unique
+            for (int i = 0; i < typestravail.Count; i++)
+            {
+                if (typestravail[i].Id == entree.Type.Id) 
+                    existeDeja = true;
+            }
+
+            // insertion uniquement si l'élément est absent
+            if (!existeDeja)
+            {
+                TypeTravailViewModel wm = new TypeTravailViewModel
+                {
+                    Id = entree.Type.Id,
+                    Nom = entree.Type.Nom,
+                    ModuleId = entree.Type.ModuleId,
+                    Somme = 0.00
+                };
+        
+                typestravail.Add(wm);
+            }
+        }
+        
         // pour chaque entrée du journal
         foreach (var entree in SelectedModule.JournalDeTravail)
         {
             Journal.Add(entree);
-            //Console.WriteLine($"{entree.Date} - {entree.Duree} : {entree.Description}");
+
+            for (int i = 0; i < typestravail.Count; i++)
+            {
+                if (entree.TypeTravailId == typestravail[i].Id)
+                    typestravail[i].Somme += entree.Duree;
+            }
         }
-        
-        // faut ajouter TypesTravail
+
+        foreach (var type in typestravail)
+        {
+            Console.WriteLine($"{type.Nom} - {type.Somme}");
+            TypesTravail.Add(type);
+        }
         
         
 
@@ -105,9 +142,7 @@ public partial class HomePage : UserControl
                 case TypeCours.TM:
                     BranchesTM.Add(vm);
                     break;
-                case TypeCours.PM:
-                    BranchesPM.Add(vm);
-                    break;
+                
                 case TypeCours.M:
                     BranchesM.Add(vm);
                     break;
@@ -209,7 +244,7 @@ public partial class HomePage : UserControl
                             branchesTM.Add(branche);
                         
                         // Si Pratique -> ajout dans liste branche pratique
-                        else if (branche.Type == TypeCours.PM) 
+                        else if (branche.Type == TypeCours.M)
                             branchesPM.Add(branche);
                     }
                     
@@ -222,9 +257,8 @@ public partial class HomePage : UserControl
                         Id = mod.Id,
                         Nom = mod.Nom,
                         AvgTheory = Math.Round(avgTM, 1),
-                        AvgPractice = Math.Round(avgPM, 1),
                         TheoryTrend = DeterminerTendance(branchesTM, avgTM),
-                        PracticeTrend = DeterminerTendance(branchesPM, avgPM),
+                        TravailModule = avgPM,
                         Branches = mod.Branches.ToList(),
                         JournalDeTravail = mod.JournalDeTravail.ToList()
                     });
@@ -235,7 +269,6 @@ public partial class HomePage : UserControl
         // nettoyage et actualisation
         Modules.Clear();
         foreach (var mod in nouveauxModules) Modules.Add(mod);
-        
     }
     
     public double ObtenirMoyenne(List<Branche> liste)
