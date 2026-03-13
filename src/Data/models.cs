@@ -1,3 +1,6 @@
+using System.Collections;
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace ScholarLog.Data;
 
 using System;
@@ -6,9 +9,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 public enum TypeCours { M, TM, PM } 
+public enum Trend {Up, Down, Stable}
 
 [Table("module")]
-public class Module
+public class Module : ObservableObject
 {
     [Key][Column("mod_id")]
     public int Id { get; set; }
@@ -63,10 +67,12 @@ public class Module
         // Sinon, on retourne l'une ou l'autre (si l'une est à 0, l'addition fonctionne)
         return noteFinaleTM + noteFinalePM;
     }
+
+  
 }
 
 [Table("type_travail")]
-public class TypeTravail
+public class TypeTravail : ObservableObject
 {
     [Key][Column("typ_id")]
     public int Id { get; set; }
@@ -81,8 +87,9 @@ public class TypeTravail
     public Module Module { get; set; }
 }
 
+
 [Table("entree")]
-public class Entree 
+public class Entree : ObservableObject
 {
     [Key][Column("ent_id")]
     public int Id { get; set; }
@@ -110,7 +117,7 @@ public class Entree
 }
 
 [Table("branche")]
-public class Branche
+public class Branche : ObservableObject
 {
     [Key][Column("bra_id")]
     public int Id { get; set; }
@@ -151,7 +158,7 @@ public class Branche
 }
 
 [Table("note")]
-public class Note
+public class Note : ObservableObject
 {
     [Key][Column("not_id")]
     public int Id { get; set; }
@@ -169,4 +176,50 @@ public class Note
     
     [ForeignKey("BrancheId")]
     public Branche Branche { get; set; }
+}
+
+
+
+
+/// 
+/// AFFICHAGE
+/// 
+
+
+public class BrancheViewModel : Branche
+{
+    public double Moyenne { get; set; }
+    public Trend BrancheTrend { get; set; }
+}
+
+
+public class TypeTravailViewModel : TypeTravail
+{
+    public double Somme { get; set; }
+}
+
+public class ModuleViewModel : Module
+{
+
+    public string ShortName => Nom.Length <= 3 ? Nom : Nom.Substring(0, 3).ToUpper();
+    public double AvgPractice { get; set; }
+    public double AvgTheory { get; set; }
+    public Trend TheoryTrend { get; set; }
+    public Trend PracticeTrend { get; set; }
+
+    public double GlobalAverage
+    {
+        get
+        {
+            double moyenne;
+                
+            // Si les deux moyennes sont présentes, on fait la moyenne des deux
+            if (AvgPractice > 0 && AvgTheory > 0)
+                moyenne =  (AvgPractice + AvgTheory) / 2.0;
+            else // Sinon, on retourne celle qui n'est pas à zéro (ou 0 si aucune n'a de note)
+                moyenne =  AvgPractice + AvgTheory; 
+                
+            return moyenne;
+        }
+    }
 }

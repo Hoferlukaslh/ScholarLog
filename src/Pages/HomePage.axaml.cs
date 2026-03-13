@@ -21,25 +21,101 @@ using Avalonia.Controls;
 using Avalonia.Interactivity; 
 using CommunityToolkit.Mvvm.ComponentModel;
 using ScholarLog.Data;
+using ScholarLog.ViewModels;
 
 namespace ScholarLog.Pages;
 
 public partial class HomePage : UserControl
 {
+    
+    
     public static readonly StyledProperty<ModuleViewModel?> SelectedModuleProperty =
         AvaloniaProperty.Register<HomePage, ModuleViewModel?>(nameof(SelectedModule));
-
+    
+    public HomePage()
+    {
+        InitializeComponent();
+        DataContext = this; 
+        
+        this.Loaded += HomePage_Loaded;
+    }
+    
+    private async void HomePage_Loaded(object? sender, RoutedEventArgs e)
+    {
+        this.Loaded -= HomePage_Loaded; 
+        await ChargerDonneesAsync();
+    }
+    
+    
     public ModuleViewModel? SelectedModule
     {
         get => GetValue(SelectedModuleProperty);
         set => SetValue(SelectedModuleProperty, value);
     }
     
-    public enum Trend {Up, Down, Stable}
     
     public ObservableCollection<ModuleViewModel> Modules { get; set; } = new ObservableCollection<ModuleViewModel>();
+    public ObservableCollection<BrancheViewModel> BranchesTM { get; set; } = new ObservableCollection<BrancheViewModel>();
+    public ObservableCollection<BrancheViewModel> BranchesPM { get; set; } = new ObservableCollection<BrancheViewModel>();
+    public ObservableCollection<BrancheViewModel> BranchesM { get; set; } = new ObservableCollection<BrancheViewModel>();
+    public ObservableCollection<TypeTravailViewModel> TypesTravail { get; set; } = new ObservableCollection<TypeTravailViewModel>();
     
+    public ObservableCollection<Entree> Journal { get; set; } = new ObservableCollection<Entree>();
     
+    // Clique sur un model de module (carte)
+    private void OnModuleSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (SelectedModule == null) return; 
+
+        // nettoyage 
+        BranchesTM.Clear();
+        BranchesPM.Clear();
+        BranchesM.Clear();
+        Journal.Clear();
+        TypesTravail.Clear();
+
+        // pour chaque entrée du journal
+        foreach (var entree in SelectedModule.JournalDeTravail)
+        {
+            Journal.Add(entree);
+            //Console.WriteLine($"{entree.Date} - {entree.Duree} : {entree.Description}");
+        }
+        
+        // faut ajouter TypesTravail
+        
+        
+
+        // dispatching
+        foreach (var branche in SelectedModule.Branches)
+        {
+            double moy = branche.CalculerMoyenne();
+        
+            var vm = new BrancheViewModel
+            {
+                Nom = branche.Nom,
+                Moyenne = Math.Round(moy, 1),
+                Type = branche.Type,
+                Notes = branche.Notes.ToList(),
+                BrancheTrend = DeterminerTendance(new List<Branche> { branche }, moy)
+            };
+
+            // ajout dans la bonne collection selon le type
+            switch (branche.Type)
+            {
+                case TypeCours.TM:
+                    BranchesTM.Add(vm);
+                    break;
+                case TypeCours.PM:
+                    BranchesPM.Add(vm);
+                    break;
+                case TypeCours.M:
+                    BranchesM.Add(vm);
+                    break;
+            }
+        }
+    }
+
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -73,7 +149,7 @@ public partial class HomePage : UserControl
         double startRow = ModuleEtJournal.RowDefinitions[1].Height.Value;
 
         // Configuration de l'animation
-        int durationMs = 300; // Durée de l'animation (300ms)
+        int durationMs = 150; // Durée de l'animation (300ms)
         int fps = 60;
         int steps = durationMs * fps / 1000;
         int delay = 1000 / fps;
@@ -102,19 +178,6 @@ public partial class HomePage : UserControl
     }
    
     
-    public HomePage()
-    {
-        InitializeComponent();
-        DataContext = this; 
-        
-        this.Loaded += HomePage_Loaded;
-    }
-    
-    private async void HomePage_Loaded(object? sender, RoutedEventArgs e)
-    {
-        this.Loaded -= HomePage_Loaded; 
-        await ChargerDonneesAsync();
-    }
     
     private async Task ChargerDonneesAsync()
     {
@@ -125,15 +188,15 @@ public partial class HomePage : UserControl
         {
             using (var repo = new DataRepository())
             {
-                var modulesDb = await repo.GetModulesAsync(); 
+                var rawModules = await repo.GetModulesAsync();
 
-                if (!modulesDb.Any())
+                if (!rawModules.Any())
                 {
                     await CreerModulesParDefautAsync(repo); 
-                    modulesDb = await repo.GetModulesAsync(); 
+                    rawModules = await repo.GetModulesAsync(); 
                 }
 
-                foreach (var mod in modulesDb)
+                foreach (var mod in rawModules)
                 {
                     // listes branches 
                     var branchesTM = new List<Branche>(); // théorique
@@ -156,11 +219,14 @@ public partial class HomePage : UserControl
 
                     nouveauxModules.Add(new ModuleViewModel
                     {
-                        Name = mod.Nom,
+                        Id = mod.Id,
+                        Nom = mod.Nom,
                         AvgTheory = Math.Round(avgTM, 1),
                         AvgPractice = Math.Round(avgPM, 1),
                         TheoryTrend = DeterminerTendance(branchesTM, avgTM),
-                        PracticeTrend = DeterminerTendance(branchesPM, avgPM)
+                        PracticeTrend = DeterminerTendance(branchesPM, avgPM),
+                        Branches = mod.Branches.ToList(),
+                        JournalDeTravail = mod.JournalDeTravail.ToList()
                     });
                 }
             }
@@ -169,6 +235,7 @@ public partial class HomePage : UserControl
         // nettoyage et actualisation
         Modules.Clear();
         foreach (var mod in nouveauxModules) Modules.Add(mod);
+        
     }
     
     public double ObtenirMoyenne(List<Branche> liste)
@@ -227,38 +294,5 @@ public partial class HomePage : UserControl
         
         foreach (var name in moduleNames)
             await repo.AjouterModuleAsync(new ScholarLog.Data.Module { Nom = name });
-    }
-
-
-    public class ModuleViewModel : ObservableObject
-    {
-        
-        public string Name { get; set; } = string.Empty;
-        public string ShortName => Name.Length <= 3 ? Name : Name.Substring(0, 3).ToUpper();
-        public double AvgPractice { get; set; }
-        public double AvgTheory { get; set; }
-        public Trend TheoryTrend { get; set; }
-        public Trend PracticeTrend { get; set; }
-
-        public double GlobalAverage
-        {
-            get
-            {
-                double moyenne;
-                
-                // Si les deux moyennes sont présentes, on fait la moyenne des deux
-                if (AvgPractice > 0 && AvgTheory > 0)
-                    moyenne =  (AvgPractice + AvgTheory) / 2.0;
-                else // Sinon, on retourne celle qui n'est pas à zéro (ou 0 si aucune n'a de note)
-                    moyenne =  AvgPractice + AvgTheory; 
-                
-                return moyenne;
-            }
-        }
-    }
-
-    private void OnModuleSelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        Console.WriteLine($"module : {SelectedModule.Name}");
     }
 }
