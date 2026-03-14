@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity; 
 
 using ScholarLog.Data;
@@ -227,6 +228,7 @@ public partial class HomePage : UserControl
         MJETBrancheGraph.ColumnDefinitions[1].Width = new GridLength(targetCol, GridUnitType.Star);
         ModuleEtJournal.RowDefinitions[1].Height = new GridLength(targetRow, GridUnitType.Star);
     }
+    
     private async Task CreerModulesParDefautAsync(DataRepository repo)
     {
         string[] moduleNames = { "M0", "M1", "M2", "M3", "M4", "M5", "M6", "M7", "DIPL." };

@@ -93,9 +93,11 @@
             <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
                 <ListBox ItemsSource="{Binding Modules}" 
                          SelectedItem="{Binding SelectedModule, Mode=TwoWay}"
+                         SelectionMode="Single, Toggle"
                          BorderThickness="0"
                          SelectionChanged="OnModuleSelectionChanged"
                          Margin="10">
+
                     
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -115,7 +117,8 @@
                                     BorderThickness="1"
                                     CornerRadius="8" 
                                     HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch">
+                                    VerticalAlignment="Stretch"
+                                    >
                                 
                                 <Grid ColumnDefinitions="Auto, *, Auto" >
                                     
