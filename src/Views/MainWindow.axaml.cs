@@ -130,29 +130,34 @@ public partial class MainWindow : Window
             }
         }
     }
-
-    private void Setting_OnClick(object? sender, RoutedEventArgs e)
+    
+    private void ButtonAccueil_OnClick(object? sender, RoutedEventArgs e)
     {
-        MainContentControler.Content = new SettingsPage();
-    }
-
-    private void Buttonjournaux_OnClick(object? sender, RoutedEventArgs e)
-    {
-        MainContentControler.Content = new JournalPage();
+        if (MainContentControler.Content is not HomePage)
+            MainContentControler.Content = new HomePage();
     }
 
     private void ButtonNotes_OnClick(object? sender, RoutedEventArgs e)
     {
-        MainContentControler.Content = new NotesPage();
+        if (MainContentControler.Content is not NotesPage)
+            MainContentControler.Content = new NotesPage();
     }
-
-    private void ButtonAccueil_OnClick(object? sender, RoutedEventArgs e)
+    
+    private void Buttonjournaux_OnClick(object? sender, RoutedEventArgs e)
     {
-        MainContentControler.Content = new HomePage();
+        if (MainContentControler.Content is not JournalPage)
+            MainContentControler.Content = new JournalPage();
     }
 
     private async void ButtonExemple_OnClick(object? sender, RoutedEventArgs e)
     {
+        if (MainContentControler.Content is not ExemplePage)
             MainContentControler.Content = new ExemplePage();
+    }
+    
+    private void Setting_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (MainContentControler.Content is not SettingsPage)
+            MainContentControler.Content = new SettingsPage();
     }
 }
