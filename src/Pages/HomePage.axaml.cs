@@ -19,9 +19,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity; 
-using CommunityToolkit.Mvvm.ComponentModel;
 using ScholarLog.Data;
-using ScholarLog.ViewModels;
 
 namespace ScholarLog.Pages;
 
@@ -115,12 +113,9 @@ public partial class HomePage : UserControl
         }
 
         foreach (var type in typestravail)
-        {
-            Console.WriteLine($"{type.Nom} - {type.Somme}");
             TypesTravail.Add(type);
-        }
         
-        
+        DessinerGraphiqueDonut(TypesTravail);
 
         // dispatching
         foreach (var branche in SelectedModule.Branches)
@@ -148,6 +143,8 @@ public partial class HomePage : UserControl
                     break;
             }
         }
+        
+        
     }
 
 
@@ -275,6 +272,7 @@ public partial class HomePage : UserControl
     {
         double sommeDesMoyennes = 0;
         int nombreDeBranchesValides = 0;
+        
 
         // 2. Parcours de la liste avec une boucle foreach
         foreach (Branche b in liste)
@@ -327,5 +325,134 @@ public partial class HomePage : UserControl
         
         foreach (var name in moduleNames)
             await repo.AjouterModuleAsync(new ScholarLog.Data.Module { Nom = name });
+    }
+    
+
+    private void OnDonutCanvasSizeChanged(object? sender, Avalonia.Controls.SizeChangedEventArgs e)
+    {
+        if (TypesTravail != null && TypesTravail.Any())
+            DessinerGraphiqueDonut(TypesTravail);
+    }
+
+    /// <summary>
+    /// Dessine le graphique en anneau (Donut).
+    /// Fonction généré par IA GEMINI,
+    /// code à revoir + à documenter.
+    /// </summary>
+    private void DessinerGraphiqueDonut(IEnumerable<TypeTravailViewModel> donnees)
+    {
+        DonutCanvas.Children.Clear();
+        LegendPanel.Children.Clear();
+
+        // 1. Dimensions allouées dynamiquement
+        double largeur = DonutCanvas.Bounds.Width;
+        double hauteur = DonutCanvas.Bounds.Height;
+
+        if (largeur <= 0 || hauteur <= 0) return;
+
+        double total = donnees.Sum(d => d.Somme);
+        if (total <= 0) return;
+
+        // 2. Centrage mathématique
+        double centerX = largeur / 2;
+        double centerY = hauteur / 2;
+
+        // On prend la plus petite dimension pour le diamètre afin que le cercle entre parfaitement
+        double dimensionMinimale = Math.Min(largeur, hauteur);
+        
+        // Marge de 5 pixels pour ne pas toucher les bords
+        double outerRadius = (dimensionMinimale / 2) - 5; 
+        if (outerRadius <= 0) return; // Sécurité si l'espace est trop petit
+        
+        double innerRadius = outerRadius * 0.6; 
+
+        double currentAngle = -Math.PI / 2; 
+        string[] colorPalette = { "#CC4A90E2", "#CC50E3C2", "#CCF5A623", "#CCD0021B", "#CCBD10E0", "#CCB8E986", "#CC8B572A" };
+        int colorIndex = 0;
+
+        foreach (var item in donnees)
+        {
+            if (item.Somme <= 0) continue;
+
+            // 3. Calcul de l'angle
+            double proportion = item.Somme / total;
+            double angleProportion = proportion * 2 * Math.PI;
+
+            if (angleProportion >= 2 * Math.PI)
+                angleProportion = 2 * Math.PI - 0.001; 
+
+            double nextAngle = currentAngle + angleProportion;
+            int isLargeArc = angleProportion > Math.PI ? 1 : 0; 
+
+            // 4. Trigonométrie SVG
+            double startX_Outer = centerX + outerRadius * Math.Cos(currentAngle);
+            double startY_Outer = centerY + outerRadius * Math.Sin(currentAngle);
+            
+            double endX_Outer = centerX + outerRadius * Math.Cos(nextAngle);
+            double endY_Outer = centerY + outerRadius * Math.Sin(nextAngle);
+            
+            double endX_Inner = centerX + innerRadius * Math.Cos(nextAngle);
+            double endY_Inner = centerY + innerRadius * Math.Sin(nextAngle);
+            
+            double startX_Inner = centerX + innerRadius * Math.Cos(currentAngle);
+            double startY_Inner = centerY + innerRadius * Math.Sin(currentAngle);
+
+            string pathData = string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                "M {0},{1} A {2},{2} 0 {3} 1 {4},{5} L {6},{7} A {8},{8} 0 {3} 0 {9},{10} Z",
+                startX_Outer, startY_Outer, 
+                outerRadius, 
+                isLargeArc, 
+                endX_Outer, endY_Outer,
+                endX_Inner, endY_Inner,
+                innerRadius,
+                startX_Inner, startY_Inner);
+
+            var sliceColor = Avalonia.Media.SolidColorBrush.Parse(colorPalette[colorIndex % colorPalette.Length]);
+
+            var path = new Avalonia.Controls.Shapes.Path
+            {
+                Data = Avalonia.Media.StreamGeometry.Parse(pathData),
+                Fill = sliceColor,
+                Stroke = Avalonia.Media.Brushes.Transparent, 
+                StrokeThickness = 1
+            };
+            
+            Avalonia.Controls.ToolTip.SetTip(path, $"{item.Nom} : {item.Somme:0.##}h");
+            DonutCanvas.Children.Add(path);
+
+            // 5. Légende dynamique pour le WrapPanel
+            var legendItem = new Avalonia.Controls.StackPanel 
+            { 
+                Orientation = Avalonia.Layout.Orientation.Horizontal, 
+                Spacing = 5,
+                Margin = new Avalonia.Thickness(10, 2), // Espacement pour le WrapPanel
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
+            };
+
+            var colorBox = new Avalonia.Controls.Border 
+            { 
+                Width = 10, Height = 10, 
+                CornerRadius = new Avalonia.CornerRadius(5), 
+                Background = sliceColor,
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
+            };
+
+            var label = new Avalonia.Controls.TextBlock 
+            { 
+                Text = $"{item.Nom} : {proportion:P0}", 
+                FontSize = 12,
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
+            };
+
+            if (this.TryFindResource("PrimaryForeground", out var fgRes) && fgRes is Avalonia.Media.IBrush fgBrush)
+                label.Foreground = fgBrush;
+
+            legendItem.Children.Add(colorBox);
+            legendItem.Children.Add(label);
+            LegendPanel.Children.Add(legendItem);
+
+            currentAngle = nextAngle;
+            colorIndex++;
+        }
     }
 }

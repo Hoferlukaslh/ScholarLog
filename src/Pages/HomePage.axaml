@@ -191,7 +191,7 @@
         <Grid Grid.Column="1" 
               IsVisible="{Binding SelectedModule, Converter={x:Static ObjectConverters.IsNotNull}}"
               HorizontalAlignment="Stretch"
-              RowDefinitions="65*, 35*" Margin="0,10,10,10" >
+              RowDefinitions="57*, 43*" Margin="0,10,10,10" >
             
             <Border Grid.Row="0" 
                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
@@ -257,17 +257,33 @@
                 </Grid>
             </Border>
             
-            <Border Grid.Row="1" Margin="0,10,0,0" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
-                    CornerRadius="{DynamicResource CardCornerRadius}" 
-                    Background="#AA00FF00">
-                <TextBlock TextAlignment="Center"
-                           Text=" DIAGRAMME" 
-                           Foreground="{DynamicResource PrimaryForeground}" 
-                           FontSize="{DynamicResource FontSizeNormal}"
-                           FontFamily="{DynamicResource Helvetica}"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Stretch"/>
+            <!-- Graphique donut -->
+            <Border Grid.Row="1" Margin="0,10,0,0"
+                    BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
+                    CornerRadius="{DynamicResource CardCornerRadius}"
+                    Background="{DynamicResource CardBackground}"
+                    Padding="10">
+
+                <!-- zone du donut -->
+                <Grid RowDefinitions="60*, Auto">
+                    <Canvas Name="DonutCanvas"
+                            Grid.Row="0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Background="Transparent"
+                            Margin="0,0,0,10"
+                            SizeChanged="OnDonutCanvasSizeChanged"/>
+                    
+                    <!-- Affichage texte de la répartition -->
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        
+                        <StackPanel Name="LegendPanel"
+                                    HorizontalAlignment="Center"
+                                    Orientation="Vertical"/>
+                    </ScrollViewer>
+                </Grid>
             </Border>
         </Grid>
     </Grid>
