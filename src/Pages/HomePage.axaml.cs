@@ -275,28 +275,22 @@ public partial class HomePage : UserControl
     {
         double sommeDesMoyennes = 0;
         int nombreDeBranchesValides = 0;
-        
 
-        // 2. Parcours de la liste avec une boucle foreach
         foreach (Branche b in liste)
         {
-            // vérification branche contient des notes pour éviter de fausser la moyenne
             if (b.Notes != null && b.Notes.Count > 0)
             {
-                // On ajoute la moyenne de cette branche à la somme totale
                 sommeDesMoyennes += b.CalculerMoyenne(); 
-
                 nombreDeBranchesValides++;
             }
         }
 
         double moyenne = 0;
 
-        // évite division par 0
         if (nombreDeBranchesValides != 0)
             moyenne = sommeDesMoyennes / nombreDeBranchesValides;
-
-        return moyenne;
+        
+        return Math.Round(moyenne * 2.0, MidpointRounding.AwayFromZero) / 2.0;
     }
     
     private Trend DeterminerTendance(List<Branche> branches, double moyenneActuelle)

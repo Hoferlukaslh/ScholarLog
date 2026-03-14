@@ -97,19 +97,19 @@ public class Branche : ObservableObject
         double sommeTotale = 0;
         int nombreDeNotes = 0;
 
-        // vérification de sécurité : si la liste de notes est vide ou nulle
         if (Notes == null || Notes.Count == 0)
             return 0;
 
-        // parcours de chaque note pour faire la somme
         foreach (var note in Notes)
         {
             sommeTotale += note.Valeur;
             nombreDeNotes++;
         }
 
-        // Somme divisée par le nombre d'éléments
-        return sommeTotale / nombreDeNotes;
+        double moyenneExacte = sommeTotale / nombreDeNotes;
+    
+        // 1er ARRONDI : La moyenne de la branche est arrondie au 0.5
+        return Math.Round(moyenneExacte * 2.0, MidpointRounding.AwayFromZero) / 2.0;
     }
 }
 
@@ -166,14 +166,13 @@ public class ModuleViewModel : Module
     {
         get
         {
-            double moyenne;
+            double moyenne = 0;
             double noteProjetModule = 0;
         
             if (base.Branches != null)
             {
                 foreach (var branche in base.Branches)
                 {
-                    // On vérifie que la branche contient au moins une note avant de la lire
                     if (branche.Type == TypeCours.M && branche.Notes != null && branche.Notes.Count > 0)
                     {
                         noteProjetModule = branche.Notes.First().Valeur;
@@ -181,13 +180,12 @@ public class ModuleViewModel : Module
                 }
             }
             
-            // Si les deux moyennes sont présentes, on fait la moyenne des deux
             if (noteProjetModule > 0 && AvgTheory > 0)
                 moyenne = (noteProjetModule + AvgTheory) / 2.0;
-            else // Sinon, on retourne celle qui n'est pas à zéro (ou 0 si aucune n'a de note)
+            else 
                 moyenne = noteProjetModule + AvgTheory; 
             
-            return moyenne;
+            return Math.Round(moyenne * 2.0, MidpointRounding.AwayFromZero) / 2.0;
         }
     }
 }
