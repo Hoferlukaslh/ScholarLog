@@ -5,10 +5,10 @@
     Description  :
         Vue principale affichant un aperçu des modules de l'utilisateur.
         Chaque module est présenté sous forme de carte contenant :
-            - Le nom du module
+            - Le nom du module (raccourcis à trois lettres)
             - La moyenne théorique
-            - La moyenne pratique
-            - La moyenne globale
+            - La note du travail du module
+            - La moyenne du module
             - L'évolution (trend) des notes
 
        Les cartes sont générées dynamiquement à partir d'une
@@ -24,7 +24,6 @@
         - Utilise un ItemsControl avec WrapPanel pour afficher les modules.
         - Les styles "trendIcon" adaptent automatiquement l'icône et la couleur 
           en fonction de la tendance (Up, Down, Stable).
-        - Les cartes de module possèdent une animation au survol.
         - Les ressources globales (polices, tailles, couleurs) proviennent de App.axaml.
 -->
 
@@ -171,21 +170,58 @@
                 </ListBox>
             </ScrollViewer>
             
-            <Border Grid.Row="1" 
+            <!-- Affichage du journal -->
+            <Border Grid.Row="1"
                     IsVisible="{Binding SelectedModule, Converter={x:Static ObjectConverters.IsNotNull}}"
                     Margin="10" VerticalAlignment="Stretch"
                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
                     CornerRadius="{DynamicResource CardCornerRadius}" 
-                    Background="#AAFF0000">
+                    Background="{DynamicResource CardBackground}">
                 
-                <TextBlock TextAlignment="Center"
-                           Text="JOURNAL" 
-                           Foreground="{DynamicResource PrimaryForeground}" 
-                           FontSize="{DynamicResource FontSizeNormal}"
-                           FontFamily="{DynamicResource Helvetica}"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Stretch"/>
+                <Grid RowDefinitions="Auto,*">
+                    
+                    <Grid Grid.Row="0" ColumnDefinitions="1.5*, 1*, 2*, 4*" Margin="20,20,20,10">
+                        <TextBlock Grid.Column="0" Text="Date" FontWeight="Bold" Foreground="{DynamicResource PrimaryForeground}"/>
+                        <TextBlock Grid.Column="1" Text="Temps" FontWeight="Bold" Foreground="{DynamicResource PrimaryForeground}"/>
+                        <TextBlock Grid.Column="2" Text="Type de travail" FontWeight="Bold" Foreground="{DynamicResource PrimaryForeground}"/>
+                        <TextBlock Grid.Column="3" Text="Description" FontWeight="Bold" Foreground="{DynamicResource PrimaryForeground}"/>
+                    </Grid>
+
+                    <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}" VerticalAlignment="Bottom" Margin="10,0"/>
+
+                    <ScrollViewer Grid.Row="1" Margin="0,5,0,10">
+                        <ItemsControl ItemsSource="{Binding Journal}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="1.5*, 1*, 2*, 4*" Margin="20,10,20,10">
+                                        
+                                        <TextBlock Grid.Column="0" 
+                                                   Text="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}" 
+                                                   Foreground="{DynamicResource PrimaryForeground}" 
+                                                   VerticalAlignment="Center"/>
+                                        
+                                        <TextBlock Grid.Column="1" 
+                                                   Text="{Binding Duree, StringFormat={}{0}h}"
+                                                   Foreground="{DynamicResource PrimaryForeground}" 
+                                                   VerticalAlignment="Center"/>
+                                        
+                                        <TextBlock Grid.Column="2" 
+                                                   Text="{Binding Type.Nom}" 
+                                                   Foreground="{DynamicResource PrimaryForeground}" 
+                                                   VerticalAlignment="Center"/>
+                                        
+                                        <TextBlock Grid.Column="3" 
+                                                   Text="{Binding Description}" 
+                                                   Foreground="{DynamicResource PrimaryForeground}" 
+                                                   TextWrapping="Wrap" 
+                                                   VerticalAlignment="Center"/>
+                                        
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
             </Border>
         </Grid>
         
@@ -222,22 +258,6 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            
-                            <!--
-                            <Separator Height="1" Background="{DynamicResource CardBorder}" Margin="0,5"/>
-
-                            <TextBlock Text="PRATIQUE" FontSize="10" Foreground="{DynamicResource SecondaryForeground}" FontWeight="Bold"/>
-                            <ItemsControl ItemsSource="{Binding BranchesPM}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate x:DataType="data:BrancheViewModel">
-                                        <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,5">
-                                            <TextBlock Grid.Column="0" Text="{Binding Nom}" VerticalAlignment="Center" FontSize="{DynamicResource FontSizeNormal}" Foreground="{DynamicResource PrimaryForeground}"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding Moyenne, StringFormat=\{0:0.0\}}" FontWeight="Bold" Width="40" TextAlignment="Right" VerticalAlignment="Center" Margin="10,0" Foreground="{DynamicResource PrimaryForeground}"/>
-                                            <TextBlock Grid.Column="2" Classes="trendIcon" Tag="{Binding BrancheTrend}" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>-->
 
                             <Separator Height="1" Background="{DynamicResource CardBorder}" Margin="0,5"/>
 

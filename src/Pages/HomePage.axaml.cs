@@ -8,17 +8,19 @@
         principale en récupérant les données depuis la base SQLite de manière asynchrone.
 
     Auteur       :  Lukas Hofer - TINF2
-    Date         :  11.03.2026
+    Date         :  14.03.2026
 */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel; 
-using System.Linq;
 using System.Threading.Tasks; 
+
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity; 
+
 using ScholarLog.Data;
 using ScholarLog.Components.DonutDiagram;
 
@@ -56,7 +58,7 @@ public partial class HomePage : UserControl
     public ObservableCollection<BrancheViewModel> BranchesTM { get; set; } = new ObservableCollection<BrancheViewModel>();
     public ObservableCollection<BrancheViewModel> BranchesM { get; set; } = new ObservableCollection<BrancheViewModel>();
     public ObservableCollection<TypeTravailViewModel> TypesTravail { get; set; } = new ObservableCollection<TypeTravailViewModel>();
-    public ObservableCollection<Entree> Journal { get; set; } = new ObservableCollection<Entree>();
+    public ObservableCollection<Entree> Journal { get; set; } = new ObservableCollection<Entree>(); // utilise cette collection
     
     
     public ObservableCollection<DonutItem> GraphiqueDonnees { get; set; } = new ObservableCollection<DonutItem>();
@@ -102,11 +104,16 @@ public partial class HomePage : UserControl
             }
         }
         
-        // pour chaque entrée du journal
-        foreach (var entree in SelectedModule.JournalDeTravail)
+
+        var journalTrie = SelectedModule.JournalDeTravail
+            .OrderByDescending(entree => entree.Date)
+            .ToList();
+
+       
+        foreach (var entree in journalTrie)
         {
             Journal.Add(entree);
-
+            
             for (int i = 0; i < typestravail.Count; i++)
             {
                 if (entree.TypeTravailId == typestravail[i].Id)
@@ -194,7 +201,7 @@ public partial class HomePage : UserControl
 
         // Configuration de l'animation
         int durationMs = 150; // Durée de l'animation (300ms)
-        int fps = 60;
+        int fps = 120;
         int steps = durationMs * fps / 1000;
         int delay = 1000 / fps;
 
