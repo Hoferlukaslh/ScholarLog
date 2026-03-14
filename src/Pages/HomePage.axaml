@@ -34,6 +34,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Pages="clr-namespace:ScholarLog.Pages"
              xmlns:data="clr-namespace:ScholarLog.Data"
+             xmlns:controls="clr-namespace:ScholarLog.Components.DonutDiagram"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ScholarLog.Pages.HomePage"
              x:DataType="Pages:HomePage">
@@ -264,26 +265,10 @@
                     Background="{DynamicResource CardBackground}"
                     Padding="10">
 
-                <!-- zone du donut -->
-                <Grid RowDefinitions="60*, Auto">
-                    <Canvas Name="DonutCanvas"
-                            Grid.Row="0"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            Background="Transparent"
-                            Margin="0,0,0,10"
-                            SizeChanged="OnDonutCanvasSizeChanged"/>
-                    
-                    <!-- Affichage texte de la répartition -->
-                    <ScrollViewer Grid.Row="1"
-                                  VerticalScrollBarVisibility="Auto"
-                                  HorizontalScrollBarVisibility="Disabled">
-                        
-                        <StackPanel Name="LegendPanel"
-                                    HorizontalAlignment="Center"
-                                    Orientation="Vertical"/>
-                    </ScrollViewer>
-                </Grid>
+                <controls:DonutChartControl 
+                    ItemsSource="{Binding GraphiqueDonnees}" 
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
             </Border>
         </Grid>
     </Grid>
