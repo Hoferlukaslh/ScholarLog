@@ -38,6 +38,13 @@ public partial class MainWindow : Window
     private DispatcherTimer? _lightTimer;
     private readonly Random _random = new Random();
     
+    // Garder les pages en mémoire
+    private HomePage? _homePage;
+    private JournalPage? _journalPage;
+    private NotesPage? _notesPage;
+    private SettingsPage? _settingsPage;
+    private ExemplePage? _exemplePage;
+    
    
 
     public MainWindow()
@@ -133,31 +140,46 @@ public partial class MainWindow : Window
     
     private void ButtonAccueil_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (MainContentControler.Content is not HomePage)
-            MainContentControler.Content = new HomePage();
+        _homePage ??= new HomePage(); // Crée seulement si c'est la première fois
+
+        if (MainContentControler?.Content?.Equals(_homePage) == false)
+        {
+            _homePage.AnimateGridsAsync(false, 0);   // rétablir l'affichage par défaut
+            _homePage.SelectedModule = null;                        // aucune sélection de module
+            MainContentControler.Content = _homePage;
+        }
+            
     }
 
     private void ButtonNotes_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (MainContentControler.Content is not NotesPage)
-            MainContentControler.Content = new NotesPage();
-    }
+        _notesPage ??= new NotesPage();
     
-    private void Buttonjournaux_OnClick(object? sender, RoutedEventArgs e)
-    {
-        if (MainContentControler.Content is not JournalPage)
-            MainContentControler.Content = new JournalPage();
+        if (MainContentControler?.Content?.Equals(_notesPage) == false)
+            MainContentControler.Content = _notesPage;
     }
 
-    private async void ButtonExemple_OnClick(object? sender, RoutedEventArgs e)
+    private void Buttonjournaux_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (MainContentControler.Content is not ExemplePage)
-            MainContentControler.Content = new ExemplePage();
-    }
+        _journalPage ??= new JournalPage();
     
+        if (MainContentControler?.Content?.Equals(_journalPage) == false)
+            MainContentControler.Content = _journalPage;
+    }
+
+    private void ButtonExemple_OnClick(object? sender, RoutedEventArgs e)
+    {
+        _exemplePage ??= new ExemplePage();
+    
+        if (MainContentControler?.Content?.Equals(_exemplePage) == false)
+            MainContentControler.Content = _exemplePage;
+    }
+
     private void Setting_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (MainContentControler.Content is not SettingsPage)
-            MainContentControler.Content = new SettingsPage();
+        _settingsPage ??= new SettingsPage();
+    
+        if (MainContentControler?.Content?.Equals(_settingsPage) == false)
+            MainContentControler.Content = _settingsPage;
     }
 }

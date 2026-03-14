@@ -188,7 +188,7 @@ public partial class HomePage : UserControl
     }
     
     
-    private async void AnimateGridsAsync(bool open)
+    public async void AnimateGridsAsync(bool open, int durationMs = 150)
     {
         // Valeurs cibles demandées dans tes commentaires XAML
         double targetCol = open ? 3.0 : 0.0;
@@ -199,7 +199,6 @@ public partial class HomePage : UserControl
         double startRow = ModuleEtJournal.RowDefinitions[1].Height.Value;
 
         // Configuration de l'animation
-        int durationMs = 150; // Durée de l'animation (300ms)
         int fps = 120;
         int steps = durationMs * fps / 1000;
         int delay = 1000 / fps;
