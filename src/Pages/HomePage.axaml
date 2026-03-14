@@ -97,7 +97,22 @@
                          BorderThickness="0"
                          SelectionChanged="OnModuleSelectionChanged"
                          Margin="10">
+                    
+                    <ListBox.Styles>
+                        <Style Selector="ListBoxItem Border.moduleCard">
+                            <Setter Property="Opacity" Value="1.0" />
+                            
+                        </Style>
 
+                        <Style Selector="ListBox.hasSelection ListBoxItem:not(:selected) Border.moduleCard">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </Style>
+
+                        <Style Selector="ListBoxItem:selected Border.moduleCard">
+                            <Setter Property="BorderBrush" Value="#4A90E2" /> 
+                            <Setter Property="BorderThickness" Value="2" />
+                        </Style>
+                    </ListBox.Styles>
                     
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
