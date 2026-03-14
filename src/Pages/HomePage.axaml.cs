@@ -31,6 +31,14 @@ public partial class HomePage : UserControl
     public static readonly StyledProperty<ModuleViewModel?> SelectedModuleProperty =
         AvaloniaProperty.Register<HomePage, ModuleViewModel?>(nameof(SelectedModule));
     
+    public static readonly StyledProperty<ModuleViewModel?> DisplayedModuleProperty =
+        AvaloniaProperty.Register<HomePage, ModuleViewModel?>(nameof(DisplayedModule));
+    public ModuleViewModel? DisplayedModule
+    {
+        get => GetValue(DisplayedModuleProperty);
+        set => SetValue(DisplayedModuleProperty, value);
+    }
+    
     public HomePage()
     {
         InitializeComponent();
@@ -162,8 +170,6 @@ public partial class HomePage : UserControl
                     break;
             }
         }
-        
-        
     }
 
 
@@ -171,24 +177,20 @@ public partial class HomePage : UserControl
     {
         base.OnPropertyChanged(change);
 
-        // On vérifie si la propriété modifiée est notre module sélectionné
         if (change.Property == SelectedModuleProperty)
         {
             var oldVal = change.GetOldValue<ModuleViewModel?>();
             var newVal = change.GetNewValue<ModuleViewModel?>();
 
-            // Si on passe de "rien" à un "module" -> on ouvre les panneaux
-            if (oldVal == null && newVal != null)
-            {
-                AnimateGridsAsync(true);
-            }
-            // Si l'utilisateur désélectionne le module -> on referme les panneaux
-            else if (oldVal != null && newVal == null)
-            {
-                AnimateGridsAsync(false);
-            }
+            // Si on a sélectionné un module,  met à jour affichage tampon
+            if (newVal != null) DisplayedModule = newVal;
+
+            if (oldVal == null && newVal != null)       AnimateGridsAsync(true);
+            else if (oldVal != null && newVal == null)  AnimateGridsAsync(false);
         }
     }
+    
+    
     private async void AnimateGridsAsync(bool open)
     {
         // Valeurs cibles demandées dans tes commentaires XAML
@@ -226,6 +228,8 @@ public partial class HomePage : UserControl
         // Par sécurité, on force les valeurs exactes de fin pour éviter les erreurs d'arrondis
         MJETBrancheGraph.ColumnDefinitions[1].Width = new GridLength(targetCol, GridUnitType.Star);
         ModuleEtJournal.RowDefinitions[1].Height = new GridLength(targetRow, GridUnitType.Star);
+        
+        if (!open) DisplayedModule = null;
     }
     
     private async Task CreerModulesParDefautAsync(DataRepository repo)
