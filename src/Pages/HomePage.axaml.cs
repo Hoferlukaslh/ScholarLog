@@ -214,8 +214,8 @@ public partial class HomePage : UserControl
     private async Task ChargerDonneesAsync()
     {
         var nouveauxModules = new List<ModuleViewModel>();
-
-        // ajout "async" ici pour pouvoir utiliser "await" à l'intérieur du Task.Run
+        
+        
         await Task.Run(async () => 
         {
             using (var repo = new DataRepository())
@@ -232,7 +232,7 @@ public partial class HomePage : UserControl
                 {
                     // listes branches 
                     var branchesTM = new List<Branche>(); // théorique
-                    var branchesPM = new List<Branche>(); // pratique
+                    var module = new Branche();
                     
                     foreach (var branche in mod.Branches) //Pour chaque branche du module
                     {
@@ -240,22 +240,25 @@ public partial class HomePage : UserControl
                         if (branche.Type == TypeCours.TM)
                             branchesTM.Add(branche);
                         
-                        // Si Pratique -> ajout dans liste branche pratique
+                        // Si Module -> ajoute travail module
                         else if (branche.Type == TypeCours.M)
-                            branchesPM.Add(branche);
+                            module = branche;
                     }
                     
                     double avgTM = ObtenirMoyenne(branchesTM);
-                    double avgPM = ObtenirMoyenne(branchesPM);
-
+                    double noteModule = 0;
+                    
+                    if (module.Notes.Count == 1)
+                        noteModule =module.Notes[0].Valeur;
+                    
 
                     nouveauxModules.Add(new ModuleViewModel
                     {
                         Id = mod.Id,
                         Nom = mod.Nom,
                         AvgTheory = Math.Round(avgTM, 1),
+                        TravailModule = noteModule,
                         TheoryTrend = DeterminerTendance(branchesTM, avgTM),
-                        TravailModule = avgPM,
                         Branches = mod.Branches.ToList(),
                         JournalDeTravail = mod.JournalDeTravail.ToList()
                     });

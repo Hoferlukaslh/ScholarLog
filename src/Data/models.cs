@@ -168,21 +168,25 @@ public class ModuleViewModel : Module
         {
             double moyenne;
             double noteProjetModule = 0;
-            
-            foreach (var branche in base.Branches)
+        
+            if (base.Branches != null)
             {
-                if (branche.Type == TypeCours.M)
-                    noteProjetModule = branche.Notes.First().Valeur;
+                foreach (var branche in base.Branches)
+                {
+                    // On vérifie que la branche contient au moins une note avant de la lire
+                    if (branche.Type == TypeCours.M && branche.Notes != null && branche.Notes.Count > 0)
+                    {
+                        noteProjetModule = branche.Notes.First().Valeur;
+                    }
+                }
             }
-
-            TravailModule = noteProjetModule;
-                
+            
             // Si les deux moyennes sont présentes, on fait la moyenne des deux
             if (noteProjetModule > 0 && AvgTheory > 0)
-                moyenne =  (noteProjetModule + AvgTheory) / 2.0;
+                moyenne = (noteProjetModule + AvgTheory) / 2.0;
             else // Sinon, on retourne celle qui n'est pas à zéro (ou 0 si aucune n'a de note)
-                moyenne =  noteProjetModule + AvgTheory; 
-                
+                moyenne = noteProjetModule + AvgTheory; 
+            
             return moyenne;
         }
     }
