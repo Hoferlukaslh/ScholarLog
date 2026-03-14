@@ -30,6 +30,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm;
 using System;
 using ScholarLog.Pages;
+using ScholarLog.Data;
 
 
 public partial class MainWindow : Window
@@ -45,7 +46,7 @@ public partial class MainWindow : Window
         this.Loaded += MainWindow_Loaded;
     }
 
-    private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
+    private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
         // Les gestionnaire de fenêtres linux gère mal le flou -> opacité ++
         if (OperatingSystem.IsLinux()) 
@@ -61,6 +62,9 @@ public partial class MainWindow : Window
 
         // On lance le premier mouvement immédiatement
         MoveLights();
+        
+        await AppDataService.Instance.ChargerDonneesGlobalesAsync();
+        MainContentControler.Content = new HomePage();
     }
 
     private void MoveLights()

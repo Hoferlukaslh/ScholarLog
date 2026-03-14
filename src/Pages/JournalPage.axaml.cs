@@ -10,9 +10,11 @@
 */
 
 
-namespace ScholarLog.Pages;
-
 using Avalonia.Controls;
+using Avalonia.Interactivity; 
+
+
+namespace ScholarLog.Pages;
 
 
 public partial class JournalPage : UserControl
@@ -20,5 +22,14 @@ public partial class JournalPage : UserControl
     public JournalPage()
     {
         InitializeComponent();
+        DataContext = this; 
+                
+        this.Loaded += JournalPage_Loaded;
     }
+    
+    private async void JournalPage_Loaded(object? sender, RoutedEventArgs e)
+    {
+        this.Loaded -= JournalPage_Loaded; 
+    }
+    
 }

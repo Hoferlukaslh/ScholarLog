@@ -50,9 +50,7 @@ public partial class HomePage : UserControl
     private async void HomePage_Loaded(object? sender, RoutedEventArgs e)
     {
         this.Loaded -= HomePage_Loaded; 
-        await ChargerDonneesAsync();
     }
-    
     
     public ModuleViewModel? SelectedModule
     {
@@ -61,12 +59,11 @@ public partial class HomePage : UserControl
     }
     
     
-    
-    public ObservableCollection<ModuleViewModel> Modules { get; set; } = new ObservableCollection<ModuleViewModel>();
+    public ObservableCollection<ModuleViewModel> Modules { get; set; } = Data.AppDataService.Instance.Modules;
     public ObservableCollection<BrancheViewModel> BranchesTM { get; set; } = new ObservableCollection<BrancheViewModel>();
     public ObservableCollection<BrancheViewModel> BranchesM { get; set; } = new ObservableCollection<BrancheViewModel>();
     public ObservableCollection<TypeTravailViewModel> TypesTravail { get; set; } = new ObservableCollection<TypeTravailViewModel>();
-    public ObservableCollection<Entree> Journal { get; set; } = new ObservableCollection<Entree>(); // utilise cette collection
+    public ObservableCollection<Entree> Journal { get; set; } = new ObservableCollection<Entree>();
     
     
     public ObservableCollection<DonutItem> GraphiqueDonnees { get; set; } = new ObservableCollection<DonutItem>();
@@ -155,7 +152,7 @@ public partial class HomePage : UserControl
                 Moyenne = Math.Round(moy, 1),
                 Type = branche.Type,
                 Notes = branche.Notes.ToList(),
-                BrancheTrend = DeterminerTendance(new List<Branche> { branche }, moy)
+                BrancheTrend = Data.AppDataService.Instance.DeterminerTendance(new List<Branche> { branche }, moy)
             };
 
             // ajout dans la bonne collection selon le type
@@ -230,122 +227,5 @@ public partial class HomePage : UserControl
         ModuleEtJournal.RowDefinitions[1].Height = new GridLength(targetRow, GridUnitType.Star);
         
         if (!open) DisplayedModule = null;
-    }
-    
-    private async Task CreerModulesParDefautAsync(DataRepository repo)
-    {
-        string[] moduleNames = { "M0", "M1", "M2", "M3", "M4", "M5", "M6", "M7", "DIPL." };
-        
-        foreach (var name in moduleNames)
-            await repo.AjouterModuleAsync(new ScholarLog.Data.Module { Nom = name });
-    }
-
-    
-   
-    
-    
-    private async Task ChargerDonneesAsync()
-    {
-        var nouveauxModules = new List<ModuleViewModel>();
-        
-        
-        await Task.Run(async () => 
-        {
-            using (var repo = new DataRepository())
-            {
-                var rawModules = await repo.GetModulesAsync();
-
-                if (!rawModules.Any())
-                {
-                    await CreerModulesParDefautAsync(repo); 
-                    rawModules = await repo.GetModulesAsync(); 
-                }
-
-                foreach (var mod in rawModules)
-                {
-                    // listes branches 
-                    var branchesTM = new List<Branche>(); // théorique
-                    var module = new Branche();
-                    
-                    foreach (var branche in mod.Branches) //Pour chaque branche du module
-                    {
-                        // Si Théorique -> ajout dans liste branche théorique
-                        if (branche.Type == TypeCours.TM)
-                            branchesTM.Add(branche);
-                        
-                        // Si Module -> ajoute travail module
-                        else if (branche.Type == TypeCours.M)
-                            module = branche;
-                    }
-                    
-                    double avgTM = ObtenirMoyenne(branchesTM);
-                    double noteModule = 0;
-                    
-                    if (module.Notes.Count == 1)
-                        noteModule =module.Notes[0].Valeur;
-                    
-
-                    nouveauxModules.Add(new ModuleViewModel
-                    {
-                        Id = mod.Id,
-                        Nom = mod.Nom,
-                        AvgTheory = Math.Round(avgTM, 1),
-                        TravailModule = noteModule,
-                        TheoryTrend = DeterminerTendance(branchesTM, avgTM),
-                        Branches = mod.Branches.ToList(),
-                        JournalDeTravail = mod.JournalDeTravail.ToList()
-                    });
-                }
-            }
-        });
-
-        // nettoyage et actualisation
-        Modules.Clear();
-        foreach (var mod in nouveauxModules) Modules.Add(mod);
-    }
-    
-    public double ObtenirMoyenne(List<Branche> liste)
-    {
-        double sommeDesMoyennes = 0;
-        int nombreDeBranchesValides = 0;
-
-        foreach (Branche b in liste)
-        {
-            if (b.Notes != null && b.Notes.Count > 0)
-            {
-                sommeDesMoyennes += b.CalculerMoyenne(); 
-                nombreDeBranchesValides++;
-            }
-        }
-
-        double moyenne = 0;
-
-        if (nombreDeBranchesValides != 0)
-            moyenne = sommeDesMoyennes / nombreDeBranchesValides;
-        
-        return Math.Round(moyenne * 2.0, MidpointRounding.AwayFromZero) / 2.0;
-    }
-    
-    private Trend DeterminerTendance(List<Branche> branches, double moyenneActuelle)
-    {
-        var toutesLesNotes = branches
-            .SelectMany(b => b.Notes)
-            .OrderByDescending(n => n.Date)
-            .ToList();
-
-        if (toutesLesNotes.Count < 2)
-            return Trend.Stable;
-
-        var derniereNote = toutesLesNotes.First();
-        double marge = 0.2;
-
-        if (derniereNote.Valeur > moyenneActuelle + marge)
-            return Trend.Up;
-        
-        else if (derniereNote.Valeur < moyenneActuelle - marge)
-            return Trend.Down;
-        
-        else
-            return Trend.Stable;
     }
 }
