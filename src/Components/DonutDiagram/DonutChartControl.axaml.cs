@@ -127,7 +127,7 @@ public partial class DonutChartControl : UserControl
                 StrokeThickness = 1
             };
             
-            ToolTip.SetTip(path, $"{item.Label} : {item.Value:0.##}");
+            ToolTip.SetTip(path, $"{item.Label} : {item.Value:0.#}h ({proportion:0.#}%)");
             DonutCanvas.Children.Add(path);
 
             // Création de la légende
@@ -149,7 +149,7 @@ public partial class DonutChartControl : UserControl
 
             var label = new TextBlock 
             { 
-                Text = $"{item.Label} : {proportion:P0}", 
+                Text = $"{item.Label} : {item.Value:0.#}h ({proportion:0.#}%)", 
                 FontSize = 12,
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
             };
@@ -164,6 +164,36 @@ public partial class DonutChartControl : UserControl
             currentAngle = nextAngle;
             colorIndex++;
         }
+
+        // Ajout de la somme des heures
+        var texteTotal = new TextBlock
+        {
+            Text = total.ToString("0.#h"),
+            FontSize = dimensionMinimale * 0.12, // Taille de police dynamique en fonction de la taille du donut
+            FontWeight = FontWeight.Bold,
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
+        };
+
+        // Appliquer la même couleur de texte que la légende, si définie
+        if (this.TryFindResource("PrimaryForeground", out var totalFgRes) && totalFgRes is IBrush totalFgBrush)
+        {
+            texteTotal.Foreground = totalFgBrush;
+        }
+
+        // Le conteneur fait exactement la taille du trou intérieur du donut
+        var conteneurCentral = new Border
+        {
+            Width = innerRadius * 2,
+            Height = innerRadius * 2,
+            Child = texteTotal
+        };
+
+        // On positionne le conteneur en haut à gauche de la zone du cercle intérieur
+        Canvas.SetLeft(conteneurCentral, centerX - innerRadius);
+        Canvas.SetTop(conteneurCentral, centerY - innerRadius);
+
+        DonutCanvas.Children.Add(conteneurCentral);
     }
 }
 

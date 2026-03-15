@@ -74,7 +74,6 @@ public partial class MainWindow : Window
         
         await AppDataService.Instance.ChargerDonneesGlobalesAsync();
         MainContentControler.Content = new HomePage();
-        
     }
 
     private void MoveLights()
