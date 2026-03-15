@@ -39,6 +39,7 @@
         Title="ScholarLog">
     
     <Window.Styles>
+       
         <Style Selector="Label.menu-text, TextBlock.menu-text">
             <Setter Property="Opacity" Value="1"/>
             <Setter Property="Transitions">
@@ -145,6 +146,7 @@
                         
                         <!-- Button Accueil -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonAccueil"
+                                Classes="nav-btn"
                                 Click="ButtonAccueil_OnClick">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" 
@@ -162,6 +164,7 @@
                         
                         <!-- Button Notes -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonNotes"
+                                Classes="nav-btn"
                                 Click="ButtonNotes_OnClick">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" 
@@ -180,6 +183,7 @@
                         
                         <!-- Button journaux -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Buttonjournaux"
+                                Classes="nav-btn"
                                 Click="Buttonjournaux_OnClick">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" FontFamily="{DynamicResource Phosphor}" 
@@ -195,6 +199,7 @@
                         </Button>
                         
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonExemple"
+                                Classes="nav-btn"
                                 Click="ButtonExemple_OnClick">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" FontFamily="{DynamicResource Phosphor}" 
@@ -237,6 +242,7 @@
                         
                         <!-- Bouton paramètres -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Setting"
+                                Classes="nav-btn"
                                 Click="Setting_OnClick" >
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" 
@@ -255,7 +261,25 @@
                             </Grid>
                         </Button>
                     </StackPanel>
+                    
+                    <!-- Indication de navigation -->
+                    <Canvas Grid.Row="0" Grid.RowSpan="3" IsHitTestVisible="False">
+                        <Border x:Name="NavCursor"
+                                Width="4" 
+                                Height="24" 
+                                CornerRadius="2"
+                                Background="{DynamicResource SecondaryForeground}"
+                                Canvas.Left="0"
+                                Canvas.Top="0">
+                            <Border.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Property="Canvas.Top" Duration="0:0:0.35" Easing="CubicEaseOut"/>
+                                </Transitions>
+                            </Border.Transitions>
+                        </Border>
+                    </Canvas>
                 </Grid>
+                
             </Border>
 
             <!-- Controleur de contenu -->

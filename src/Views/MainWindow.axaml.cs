@@ -19,6 +19,7 @@
         - Classes "linux" et "rotated" utilisées pour ajuster le style.
 */
 
+using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ScholarLog.Views;
@@ -55,6 +56,7 @@ public partial class MainWindow : Window
 
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
+        MettreAJourSelection(ButtonAccueil);
         // Les gestionnaire de fenêtres linux gère mal le flou -> opacité ++
         if (OperatingSystem.IsLinux()) 
             this.Classes.Add("linux");
@@ -72,6 +74,7 @@ public partial class MainWindow : Window
         
         await AppDataService.Instance.ChargerDonneesGlobalesAsync();
         MainContentControler.Content = new HomePage();
+        
     }
 
     private void MoveLights()
@@ -138,9 +141,31 @@ public partial class MainWindow : Window
         }
     }
     
+    private void MettreAJourSelection(Button boutonSelectionne)
+    {
+        if (boutonSelectionne == null || NavCursor == null || Sidebar == null) return;
+
+        // récupère les coordonnées du bouton par rapport au conteneur complet (Sidebar)
+        var pointRelatif = boutonSelectionne.TranslatePoint(new Point(0, 0), Sidebar);
+    
+        if (pointRelatif.HasValue)
+        {
+            double yPos = pointRelatif.Value.Y;
+        
+            // centre le curseur (24px de haut) verticalement par rapport au bouton
+            // Si la hauteur n'est pas encore calculée au démarrage, on met une valeur par défaut (ex: 36px/2 - 24px/2 = 6)
+            double decalage = boutonSelectionne.Bounds.Height > 0 
+                ? (boutonSelectionne.Bounds.Height - NavCursor.Height) / 2 
+                : 6; 
+            
+            Canvas.SetTop(NavCursor, yPos + decalage); // déplacement -> geré par axaml
+        }
+    }
+    
     private void ButtonAccueil_OnClick(object? sender, RoutedEventArgs e)
     {
         _homePage ??= new HomePage(); // Crée seulement si c'est la première fois
+        MettreAJourSelection(ButtonAccueil);
 
         if (MainContentControler?.Content?.Equals(_homePage) == false)
         {
@@ -150,18 +175,23 @@ public partial class MainWindow : Window
         }
             
     }
+    
+    
 
     private void ButtonNotes_OnClick(object? sender, RoutedEventArgs e)
     {
         _notesPage ??= new NotesPage();
+        MettreAJourSelection(ButtonNotes);
     
         if (MainContentControler?.Content?.Equals(_notesPage) == false)
             MainContentControler.Content = _notesPage;
     }
+    
 
     private void Buttonjournaux_OnClick(object? sender, RoutedEventArgs e)
     {
         _journalPage ??= new JournalPage();
+        MettreAJourSelection(Buttonjournaux);
     
         if (MainContentControler?.Content?.Equals(_journalPage) == false)
             MainContentControler.Content = _journalPage;
@@ -170,6 +200,7 @@ public partial class MainWindow : Window
     private void ButtonExemple_OnClick(object? sender, RoutedEventArgs e)
     {
         _exemplePage ??= new ExemplePage();
+        MettreAJourSelection(ButtonExemple);
     
         if (MainContentControler?.Content?.Equals(_exemplePage) == false)
             MainContentControler.Content = _exemplePage;
@@ -178,6 +209,7 @@ public partial class MainWindow : Window
     private void Setting_OnClick(object? sender, RoutedEventArgs e)
     {
         _settingsPage ??= new SettingsPage();
+        MettreAJourSelection(Setting);
     
         if (MainContentControler?.Content?.Equals(_settingsPage) == false)
             MainContentControler.Content = _settingsPage;

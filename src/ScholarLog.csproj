@@ -22,6 +22,12 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <ApplicationIcon>Assets\Images\ScholarLogLogoEx.ico</ApplicationIcon>
+        <Version>0.0.1</Version>
+        <Title>ScholarLog</Title>
+        <Authors>Lukas Hofer</Authors>
+        <Description>Interface de gestions de résultats scolaire</Description>
+        <PackageProjectUrl>https://github.com/Hoferlukaslh/ScholarLog</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Hoferlukaslh/ScholarLog</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
