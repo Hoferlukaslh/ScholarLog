@@ -126,80 +126,89 @@ public partial class JournalPage : UserControl
         IsModalOpen = false;
     }
     
-    public async void SauvegarderEntree()
-{
-    if (EditingEntree.Module != null) 
-        EditingEntree.ModuleId = EditingEntree.Module.Id;
-        
-    if (EditingEntree.TypeTravailId == 0 && ModalTypesTravail.Count > 0)
-        EditingEntree.TypeTravailId = ModalTypesTravail[0].Id;
-
-    if (EditingEntree.ModuleId <= 0 || EditingEntree.TypeTravailId <= 0)
+    public async Task SauvegarderEntree()
     {
-        Console.WriteLine("Sauvegarde annulée : ModuleId ou TypeTravailId est invalide (0).");
-        return; 
-    }
-
-    var typeSelectionne = ModalTypesTravail.FirstOrDefault(t => t.Id == EditingEntree.TypeTravailId);
-    
-    EditingEntree.Module = null;
-    EditingEntree.Type = null;
-
-    using (var repo = new DataRepository())
-    {
-        if (_isEditingExisting)
-            await repo.ModifierEntreeAsync(EditingEntree);
-        else
-            await repo.AjouterEntreeAsync(EditingEntree);
-    }
-
-    // mise a jour mémoire (interface)
-
-    // objet pour l'affichage
-    if (typeSelectionne != null)
-    {
-        EditingEntree.Type = new TypeTravail 
-        { 
-            Id = typeSelectionne.Id, 
-            Nom = typeSelectionne.Nom, 
-            ModuleId = typeSelectionne.ModuleId 
-        };
-    }
-    
-    var moduleDestination = Modules.FirstOrDefault(m => m.Id == EditingEntree.ModuleId);
-
-    if (moduleDestination != null)
-    {
-
-        if (moduleDestination.JournalDeTravail == null)
+        try 
         {
-            moduleDestination.JournalDeTravail = new List<Entree>();
-        }
-
-        if (!_isEditingExisting)
-        {
-            // ajoute la nouvelle entrée à son vrai module
-            moduleDestination.JournalDeTravail.Add(EditingEntree);
-        }
-        else
-        {
-            // remplace l'ancienne entrée
-            var ancienneEntree = moduleDestination.JournalDeTravail.FirstOrDefault(e => e.Id == EditingEntree.Id);
-            if (ancienneEntree != null)
+            // vérification que la description n'est pas vide
+            if (string.IsNullOrWhiteSpace(EditingEntree?.Description))
             {
-                moduleDestination.JournalDeTravail.Remove(ancienneEntree);
+                Console.WriteLine("Sauvegarde annulée : La description est obligatoire.");
+                return; // On bloque la sauvegarde ici
             }
-            moduleDestination.JournalDeTravail.Add(EditingEntree);
+
+            // Préparation des IDs
+            if (EditingEntree.Module != null) 
+                EditingEntree.ModuleId = EditingEntree.Module.Id;
+                
+            if (EditingEntree.TypeTravailId <= 0 && ModalTypesTravail?.Count > 0)
+                EditingEntree.TypeTravailId = ModalTypesTravail[0].Id;
+
+            // validation finale des IDs
+            if (EditingEntree.ModuleId <= 0 || EditingEntree.TypeTravailId <= 0)
+            {
+                Console.WriteLine("Sauvegarde annulée : ModuleId ou TypeTravailId est invalide.");
+                return; 
+            }
+
+            var typeSelectionne = ModalTypesTravail.FirstOrDefault(t => t.Id == EditingEntree.TypeTravailId);
+            
+            // détacher les objets pour éviter que Entity Framework essaie de les re-créer
+            EditingEntree.Module = null;
+            EditingEntree.Type = null;
+
+            // Sauvegarde en base de données
+            using (var repo = new DataRepository())
+            {
+                if (_isEditingExisting)
+                    await repo.ModifierEntreeAsync(EditingEntree);
+                else
+                    await repo.AjouterEntreeAsync(EditingEntree);
+            }
+
+            // mise à jour mémoire (interface)
+            if (typeSelectionne != null)
+            {
+                EditingEntree.Type = new TypeTravail 
+                { 
+                    Id = typeSelectionne.Id, 
+                    Nom = typeSelectionne.Nom, 
+                    ModuleId = typeSelectionne.ModuleId 
+                };
+            }
+            
+            var moduleDestination = Modules?.FirstOrDefault(m => m.Id == EditingEntree.ModuleId);
+
+            if (moduleDestination != null)
+            {
+                moduleDestination.JournalDeTravail ??= new List<Entree>();
+
+                if (_isEditingExisting)
+                {
+                    var ancienneEntree = moduleDestination.JournalDeTravail.FirstOrDefault(e => e.Id == EditingEntree.Id);
+                    if (ancienneEntree != null)
+                    {
+                        moduleDestination.JournalDeTravail.Remove(ancienneEntree);
+                    }
+                }
+                
+                // Dans les deux cas (ajout ou édition), on ajoute l'entité à jour
+                moduleDestination.JournalDeTravail.Add(EditingEntree);
+            }
+            
+            if (SelectedModule != null)
+            {
+                actualiserJournalTypeTravail(SelectedModule); 
+            }
+            
+            FermerModal();
+        }
+        catch (Exception ex)
+        {
+            // empêche l'application de crasher si la DB est verrouillée
+            Console.WriteLine($"Erreur fatale lors de la sauvegarde : {ex.Message}");
         }
     }
-    
-    if (SelectedModule != null)
-    {
-        actualiserJournalTypeTravail(SelectedModule); 
-    }
-    
-    FermerModal();
-}
     
 
     public ModuleViewModel? SelectedModule
