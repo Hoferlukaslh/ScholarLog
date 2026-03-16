@@ -11,6 +11,11 @@ using Avalonia.Interactivity;
 using ScholarLog.Data;
 using ScholarLog.Components.DonutDiagram;
 
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using Avalonia.Platform.Storage; 
+
 namespace ScholarLog.Pages;
 
 public partial class JournalPage : UserControl
@@ -323,9 +328,9 @@ public partial class JournalPage : UserControl
         TotalHeures = $"{totalDuree:0.0}h";
     }
     
-    /// <summary>
-    /// Journal Modal
-    /// </summary>
+
+#region  Journal Modal
+
     
     private async void BoutonSupprimer_Tapped(object? sender, Avalonia.Input.TappedEventArgs e)
     {
@@ -436,10 +441,9 @@ public partial class JournalPage : UserControl
             }
         }
     }
-    
-    /// 
-    /// Type Travail Modal
-    /// 
+#endregion
+
+#region Type Travail Modal
 
     public static readonly StyledProperty<bool> IsModalTypesOpenProperty =
         AvaloniaProperty.Register<JournalPage, bool>(nameof(IsModalTypesOpen), false);
@@ -608,10 +612,11 @@ public partial class JournalPage : UserControl
         actualiserJournalTypeTravail(SelectedModule);
         ActualiserModalTypesTravail(SelectedModule);
     }
+#endregion
     
-    /// 
-    /// Graphique Donut
-    ///
+
+#region Graphique Donut
+
   
     // ajouter la collection pour le graphique
     public ObservableCollection<DonutItem> GraphiqueDonnees { get; set; } = new ObservableCollection<DonutItem>();
@@ -654,4 +659,300 @@ public partial class JournalPage : UserControl
     {
         IsModalGraphOpen = false;
     }
+#endregion
+    
+    
+#region Exportation des données
+
+    public static readonly StyledProperty<bool> IsExportModalOpenProperty =
+        AvaloniaProperty.Register<JournalPage, bool>(nameof(IsExportModalOpen), false);
+
+    public bool IsExportModalOpen
+    {
+        get => GetValue(IsExportModalOpenProperty);
+        set => SetValue(IsExportModalOpenProperty, value);
+    }
+    
+    public static readonly StyledProperty<string> ExportPreviewTextProperty =
+        AvaloniaProperty.Register<JournalPage, string>(nameof(ExportPreviewText), string.Empty);
+
+    public string ExportPreviewText
+    {
+        get => GetValue(ExportPreviewTextProperty);
+        set => SetValue(ExportPreviewTextProperty, value);
+    }
+
+    private string _currentExportFormat = "MD";
+    private bool _exportAllModules = false;
+
+
+    // commandes et interface
+
+    private void BoutonExporter_Tapped(object? sender, Avalonia.Input.TappedEventArgs e)
+    {
+        _exportAllModules = e.KeyModifiers.HasFlag(Avalonia.Input.KeyModifiers.Control) ||
+                            e.KeyModifiers.HasFlag(Avalonia.Input.KeyModifiers.Shift) ||
+                            e.KeyModifiers.HasFlag(Avalonia.Input.KeyModifiers.Alt);
+
+        OuvrirModalExportation();
+    }
+
+    public void OuvrirModalExportation()
+    {
+        if (!GetModulesAExporter().Any()) return;
+        
+        ChangerFormatExportation("MD");
+        IsExportModalOpen = true;
+    }
+
+    public void FermerModalExportation() => IsExportModalOpen = false;
+
+    // choix exportation
+    public void ChangerFormatExportation(string format)
+    {
+        _currentExportFormat = format;
+
+        // changer apparence des boutons
+        BtnExportMd.Classes.Set("active", format == "MD");
+        BtnExportCsv.Classes.Set("active", format == "CSV");
+        BtnExportJson.Classes.Set("active", format == "JSON");
+
+        ExportPreviewText = format.ToUpper() switch
+        {
+            "CSV" => GenererContenuCSV(),
+            "JSON" => GenererContenuJSON(),
+            "MD" => GenererContenuMD(),
+            _ => string.Empty
+        };
+    }
+
+    public async void CopierPressePapier()
+    {
+        if (string.IsNullOrEmpty(ExportPreviewText)) return;
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel?.Clipboard != null) await topLevel.Clipboard.SetTextAsync(ExportPreviewText);
+    }
+
+    public async void SauvegarderFichierExportation()
+    {
+        if (string.IsNullOrEmpty(ExportPreviewText)) return;
+        await SauvegarderFichierAsync(ExportPreviewText, _currentExportFormat.ToLower());
+    }
+
+
+    // logique métier
+
+    private List<ModuleViewModel> GetModulesAExporter()
+    {
+        if (_exportAllModules)
+            return Modules.Where(m => m.JournalDeTravail != null && m.JournalDeTravail.Any()).ToList();
+        
+        if (SelectedModule != null && SelectedModule.JournalDeTravail != null && SelectedModule.JournalDeTravail.Any())
+            return new List<ModuleViewModel> { SelectedModule };
+            
+        return new List<ModuleViewModel>();
+    }
+
+   private string GenererContenuMD()
+    {
+        var sb = new StringBuilder();
+        var modules = GetModulesAExporter();
+
+        if (_exportAllModules)
+        {
+            sb.AppendLine("# Rapport Global - Tous les modules\n");
+        }
+
+        double grandTotalHeuresFichier = 0.0; // Pour le total final de tout le fichier
+
+        foreach (var mod in modules)
+        {
+            if (mod.JournalDeTravail != null)
+            {
+                if (_exportAllModules) sb.AppendLine($"## Module : {mod.Nom}");
+                else sb.AppendLine($"# {mod.Nom}");
+                
+                sb.AppendLine();
+
+                // calcul des heures 
+                double totalHeuresModule = 0.0;
+                var repartitionDict = new Dictionary<string, double>();
+
+                foreach (var entree in mod.JournalDeTravail)
+                {
+                    totalHeuresModule += entree.Duree;
+                    
+                    string categorie = entree.Type?.Nom ?? "Général";
+                    if (repartitionDict.ContainsKey(categorie))
+                    {
+                        repartitionDict[categorie] += entree.Duree;
+                    }
+                    else
+                    {
+                        repartitionDict.Add(categorie, entree.Duree);
+                    }
+                }
+
+                grandTotalHeuresFichier += totalHeuresModule;
+
+                // affichage du tableau d'abord
+                sb.AppendLine($"| Date       | Temps | Type de travail | Description");
+                sb.AppendLine($"|------------|-------|-----------------|----------------------------------");
+
+                foreach (var entree in mod.JournalDeTravail)
+                {
+                    string date = entree.Date.ToString("dd.MM.yyyy");
+                    string duree = entree.Duree.ToString("0.00").Replace(",", ".");
+                    string type = (entree.Type?.Nom ?? "Général").PadRight(15);
+                    string desc = entree.Description?.Replace("\n", " ").Replace("|", "-") ?? "";
+                    
+                    sb.AppendLine($"| {date} | {duree}  | {type} | {desc}");
+                }
+
+                sb.AppendLine("\n### Répartition des heures\n");
+
+                // tri et affichage de la répartition
+                var listeRepartition = new List<KeyValuePair<string, double>>();
+                foreach (var kvp in repartitionDict)
+                {
+                    listeRepartition.Add(kvp);
+                }
+
+                listeRepartition.Sort((a, b) => b.Value.CompareTo(a.Value));
+
+                foreach (var item in listeRepartition)
+                {
+                    sb.AppendLine($"**{item.Key}** : {item.Value.ToString("0.00").Replace(",", ".")}h   ");
+                }
+
+                sb.AppendLine();
+                
+                //  total du module à la fin
+                sb.AppendLine($"**Total des heures :** {totalHeuresModule.ToString("0.00").Replace(",", ".")}h");
+                sb.AppendLine();
+
+                if (_exportAllModules) sb.AppendLine("---\n"); 
+            }
+        }
+
+        // total global à la a la fin du fichier (si plusieurs modules)
+        if (_exportAllModules && modules.Count > 1)
+        {
+            sb.AppendLine($"# TOTAL GLOBAL : {grandTotalHeuresFichier.ToString("0.00").Replace(",", ".")}h");
+            sb.AppendLine();
+        }
+
+        return sb.ToString();
+    }
+
+    private string GenererContenuCSV()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("Module;Date;Temps;Type;Description");
+        
+        foreach (var mod in GetModulesAExporter())
+        {
+            if (mod.JournalDeTravail != null)
+            {
+                foreach (var e in mod.JournalDeTravail)
+                {
+                    sb.AppendLine($"{mod.Nom};{e.Date:dd.MM.yyyy};{e.Duree};{e.Type?.Nom ?? "Général"};{e.Description?.Replace(";", ",")}");
+                }
+            }
+        }
+        return sb.ToString();
+    }
+
+    private string GenererContenuJSON()
+    {
+        var modules = GetModulesAExporter();
+        
+        if (modules.Count == 1 && !_exportAllModules)
+        {
+            return CreerJsonPourModule(modules[0]).ToJsonString(new JsonSerializerOptions { WriteIndented = true });
+        }
+        
+        var jsonArrayGlobal = new JsonArray();
+        foreach (var mod in modules)
+        {
+            jsonArrayGlobal.Add((JsonNode)CreerJsonPourModule(mod));
+        }
+        return jsonArrayGlobal.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
+    }
+
+    private JsonObject CreerJsonPourModule(ModuleViewModel mod)
+    {
+        var jsonRoot = new JsonObject();
+        jsonRoot["Module"] = JsonValue.Create(mod.Nom ?? "MOD");
+
+        var totalHeuresObject = new JsonObject();
+        if (mod.JournalDeTravail != null)
+        {
+            var repartition = mod.JournalDeTravail
+                .GroupBy(e => e.Type?.Nom ?? "Général")
+                .Select(g => new { Categorie = g.Key, Total = g.Sum(e => e.Duree) });
+
+            foreach (var item in repartition) 
+                totalHeuresObject[item.Categorie] = JsonValue.Create(item.Total);
+        }
+        jsonRoot["TotalHeures"] = totalHeuresObject;
+
+        var jsonArray = new JsonArray();
+        if (mod.JournalDeTravail != null)
+        {
+            foreach (var e in mod.JournalDeTravail)
+            {
+                var jsonObject = new JsonObject
+                {
+                    ["Date"] = JsonValue.Create(e.Date.ToString("yyyy-MM-dd")),
+                    ["Temps"] = JsonValue.Create(e.Duree),
+                    ["Type"] = JsonValue.Create(e.Type?.Nom ?? "Général"),
+                    ["Description"] = JsonValue.Create(e.Description ?? "")
+                };
+                
+                jsonArray.Add((JsonNode)jsonObject);
+            }
+        }
+        jsonRoot["Entrees"] = jsonArray;
+
+        return jsonRoot;
+    }
+
+
+    // sauvegarde en fichier
+    private async Task SauvegarderFichierAsync(string contenu, string extension)
+    {
+        try
+        {
+            var topLevel = TopLevel.GetTopLevel(this);
+            if (topLevel == null) return;
+
+            string trigramme = "ALL";
+            
+            if (!_exportAllModules)
+            {
+                string nomModule = SelectedModule?.ShortName ?? "MOD";
+                trigramme = nomModule.Length >= 3 ? nomModule.Substring(0, 3).ToUpper() : nomModule.ToUpper();
+            }
+
+            var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            {
+                Title = "Exporter le journal de travail",
+                SuggestedFileName = $"JournalDeTravail_{trigramme}.{extension}",
+                DefaultExtension = extension
+            });
+
+            if (file != null)
+            {
+                await using var stream = await file.OpenWriteAsync();
+                using var writer = new System.IO.StreamWriter(stream, Encoding.UTF8);
+                await writer.WriteAsync(contenu);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur sauvegarde: {ex.Message}");
+        }
+    }
+ #endregion
 }
