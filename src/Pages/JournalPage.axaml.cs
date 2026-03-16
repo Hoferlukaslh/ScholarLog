@@ -15,21 +15,18 @@ namespace ScholarLog.Pages;
 
 public partial class JournalPage : UserControl
 {
-    
-
- 
     public static readonly StyledProperty<ModuleViewModel?> SelectedModuleProperty =
         AvaloniaProperty.Register<JournalPage, ModuleViewModel?>(nameof(SelectedModule));
     
     public static readonly StyledProperty<bool> IsModalOpenProperty =
         AvaloniaProperty.Register<JournalPage, bool>(nameof(IsModalOpen), false);
+    
     public bool IsModalOpen
     {
         get => GetValue(IsModalOpenProperty);
         set => SetValue(IsModalOpenProperty, value);
     }
-    
-
+ 
     
     public static readonly StyledProperty<string> ModalTitleProperty =
         AvaloniaProperty.Register<JournalPage, string>(nameof(ModalTitle), "Nouvelle entrée");
@@ -268,13 +265,15 @@ public partial class JournalPage : UserControl
         }
     }
     
+   
+    
     private async void actualiserJournalTypeTravail(ModuleViewModel moduleVM)
     {
         Journal.Clear();
         TypesTravail.Clear();
         double totalDuree = 0.0;
     
-        // 1. On fouille dans le journal existant
+        // fouille dans le journal existant
         if (moduleVM.JournalDeTravail != null)
         {
             foreach (var entree in moduleVM.JournalDeTravail)
@@ -286,7 +285,7 @@ public partial class JournalPage : UserControl
             }
         }
 
-        // 2. On ajoute les types de la base de données
+        // ajoute les types de la base de données
         if (moduleVM.TypesDeTravail != null)
         {
             foreach (var type in moduleVM.TypesDeTravail)
@@ -324,6 +323,9 @@ public partial class JournalPage : UserControl
         TotalHeures = $"{totalDuree:0.0}h";
     }
     
+    /// <summary>
+    /// Journal Modal
+    /// </summary>
     
     private async void BoutonSupprimer_Tapped(object? sender, Avalonia.Input.TappedEventArgs e)
     {
@@ -433,5 +435,177 @@ public partial class JournalPage : UserControl
                 EditingEntree.Date = picker.SelectedDate.Value.Date;
             }
         }
+    }
+    
+    /// <summary>
+    /// Type Travail Modal
+    /// </summary>
+
+    public static readonly StyledProperty<bool> IsModalTypesOpenProperty =
+        AvaloniaProperty.Register<JournalPage, bool>(nameof(IsModalTypesOpen), false);
+
+    public bool IsModalTypesOpen
+    {
+        get => GetValue(IsModalTypesOpenProperty);
+        set => SetValue(IsModalTypesOpenProperty, value);
+    }
+
+    public static readonly StyledProperty<string> NouveauTypeNomProperty =
+        AvaloniaProperty.Register<JournalPage, string>(nameof(NouveauTypeNom), string.Empty);
+
+    public string NouveauTypeNom
+    {
+        get => GetValue(NouveauTypeNomProperty);
+        set => SetValue(NouveauTypeNomProperty, value);
+    }
+
+    public static readonly StyledProperty<bool> IsConfirmDeleteTypeOpenProperty =
+        AvaloniaProperty.Register<JournalPage, bool>(nameof(IsConfirmDeleteTypeOpen), false);
+
+    public bool IsConfirmDeleteTypeOpen
+    {
+        get => GetValue(IsConfirmDeleteTypeOpenProperty);
+        set => SetValue(IsConfirmDeleteTypeOpenProperty, value);
+    }
+
+    public static readonly StyledProperty<string> DeleteWarningMessageProperty =
+        AvaloniaProperty.Register<JournalPage, string>(nameof(DeleteWarningMessage), string.Empty);
+
+    public string DeleteWarningMessage
+    {
+        get => GetValue(DeleteWarningMessageProperty);
+        set => SetValue(DeleteWarningMessageProperty, value);
+    }
+
+    private TypeTravailViewModel? _typeToDelete;
+
+    public void OuvrirModalTypesTravail()
+    {
+        if (SelectedModule == null) return;
+        IsModalTypesOpen = true;
+    }
+
+    public void FermerModalTypes()
+    {
+        IsModalTypesOpen = false;
+        NouveauTypeNom = string.Empty;
+    }
+
+    public async void AjouterNouveauType()
+    {
+        if (string.IsNullOrWhiteSpace(NouveauTypeNom) || SelectedModule == null) return;
+
+        var nouveauType = new TypeTravail { Nom = NouveauTypeNom.Trim(), ModuleId = SelectedModule.Id };
+        
+        using (var repo = new DataRepository())
+        {
+            await repo.AjouterTypeTravailAsync(nouveauType);
+        }
+
+        if (SelectedModule.TypesDeTravail == null)
+            SelectedModule.TypesDeTravail = new List<TypeTravail>();
+            
+        SelectedModule.TypesDeTravail.Add(nouveauType);
+        
+        actualiserJournalTypeTravail(SelectedModule);
+        ActualiserModalTypesTravail(SelectedModule);
+        
+        NouveauTypeNom = string.Empty;
+    }
+
+    public async void RenommerType(TypeTravailViewModel typeVM)
+    {
+        if (typeVM == null || string.IsNullOrWhiteSpace(typeVM.Nom) || SelectedModule == null) return;
+
+        var typeAModifier = new TypeTravail { Id = typeVM.Id, Nom = typeVM.Nom.Trim(), ModuleId = typeVM.ModuleId };
+        
+        using (var repo = new DataRepository())
+        {
+            await repo.ModifierTypeTravailAsync(typeAModifier);
+        }
+
+        // met à jour la mémoire
+        var typeInMemory = SelectedModule.TypesDeTravail?.FirstOrDefault(t => t.Id == typeVM.Id);
+        if (typeInMemory != null) typeInMemory.Nom = typeVM.Nom;
+
+        if (SelectedModule.JournalDeTravail != null)
+        {
+            foreach (var entree in SelectedModule.JournalDeTravail.Where(e => e.Type != null && e.Type.Id == typeVM.Id))
+            {
+                entree.Type.Nom = typeVM.Nom;
+            }
+        }
+        
+        actualiserJournalTypeTravail(SelectedModule);
+        ActualiserModalTypesTravail(SelectedModule);
+    }
+
+    public async void DemanderSuppressionType(TypeTravailViewModel typeVM)
+    {
+        if (typeVM == null || SelectedModule == null) return;
+
+        _typeToDelete = typeVM;
+        
+        // compte le nombre d'entrées liées à cette catégorie
+        int count = SelectedModule.JournalDeTravail?.Count(e => e.Type != null && e.Type.Id == typeVM.Id) ?? 0;
+
+        if (count == 0)
+        {
+            // s'il n'y a aucune entrée, on supprime directement et silencieusement
+            await ExecuterSuppressionTypeAsync();
+        }
+        else
+        {
+            // s'il y a des entrées, on demande confirmation
+            DeleteWarningMessage = $"Voulez-vous vraiment supprimer la catégorie '{typeVM.Nom}' ?\nCela supprimera également {count} entrée(s) de journal qui y sont associée(s).";
+            IsConfirmDeleteTypeOpen = true;
+        }
+    }
+
+    public void AnnulerSuppressionType()
+    {
+        IsConfirmDeleteTypeOpen = false;
+        _typeToDelete = null;
+    }
+
+    public async void ConfirmerSuppressionType()
+    {
+        await ExecuterSuppressionTypeAsync();
+        IsConfirmDeleteTypeOpen = false;
+    }
+    
+    private async Task ExecuterSuppressionTypeAsync()
+    {
+        if (_typeToDelete == null || SelectedModule == null) return;
+
+        using (var repo = new DataRepository())
+        {
+            // supprime d'abord les entrées de journal associées à cette catégorie
+            if (SelectedModule.JournalDeTravail != null)
+            {
+                var entreesASupprimer = SelectedModule.JournalDeTravail.Where(e => e.Type != null && e.Type.Id == _typeToDelete.Id).ToList();
+                foreach (var entree in entreesASupprimer)
+                {
+                    var entreeStub = new Entree { Id = entree.Id };
+                    
+                    await repo.SupprimerEntreeAsync(entreeStub);
+                    SelectedModule.JournalDeTravail.Remove(entree);
+                }
+            }
+
+            // supprime la catégorie elle-même de la BDD via un stub
+            var typeStub = new TypeTravail { Id = _typeToDelete.Id };
+            await repo.SupprimerTypeTravailAsync(typeStub);
+
+            // nettoyage de la mémoire locale
+            var typeInMemory = SelectedModule.TypesDeTravail?.FirstOrDefault(t => t.Id == _typeToDelete.Id);
+            if (typeInMemory != null) SelectedModule.TypesDeTravail.Remove(typeInMemory);
+        }
+
+        _typeToDelete = null;
+        
+        // rafraîchissement de l'interface
+        actualiserJournalTypeTravail(SelectedModule);
+        ActualiserModalTypesTravail(SelectedModule);
     }
 }

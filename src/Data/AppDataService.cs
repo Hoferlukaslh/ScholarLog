@@ -53,7 +53,8 @@ public class AppDataService
                         TravailModule = noteModule,
                         TheoryTrend = DeterminerTendance(branchesTM, avgTM),
                         Branches = mod.Branches.ToList(),
-                        JournalDeTravail = mod.JournalDeTravail.ToList()
+                        JournalDeTravail = mod.JournalDeTravail.ToList(),
+                        TypesDeTravail = mod.TypesDeTravail.ToList()
                     });
                 }
             }
