@@ -39,6 +39,18 @@ public partial class HomePage : UserControl
         set => SetValue(DisplayedModuleProperty, value);
     }
     
+    // Événement que la vue principale (MainWindow) pourra écouter
+    public event EventHandler<ModuleViewModel>? NavigationVersJournalDemandee;
+
+    private void BoutonAllerAuxJournaux_Click(object? sender, RoutedEventArgs e)
+    {
+        // un module est bien affiché avant de lancer la navigation
+        if (DisplayedModule != null)
+        {
+            NavigationVersJournalDemandee?.Invoke(this, DisplayedModule);
+        }
+    }
+    
     public HomePage()
     {
         InitializeComponent();

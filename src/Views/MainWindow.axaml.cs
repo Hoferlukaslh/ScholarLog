@@ -52,11 +52,39 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         this.Loaded += MainWindow_Loaded;
+        
+        // 1. Initialiser la HomePage tout de suite
+        _homePage = new HomePage();
+        
+        // 2. S'abonner à l'événement de navigation
+        _homePage.NavigationVersJournalDemandee += (sender, moduleASelectionner) => 
+        {
+            AllerAuJournalAvecModule(moduleASelectionner);
+        };
     }
+    
+    
+    
+    private void AllerAuJournalAvecModule(ModuleViewModel module)
+    {
+        _journalPage ??= new JournalPage();
+        
+        // On définit le module sélectionné dans la page journal
+        _journalPage.SelectedModule = module;
+        
+        // On met à jour l'UI de la barre latérale (curseur)
+        MettreAJourSelection(Buttonjournaux);
+        
+        // On affiche la page
+        MainContentControler.Content = _journalPage;
+    }
+    
+    
 
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
         MettreAJourSelection(ButtonAccueil);
+        
         // Les gestionnaire de fenêtres linux gère mal le flou -> opacité ++
         if (OperatingSystem.IsLinux()) 
             this.Classes.Add("linux");
@@ -69,12 +97,12 @@ public partial class MainWindow : Window
         _lightTimer.Tick += (s, ev) => MoveLights();
         _lightTimer.Start();
 
-        // On lance le premier mouvement immédiatement
+        // lance le premier mouvement immédiatement
         MoveLights();
         
         await AppDataService.Instance.ChargerDonneesGlobalesAsync();
-        MainContentControler.Content = new HomePage();
-        //MainContentControler.Content = new JournalPage();
+        
+        MainContentControler.Content = _homePage;
     }
 
     private void MoveLights()
@@ -164,16 +192,16 @@ public partial class MainWindow : Window
     
     private void ButtonAccueil_OnClick(object? sender, RoutedEventArgs e)
     {
-        _homePage ??= new HomePage(); // Crée seulement si c'est la première fois
+        _homePage ??= new HomePage(); 
+        
         MettreAJourSelection(ButtonAccueil);
 
         if (MainContentControler?.Content?.Equals(_homePage) == false)
         {
-            _homePage.AnimateGridsAsync(false, 0);   // rétablir l'affichage par défaut
-            _homePage.SelectedModule = null;                        // aucune sélection de module
+            _homePage.AnimateGridsAsync(false, 0);
+            _homePage.SelectedModule = null;
             MainContentControler.Content = _homePage;
         }
-            
     }
     
     
@@ -186,6 +214,8 @@ public partial class MainWindow : Window
         if (MainContentControler?.Content?.Equals(_notesPage) == false)
             MainContentControler.Content = _notesPage;
     }
+    
+    
     
 
     private void Buttonjournaux_OnClick(object? sender, RoutedEventArgs e)

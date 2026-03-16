@@ -83,6 +83,7 @@
             <x:String x:Key="IconeUp">&#xE4AE;</x:String>
             <x:String x:Key="IconeDown">&#xE4AC;</x:String>
             <x:String x:Key="IconeStable">&#xE06C;</x:String>
+            <x:String x:Key="IconeFoward">&#xE6A6;</x:String>
             
             <x:String x:Key="IconeTime">&#xE19A;</x:String>
             <x:String x:Key="IconePlus">&#xE3D4;</x:String>
