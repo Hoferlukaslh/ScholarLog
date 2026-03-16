@@ -12,6 +12,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 public enum TypeCours { M, TM, PM } 
 public enum Trend {Up, Down, Stable}
 
+
+
 [Table("module")]
 public class Module : ObservableObject
 {
@@ -70,6 +72,17 @@ public class Entree : ObservableObject
     
     [ForeignKey("TypeTravailId")]
     public TypeTravail Type { get; set; }
+    
+    [NotMapped]
+    private bool _isDeletePending;
+
+    [NotMapped]
+    public bool IsDeletePending
+    {
+        get => _isDeletePending;
+        set => SetProperty(ref _isDeletePending, value); 
+        // SetProperty notifiera l'interface que la valeur a changé (grâce à ObservableObject)
+    }
 }
 
 [Table("branche")]

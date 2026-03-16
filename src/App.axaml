@@ -118,6 +118,7 @@
                     <SolidColorBrush x:Key="SecondaryForeground">#A0A0AB</SolidColorBrush>
                     
                     <SolidColorBrush x:Key="CardBackground">#15FFFFFF</SolidColorBrush> 
+                    <SolidColorBrush x:Key="ModalBackground">#EE14172D</SolidColorBrush> 
                     <SolidColorBrush x:Key="CardBorder">#20FFFFFF</SolidColorBrush>
                 </ResourceDictionary>
 
@@ -139,6 +140,7 @@
                     <SolidColorBrush x:Key="SecondaryForeground">#6E7681</SolidColorBrush>
                     
                     <SolidColorBrush x:Key="CardBackground">#AAFFFFFF</SolidColorBrush> 
+                    <SolidColorBrush x:Key="ModalBackground">#EEFFFFFF</SolidColorBrush> 
                     <SolidColorBrush x:Key="CardBorder">#80D1D5DB</SolidColorBrush>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>

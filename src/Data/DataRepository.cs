@@ -54,11 +54,20 @@ public class DataRepository : IDisposable
     
     public async Task AjouterTypeTravailAsync(TypeTravail t)
     {
-        bool existe = await _context.TypeTravail.AnyAsync(type => type.Nom == t.Nom && type.ModuleId == t.ModuleId);
-        if (!existe)
+        // On cherche si le type existe déjà en base
+        var existant = await _context.TypeTravail
+            .FirstOrDefaultAsync(type => type.Nom == t.Nom && type.ModuleId == t.ModuleId);
+        
+        if (existant == null)
         {
+            // Il n'existe pas, on l'ajoute (EF Core va mettre à jour t.Id automatiquement)
             _context.TypeTravail.Add(t);
             await _context.SaveChangesAsync();
+        }
+        else
+        {
+            // CRITIQUE : Il existe déjà, on doit assigner le vrai ID de la base à notre objet !
+            t.Id = existant.Id;
         }
     }
 

@@ -19,10 +19,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:Pages="clr-namespace:ScholarLog.Pages"
              xmlns:data="clr-namespace:ScholarLog.Data"
+             xmlns:System="clr-namespace:System;assembly=System.Runtime"
              x:Class="ScholarLog.Pages.JournalPage"
              x:DataType="Pages:JournalPage">
     
-    <UserControl.Styles>
+<UserControl.Styles>
         <Style Selector="Button.icon-button">
             <Setter Property="FontFamily" Value="{DynamicResource Phosphor}" />
             <Setter Property="FontSize" Value="{DynamicResource IconSizeNormal}" />
@@ -33,120 +34,189 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="{DynamicResource CardBackground}" />
             <Setter Property="CornerRadius" Value="8" />
-            <Setter Property="Padding"  Value="-0.5, 0, 0,0"></Setter>
+            <Setter Property="Padding"  Value="-0.5, 0, 0,0" />
         </Style>
-    
         <Style Selector="Button.icon-button:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource CardBorder}" />
         </Style>
     </UserControl.Styles>
     
+    <Grid>
         
-    <Grid RowDefinitions="Auto, *">
-        
-        <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto, *, Auto" Margin="10,20,10,20">
+        <Grid RowDefinitions="Auto, *">
             
-            <!-- Titre de la page -->
-            <TextBlock Grid.Column="0" Text="Mes Journaux" FontSize="24" 
-                       Foreground="{DynamicResource PrimaryForeground}" 
-                       VerticalAlignment="Center" Margin="0,0,30,0"/>
-            
-            <!-- Liste des modules disponibles -->
-            <ComboBox Grid.Column="1" 
-                      ItemsSource="{Binding Modules}" 
-                      SelectedItem="{Binding SelectedModule}" 
-                      Width="250" VerticalAlignment="Center"
-                      PlaceholderText="Sélectionner un module...">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate x:DataType="data:ModuleViewModel">
-                        <TextBlock Text="{Binding ShortName}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            
-            <!-- Boutons d'interraction -->
-            <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto, *, Auto" Margin="10,20,10,20">
                 
-                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,15,0">
-                    <TextBlock Text="Total" FontSize="12" Foreground="{DynamicResource SecondaryForeground}" HorizontalAlignment="Right"/>
-                    <TextBlock Text="{Binding TotalHeures}" FontSize="18" Foreground="{DynamicResource PrimaryForeground}" HorizontalAlignment="Right"/>
-                </StackPanel>
+                <TextBlock Grid.Column="0" Text="Mes Journaux" FontSize="24" 
+                           Foreground="{DynamicResource PrimaryForeground}" 
+                           VerticalAlignment="Center" Margin="0,0,30,0"/>
                 
-                <StackPanel Orientation="Horizontal" Spacing="10">
-                    <Button Content="{DynamicResource IconeGear}" Classes="icon-button" />
-                    <Button Content="{DynamicResource IconeGraph}" Classes="icon-button" />
-                    <Button Content="{DynamicResource IconePlus}" Classes="icon-button" />
-                </StackPanel>
+                <ComboBox Grid.Column="1" 
+                          ItemsSource="{Binding Modules}" 
+                          SelectedItem="{Binding SelectedModule}" 
+                          Width="250" VerticalAlignment="Center"
+                          PlaceholderText="Sélectionner un module...">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="data:ModuleViewModel">
+                            <TextBlock Text="{Binding ShortName}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 
-                <Button Background="{DynamicResource CardBackground}" 
-                        Height="35" 
-                        VerticalContentAlignment="Center" 
-                        Padding="15,0">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Text="Exporter" VerticalAlignment="Center"/>
-                        <ContentControl Content="{DynamicResource IconeExport}" FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource IconSizeNormal}"
-                                        VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,15,0">
+                        <TextBlock Text="Total" FontSize="12" Foreground="{DynamicResource SecondaryForeground}" HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding TotalHeures}" FontSize="18" Foreground="{DynamicResource PrimaryForeground}" HorizontalAlignment="Right"/>
                     </StackPanel>
-                </Button>
-            </StackPanel>
-        </Grid>
-
-        <Border Grid.Row="1" Margin="10,0,10,10" VerticalAlignment="Stretch"
-                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
-                CornerRadius="{DynamicResource CardCornerRadius}" 
-                Background="{DynamicResource CardBackground}">
-            
-            <Grid RowDefinitions="Auto,*">
-                
-                <!-- Affichage des entêtes des colonnes -->
-                <Grid Grid.Row="0" ColumnDefinitions="1.5*, 1*, 2*, 4*, Auto" Margin="20,20,20,10">
-                    <TextBlock Grid.Column="0" Text="Date" Foreground="{DynamicResource PrimaryForeground}"/>
-                    <TextBlock Grid.Column="1" Text="Temps" Foreground="{DynamicResource PrimaryForeground}"/>
-                    <TextBlock Grid.Column="2" Text="Type de travail" Foreground="{DynamicResource PrimaryForeground}"/>
-                    <TextBlock Grid.Column="3" Text="Description" Foreground="{DynamicResource PrimaryForeground}"/>
-                    <TextBlock Grid.Column="4" Text="Action" Foreground="{DynamicResource PrimaryForeground}" Width="80" TextAlignment="Right"/>
-                </Grid>
-
-                <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}" VerticalAlignment="Bottom" Margin="10,0"/>
-
-                <!-- Affichage des données -->
-                <ScrollViewer Grid.Row="1" Margin="0,5,0,10">
-                    <ItemsControl ItemsSource="{Binding Journal}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="data:Entree"> 
-                                <Grid ColumnDefinitions="1.5*, 1*, 2*, 4*, Auto" Margin="20,10">
-        
-                                    <TextBlock Grid.Column="0" Text="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="1" Text="{Binding Duree, StringFormat={}{0}h}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="2" Text="{Binding Type.Nom}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="3" Text="{Binding Description}" Foreground="{DynamicResource PrimaryForeground}" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                    
-                                    <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="10" Width="80" HorizontalAlignment="Right">
-                                        <!-- Button edition -->
-                                        <Button Content="{DynamicResource IconeCrayon}" 
-                                                FontFamily="{DynamicResource Phosphor}" 
-                                                FontSize="{DynamicResource IconSizeSmall}"  
-                                                Foreground="{DynamicResource PrimaryForeground}"
-                                                Background="Transparent" 
-                                                Padding="5" Cursor="Hand"/>
-                                        
-                                        <!-- Button suppression -->
-                                        <Button Content="{DynamicResource IconeTrash}" 
-                                                FontFamily="{DynamicResource Phosphor}" 
-                                                FontSize="{DynamicResource IconSizeSmall}" 
-                                                Foreground="{DynamicResource PrimaryForeground}"
-                                                Background="Transparent" 
-                                                Padding="5" Cursor="Hand"
-                                                Command="{Binding $parent[Pages:JournalPage].SupprimerEntree}"
-                                                CommandParameter="{Binding}"/>
-                                    </StackPanel>
-                                    
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
+                    
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Content="{DynamicResource IconeGear}" Classes="icon-button" />
+                        <Button Content="{DynamicResource IconeGraph}" Classes="icon-button" />
+                        <Button Content="{DynamicResource IconePlus}" Classes="icon-button" 
+                                Command="{Binding OuvrirModalAjout}"/>
+                    </StackPanel>
+                    
+                    <Button Background="{DynamicResource CardBackground}" Height="35" VerticalContentAlignment="Center" Padding="15,0">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="Exporter" VerticalAlignment="Center"/>
+                            <ContentControl Content="{DynamicResource IconeExport}" FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource IconSizeNormal}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
             </Grid>
-        </Border>
+
+            <Border Grid.Row="1" Margin="10,0,10,10" VerticalAlignment="Stretch"
+                    BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
+                    CornerRadius="{DynamicResource CardCornerRadius}" 
+                    Background="{DynamicResource CardBackground}">
+                
+                <Grid RowDefinitions="Auto,*">
+                    <Grid Grid.Row="0" ColumnDefinitions="1.5*, 1*, 2*, 4*, Auto" Margin="20,20,20,10">
+                        <TextBlock Grid.Column="0" Text="Date" Foreground="{DynamicResource PrimaryForeground}"/>
+                        <TextBlock Grid.Column="1" Text="Temps" Foreground="{DynamicResource PrimaryForeground}"/>
+                        <TextBlock Grid.Column="2" Text="Type de travail" Foreground="{DynamicResource PrimaryForeground}"/>
+                        <TextBlock Grid.Column="3" Text="Description" Foreground="{DynamicResource PrimaryForeground}"/>
+                        <TextBlock Grid.Column="4" Text="Action" Foreground="{DynamicResource PrimaryForeground}" Width="80" TextAlignment="Right"/>
+                    </Grid>
+
+                    <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}" VerticalAlignment="Bottom" Margin="10,0"/>
+
+                    <ScrollViewer Grid.Row="1" Margin="0,5,0,10">
+                        <ItemsControl ItemsSource="{Binding Journal}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="data:Entree"> 
+                                    <Grid ColumnDefinitions="1.5*, 1*, 2*, 4*, Auto" Margin="20,10">
+                                        <TextBlock Grid.Column="0" Text="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Duree, StringFormat={}{0}h}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding Type.Nom}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="3" Text="{Binding Description}" Foreground="{DynamicResource PrimaryForeground}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                        
+                                        <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="10" Width="80" HorizontalAlignment="Right">
+                                            <Button Content="{DynamicResource IconeCrayon}" 
+                                                    FontFamily="{DynamicResource Phosphor}" 
+                                                    FontSize="{DynamicResource IconSizeSmall}"  
+                                                    Foreground="{DynamicResource PrimaryForeground}"
+                                                    Background="Transparent" Padding="5" Cursor="Hand"
+                                                    Command="{Binding $parent[Pages:JournalPage].OuvrirModalModification}"
+                                                    CommandParameter="{Binding}"/>
+                                            
+                                            <Button Content="{DynamicResource IconeTrash}" 
+                                                    FontFamily="{DynamicResource Phosphor}" 
+                                                    FontSize="{DynamicResource IconSizeSmall}" 
+                                                    Background="Transparent" Padding="5" Cursor="Hand"
+                                                    Tapped="BoutonSupprimer_Tapped">
+    
+                                                <Button.Styles>
+                                                    <Style Selector="Button">
+                                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}"/>
+                                                    </Style>
+        
+                                                    <Style Selector="Button[IsDefault=True]">
+                                                        <Setter Property="Foreground" Value="Red"/>
+                                                    </Style>
+        
+                                                    <Style Selector="Button[IsDefault=True]:pointerover /template/ ContentPresenter">
+                                                        <Setter Property="Foreground" Value="Red"/>
+                                                    </Style>
+                                                </Button.Styles>
+    
+                                                <Button.IsDefault>
+                                                    <Binding Path="IsDeletePending"/>
+                                                </Button.IsDefault>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        <Grid Background="Transparent" ZIndex="100" IsVisible="{Binding IsModalOpen}">
+            <Border Width="450" Background="{DynamicResource ModalBackground}" 
+                    CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
+                    BoxShadow="0 10 30 0 #40000000">
+                
+                <StackPanel Margin="20" Spacing="15">
+                    
+                    <Grid>
+                        <TextBlock Text="{Binding ModalTitle}" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        <Button Content="✕" Background="Transparent" HorizontalAlignment="Right" Command="{Binding FermerModal}"/>
+                    </Grid>
+                    
+                    <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5"/>
+
+                    <TextBlock Text="Module" IsVisible="{Binding IsNewEntry}" FontSize="12" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
+                    <ComboBox IsVisible="{Binding IsNewEntry}" 
+                              ItemsSource="{Binding Modules}" 
+                              SelectedItem="{Binding ModalSelectedModule}" 
+                              HorizontalAlignment="Stretch">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="data:ModuleViewModel">
+                                <TextBlock Text="{Binding ShortName}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBlock Text="Date" FontSize="12" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
+                    <CalendarDatePicker 
+                        SelectedDateFormat="Custom" 
+                        CustomDateFormatString="dd.MM.yyyy" 
+                        DisplayDateStart="2024-01-01"
+                        SelectedDate="{Binding EditingEntree.Date}"
+                        SelectedDateChanged="CalendarDatePicker_OnSelectedDateChanged"
+                        Watermark="JJ.MM.AAAA"
+                        UseFloatingWatermark="False"
+                        HorizontalAlignment="Stretch">
+                    </CalendarDatePicker>
+
+                    <TextBlock Text="Temps (heures)" FontSize="12" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
+                    <NumericUpDown Value="{Binding EditingEntree.Duree}" Increment="0.5" Minimum="0" FormatString="0.0" HorizontalAlignment="Stretch"/>
+
+                    <TextBlock Text="Type de travail" FontSize="12" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
+
+                    <ComboBox ItemsSource="{Binding ModalTypesTravail}" 
+                              SelectedValue="{Binding EditingEntree.TypeTravailId}" 
+                              SelectedValueBinding="{Binding Id}" 
+                              HorizontalAlignment="Stretch">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="data:TypeTravailViewModel">
+                                <TextBlock Text="{Binding Nom}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBlock Text="Description" FontSize="12" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
+                    <TextBox Text="{Binding EditingEntree.Description}" HorizontalAlignment="Stretch" MinHeight="60" TextWrapping="Wrap"/>
+
+                    <Button Content="💾 Sauvegarder" Command="{Binding SauvegarderEntree}" 
+                            HorizontalAlignment="Right" Margin="0,10,0,0" Padding="15,8"
+                            Background="#3A3A3A" Foreground="White" CornerRadius="5"/>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
