@@ -197,22 +197,6 @@
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
                         </Button>
-                        
-                        <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonExemple"
-                                Classes="nav-btn"
-                                Click="ButtonExemple_OnClick">
-                            <Grid ColumnDefinitions="40, *">
-                                <Label Grid.Column="0" FontFamily="{DynamicResource Phosphor}" 
-                                       FontSize="{DynamicResource IconSizeMedium}" Foreground="{DynamicResource SecondaryForeground}"
-                                       HorizontalAlignment="Center" Content="{DynamicResource IconeScholarHat}" />
-                                <TextBlock x:Name="TextExemple" Classes="menu-text" Grid.Column="1" 
-                                           FontFamily="{DynamicResource Helvetica}" 
-                                           Foreground="{DynamicResource SecondaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}" 
-                                           Text="Exemple" 
-                                           VerticalAlignment="Center" Margin="10,0,0,0" />
-                            </Grid>
-                        </Button>
                     </StackPanel>
                     
                     

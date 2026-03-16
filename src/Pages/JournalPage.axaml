@@ -34,7 +34,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="{DynamicResource CardBackground}" />
-            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
             <Setter Property="Padding"  Value="-0.5, 0, 0,0" />
         </Style>
         <Style Selector="Button.icon-button:pointerover /template/ ContentPresenter">
@@ -42,16 +42,29 @@
         </Style>
     
     <!-- Boutons export -->
-        <Style Selector="Button.exportTab">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="CornerRadius" Value="0"/>
-        </Style>
-        <Style Selector="Button.exportTab:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#1AFFFFFF"/>
-        </Style>
-        <Style Selector="Button.exportTab.active /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource CardBackground}"/> <Setter Property="Foreground" Value="#FFFFFF"/>
-        </Style>
+    <Style Selector="RadioButton.export-toggle">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource SecondaryForeground}"/>
+        <Setter Property="Padding" Value="0,8"/>
+        <Setter Property="Margin" Value="2"/> <Setter Property="CornerRadius" Value="7"/> <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{TemplateBinding Background}" 
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                    <ContentPresenter Content="{TemplateBinding Content}" 
+                                      Margin="{TemplateBinding Padding}" 
+                                      HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"/>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    
+    <Style Selector="RadioButton.export-toggle:checked">
+        <Setter Property="Background" Value="{DynamicResource CardBorder}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}"/>
+    </Style>
     </UserControl.Styles>
     
     
@@ -69,6 +82,7 @@
                           ItemsSource="{Binding Modules}" 
                           SelectedItem="{Binding SelectedModule}" 
                           Width="250" VerticalAlignment="Center"
+                          HorizontalAlignment="Center"
                           PlaceholderText="Sélectionner un module...">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="data:ModuleViewModel">
@@ -91,7 +105,7 @@
                     </StackPanel>
                     
                     <Button Tapped="BoutonExporter_Tapped"
-                            Background="{DynamicResource CardBackground}" Height="35" VerticalContentAlignment="Center" Padding="15,0">
+                            Background="{DynamicResource CardBackground}" Height="35" CornerRadius="{DynamicResource ControlCornerRadius}" VerticalContentAlignment="Center" Padding="15,0">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Exporter" VerticalAlignment="Center"/>
                             <ContentControl Content="{DynamicResource IconeExport}" FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource IconSizeNormal}" VerticalAlignment="Center"/>
@@ -413,11 +427,22 @@
                         </Grid>
                         <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}" VerticalAlignment="Bottom" Margin="-20,0"/>
 
-                        <Border Grid.Row="1" Margin="0,20,0,15" Background="{DynamicResource CardBackground}" CornerRadius="{DynamicResource ControlCornerRadius}" ClipToBounds="True">
+                        <Border Grid.Row="1" Margin="0,20,0,15" 
+                                Background="{DynamicResource CardBackground}" 
+                                CornerRadius="8" 
+                                Padding="2"> 
                             <Grid ColumnDefinitions="*,*,*">
-                                <Button Name="BtnExportMd" CornerRadius="{DynamicResource ControlCornerRadius}" Classes="exportTab active" Grid.Column="0" Content="MD" Command="{Binding ChangerFormatExportation}" CommandParameter="MD" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
-                                <Button Name="BtnExportCsv" CornerRadius="{DynamicResource ControlCornerRadius}" Classes="exportTab" Grid.Column="1" Content="CSV" Command="{Binding ChangerFormatExportation}" CommandParameter="CSV" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
-                                <Button Name="BtnExportJson" CornerRadius="{DynamicResource ControlCornerRadius}" Classes="exportTab" Grid.Column="2" Content="JSON" Command="{Binding ChangerFormatExportation}" CommandParameter="JSON" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                                <RadioButton Name="RbExportMd" Grid.Column="0" Classes="export-toggle" 
+                                             Content="MD" Command="{Binding ChangerFormatExportation}" 
+                                             CommandParameter="MD" GroupName="ExportFormat"/>
+        
+                                <RadioButton Name="RbExportCsv" Grid.Column="1" Classes="export-toggle" 
+                                             Content="CSV" Command="{Binding ChangerFormatExportation}" 
+                                             CommandParameter="CSV" GroupName="ExportFormat"/>
+        
+                                <RadioButton Name="RbExportJson" Grid.Column="2" Classes="export-toggle" 
+                                             Content="JSON" Command="{Binding ChangerFormatExportation}" 
+                                             CommandParameter="JSON" GroupName="ExportFormat"/>
                             </Grid>
                         </Border>
 
@@ -443,7 +468,7 @@
                         <Button Grid.Row="3" Command="{Binding SauvegarderFichierExportation}"
                                 Background="{DynamicResource CardBackground}" 
                                 Foreground="{DynamicResource PrimaryForeground}" 
-                                CornerRadius="{DynamicResource ControlCornerRadius}" Padding="10"
+                                CornerRadius="{DynamicResource CardCornerRadius}" Padding="10"
                                 HorizontalAlignment="Right" ToolTip.Tip="Enregistrer sur l'ordinateur">
                             <ContentControl Content="{DynamicResource IconeSave}" FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource IconSizeNormal}" />
                         </Button>

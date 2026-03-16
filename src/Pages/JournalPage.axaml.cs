@@ -1,3 +1,23 @@
+/*
+    Fichier      :  JournalPage.axaml.cs
+    Projet       :  ScholarLog
+
+    Description  :
+        Code-behind de la vue JournalPage. 
+        Gère l'affichage, la création, la modification et la suppression 
+        des entrées du journal de travail. Inclut également la gestion 
+        des catégories (TypeTravail), la visualisation via un graphique 
+        Donut et les fonctionnalités d'exportation (MD, CSV, JSON).
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  16.03.2026
+
+    Remarques    :
+        - Utilise des StyledProperties pour le binding bidirectionnel.
+        - Gère un système de "DeletePending" (confirmation visuelle rouge) pour la suppression.
+        - Supporte l'exportation multi-modules via les touches modificatrices (Ctrl/Shift/Alt).
+*/
+
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -710,7 +730,10 @@ public partial class JournalPage : UserControl
     {
         if (!GetModulesAExporter().Any()) return;
         
+        // Coche visuellement le bouton MD par défaut à l'ouverture
+        RbExportMd.IsChecked = true;
         ChangerFormatExportation("MD");
+        
         IsExportModalOpen = true;
     }
 
@@ -720,11 +743,6 @@ public partial class JournalPage : UserControl
     public void ChangerFormatExportation(string format)
     {
         _currentExportFormat = format;
-
-        // changer apparence des boutons
-        BtnExportMd.Classes.Set("active", format == "MD");
-        BtnExportCsv.Classes.Set("active", format == "CSV");
-        BtnExportJson.Classes.Set("active", format == "JSON");
 
         ExportPreviewText = format.ToUpper() switch
         {

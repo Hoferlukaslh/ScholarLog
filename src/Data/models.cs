@@ -145,6 +145,16 @@ public class Note : ObservableObject
     
     [ForeignKey("BrancheId")]
     public Branche Branche { get; set; }
+    
+    [NotMapped]
+    private bool _isDeletePending;
+
+    [NotMapped]
+    public bool IsDeletePending
+    {
+        get => _isDeletePending;
+        set => SetProperty(ref _isDeletePending, value); 
+    }
 }
 
 

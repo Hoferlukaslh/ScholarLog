@@ -44,7 +44,6 @@ public partial class MainWindow : Window
     private JournalPage? _journalPage;
     private NotesPage? _notesPage;
     private SettingsPage? _settingsPage;
-    private ExemplePage? _exemplePage;
     
    
 
@@ -226,15 +225,7 @@ public partial class MainWindow : Window
         if (MainContentControler?.Content?.Equals(_journalPage) == false)
             MainContentControler.Content = _journalPage;
     }
-
-    private void ButtonExemple_OnClick(object? sender, RoutedEventArgs e)
-    {
-        _exemplePage ??= new ExemplePage();
-        MettreAJourSelection(ButtonExemple);
     
-        if (MainContentControler?.Content?.Equals(_exemplePage) == false)
-            MainContentControler.Content = _exemplePage;
-    }
 
     private void Setting_OnClick(object? sender, RoutedEventArgs e)
     {
