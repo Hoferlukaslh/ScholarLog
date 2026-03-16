@@ -17,6 +17,136 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="ScholarLog.Pages.JournalPage">
-    Welcome to Journal !
+             xmlns:Pages="clr-namespace:ScholarLog.Pages"
+             xmlns:data="clr-namespace:ScholarLog.Data"
+             x:Class="ScholarLog.Pages.JournalPage"
+             x:DataType="Pages:JournalPage">
+    
+    <UserControl.Styles>
+        <Style Selector="Button.icon-button">
+            <Setter Property="FontFamily" Value="{DynamicResource Phosphor}" />
+            <Setter Property="FontSize" Value="{DynamicResource IconSizeNormal}" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
+            <Setter Property="Width" Value="35" />
+            <Setter Property="Height" Value="35" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding"  Value="-0.5, 0, 0,0"></Setter>
+        </Style>
+    
+        <Style Selector="Button.icon-button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource CardBorder}" />
+        </Style>
+    </UserControl.Styles>
+    
+        
+    <Grid RowDefinitions="Auto, *">
+        
+        <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto, *, Auto" Margin="10,20,10,20">
+            
+            <!-- Titre de la page -->
+            <TextBlock Grid.Column="0" Text="Mes Journaux" FontSize="24" 
+                       Foreground="{DynamicResource PrimaryForeground}" 
+                       VerticalAlignment="Center" Margin="0,0,30,0"/>
+            
+            <!-- Liste des modules disponibles -->
+            <ComboBox Grid.Column="1" 
+                      ItemsSource="{Binding Modules}" 
+                      SelectedItem="{Binding SelectedModule}" 
+                      Width="250" VerticalAlignment="Center"
+                      PlaceholderText="Sélectionner un module...">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="data:ModuleViewModel">
+                        <TextBlock Text="{Binding ShortName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            
+            <!-- Boutons d'interraction -->
+            <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,15,0">
+                    <TextBlock Text="Total" FontSize="12" Foreground="{DynamicResource SecondaryForeground}" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding TotalHeures}" FontSize="18" Foreground="{DynamicResource PrimaryForeground}" HorizontalAlignment="Right"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Button Content="{DynamicResource IconeGear}" Classes="icon-button" />
+                    <Button Content="{DynamicResource IconeGraph}" Classes="icon-button" />
+                    <Button Content="{DynamicResource IconePlus}" Classes="icon-button" />
+                </StackPanel>
+                
+                <Button Background="{DynamicResource CardBackground}" 
+                        Height="35" 
+                        VerticalContentAlignment="Center" 
+                        Padding="15,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="Exporter" VerticalAlignment="Center"/>
+                        <ContentControl Content="{DynamicResource IconeExport}" FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource IconSizeNormal}"
+                                        VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="1" Margin="10,0,10,10" VerticalAlignment="Stretch"
+                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
+                CornerRadius="{DynamicResource CardCornerRadius}" 
+                Background="{DynamicResource CardBackground}">
+            
+            <Grid RowDefinitions="Auto,*">
+                
+                <!-- Affichage des entêtes des colonnes -->
+                <Grid Grid.Row="0" ColumnDefinitions="1.5*, 1*, 2*, 4*, Auto" Margin="20,20,20,10">
+                    <TextBlock Grid.Column="0" Text="Date" Foreground="{DynamicResource PrimaryForeground}"/>
+                    <TextBlock Grid.Column="1" Text="Temps" Foreground="{DynamicResource PrimaryForeground}"/>
+                    <TextBlock Grid.Column="2" Text="Type de travail" Foreground="{DynamicResource PrimaryForeground}"/>
+                    <TextBlock Grid.Column="3" Text="Description" Foreground="{DynamicResource PrimaryForeground}"/>
+                    <TextBlock Grid.Column="4" Text="Action" Foreground="{DynamicResource PrimaryForeground}" Width="80" TextAlignment="Right"/>
+                </Grid>
+
+                <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}" VerticalAlignment="Bottom" Margin="10,0"/>
+
+                <!-- Affichage des données -->
+                <ScrollViewer Grid.Row="1" Margin="0,5,0,10">
+                    <ItemsControl ItemsSource="{Binding Journal}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="data:Entree"> 
+                                <Grid ColumnDefinitions="1.5*, 1*, 2*, 4*, Auto" Margin="20,10">
+        
+                                    <TextBlock Grid.Column="0" Text="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Duree, StringFormat={}{0}h}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Type.Nom}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding Description}" Foreground="{DynamicResource PrimaryForeground}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                    
+                                    <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="10" Width="80" HorizontalAlignment="Right">
+                                        <!-- Button edition -->
+                                        <Button Content="{DynamicResource IconeCrayon}" 
+                                                FontFamily="{DynamicResource Phosphor}" 
+                                                FontSize="{DynamicResource IconSizeSmall}"  
+                                                Foreground="{DynamicResource PrimaryForeground}"
+                                                Background="Transparent" 
+                                                Padding="5" Cursor="Hand"/>
+                                        
+                                        <!-- Button suppression -->
+                                        <Button Content="{DynamicResource IconeTrash}" 
+                                                FontFamily="{DynamicResource Phosphor}" 
+                                                FontSize="{DynamicResource IconSizeSmall}" 
+                                                Foreground="{DynamicResource PrimaryForeground}"
+                                                Background="Transparent" 
+                                                Padding="5" Cursor="Hand"
+                                                Command="{Binding $parent[Pages:JournalPage].SupprimerEntree}"
+                                                CommandParameter="{Binding}"/>
+                                    </StackPanel>
+                                    
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>

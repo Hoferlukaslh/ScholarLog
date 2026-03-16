@@ -73,7 +73,8 @@ public partial class MainWindow : Window
         MoveLights();
         
         await AppDataService.Instance.ChargerDonneesGlobalesAsync();
-        MainContentControler.Content = new HomePage();
+        //MainContentControler.Content = new HomePage();
+        MainContentControler.Content = new JournalPage();
     }
 
     private void MoveLights()
