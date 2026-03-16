@@ -437,9 +437,9 @@ public partial class JournalPage : UserControl
         }
     }
     
-    /// <summary>
+    /// 
     /// Type Travail Modal
-    /// </summary>
+    /// 
 
     public static readonly StyledProperty<bool> IsModalTypesOpenProperty =
         AvaloniaProperty.Register<JournalPage, bool>(nameof(IsModalTypesOpen), false);
@@ -607,5 +607,51 @@ public partial class JournalPage : UserControl
         // rafraîchissement de l'interface
         actualiserJournalTypeTravail(SelectedModule);
         ActualiserModalTypesTravail(SelectedModule);
+    }
+    
+    /// 
+    /// Graphique Donut
+    ///
+  
+    // ajouter la collection pour le graphique
+    public ObservableCollection<DonutItem> GraphiqueDonnees { get; set; } = new ObservableCollection<DonutItem>();
+
+    // propriété pour afficher/masquer le modal
+    public static readonly StyledProperty<bool> IsModalGraphOpenProperty =
+        AvaloniaProperty.Register<JournalPage, bool>(nameof(IsModalGraphOpen), false);
+
+    public bool IsModalGraphOpen
+    {
+        get => GetValue(IsModalGraphOpenProperty);
+        set => SetValue(IsModalGraphOpenProperty, value);
+    }
+
+    // méthode pour ouvrir et calculer le graphique
+    public void OuvrirModalGraphique()
+    {
+        GraphiqueDonnees.Clear();
+
+        // regrouper les entrées du journal actuel par nom de type de travail et faire la somme des heures
+        var donneesGroupees = Journal
+            .Where(e => e.Type != null)
+            .GroupBy(e => e.Type.Nom)
+            .Select(g => new DonutItem
+            {
+                Label = g.Key,
+                Value = g.Sum(e => e.Duree)
+            });
+
+        foreach (var item in donneesGroupees)
+        {
+            GraphiqueDonnees.Add(item);
+        }
+
+        IsModalGraphOpen = true;
+    }
+
+    // fermer le modal
+    public void FermerModalGraphique()
+    {
+        IsModalGraphOpen = false;
     }
 }
