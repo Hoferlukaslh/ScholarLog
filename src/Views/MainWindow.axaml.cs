@@ -20,7 +20,7 @@
 */
 
 
-
+using System.Threading.Tasks;
 
 namespace ScholarLog.Views;
 using Avalonia;
@@ -89,25 +89,70 @@ public partial class MainWindow : Window
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
         MettreAJourSelection(ButtonAccueil);
-        
-        // Les gestionnaire de fenêtres linux gère mal le flou -> opacité ++
+    
+        // les gestionnaires de fenêtres linux gèrent mal le flou -> opacité ++
         if (OperatingSystem.IsLinux()) 
             this.Classes.Add("linux");
-        
-        // Le timer s'active toutes les 7.5 secondes
+    
+        // timer pour fond animé
         _lightTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromSeconds(7.5)
         };
         _lightTimer.Tick += (s, ev) => MoveLights();
         _lightTimer.Start();
-
-        // lance le premier mouvement immédiatement
         MoveLights();
+    
         
-        await AppDataService.Instance.ChargerDonneesGlobalesAsync();
+        // splash screen
+        LoadingText.Text = "Chargement des données globales...";
         
+        bool isCharging = false;
+        int delais = 200;
+        
+        // animation de chagement
+        for (int i = 0; i <= 70; i += 5)
+        {
+            LoadingBar.Value = i;
+            if (!isCharging)
+            {
+                if (i > 30) // plus de confort pour utilisateur
+                {
+                    // chargement réel de tes données
+                    await AppDataService.Instance.ChargerDonneesGlobalesAsync();
+                    isCharging = true;
+                }
+            }
+            
+            await Task.Delay(delais); // Ajuste le délai selon tes préférences
+
+            if (AppDataService.Instance.IsLoaded && delais != 5)
+            {
+                delais = 5;
+                i = 80;
+            }
+        }
+
+       
+    
+        
+    
+        // 3. Fin du chargement (passage direct à 100%)
+        LoadingBar.Value = 100;
+        LoadingText.Text = "Terminé !";
+    
+        // affiche terminé 
+        await Task.Delay(150); 
+
+        // réduction de l'opacité du splash screen
+        SplashScreenOverlay.Opacity = 0;
+    
+        // On charge le contenu principal en arrière-plan pendant le fondu
         MainContentControler.Content = _homePage;
+
+        // 5. On attend la fin de l'animation (0.5s définie dans le XAML) puis on cache l'élément
+        await Task.Delay(500);
+        SplashScreenOverlay.IsVisible = false;
     }
 
     private void MoveLights()
