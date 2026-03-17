@@ -215,7 +215,7 @@
             </ScrollViewer>
         </Grid>
         
-        <Grid Background="Transparent" ZIndex="100" IsVisible="{Binding IsModalOpen}">
+        <Grid Background="#A0000000" ZIndex="100" IsVisible="{Binding IsModalOpen}">
             <Border Width="450" Background="{DynamicResource ModalBackground}" 
                     CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center"
                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"

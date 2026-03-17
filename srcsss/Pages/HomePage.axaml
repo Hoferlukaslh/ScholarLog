@@ -42,8 +42,8 @@
     <Style Selector="Pages|HomePage">
         <Setter Property="Transitions">
             <Transitions>
-                <DoubleTransition Property="RightPanelWidthStar" Duration="0:0:0.15" Easing="CubicEaseOut"/>
-                <DoubleTransition Property="BottomPanelHeightStar" Duration="0:0:0.15" Easing="CubicEaseOut"/>
+                <DoubleTransition Property="RightPanelWidthStar" Duration="0:0:0.25" Easing="CubicEaseOut"/>
+                <DoubleTransition Property="BottomPanelHeightStar" Duration="0:0:0.25" Easing="CubicEaseOut"/>
             </Transitions>
         </Setter>
     </Style>
@@ -99,7 +99,7 @@
         
         <Grid Name="ModuleEtJournal" Grid.Column="0" RowDefinitions="60*, 0*" Margin="0">
             
-            <ScrollViewer Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
                 <ListBox ItemsSource="{Binding Modules}" 
                          SelectedItem="{Binding SelectedModule, Mode=TwoWay}"
                          SelectionMode="Single, Toggle"
@@ -198,15 +198,13 @@
             </ScrollViewer>
             
             <!-- Panneau d'affichage du journal -->
-            <Panel Grid.Row="1" 
-                   ClipToBounds="True" 
-                   IsVisible="{Binding DisplayedModule, Converter={x:Static ObjectConverters.IsNotNull}}">
-                <Border Margin="10" 
-                        VerticalAlignment="Stretch"
-                        BorderBrush="{DynamicResource CardBorder}" 
-                        BorderThickness="1" 
-                        CornerRadius="{DynamicResource CardCornerRadius}" 
-                        Background="{DynamicResource CardBackground}">
+            <Border Grid.Row="1"
+                    Classes="animatedPanelBottom"
+                    IsVisible="{Binding DisplayedModule, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Margin="10" VerticalAlignment="Stretch"
+                    BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
+                    CornerRadius="{DynamicResource CardCornerRadius}" 
+                    Background="{DynamicResource CardBackground}">
                 
                 <Grid RowDefinitions="Auto,*">
                     
@@ -273,17 +271,14 @@
                     </ScrollViewer>
                 </Grid>
             </Border>
-            </Panel>
         </Grid>
         
         <!-- Panneau graphique et moyennes par branches -->
-        <Panel Grid.Column="1" 
-               ClipToBounds="True" 
-               IsVisible="{Binding DisplayedModule, Converter={x:Static ObjectConverters.IsNotNull}}">
-
-            <Grid HorizontalAlignment="Stretch"
-                  RowDefinitions="57*, 43*" 
-                  Margin="0,10,10,10">
+        <Grid Grid.Column="1" 
+              Classes="animatedPanelRight"
+              IsVisible="{Binding DisplayedModule, Converter={x:Static ObjectConverters.IsNotNull}}"
+              HorizontalAlignment="Stretch"
+              RowDefinitions="57*, 43*" Margin="0,10,10,10" >
             
             <Border Grid.Row="0" 
                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
@@ -298,8 +293,7 @@
                                Foreground="{DynamicResource SecondaryForeground}"
                                FontWeight="Bold" Margin="0,0,0,15" HorizontalAlignment="Center"/>
 
-                    <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible">
-                        
+                    <ScrollViewer Grid.Row="1">
                         <StackPanel Spacing="10">
                             
                             <TextBlock Text="THÉORIE" FontSize="10" Foreground="{DynamicResource SecondaryForeground}" FontWeight="Bold"/>
@@ -333,7 +327,6 @@
                     </ScrollViewer>
                 </Grid>
             </Border>
-        
             
             <!-- Graphique donut -->
             <Border Grid.Row="1" Margin="0,10,0,0"
@@ -348,7 +341,5 @@
                     VerticalAlignment="Stretch" />
             </Border>
         </Grid>
-        </Panel>
     </Grid>
-    
 </UserControl>

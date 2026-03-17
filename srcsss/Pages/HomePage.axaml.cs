@@ -181,72 +181,72 @@ public partial class HomePage : UserControl
         }
     }
 
-#region animation
 
-    public static readonly StyledProperty<double> RightPanelWidthStarProperty =
-        AvaloniaProperty.Register<HomePage, double>(nameof(RightPanelWidthStar), 0.0);
+   // --- 1. Ajout des propriétés animables par XAML ---
+public static readonly StyledProperty<double> RightPanelWidthStarProperty =
+    AvaloniaProperty.Register<HomePage, double>(nameof(RightPanelWidthStar), 0.0);
 
-    public static readonly StyledProperty<double> BottomPanelHeightStarProperty =
-        AvaloniaProperty.Register<HomePage, double>(nameof(BottomPanelHeightStar), 0.0);
+public static readonly StyledProperty<double> BottomPanelHeightStarProperty =
+    AvaloniaProperty.Register<HomePage, double>(nameof(BottomPanelHeightStar), 0.0);
 
-    public double RightPanelWidthStar
+public double RightPanelWidthStar
+{
+    get => GetValue(RightPanelWidthStarProperty);
+    set => SetValue(RightPanelWidthStarProperty, value);
+}
+
+public double BottomPanelHeightStar
+{
+    get => GetValue(BottomPanelHeightStarProperty);
+    set => SetValue(BottomPanelHeightStarProperty, value);
+}
+
+// --- 2. Mise à jour de OnPropertyChanged ---
+protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+{
+    base.OnPropertyChanged(change);
+
+    if (change.Property == SelectedModuleProperty)
     {
-        get => GetValue(RightPanelWidthStarProperty);
-        set => SetValue(RightPanelWidthStarProperty, value);
-    }
+        var oldVal = change.GetOldValue<ModuleViewModel?>();
+        var newVal = change.GetNewValue<ModuleViewModel?>();
 
-    public double BottomPanelHeightStar
-    {
-        get => GetValue(BottomPanelHeightStarProperty);
-        set => SetValue(BottomPanelHeightStarProperty, value);
+        if (newVal != null) DisplayedModule = newVal;
+
+        if (oldVal == null && newVal != null)       
+        {
+            // Déclenche l'animation XAML vers l'ouverture
+            RightPanelWidthStar = 3.0;
+            BottomPanelHeightStar = 40.0;
+        }
+        else if (oldVal != null && newVal == null)  
+        {
+            // Déclenche l'animation XAML vers la fermeture
+            RightPanelWidthStar = 0.0;
+            BottomPanelHeightStar = 0.0;
+            
+            // On attend la fin de l'animation (350ms) pour vider la vue, 
+            // tout en vérifiant que l'utilisateur n'a pas cliqué sur un autre module entre temps
+            Task.Delay(350).ContinueWith(_ => 
+                Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => 
+                {
+                    if (SelectedModule == null) DisplayedModule = null;
+                }));
+        }
     }
+    // --- 3. Appliquer les valeurs animées à la grille en temps réel ---
+    else if (change.Property == RightPanelWidthStarProperty)
+    {
+        // Math.Max évite les valeurs négatives si l'animation "rebondit" légèrement
+        double val = Math.Max(0, change.GetNewValue<double>());
+        MJETBrancheGraph.ColumnDefinitions[1].Width = new GridLength(val, GridUnitType.Star);
+    }
+    else if (change.Property == BottomPanelHeightStarProperty)
+    {
+        double val = Math.Max(0, change.GetNewValue<double>());
+        ModuleEtJournal.RowDefinitions[1].Height = new GridLength(val, GridUnitType.Star);
+    }
+}
     
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-
-        if (change.Property == SelectedModuleProperty)
-        {
-            var oldVal = change.GetOldValue<ModuleViewModel?>();
-            var newVal = change.GetNewValue<ModuleViewModel?>();
-
-            if (newVal != null) DisplayedModule = newVal;
-
-            if (oldVal == null && newVal != null)       
-            {
-                // déclenche l'animation XAML vers l'ouverture
-                RightPanelWidthStar = 3.0;
-                BottomPanelHeightStar = 40.0;
-            }
-            else if (oldVal != null && newVal == null)  
-            {
-                // déclenche l'animation XAML vers la fermeture
-                RightPanelWidthStar = 0.0;
-                BottomPanelHeightStar = 0.0;
-                
-                // on attend la fin de l'animation (350ms) pour vider la vue, 
-                // tout en vérifiant que l'utilisateur n'a pas cliqué sur un autre module entre temps
-                Task.Delay(350).ContinueWith(_ => 
-                    Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => 
-                    {
-                        if (SelectedModule == null) DisplayedModule = null;
-                    }));
-            }
-        }
-        // appliquer les valeurs animées à la grille en temps réel ---
-        else if (change.Property == RightPanelWidthStarProperty)
-        {
-            // Math.Max évite les valeurs négatives si l'animation "rebondit" légèrement
-            double val = Math.Max(0, change.GetNewValue<double>());
-            MJETBrancheGraph.ColumnDefinitions[1].Width = new GridLength(val, GridUnitType.Star);
-        }
-        else if (change.Property == BottomPanelHeightStarProperty)
-        {
-            double val = Math.Max(0, change.GetNewValue<double>());
-            ModuleEtJournal.RowDefinitions[1].Height = new GridLength(val, GridUnitType.Star);
-        }
-    }
-    
-#endregion
-
+   
 }
