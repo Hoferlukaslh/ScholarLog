@@ -8,6 +8,7 @@
             - Gestion de la barre latérale (ouverture / fermeture)
             - Gestion des boutons de navigation et chargement des pages
             - Adaptation spécifique à Linux pour les effets de flou
+            - Gestion de la barre de chagement dans le spash screen
 
     Auteur       :  Lukas Hofer - TINF2
     Date         :  10.03.2026
@@ -104,40 +105,28 @@ public partial class MainWindow : Window
         MoveLights();
     
         
-        // splash screen
-        LoadingText.Text = "Chargement des données globales...";
-        
-        bool isCharging = false;
-        int delais = 200;
-        
-        // animation de chagement
-        for (int i = 0; i <= 70; i += 5)
+        LoadingText.Text = "Chargement des données globales... ";
+
+// 1. On lance le chargement des données en arrière-plan (sans await ici)
+        Task chargementTask = AppDataService.Instance.ChargerDonneesGlobalesAsync();
+
+// 2. Animation de la barre
+        for (int i = 0; i <= 100; i += 2)
         {
             LoadingBar.Value = i;
-            if (!isCharging)
-            {
-                if (i > 30) // plus de confort pour utilisateur
-                {
-                    // chargement réel de tes données
-                    await AppDataService.Instance.ChargerDonneesGlobalesAsync();
-                    isCharging = true;
-                }
-            }
-            
-            await Task.Delay(delais); // Ajuste le délai selon tes préférences
 
-            if (AppDataService.Instance.IsLoaded && delais != 5)
+            // Si on arrive à 90% et que ce n'est pas fini, on ralentit ou on attend
+            if (i >= 90 && !chargementTask.IsCompleted)
             {
-                delais = 5;
-                i = 80;
+                await chargementTask; // On attend proprement la fin si c'est plus long que prévu
             }
+
+            // Accélération si le chargement est terminé
+            int delais = chargementTask.IsCompleted ? 5 : 70; 
+            await Task.Delay(delais);
         }
-
-       
     
-        
-    
-        // 3. Fin du chargement (passage direct à 100%)
+        // fin du chargement (passage direct à 100%)
         LoadingBar.Value = 100;
         LoadingText.Text = "Terminé !";
     
