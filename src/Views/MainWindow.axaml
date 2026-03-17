@@ -25,6 +25,7 @@
         xmlns:vm="using:ScholarLog.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ScholarLog.Views"
         mc:Ignorable="d" 
         d:DesignWidth="960" d:DesignHeight="720"
         
@@ -267,7 +268,18 @@
             </Border>
 
             <!-- Controleur de contenu -->
-           <ContentControl Grid.Column="1" Name="MainContentControler" Padding="20" /> 
+            <TransitioningContentControl Grid.Column="1" 
+                                         Name="MainContentControler" 
+                                         Padding="20">
+                <TransitioningContentControl.PageTransition>
+                    <CompositePageTransition>
+                        <CrossFade Duration="0:0:0.3" />
+                        <local:MyPageSlide Duration="0:0:0.3" 
+                                           Orientation="Vertical" 
+                                           Easing="CircularEaseOut" />
+                    </CompositePageTransition>
+                </TransitioningContentControl.PageTransition>
+            </TransitioningContentControl>
         </Grid>
     </Grid>
 </Window>

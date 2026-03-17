@@ -81,7 +81,8 @@ public partial class NotesPage : UserControl
 
         RefreshAllNotes();
     }
-
+    
+    
     // gère les mises à jour en cascade lorsque l'utilisateur sélectionne un module
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {

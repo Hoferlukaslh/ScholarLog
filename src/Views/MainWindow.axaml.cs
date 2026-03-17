@@ -19,15 +19,19 @@
         - Classes "linux" et "rotated" utilisées pour ajuster le style.
 */
 
-using Avalonia;
-using CommunityToolkit.Mvvm.ComponentModel;
+
+
 
 namespace ScholarLog.Views;
-
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+
+using Avalonia.Animation;
+using Avalonia.Animation.Easings;
+
 using CommunityToolkit.Mvvm;
 using System;
 using ScholarLog.Pages;
@@ -36,6 +40,8 @@ using ScholarLog.Data;
 
 public partial class MainWindow : Window
 {
+    
+    
     private DispatcherTimer? _lightTimer;
     private readonly Random _random = new Random();
     
@@ -203,6 +209,8 @@ public partial class MainWindow : Window
     }
     
     
+    
+    
 
     private void ButtonNotes_OnClick(object? sender, RoutedEventArgs e)
     {
@@ -233,5 +241,29 @@ public partial class MainWindow : Window
     
         if (MainContentControler?.Content?.Equals(_settingsPage) == false)
             MainContentControler.Content = _settingsPage;
+    }
+}
+
+/// <summary>
+/// Animation de transition entre les pages
+/// </summary>
+public class MyPageSlide : PageSlide
+{
+    private Easing _easing = new LinearEasing();
+
+    public Easing Easing 
+    { 
+        set 
+        { 
+            _easing = value; 
+            SlideInEasing = value; 
+            SlideOutEasing = value; 
+        } 
+    }
+
+    public MyPageSlide()
+    {
+        SlideInEasing = _easing;
+        SlideOutEasing = _easing;
     }
 }
