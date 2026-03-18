@@ -8,7 +8,7 @@ namespace ScholarLog.ViewModels;
 
 public partial class SettingsViewModel : ViewModelBase
 {
-    // --- ÉTAT ---
+    // etat
 
     [ObservableProperty]
     private string _pathToBDD = "/home/lukas/Documents/CloudSync/App.db";
@@ -39,7 +39,7 @@ public partial class SettingsViewModel : ViewModelBase
         }
     }
 
-    // --- COMMANDES ---
+    // commandes
 
     [RelayCommand]
     private void SavePath()

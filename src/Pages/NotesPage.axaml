@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Pages="clr-namespace:ScholarLog.Pages"
              xmlns:data="clr-namespace:ScholarLog.Data"
+             xmlns:vm="using:ScholarLog.ViewModels"
              mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
              x:Class="ScholarLog.Pages.NotesPage"
-             x:DataType="Pages:NotesPage">
+             x:DataType="vm:NotesViewModel">
 
     <UserControl.Styles>
         <Style Selector="Button.icon-button">
@@ -122,7 +123,7 @@
                     <ScrollViewer Grid.Row="1" Margin="0,5,0,10">
                         <ItemsControl ItemsSource="{Binding AllNotes}">
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="Pages:NoteDisplay">
+                                <DataTemplate x:DataType="vm:NoteDisplay">
                                     <Grid ColumnDefinitions="1.5*, 1*, 2*, 2*, 1*, Auto" Margin="20,10">
                                         <TextBlock Grid.Column="0" Text="{Binding BrancheNom}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
                                         <TextBlock Grid.Column="1" Text="{Binding NoteData.Date, StringFormat={}{0:dd.MM.yyyy}}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
@@ -131,7 +132,8 @@
                                         <TextBlock Grid.Column="4" Text="{Binding NoteData.Valeur, StringFormat={}{0:0.0}}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
                                         
                                         <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="10" Width="80" HorizontalAlignment="Right">
-                                            <Button Content="{DynamicResource IconeCrayon}" Classes="icon-button-small" Command="{Binding $parent[Pages:NotesPage].OuvrirModalModification}" CommandParameter="{Binding NoteData}"/>
+                                            <Button Content="{DynamicResource IconeCrayon}" Classes="icon-button-small" Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirModalModificationCommand}" 
+                                                    CommandParameter="{Binding NoteData}"/>
                                             <Button Content="{DynamicResource IconeTrash}" Classes="icon-button-small" Tapped="BoutonSupprimer_Tapped">
                                                 <Button.Styles>
                                                     <Style Selector="Button">
@@ -185,7 +187,9 @@
                                                     <TextBlock Grid.Column="2" Text="{Binding Valeur, StringFormat={}{0:0.0}}" FontWeight="Bold" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,20,0"/>
                                                     
                                                     <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="5" Width="80" HorizontalAlignment="Right">
-                                                        <Button Content="{DynamicResource IconeCrayon}" Classes="icon-button-small" Command="{Binding $parent[Pages:NotesPage].OuvrirModalModification}" CommandParameter="{Binding}"/>
+                                                        <Button Content="{DynamicResource IconeCrayon}" Classes="icon-button-small" 
+                                                                Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirModalModificationCommand}" 
+                                                                CommandParameter="{Binding}"/>
                                                         <Button Content="{DynamicResource IconeTrash}" Classes="icon-button-small" Tapped="BoutonSupprimer_Tapped">
                                                             <Button.Styles>
                                                                 <Style Selector="Button">
