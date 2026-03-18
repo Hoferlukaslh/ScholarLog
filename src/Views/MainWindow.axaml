@@ -23,7 +23,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:ScholarLog.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:Pages="clr-namespace:ScholarLog.Pages"  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScholarLog.Views"
         mc:Ignorable="d" 
@@ -84,6 +84,26 @@
             </Setter>
         </Style>
     </Window.Styles>
+    
+    <Window.DataTemplates>
+        
+        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+            <Pages:HomePage />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:NotesViewModel}">
+            <Pages:NotesPage />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:JournalViewModel}">
+            <Pages:JournalPage />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <Pages:SettingsPage />
+        </DataTemplate>
+        
+    </Window.DataTemplates>
 
     <Grid>
         <Canvas x:Name="BackgroundCanvas" ClipToBounds="True">
@@ -274,7 +294,7 @@
             <!-- Controleur de contenu -->
             <TransitioningContentControl Grid.Column="1" 
                                          Name="MainContentControler" 
-                                         Padding="20">
+                                         Content="{Binding CurrentPage}"  Padding="20">
                 <TransitioningContentControl.PageTransition>
                     <CompositePageTransition>
                         <CrossFade Duration="0:0:0.3" />
