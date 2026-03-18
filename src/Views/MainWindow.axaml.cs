@@ -21,6 +21,8 @@
 */
 
 
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ScholarLog.Views;
@@ -52,6 +54,9 @@ public partial class MainWindow : Window
     private NotesPage? _notesPage;
     private SettingsPage? _settingsPage;
     
+    // Variable globale à ajouter dans ta classe MainWindow
+    private int _indexPageActuelle = 0;
+    
    
 
     public MainWindow()
@@ -69,24 +74,6 @@ public partial class MainWindow : Window
         };
     }
     
-    
-    
-    private void AllerAuJournalAvecModule(ModuleViewModel module)
-    {
-        _journalPage ??= new JournalPage();
-        
-        // On définit le module sélectionné dans la page journal
-        _journalPage.SelectedModule = module;
-        
-        // On met à jour l'UI de la barre latérale (curseur)
-        MettreAJourSelection(Buttonjournaux);
-        
-        // On affiche la page
-        MainContentControler.Content = _journalPage;
-    }
-    
-    
-
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
         MettreAJourSelection(ButtonAccueil);
@@ -143,6 +130,43 @@ public partial class MainWindow : Window
         await Task.Delay(500);
         SplashScreenOverlay.IsVisible = false;
     }
+    
+    
+    private void AllerAuJournalAvecModule(ModuleViewModel module)
+    {
+        _journalPage ??= new JournalPage();
+        _journalPage.SelectedModule = module;
+        
+        NaviguerVers(_journalPage, 2, Buttonjournaux); 
+    }
+    
+    
+
+    // Méthode centralisée pour gérer la navigation et le sens
+    private void NaviguerVers(Control page, int indexCible, Button boutonMenu)
+    {
+        // Si on est déjà sur la page, on ne fait rien
+        if (MainContentControler?.Content?.Equals(page) == true) return;
+
+        MettreAJourSelection(boutonMenu);
+
+        // On récupère la transition depuis le XAML (MainContentControler)
+        if (MainContentControler!.PageTransition is CompositePageTransition compositeTransition)
+        {
+            var slideTransition = compositeTransition.PageTransitions.OfType<MyPageSlide>().FirstOrDefault();
+            if (slideTransition != null)
+            {
+                // Magie ici : si l'index cible est plus grand (ex: Accueil(0) -> Notes(1)), 
+                // on descend (true). Si on remonte (ex: Notes(1) -> Accueil(0)), on monte (false).
+                slideTransition.SensManuel = indexCible > _indexPageActuelle;
+            }
+        }
+
+        _indexPageActuelle = indexCible;
+        MainContentControler.Content = page;
+    }
+    
+    
 
     private void MoveLights()
     {
@@ -208,6 +232,7 @@ public partial class MainWindow : Window
         }
     }
     
+    
     private void MettreAJourSelection(Button boutonSelectionne)
     {
         if (boutonSelectionne == null || NavCursor == null || Sidebar == null) return;
@@ -229,52 +254,35 @@ public partial class MainWindow : Window
         }
     }
     
+    
     private void ButtonAccueil_OnClick(object? sender, RoutedEventArgs e)
     {
         _homePage ??= new HomePage(); 
+        _homePage.SelectedModule = null;
         
-        MettreAJourSelection(ButtonAccueil);
-
-        if (MainContentControler?.Content?.Equals(_homePage) == false)
-        {
-            _homePage.SelectedModule = null;
-            MainContentControler.Content = _homePage;
-        }
+        NaviguerVers(_homePage, 0, ButtonAccueil);
     }
-    
-    
-    
-    
 
     private void ButtonNotes_OnClick(object? sender, RoutedEventArgs e)
     {
         _notesPage ??= new NotesPage();
-        MettreAJourSelection(ButtonNotes);
-    
-        if (MainContentControler?.Content?.Equals(_notesPage) == false)
-            MainContentControler.Content = _notesPage;
+        
+        NaviguerVers(_notesPage, 1, ButtonNotes);
     }
-    
-    
     
 
     private void Buttonjournaux_OnClick(object? sender, RoutedEventArgs e)
     {
         _journalPage ??= new JournalPage();
-        MettreAJourSelection(Buttonjournaux);
-    
-        if (MainContentControler?.Content?.Equals(_journalPage) == false)
-            MainContentControler.Content = _journalPage;
+        
+        NaviguerVers(_journalPage, 2, Buttonjournaux);
     }
-    
 
     private void Setting_OnClick(object? sender, RoutedEventArgs e)
     {
         _settingsPage ??= new SettingsPage();
-        MettreAJourSelection(Setting);
-    
-        if (MainContentControler?.Content?.Equals(_settingsPage) == false)
-            MainContentControler.Content = _settingsPage;
+        
+        NaviguerVers(_settingsPage, 3, Setting);
     }
 }
 
@@ -284,6 +292,9 @@ public partial class MainWindow : Window
 public class MyPageSlide : PageSlide
 {
     private Easing _easing = new LinearEasing();
+
+    // Propriété qui va déterminer si l'animation monte ou descend
+    public bool SensManuel { get; set; } = true; 
 
     public Easing Easing 
     { 
@@ -299,5 +310,10 @@ public class MyPageSlide : PageSlide
     {
         SlideInEasing = _easing;
         SlideOutEasing = _easing;
+    }
+    
+    public override Task Start(Visual? from, Visual? to, bool forward, CancellationToken cancellationToken)
+    {
+        return base.Start(from, to, SensManuel, cancellationToken);
     }
 }
