@@ -1,38 +1,10 @@
-/*
-    Fichier      :  SettingsPage.axaml.cs
-    Projet       :  ScholarLog
-
-    Description  :
-        Code-behind de la vue SettingsPage.
-
-        Ce fichier gère la logique associée aux paramètres affichés dans l'interface, notamment :
-            - La gestion du thème de l'application (mode clair / sombre)
-            - La sélection du fichier de base de données SQLite
-            - La validation du chemin fourni par l'utilisateur
-            - L'affichage d'un message d'erreur si le fichier est introuvable
-
-        Le fichier utilise les API de stockage Avalonia pour ouvrir un
-        sélecteur de fichier compatible multiplateforme.
-
-    Auteur       :  Lukas Hofer - TINF2
-    Date         :  10.03.2026
-
-    Remarques    :
-        - Le thème est appliqué via Application.Current.RequestedThemeVariant.
-        - Le chemin de la base de données est validé à l'aide de File.Exists().
-        - Un Flyout est affiché en cas d'erreur de chemin.
-*/
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
+using ScholarLog.ViewModels;
 
 namespace ScholarLog.Pages;
-
-using System;
-using System.IO;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Styling;
-using Avalonia.Platform.Storage;
-using Avalonia.Controls.Primitives;
 
 public partial class SettingsPage : UserControl
 {
@@ -40,61 +12,29 @@ public partial class SettingsPage : UserControl
     {
         InitializeComponent();
         
-        if (Application.Current != null)
-            _isDarkModeEnabled = Application.Current.ActualThemeVariant == ThemeVariant.Dark;
-        
-        this.DataContext = this;
+        // On s'abonne aux changements du ViewModel pour afficher le Flyout
+        this.DataContextChanged += SettingsPage_DataContextChanged;
     }
-    private bool _isDarkModeEnabled;
-    public bool IsDarkModeEnabled
+
+    private void SettingsPage_DataContextChanged(object? sender, System.EventArgs e)
     {
-        get => _isDarkModeEnabled;
-        set 
+        if (this.DataContext is SettingsViewModel vm)
         {
-            if (_isDarkModeEnabled != value)
+            vm.PropertyChanged += (s, args) =>
             {
-                _isDarkModeEnabled = value;
-                ApplyTheme(value);
-            }
+                // Si le ViewModel dit qu'il y a une erreur, on affiche le Flyout
+                if (args.PropertyName == nameof(SettingsViewModel.ShowPathError) && vm.ShowPathError)
+                {
+                    FlyoutBase.ShowAttachedFlyout(this.FindControl<TextBlock>("userbddPath"));
+                    vm.ShowPathError = false; // On reset pour la prochaine fois
+                }
+            };
         }
     }
 
-    private void ApplyTheme(bool isDark)
-    {
-        var app = Application.Current;
-        if (app != null)
-            app.RequestedThemeVariant = isDark ? ThemeVariant.Dark : ThemeVariant.Light;
-    }
-    
-    private string _pathToBDD = "/home/lukas/Documents/CloudSync/App.db";
-
-    public string PathToBDD
-    {
-        get => _pathToBDD;
-        set
-        {
-            // Normaliser le chemin (enlever les espaces inutiles)
-            string cleanedPath = value?.Trim() ?? string.Empty;
-
-            if (File.Exists(cleanedPath) || string.IsNullOrEmpty(cleanedPath))
-            {
-                _pathToBDD = cleanedPath;
-                Console.WriteLine($"Chemin sauvegarde : {cleanedPath}");
-            }
-                
-            else
-            {
-                Console.WriteLine($"Chemin non-sauvegarde : {cleanedPath}");
-                // Affiche le petit message d'erreur juste au-dessus du TextBox
-                FlyoutBase.ShowAttachedFlyout(userbddPath);
-                _pathToBDD = cleanedPath; // On garde quand même la valeur pour permettre la correction
-                
-            }
-            
-        }
-    }
-    
-    public async void BrowseFileCommand(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    // L'ouverture d'un explorateur de fichier est une action de VUE.
+    // On la garde dans le code-behind, mais on donne le résultat au ViewModel.
+    public async void BrowseFile_Click(object? sender, RoutedEventArgs e)
     {
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel == null) return;
@@ -109,18 +49,10 @@ public partial class SettingsPage : UserControl
             }
         });
 
-        if (files != null && files.Count > 0)
-            PathToBDD = files[0].Path.LocalPath;
-        
-        Console.WriteLine(PathToBDD);
-        userbddPath.Text = PathToBDD;
-    }
-
-    
-    private void Button_SavePathBDD(object? sender, RoutedEventArgs e)
-    {
-        string path = userbddPath.Text ?? string.Empty;
-        
-        PathToBDD = path;
+        if (files != null && files.Count > 0 && this.DataContext is SettingsViewModel vm)
+        {
+            // On met à jour la propriété du ViewModel directement
+            vm.PathToBDD = files[0].Path.LocalPath;
+        }
     }
 }

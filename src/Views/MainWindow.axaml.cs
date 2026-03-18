@@ -3,86 +3,79 @@
     Projet       :  ScholarLog
 
     Description  : 
-        Code-behind de la fenêtre principale. Contient :
-            - Gestion du déplacement aléatoire des lumières ambiantes
-            - Gestion de la barre latérale (ouverture / fermeture)
-            - Gestion des boutons de navigation et chargement des pages
-            - Adaptation spécifique à Linux pour les effets de flou
-            - Gestion de la barre de chagement dans le spash screen
-
-    Auteur       :  Lukas Hofer - TINF2
-    Date         :  10.03.2026
-
-    Remarques    :
-        - Les lumières sont déplacées toutes les 7,5 secondes via DispatcherTimer.
-        - Les transitions de largeur et d'opacité de la barre latérale sont gérées manuellement.
-        - Le contenu principal est mis à jour via MainContentControler.
-        - Classes "linux" et "rotated" utilisées pour ajuster le style.
+        Code-behind de la fenêtre principale. STRICTEMENT limité à la logique visuelle (UI).
+        Écoute le ViewModel pour animer l'interface :
+            - Déplacement aléatoire des lumières (Timer)
+            - Animation du menu latéral et opacité des textes
+            - Positionnement du curseur de navigation
+            - Direction de l'animation de changement de page (Haut/Bas)
 */
 
-
+using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
-namespace ScholarLog.Views;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
+using ScholarLog.ViewModels;
 
-using CommunityToolkit.Mvvm;
-using System;
-using ScholarLog.Pages;
-using ScholarLog.Data;
-
+namespace ScholarLog.Views;
 
 public partial class MainWindow : Window
 {
-    
-    
     private DispatcherTimer? _lightTimer;
     private readonly Random _random = new Random();
-    
-    // Garder les pages en mémoire
-    private HomePage? _homePage;
-    private JournalPage? _journalPage;
-    private NotesPage? _notesPage;
-    private SettingsPage? _settingsPage;
-    
-    // Variable globale à ajouter dans ta classe MainWindow
-    private int _indexPageActuelle = 0;
-    
-   
+    private int _lastPageIndex = 0; // Pour calculer le sens de l'animation des pages
 
     public MainWindow()
     {
         InitializeComponent();
+        
         this.Loaded += MainWindow_Loaded;
-        
-        // 1. Initialiser la HomePage tout de suite
-        _homePage = new HomePage();
-        
-        // 2. S'abonner à l'événement de navigation
-        _homePage.NavigationVersJournalDemandee += (sender, moduleASelectionner) => 
-        {
-            AllerAuJournalAvecModule(moduleASelectionner);
-        };
+        // On s'abonne au changement de DataContext pour écouter le ViewModel
+        this.DataContextChanged += MainWindow_DataContextChanged; 
     }
-    
+
+    private void MainWindow_DataContextChanged(object? sender, EventArgs e)
+    {
+        if (DataContext is MainWindowViewModel vm)
+        {
+            // Dès qu'une propriété du ViewModel change, on vérifie si on doit animer l'UI
+            vm.PropertyChanged += ViewModel_PropertyChanged;
+        }
+    }
+
+    private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        var vm = (MainWindowViewModel)DataContext!;
+
+        // Si la page a changé : on met à jour la direction de l'animation et le curseur
+        if (e.PropertyName == nameof(MainWindowViewModel.CurrentPageIndex))
+        {
+            UpdatePageTransitionDirection(vm.CurrentPageIndex);
+            MoveNavCursor(vm.CurrentPageIndex);
+            _lastPageIndex = vm.CurrentPageIndex;
+        }
+        // Si l'état du menu a changé : on lance l'animation de la barre latérale
+        else if (e.PropertyName == nameof(MainWindowViewModel.IsSidebarOpen))
+        {
+            AnimateSidebar(vm.IsSidebarOpen);
+        }
+    }
+
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
-        MettreAJourSelection(ButtonAccueil);
-    
-        // les gestionnaires de fenêtres linux gèrent mal le flou -> opacité ++
+        // Fix spécifique Linux
         if (OperatingSystem.IsLinux()) 
             this.Classes.Add("linux");
-    
-        // timer pour fond animé
+
+        // Timer pour les lumières de fond animées
         _lightTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromSeconds(7.5)
@@ -90,93 +83,26 @@ public partial class MainWindow : Window
         _lightTimer.Tick += (s, ev) => MoveLights();
         _lightTimer.Start();
         MoveLights();
-    
-        
-        LoadingText.Text = "Chargement des données globales... ";
 
-        // lance le chargement des données en arrière-plan
-        Task chargementTask = AppDataService.Instance.ChargerDonneesGlobalesAsync();
+        // Positionnement initial du curseur de navigation
+        MoveNavCursor(0);
 
-        // animation de la barre
-        for (int i = 0; i <= 100; i += 2)
+        // Déclenche le chargement depuis le ViewModel
+        if (DataContext is MainWindowViewModel vm)
         {
-            LoadingBar.Value = i;
-
-            // Si on arrive à 90% et que ce n'est pas fini, on ralentit ou on attend
-            if (i >= 90 && !chargementTask.IsCompleted)
-            {
-                await chargementTask; // On attend proprement la fin si c'est plus long que prévu
-            }
-
-            // Accélération si le chargement est terminé
-            int delais = chargementTask.IsCompleted ? 5 : 70; 
-            await Task.Delay(delais);
+            await vm.ChargerDonneesInitialesAsync();
         }
-    
-        // fin du chargement (passage direct à 100%)
-        LoadingBar.Value = 100;
-        LoadingText.Text = "Terminé !";
-    
-        // affiche terminé 
-        await Task.Delay(150); 
-
-        // réduction de l'opacité du splash screen
-        SplashScreenOverlay.Opacity = 0;
-    
-        // On charge le contenu principal en arrière-plan pendant le fondu
-        MainContentControler.Content = _homePage;
-
-        // 5. On attend la fin de l'animation (0.5s définie dans le XAML) puis on cache l'élément
-        await Task.Delay(500);
-        SplashScreenOverlay.IsVisible = false;
     }
-    
-    
-    private void AllerAuJournalAvecModule(ModuleViewModel module)
-    {
-        _journalPage ??= new JournalPage();
-        _journalPage.SelectedModule = module;
-        
-        NaviguerVers(_journalPage, 2, Buttonjournaux); 
-    }
-    
-    
 
-    // Méthode centralisée pour gérer la navigation et le sens
-    private void NaviguerVers(Control page, int indexCible, Button boutonMenu)
-    {
-        // Si on est déjà sur la page, on ne fait rien
-        if (MainContentControler?.Content?.Equals(page) == true) return;
-
-        MettreAJourSelection(boutonMenu);
-
-        // On récupère la transition depuis le XAML (MainContentControler)
-        if (MainContentControler!.PageTransition is CompositePageTransition compositeTransition)
-        {
-            var slideTransition = compositeTransition.PageTransitions.OfType<MyPageSlide>().FirstOrDefault();
-            if (slideTransition != null)
-            {
-                // Magie ici : si l'index cible est plus grand (ex: Accueil(0) -> Notes(1)), 
-                // on descend (true). Si on remonte (ex: Notes(1) -> Accueil(0)), on monte (false).
-                slideTransition.SensManuel = indexCible > _indexPageActuelle;
-            }
-        }
-
-        _indexPageActuelle = indexCible;
-        MainContentControler.Content = page;
-    }
-    
-    
+    // --- LOGIQUE PUREMENT VISUELLE (ANIMATIONS & GEOMÉTRIE) ---
 
     private void MoveLights()
     {
-        // On récupère la taille. Si elle est de 0 (fenêtre en train de charger), on donne une valeur par défaut
         double windowWidth = this.Bounds.Width > 0 ? this.Bounds.Width : 1280;
         double windowHeight = this.Bounds.Height > 0 ? this.Bounds.Height : 720;
 
         void SetRandomPosition(Ellipse light)
         {
-            // Calcule une nouvelle position aléatoire
             double newX = _random.NextDouble() * windowWidth - (light.Width / 2);
             double newY = _random.NextDouble() * windowHeight - (light.Height / 2);
 
@@ -184,18 +110,18 @@ public partial class MainWindow : Window
             Canvas.SetTop(light, newY);
         }
 
-        if (Light1 != null) SetRandomPosition(Light1);
-        if (Light2 != null) SetRandomPosition(Light2);
+        if (this.FindControl<Ellipse>("Light1") is { } l1) SetRandomPosition(l1);
+        if (this.FindControl<Ellipse>("Light2") is { } l2) SetRandomPosition(l2);
     }
-    
-    private void ToggleSidebar_Click(object? sender, RoutedEventArgs e)
+
+    private void AnimateSidebar(bool isOpen)
     {
         var sidebar = this.FindControl<Grid>("Sidebar");
         var toggleIcon = this.FindControl<Label>("ToggleIcon");
 
         if (sidebar == null || toggleIcon == null) return;
 
-        if (sidebar.Width <= 60)
+        if (isOpen)
         {
             sidebar.Width = 212;
             toggleIcon.Classes.Remove("rotated");
@@ -214,75 +140,62 @@ public partial class MainWindow : Window
     private void SetMenuTextOpacity(double opacity)
     {
         string[] controlNames = { 
-            "TextLogo", 
-            "TextAccueil", 
-            "TextNotes", 
-            "TextJournaux", 
-            "TextCollapse", 
-            "TextSettings" 
+            "TextLogo", "TextAccueil", "TextNotes", 
+            "TextJournaux", "TextCollapse", "TextSettings" 
         };
 
         foreach (var name in controlNames)
         {
-            var control = this.FindControl<Control>(name);
-            if (control != null)
+            if (this.FindControl<Control>(name) is { } control)
             {
                 control.Opacity = opacity;
             }
         }
     }
-    
-    
-    private void MettreAJourSelection(Button boutonSelectionne)
-    {
-        if (boutonSelectionne == null || NavCursor == null || Sidebar == null) return;
 
-        // récupère les coordonnées du bouton par rapport au conteneur complet (Sidebar)
-        var pointRelatif = boutonSelectionne.TranslatePoint(new Point(0, 0), Sidebar);
+    private void MoveNavCursor(int pageIndex)
+    {
+        var sidebar = this.FindControl<Grid>("Sidebar");
+        var navCursor = this.FindControl<Border>("NavCursor");
+        
+        // On associe l'index à son bouton physique
+        Button? targetButton = pageIndex switch
+        {
+            0 => this.FindControl<Button>("ButtonAccueil"),
+            1 => this.FindControl<Button>("ButtonNotes"),
+            2 => this.FindControl<Button>("Buttonjournaux"),
+            3 => this.FindControl<Button>("Setting"),
+            _ => null
+        };
+
+        if (targetButton == null || navCursor == null || sidebar == null) return;
+
+        var pointRelatif = targetButton.TranslatePoint(new Point(0, 0), sidebar);
     
         if (pointRelatif.HasValue)
         {
             double yPos = pointRelatif.Value.Y;
-        
-            // centre le curseur (24px de haut) verticalement par rapport au bouton
-            // Si la hauteur n'est pas encore calculée au démarrage, on met une valeur par défaut (ex: 36px/2 - 24px/2 = 6)
-            double decalage = boutonSelectionne.Bounds.Height > 0 
-                ? (boutonSelectionne.Bounds.Height - NavCursor.Height) / 2 
+            double decalage = targetButton.Bounds.Height > 0 
+                ? (targetButton.Bounds.Height - navCursor.Height) / 2 
                 : 6; 
             
-            Canvas.SetTop(NavCursor, yPos + decalage); // déplacement -> geré par axaml
+            Canvas.SetTop(navCursor, yPos + decalage);
         }
     }
-    
-    
-    private void ButtonAccueil_OnClick(object? sender, RoutedEventArgs e)
-    {
-        _homePage ??= new HomePage(); 
-        _homePage.SelectedModule = null;
-        
-        NaviguerVers(_homePage, 0, ButtonAccueil);
-    }
 
-    private void ButtonNotes_OnClick(object? sender, RoutedEventArgs e)
+    private void UpdatePageTransitionDirection(int newIndex)
     {
-        _notesPage ??= new NotesPage();
-        
-        NaviguerVers(_notesPage, 1, ButtonNotes);
-    }
-    
+        var mainContentControler = this.FindControl<TransitioningContentControl>("MainContentControler");
 
-    private void Buttonjournaux_OnClick(object? sender, RoutedEventArgs e)
-    {
-        _journalPage ??= new JournalPage();
-        
-        NaviguerVers(_journalPage, 2, Buttonjournaux);
-    }
-
-    private void Setting_OnClick(object? sender, RoutedEventArgs e)
-    {
-        _settingsPage ??= new SettingsPage();
-        
-        NaviguerVers(_settingsPage, 3, Setting);
+        if (mainContentControler?.PageTransition is CompositePageTransition compositeTransition)
+        {
+            var slideTransition = compositeTransition.PageTransitions.OfType<MyPageSlide>().FirstOrDefault();
+            if (slideTransition != null)
+            {
+                // Si on descend dans le menu (index plus grand), l'animation glisse vers le bas, et inversement
+                slideTransition.SensManuel = newIndex > _lastPageIndex;
+            }
+        }
     }
 }
 
@@ -292,8 +205,6 @@ public partial class MainWindow : Window
 public class MyPageSlide : PageSlide
 {
     private Easing _easing = new LinearEasing();
-
-    // Propriété qui va déterminer si l'animation monte ou descend
     public bool SensManuel { get; set; } = true; 
 
     public Easing Easing 

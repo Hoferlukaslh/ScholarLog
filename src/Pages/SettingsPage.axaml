@@ -24,9 +24,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Pages="clr-namespace:ScholarLog.Pages"
+             xmlns:vm="using:ScholarLog.ViewModels"
              mc:Ignorable="d" d:DesignWidth="740" d:DesignHeight="450"
              x:Class="ScholarLog.Pages.SettingsPage"
-             x:DataType="Pages:SettingsPage">
+             x:DataType="vm:SettingsViewModel">
     
     
     <UserControl.Styles>
@@ -178,7 +179,7 @@
                             </Grid>
                         </Border>
                         
-                        <Button Grid.Column="1" Click="BrowseFileCommand" CornerRadius="{DynamicResource FieldCornerRadius}" Margin="0,0,10,0"
+                        <Button Grid.Column="1" Click="BrowseFile_Click" CornerRadius="{DynamicResource FieldCornerRadius}" Margin="0,0,10,0"
                                 Classes="zoom" 
                                 Background="{DynamicResource CardBackground}" 
                                 BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
@@ -199,7 +200,7 @@
                         
                         <Button Grid.Column="2" CornerRadius="{DynamicResource FieldCornerRadius}" Margin="0"
                                 Classes="zoom"
-                                Click="Button_SavePathBDD"
+                                Command="{Binding SavePathCommand}"
                                 Background="{DynamicResource CardBackground}" 
                                 BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
                                 Foreground="{DynamicResource PrimaryForeground}" 

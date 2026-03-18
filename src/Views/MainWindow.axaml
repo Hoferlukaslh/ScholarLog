@@ -148,7 +148,8 @@
                         <!-- Button Accueil -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonAccueil"
                                 Classes="nav-btn"
-                                Click="ButtonAccueil_OnClick">
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="Accueil">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" 
                                        FontFamily="{DynamicResource Phosphor}" 
@@ -166,7 +167,8 @@
                         <!-- Button Notes -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonNotes"
                                 Classes="nav-btn"
-                                Click="ButtonNotes_OnClick">
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="Notes">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" 
                                        FontFamily="{DynamicResource Phosphor}" 
@@ -185,7 +187,8 @@
                         <!-- Button journaux -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Buttonjournaux"
                                 Classes="nav-btn"
-                                Click="Buttonjournaux_OnClick">
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="Journal">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" FontFamily="{DynamicResource Phosphor}" 
                                        FontSize="{DynamicResource IconSizeMedium}" Foreground="{DynamicResource PrimaryForeground}"
@@ -204,7 +207,7 @@
                     <!-- Éléments du bas -->
                     <StackPanel Grid.Row="2" Margin="0,0,0,10" Spacing="5">
                         <!-- Bouton pour rétracter le menu -->
-                        <Button HorizontalAlignment="Stretch" Background="Transparent" Click="ToggleSidebar_Click">
+                        <Button HorizontalAlignment="Stretch" Background="Transparent" Command="{Binding ToggleSidebarCommand}">
                             <Grid ColumnDefinitions="40, *">
                                 <Label x:Name="ToggleIcon" 
                                        Grid.Column="0" 
@@ -228,7 +231,8 @@
                         <!-- Bouton paramètres -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Setting"
                                 Classes="nav-btn"
-                                Click="Setting_OnClick" >
+                                Command="{Binding NavigateCommand}" 
+                                CommandParameter="Settings">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" 
                                        FontFamily="{DynamicResource Phosphor}" 
@@ -283,10 +287,12 @@
         </Grid>
         
         <!-- Écran de chargement -->
-        <Grid x:Name="SplashScreenOverlay" 
-              Background="{DynamicResource PrimaryBackground}" 
+        <Grid Background="{DynamicResource PrimaryBackground}" 
               ZIndex="100"
-              Opacity="1"> <Grid.Transitions>
+              IsVisible="{Binding IsLoading}"
+              Opacity="{Binding SplashOpacity}">
+            
+            <Grid.Transitions>
                 <Transitions>
                     <DoubleTransition Property="Opacity" Duration="0:0:0.5" Easing="CubicEaseOut"/>
                 </Transitions>
@@ -305,16 +311,16 @@
                            Foreground="{DynamicResource PrimaryForeground}" 
                            HorizontalAlignment="Center"/>
                 
-                <ProgressBar x:Name="LoadingBar" 
-                             Width="300" 
+                <ProgressBar Width="300" 
                              Height="8" 
                              CornerRadius="4"
-                             Minimum="0" Maximum="100" Value="0"
+                             Minimum="0" 
+                             Maximum="100" 
+                             Value="{Binding LoadingProgress}"
                              Foreground="{DynamicResource SecondaryForeground}"
                              ShowProgressText="False"/>
-                
-                <TextBlock x:Name="LoadingText" 
-                           Text="Initialisation..." 
+
+                <TextBlock Text="{Binding LoadingText}" 
                            HorizontalAlignment="Center" 
                            Foreground="{DynamicResource SecondaryForeground}"
                            Opacity="0.8"/>
