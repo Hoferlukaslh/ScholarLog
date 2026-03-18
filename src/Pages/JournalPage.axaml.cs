@@ -74,7 +74,7 @@ public partial class JournalPage : UserControl
         }
     }
 
-    public async void CopierPressePapier()
+    public async void CopierPressePapier(object? sender, RoutedEventArgs e)
     {
         if (this.DataContext is JournalViewModel vm && !string.IsNullOrEmpty(vm.ExportPreviewText))
         {
@@ -84,7 +84,7 @@ public partial class JournalPage : UserControl
         }
     }
 
-    public async void SauvegarderFichierExportation()
+    public async void SauvegarderFichierExportation(object? sender, RoutedEventArgs e)
     {
         if (this.DataContext is JournalViewModel vm && !string.IsNullOrEmpty(vm.ExportPreviewText))
         {

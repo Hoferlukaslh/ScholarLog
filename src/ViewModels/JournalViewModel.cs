@@ -483,6 +483,21 @@ public partial class JournalViewModel : ViewModelBase
         };
     }
 
+    private string GenererContenuMD()
+    {
+        throw new NotImplementedException();
+    }
+
+    private string GenererContenuJSON()
+    {
+        throw new NotImplementedException();
+    }
+
+    private string GenererContenuCSV()
+    {
+        throw new NotImplementedException();
+    }
+
     [RelayCommand]
     private void FermerModalExportation() => IsExportModalOpen = false;
 
