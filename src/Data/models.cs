@@ -1,19 +1,52 @@
+/*
+    Fichier      :  models.cs
+    Projet       :  ScholarLog
+
+    Description  :
+        Définit la structure des données et les modèles de vue (ViewModels).
+        Contient les entités mappées à la base SQLite via Entity Framework Core
+        ainsi que les extensions nécessaires à l'affichage dans Avalonia UI.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  18.03.2026
+*/
+
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-
-namespace ScholarLog.Data;
 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Module = ScholarLog.Data.Module;
 
+using Module = ScholarLog.Data.Module; // Élimination de l'ambiguité avec système Module pour EF
+
+
+namespace ScholarLog.Data;
+
+
+/// <summary>
+/// Définit le type d'une branche ou d'un cours (ex: M, TM, PM).
+/// </summary>
 public enum TypeCours { M, TM, PM } 
+
+/// <summary>
+/// Représente la tendance d'une moyenne pour l'affichage des indicateurs visuels (en hausse, en baisse ou stable).
+/// </summary>
 public enum Trend {Up, Down, Stable}
 
 
+// ==========================================
+#region Modèles de données (Entités)
+// Ces classes représentent le modèle orienté objet (domaine métier) de l'application.
+// Elles sont mappées aux tables de la base de données relationnelle locale SQLite 
+// via le framework Entity Framework Core (ORM).
+// ==========================================
 
+/// <summary>
+/// Entité représentant un module. 
+/// Un module regroupe de manière hiérarchique ses propres types de travaux, ses branches et son journal de travail.
+/// </summary>
 [Table("module")]
 public class Module : ObservableObject
 {
@@ -29,6 +62,10 @@ public class Module : ObservableObject
     public List<TypeTravail> TypesDeTravail { get; set; } = new List<TypeTravail>();
 }
 
+/// <summary>
+/// Entité représentant une catégorie de travail pour le journal (ex: Documentation, Programmation, Recherche).
+/// La liste des types de travail disponibles est unique et spécifique à chaque module pour éviter l'affichage de catégories non pertinentes.
+/// </summary>
 [Table("type_travail")]
 public class TypeTravail : ObservableObject
 {
@@ -46,6 +83,10 @@ public class TypeTravail : ObservableObject
 }
 
 
+/// <summary>
+/// Entité représentant une entrée journalisée pour le suivi du temps de travail de l'étudiant.
+/// Elle documente le temps passé sur une tâche, incluant la date, la durée, le type de travail et une description.
+/// </summary>
 [Table("entree")]
 public class Entree : ObservableObject
 {
@@ -85,6 +126,10 @@ public class Entree : ObservableObject
     }
 }
 
+/// <summary>
+/// Entité représentant une subdivision d'un module, comme une matière spécifique (ex: Mathématique).
+/// Elle regroupe les différentes évaluations (notes) de l'étudiant pour cette matière.
+/// </summary>
 [Table("branche")]
 public class Branche : ObservableObject
 {
@@ -105,6 +150,10 @@ public class Branche : ObservableObject
     
     public List<Note> Notes { get; set; } = new List<Note>();
     
+    /// <summary>
+    /// Calcule la moyenne des notes associées à cette branche.
+    /// </summary>
+    /// <returns>La moyenne arrondie au demi-point (0.5) supérieur ou inférieur.</returns>
     public double CalculerMoyenne()
     {
         // vérifie que la liste existe et n'est pas vide
@@ -119,6 +168,11 @@ public class Branche : ObservableObject
     }
 }
 
+/// <summary>
+/// Entité représentant un résultat scolaire ou une évaluation.
+/// Elle est associée à une branche existante et contient la
+/// valeur entre 1 et 6 (par incrément de 0.5), le titre et la date de l'épreuve.
+/// </summary>
 [Table("note")]
 public class Note : ObservableObject
 {
@@ -149,27 +203,37 @@ public class Note : ObservableObject
         set => SetProperty(ref _isDeletePending, value); 
     }
 }
+#endregion
 
+// ==========================================
+#region Affichage (MVVM)
+// Modèles de vue (ViewModels du pattern MVVM)
+// Ces classes sont dédiées au fonctionnement de l'interface Avalonia UI et étendent le domaine métier.
+// ==========================================
 
-
-
-/// 
-/// AFFICHAGE
-/// 
-
-
+/// <summary>
+/// Modèle de vue (ViewModel) pour l'affichage détaillé d'une Branche dans l'interface
+/// Intègre des propriétés supplémentaires pour l'affichage dynamique de la moyenne et de la tendance.
+/// </summary>
 public class BrancheViewModel : Branche
 {
     public double Moyenne { get; set; }
     public Trend BrancheTrend { get; set; }
 }
 
-
+/// <summary>
+/// Modèle de vue (ViewModel) pour l'affichage d'un Type de Travail dans l'interface
+/// Ajoute le cumul des heures travaillées pour cette catégorie.
+/// </summary>
 public class TypeTravailViewModel() : TypeTravail
 {
     public double Somme { get; set; }
 }
 
+/// <summary>
+/// Modèle de vue (ViewModel) pour l'affichage synthétique d'un Module dans l'interface
+/// Centralise les calculs globaux nécessaires au tableau de bord (moyennes théoriques, cumul du journal)
+/// </summary>
 public class ModuleViewModel : ScholarLog.Data.Module
 {
 
@@ -178,6 +242,9 @@ public class ModuleViewModel : ScholarLog.Data.Module
     public double TravailModule { get; set; }
     public Trend TheoryTrend { get; set; }
 
+    /// <summary>
+    /// Calcule la moyenne pondérée générale du module
+    /// </summary>
     public double GlobalAverage
     {
         get
@@ -197,3 +264,4 @@ public class ModuleViewModel : ScholarLog.Data.Module
         }
     }
 }
+# endregion
