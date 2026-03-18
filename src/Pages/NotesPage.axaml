@@ -100,7 +100,7 @@
                 
                 <!-- Bouton d'ajout de note -->
                 <Button Grid.Column="4" Content="{DynamicResource IconePlus}" 
-                        Classes="icon-button" Command="{Binding OuvrirModalAjout}" Padding="0 0 1 0 "/>
+                        Classes="icon-button" Command="{Binding OuvrirModalAjoutCommand}" Padding="0 0 1 0 "/>
             </Grid>
 
             <Border Grid.Row="1" IsVisible="{Binding IsListView}" Margin="10,0,10,10"
@@ -229,7 +229,7 @@
                     
                     <Grid>
                         <TextBlock Text="{Binding ModalTitle}" FontSize="{DynamicResource FontSizeNormal}" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryForeground}"/>
-                        <Button Content="✕" Background="Transparent" Foreground="{DynamicResource PrimaryForeground}" HorizontalAlignment="Right" Command="{Binding FermerModal}" Cursor="Hand"/>
+                        <Button Content="✕" Background="Transparent" HorizontalAlignment="Right" Command="{Binding FermerModalCommand}" Cursor="Hand"/>
                     </Grid>
                     
                     <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5"/>
@@ -267,7 +267,7 @@
                     <TextBlock Text="Note (1 à 6)" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
                     <NumericUpDown Value="{Binding EditingNote.Valeur}" Minimum="1.0" Maximum="6.0" Increment="0.5" FormatString="0.0" HorizontalAlignment="Stretch"/>
 
-                    <Button Command="{Binding SauvegarderNote}" HorizontalAlignment="Right" Margin="0,10,0,0" Padding="15,8"
+                    <Button Command="{Binding SauvegarderNoteCommand}" HorizontalAlignment="Right" Margin="0,10,0,0" Padding="15,8"
                             Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryForeground}" 
                             CornerRadius="{DynamicResource FieldCornerRadius}" Cursor="Hand">
                         <StackPanel Orientation="Horizontal" Spacing="8">
