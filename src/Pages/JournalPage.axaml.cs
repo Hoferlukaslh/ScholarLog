@@ -246,9 +246,9 @@ public partial class JournalPage : UserControl
         set => SetValue(TotalHeuresProperty, value);
     }
 
-    public ObservableCollection<ModuleViewModel> Modules { get; set; } = Data.AppDataService.Instance.Modules;
-    public ObservableCollection<Entree> Journal { get; set; } = new ObservableCollection<Entree>();
-    public ObservableCollection<TypeTravailViewModel> TypesTravail { get; set; } = new ObservableCollection<TypeTravailViewModel>();
+    public ObservableRangeCollection<ModuleViewModel> Modules { get; set; } = Data.AppDataService.Instance.Modules;
+    public ObservableRangeCollection<Entree> Journal { get; set; } = new ObservableRangeCollection<Entree>();
+    public ObservableRangeCollection<TypeTravailViewModel> TypesTravail { get; set; } = new ObservableRangeCollection<TypeTravailViewModel>();
     
     
     public JournalPage()
@@ -648,7 +648,7 @@ public partial class JournalPage : UserControl
 
   
     // ajouter la collection pour le graphique
-    public ObservableCollection<DonutItem> GraphiqueDonnees { get; set; } = new ObservableCollection<DonutItem>();
+    public ObservableRangeCollection<DonutItem> GraphiqueDonnees { get; set; } = new ObservableRangeCollection<DonutItem>();
 
     // propriété pour afficher/masquer le modal
     public static readonly StyledProperty<bool> IsModalGraphOpenProperty =
@@ -663,8 +663,6 @@ public partial class JournalPage : UserControl
     // méthode pour ouvrir et calculer le graphique
     public void OuvrirModalGraphique()
     {
-        GraphiqueDonnees.Clear();
-
         // regrouper les entrées du journal actuel par nom de type de travail et faire la somme des heures
         var donneesGroupees = Journal
             .Where(e => e.Type != null)
@@ -674,11 +672,8 @@ public partial class JournalPage : UserControl
                 Label = g.Key,
                 Value = g.Sum(e => e.Duree)
             });
-
-        foreach (var item in donneesGroupees)
-        {
-            GraphiqueDonnees.Add(item);
-        }
+        
+        GraphiqueDonnees.ReplaceAll(donneesGroupees);
 
         IsModalGraphOpen = true;
     }
@@ -839,13 +834,7 @@ public partial class JournalPage : UserControl
                 sb.AppendLine("\n### Répartition des heures\n");
 
                 // tri et affichage de la répartition
-                var listeRepartition = new List<KeyValuePair<string, double>>();
-                foreach (var kvp in repartitionDict)
-                {
-                    listeRepartition.Add(kvp);
-                }
-
-                listeRepartition.Sort((a, b) => b.Value.CompareTo(a.Value));
+                var listeRepartition = repartitionDict.OrderByDescending(kvp => kvp.Value);
 
                 foreach (var item in listeRepartition)
                 {

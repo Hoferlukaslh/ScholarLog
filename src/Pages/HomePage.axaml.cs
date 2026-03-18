@@ -71,93 +71,45 @@ public partial class HomePage : UserControl
     }
     
     
-    public ObservableCollection<ModuleViewModel> Modules { get; set; } = Data.AppDataService.Instance.Modules;
-    public ObservableCollection<BrancheViewModel> BranchesTM { get; set; } = new ObservableCollection<BrancheViewModel>();
-    public ObservableCollection<BrancheViewModel> BranchesM { get; set; } = new ObservableCollection<BrancheViewModel>();
-    public ObservableCollection<TypeTravailViewModel> TypesTravail { get; set; } = new ObservableCollection<TypeTravailViewModel>();
-    public ObservableCollection<Entree> Journal { get; set; } = new ObservableCollection<Entree>();
+    public ObservableRangeCollection<ModuleViewModel> Modules { get; set; } = Data.AppDataService.Instance.Modules;
+    public ObservableRangeCollection<BrancheViewModel> BranchesTM { get; set; } = new ObservableRangeCollection<BrancheViewModel>();
+    public ObservableRangeCollection<BrancheViewModel> BranchesM { get; set; } = new ObservableRangeCollection<BrancheViewModel>();
+    public ObservableRangeCollection<TypeTravailViewModel> TypesTravail { get; set; } = new ObservableRangeCollection<TypeTravailViewModel>();
+    public ObservableRangeCollection<Entree> Journal { get; set; } = new ObservableRangeCollection<Entree>();
     
     
-    public ObservableCollection<DonutItem> GraphiqueDonnees { get; set; } = new ObservableCollection<DonutItem>();
+    public ObservableRangeCollection<DonutItem> GraphiqueDonnees { get; set; } = new ObservableRangeCollection<DonutItem>();
     
     // Clique sur un model de module (carte)
     private void OnModuleSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (SelectedModule == null) return; 
 
-        // nettoyage 
-        BranchesTM.Clear();
-        BranchesM.Clear();
-        Journal.Clear();
-        TypesTravail.Clear();
-        GraphiqueDonnees.Clear();
-        
-        var typestravail = new List<TypeTravailViewModel>();
-        
-        // parcours de chaque entrée du journal
-        foreach (var entree in SelectedModule.JournalDeTravail)
-        {
-            bool existeDeja = false;
-
-            // Recherche manuelle par identifiant unique
-            for (int i = 0; i < typestravail.Count; i++)
-            {
-                if (typestravail[i].Id == entree.Type.Id) 
-                    existeDeja = true;
-            }
-
-            // insertion uniquement si l'élément est absent
-            if (!existeDeja)
-            {
-                TypeTravailViewModel wm = new TypeTravailViewModel
-                {
-                    Id = entree.Type.Id,
-                    Nom = entree.Type.Nom,
-                    ModuleId = entree.Type.ModuleId,
-                    Somme = 0.00
-                };
-        
-                typestravail.Add(wm);
-            }
-        }
-        
-
+        // Tri du journal (LINQ)
         var journalTrie = SelectedModule.JournalDeTravail
             .OrderByDescending(entree => entree.Date)
             .ToList();
 
-       
-        foreach (var entree in journalTrie)
-        {
-            Journal.Add(entree);
-            
-            for (int i = 0; i < typestravail.Count; i++)
+        // regroupement et somme par type de travail 
+        var typesTravailCalcules = SelectedModule.JournalDeTravail
+            .GroupBy(entree => entree.Type) // On groupe par type de travail
+            .Select(groupe => new TypeTravailViewModel
             {
-                if (entree.TypeTravailId == typestravail[i].Id)
-                    typestravail[i].Somme += entree.Duree;
-            }
-        }
-
-        foreach (var type in typestravail)
-            TypesTravail.Add(type);
+                Id = groupe.Key.Id,
+                Nom = groupe.Key.Nom,
+                ModuleId = groupe.Key.ModuleId,
+                Somme = groupe.Sum(entree => entree.Duree) // Somme automatique des durées du groupe
+            })
+            .ToList();
         
-       
-        foreach (var type in TypesTravail)
-        {
-            GraphiqueDonnees.Add(new DonutItem 
-            { 
-                Label = type.Nom, 
-                Value = type.Somme 
-            });
-        }
 
+        // dispatching des branches
+        var branchesTM = new List<BrancheViewModel>();
+        var branchesM = new List<BrancheViewModel>();
 
-
-        // dispatching
         foreach (var branche in SelectedModule.Branches)
         {
             double moy = branche.CalculerMoyenne();
-        
             var vm = new BrancheViewModel
             {
                 Nom = branche.Nom,
@@ -167,20 +119,27 @@ public partial class HomePage : UserControl
                 BrancheTrend = Data.AppDataService.Instance.DeterminerTendance(new List<Branche> { branche }, moy)
             };
 
-            // ajout dans la bonne collection selon le type
-            switch (branche.Type)
-            {
-                case TypeCours.TM:
-                    BranchesTM.Add(vm);
-                    break;
-                
-                case TypeCours.M:
-                    BranchesM.Add(vm);
-                    break;
-            }
+            if (branche.Type == TypeCours.TM)
+                branchesTM.Add(vm);
+            else if (branche.Type == TypeCours.M)
+                branchesM.Add(vm);
         }
-    }
+        
+        // mise à jour de l'interface 
+        
+        // injection des nouvelles données en un seul bloc (le nettoyage est géré par ReplaceAll)
+        BranchesTM.ReplaceAll(branchesTM);
+        BranchesM.ReplaceAll(branchesM);
+        Journal.ReplaceAll(journalTrie);
+        TypesTravail.ReplaceAll(typesTravailCalcules);
 
+        // transformation des types de travail en parts de Donut et injection
+        GraphiqueDonnees.ReplaceAll(typesTravailCalcules.Select(type => new DonutItem 
+        { 
+            Label = type.Nom, 
+            Value = type.Somme 
+        }));
+    }
 #region animation
 
     public static readonly StyledProperty<double> RightPanelWidthStarProperty =

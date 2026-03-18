@@ -41,9 +41,9 @@ public partial class NotesPage : UserControl
     }
 
     // Collections pour l'affichage
-    public ObservableCollection<NoteDisplay> AllNotes { get; set; } = new ObservableCollection<NoteDisplay>();
-    public ObservableCollection<Branche> SelectedModuleBranchesWithNotes { get; set; } = new ObservableCollection<Branche>();
-    public ObservableCollection<ModuleViewModel> Modules { get; set; } = AppDataService.Instance.Modules;
+    public ObservableRangeCollection<NoteDisplay> AllNotes { get; set; } = new ObservableRangeCollection<NoteDisplay>();
+    public ObservableRangeCollection<Branche> SelectedModuleBranchesWithNotes { get; set; } = new ObservableRangeCollection<Branche>();
+    public ObservableRangeCollection<ModuleViewModel> Modules { get; set; } = AppDataService.Instance.Modules;
 
     // Filtres
     public static readonly StyledProperty<ModuleViewModel?> SelectedModuleProperty = AvaloniaProperty.Register<NotesPage, ModuleViewModel?>(nameof(SelectedModule));
@@ -62,7 +62,7 @@ public partial class NotesPage : UserControl
     public static readonly StyledProperty<ModuleViewModel?> ModalSelectedModuleProperty = AvaloniaProperty.Register<NotesPage, ModuleViewModel?>(nameof(ModalSelectedModule));
     public ModuleViewModel? ModalSelectedModule { get => GetValue(ModalSelectedModuleProperty); set => SetValue(ModalSelectedModuleProperty, value); }
 
-    public ObservableCollection<Branche> ModalBranches { get; set; } = new ObservableCollection<Branche>();
+    public ObservableRangeCollection<Branche> ModalBranches { get; set; } = new ObservableRangeCollection<Branche>();
 
     public static readonly StyledProperty<Branche?> ModalSelectedBrancheProperty = AvaloniaProperty.Register<NotesPage, Branche?>(nameof(ModalSelectedBranche));
     public Branche? ModalSelectedBranche { get => GetValue(ModalSelectedBrancheProperty); set => SetValue(ModalSelectedBrancheProperty, value); }
@@ -95,11 +95,15 @@ public partial class NotesPage : UserControl
         else if (change.Property == ModalSelectedModuleProperty)
         {
             var newVal = change.GetNewValue<ModuleViewModel?>();
-            ModalBranches.Clear();
-            
+    
             if (newVal?.Branches != null)
             {
-                foreach (var b in newVal.Branches) ModalBranches.Add(b);
+                // injection massive et instantanée
+                ModalBranches.ReplaceAll(newVal.Branches);
+            }
+            else
+            {
+                ModalBranches.Clear();
             }
 
             // s'il s'agit d'un ajout, on présélectionne la première branche
@@ -135,24 +139,20 @@ public partial class NotesPage : UserControl
             }
         }
 
-        // tri chronologique inversé (la plus récente en haut)
-        foreach (var item in listeTemporaire.OrderByDescending(n => n.NoteData.Date))
-        {
-            AllNotes.Add(item);
-        }
+        AllNotes.ReplaceAll(listeTemporaire.OrderByDescending(n => n.NoteData.Date));
     }
 
     private void RefreshSelectedModuleBranches()
     {
-        SelectedModuleBranchesWithNotes.Clear();
-        if (SelectedModule?.Branches == null) return;
-
-        // conserve uniquement ceux avec une note
-        var branchesFiltrees = SelectedModule.Branches.Where(b => b.Notes != null && b.Notes.Count > 0);
-        foreach (var branche in branchesFiltrees)
+        if (SelectedModule?.Branches == null) 
         {
-            SelectedModuleBranchesWithNotes.Add(branche);
+            SelectedModuleBranchesWithNotes.Clear();
+            return;
         }
+
+        // filtre et on injecte tout d'un coup
+        var branchesFiltrees = SelectedModule.Branches.Where(b => b.Notes != null && b.Notes.Count > 0);
+        SelectedModuleBranchesWithNotes.ReplaceAll(branchesFiltrees);
     }
 
     // modal
