@@ -3,6 +3,31 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net10.0</TargetFramework>
 
+        <!-- Optimisation de la compilation -->
+        <InvariantGlobalization>true</InvariantGlobalization>
+	    
+        <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
+        <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+        <EnableUnsafeAssemblyLoadSupport>false</EnableUnsafeAssemblyLoadSupport>
+
+
+        <!-- Pas de debug pour l'utilisateur final -->
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>none</DebugType>
+        <StackTraceSupport>false</StackTraceSupport>
+        <DebuggerSupport>false</DebuggerSupport>
+        <EventSourceSupport>false</EventSourceSupport>
+        <MetricsSupport>false</MetricsSupport>
+        <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+
+        <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport> <!-- Pas de requette web -->
+        <ServerGarbageCollection>false</ServerGarbageCollection> <!-- pas un serveur-->
+
+        <!-- Voir pour désactiver TRIM en cas de problèmes -->
+        <PublishTrimmed>true</PublishTrimmed> 
+        <TrimMode>full</TrimMode> <!-- sûr : partial-->
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+
         <Nullable>enable</Nullable>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>

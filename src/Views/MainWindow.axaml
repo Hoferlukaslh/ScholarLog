@@ -208,7 +208,7 @@
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Buttonjournaux"
                                 Classes="nav-btn"
                                 Command="{Binding NavigateCommand}" 
-                                CommandParameter="Journal">
+                                CommandParameter="Journaux">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" FontFamily="{DynamicResource Phosphor}" 
                                        FontSize="{DynamicResource IconSizeMedium}" Foreground="{DynamicResource PrimaryForeground}"

@@ -483,30 +483,184 @@ public partial class JournalViewModel : ViewModelBase
         };
     }
 
-    private string GenererContenuMD()
+     private string GenererContenuMD()
     {
-        throw new NotImplementedException();
-    }
+        var sb = new StringBuilder();
+        var modules = GetModulesAExporter();
 
-    private string GenererContenuJSON()
-    {
-        throw new NotImplementedException();
+        if (_exportAllModules)
+        {
+            sb.AppendLine("# Rapport Global - Tous les modules\n");
+        }
+
+        double grandTotalHeuresFichier = 0.0; // Pour le total final de tout le fichier
+
+        foreach (var mod in modules)
+        {
+            if (mod.JournalDeTravail != null)
+            {
+                if (_exportAllModules) sb.AppendLine($"## Module : {mod.Nom}");
+                else sb.AppendLine($"# {mod.Nom}");
+                
+                sb.AppendLine();
+
+                // calcul des heures 
+                double totalHeuresModule = 0.0;
+                var repartitionDict = new Dictionary<string, double>();
+
+                foreach (var entree in mod.JournalDeTravail)
+                {
+                    totalHeuresModule += entree.Duree;
+                    
+                    string categorie = entree.Type?.Nom ?? "Général";
+                    if (repartitionDict.ContainsKey(categorie))
+                    {
+                        repartitionDict[categorie] += entree.Duree;
+                    }
+                    else
+                    {
+                        repartitionDict.Add(categorie, entree.Duree);
+                    }
+                }
+
+                grandTotalHeuresFichier += totalHeuresModule;
+
+                // affichage du tableau d'abord
+                sb.AppendLine($"| Date       | Temps | Type de travail | Description");
+                sb.AppendLine($"|------------|-------|-----------------|----------------------------------");
+
+                foreach (var entree in mod.JournalDeTravail)
+                {
+                    string date = entree.Date.ToString("dd.MM.yyyy");
+                    string duree = entree.Duree.ToString("0.00").Replace(",", ".");
+                    string type = (entree.Type?.Nom ?? "Général").PadRight(15);
+                    string desc = entree.Description?.Replace("\n", " ").Replace("|", "-") ?? "";
+                    
+                    sb.AppendLine($"| {date} | {duree}  | {type} | {desc}");
+                }
+
+                sb.AppendLine("\n### Répartition des heures\n");
+
+                // tri et affichage de la répartition
+                var listeRepartition = repartitionDict.OrderByDescending(kvp => kvp.Value);
+
+                foreach (var item in listeRepartition)
+                {
+                    sb.AppendLine($"**{item.Key}** : {item.Value.ToString("0.00").Replace(",", ".")}h   ");
+                }
+
+                sb.AppendLine();
+                
+                //  total du module à la fin
+                sb.AppendLine($"**Total des heures :** {totalHeuresModule.ToString("0.00").Replace(",", ".")}h");
+                sb.AppendLine();
+
+                if (_exportAllModules) sb.AppendLine("---\n"); 
+            }
+        }
+
+        // total global à la a la fin du fichier (si plusieurs modules)
+        if (_exportAllModules && modules.Count > 1)
+        {
+            sb.AppendLine($"# TOTAL GLOBAL : {grandTotalHeuresFichier.ToString("0.00").Replace(",", ".")}h");
+            sb.AppendLine();
+        }
+
+        return sb.ToString();
     }
 
     private string GenererContenuCSV()
     {
-        throw new NotImplementedException();
+        var sb = new StringBuilder();
+        sb.AppendLine("Module;Date;Temps;Type;Description");
+        
+        foreach (var mod in GetModulesAExporter())
+        {
+            if (mod.JournalDeTravail != null)
+            {
+                foreach (var e in mod.JournalDeTravail)
+                {
+                    sb.AppendLine($"{mod.Nom};{e.Date:dd.MM.yyyy};{e.Duree};{e.Type?.Nom ?? "Général"};{e.Description?.Replace(";", ",")}");
+                }
+            }
+        }
+        return sb.ToString();
+    }
+
+    private string GenererContenuJSON()
+    {
+        var modules = GetModulesAExporter();
+        
+        if (modules.Count == 1 && !_exportAllModules)
+        {
+            return CreerJsonPourModule(modules[0]).ToJsonString(new JsonSerializerOptions { WriteIndented = true });
+        }
+        
+        var jsonArrayGlobal = new JsonArray();
+        foreach (var mod in modules)
+        {
+            jsonArrayGlobal.Add((JsonNode)CreerJsonPourModule(mod));
+        }
+        return jsonArrayGlobal.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
+    }
+
+    private JsonObject CreerJsonPourModule(ModuleViewModel mod)
+    {
+        var jsonRoot = new JsonObject();
+        jsonRoot["Module"] = JsonValue.Create(mod.Nom ?? "MOD");
+
+        var totalHeuresObject = new JsonObject();
+        if (mod.JournalDeTravail != null)
+        {
+            var repartition = mod.JournalDeTravail
+                .GroupBy(e => e.Type?.Nom ?? "Général")
+                .Select(g => new { Categorie = g.Key, Total = g.Sum(e => e.Duree) });
+
+            foreach (var item in repartition) 
+                totalHeuresObject[item.Categorie] = JsonValue.Create(item.Total);
+        }
+        jsonRoot["TotalHeures"] = totalHeuresObject;
+
+        var jsonArray = new JsonArray();
+        if (mod.JournalDeTravail != null)
+        {
+            foreach (var e in mod.JournalDeTravail)
+            {
+                var jsonObject = new JsonObject
+                {
+                    ["Date"] = JsonValue.Create(e.Date.ToString("yyyy-MM-dd")),
+                    ["Temps"] = JsonValue.Create(e.Duree),
+                    ["Type"] = JsonValue.Create(e.Type?.Nom ?? "Général"),
+                    ["Description"] = JsonValue.Create(e.Description ?? "")
+                };
+                
+                jsonArray.Add((JsonNode)jsonObject);
+            }
+        }
+        jsonRoot["Entrees"] = jsonArray;
+
+        return jsonRoot;
     }
 
     [RelayCommand]
     private void FermerModalExportation() => IsExportModalOpen = false;
 
-    // ... (Gardez vos méthodes GenererContenuMD, GenererContenuCSV, GenererContenuJSON, CreerJsonPourModule et GetModulesAExporter ici, elles ne changent pas).
 
     public void SetExportAllModules(bool exportAll)
     {
         _exportAllModules = exportAll;
     }
+    private List<ModuleViewModel> GetModulesAExporter()
+    {
+        if (_exportAllModules)
+            return Modules.Where(m => m.JournalDeTravail != null && m.JournalDeTravail.Any()).ToList();
+        
+        if (SelectedModule != null && SelectedModule.JournalDeTravail != null && SelectedModule.JournalDeTravail.Any())
+            return new List<ModuleViewModel> { SelectedModule };
+            
+        return new List<ModuleViewModel>();
+    }
+    
 
     public string GetCurrentExportFormat() => _currentExportFormat;
     public bool GetExportAllModules() => _exportAllModules;
