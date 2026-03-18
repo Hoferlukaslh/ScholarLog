@@ -43,6 +43,7 @@ public class DataRepository : IDisposable
             .Include(m => m.Branches).ThenInclude(b => b.Notes)
             .Include(m => m.JournalDeTravail).ThenInclude(e => e.Type) 
             .Include(m => m.TypesDeTravail)
+            .AsSplitQuery()
             .ToListAsync();
     }
 
