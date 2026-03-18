@@ -8,7 +8,7 @@ public class MonDbContext : DbContext
 {
     // Tables de la base de données
     public DbSet<Note> Note { get; set; }
-    public DbSet<Module> Module { get; set; }
+    public DbSet<Module> Module { get; set; }   
     public DbSet<Branche> Branche { get; set; }
     public DbSet<Entree> Entree { get; set; }
     public DbSet<TypeTravail> TypeTravail { get; set; }
@@ -17,9 +17,14 @@ public class MonDbContext : DbContext
     {
         // Récupère le dossier où se trouve l'exécutable
         string dbPath = Path.Combine(AppContext.BaseDirectory, "BDD.db");
-    
         Console.WriteLine($"Base de données située à : {dbPath}");
-    
-        options.UseSqlite($"Data Source={dbPath}");
+
+        options
+            .UseSqlite($"Data Source={dbPath}")
+        // AJOUTE CETTE LIGNE :
+        .UseModel(ScholarLog.Data.CompiledModels.MonDbContextModel.Instance); 
+        
+        // sur modification de models.cd -> regenerer EF compiledModels ->
+        //      dotnet ef dbcontext optimize -c MonDbContext -o CompiledModels --namespace ScholarLog.Data.CompiledModels
     }
 }

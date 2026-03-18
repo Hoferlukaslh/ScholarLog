@@ -4,7 +4,7 @@
         <TargetFramework>net10.0</TargetFramework>
 
         <!-- Optimisation de la compilation -->
-        <InvariantGlobalization>true</InvariantGlobalization> <!-- QUE en suisse -->
+        <InvariantGlobalization>true</InvariantGlobalization>
 	    
         <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
         <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
@@ -21,16 +21,11 @@
         <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
 
         <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport> <!-- Pas de requette web -->
-
-        <!-- pas sur un serveur, mais garde le GC -->
-        <ServerGarbageCollection>false</ServerGarbageCollection> 
-        <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+        <ServerGarbageCollection>false</ServerGarbageCollection> <!-- pas un serveur-->
 
         <!-- Voir pour désactiver TRIM en cas de problèmes -->
         <PublishTrimmed>true</PublishTrimmed> 
-        <!--<TrimMode>link</TrimMode> EF core fonctionne mal -->
-        <!--<TrimMode>partial</TrimMode> -->
-        <TrimMode>full</TrimMode>
+        <TrimMode>full</TrimMode> <!-- sûr : partial-->
         <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 
         <Nullable>enable</Nullable>

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Module = ScholarLog.Data.Module;
 
 public enum TypeCours { M, TM, PM } 
 public enum Trend {Up, Down, Stable}
@@ -41,7 +42,7 @@ public class TypeTravail : ObservableObject
     public int ModuleId { get; set; }
 
     [ForeignKey("ModuleId")]
-    public Module Module { get; set; }
+    public ScholarLog.Data.Module Module { get; set; }
 }
 
 
@@ -64,7 +65,7 @@ public class Entree : ObservableObject
     public int ModuleId { get; set; }
     
     [ForeignKey("ModuleId")]
-    public Module Module { get; set; }
+    public ScholarLog.Data.Module Module { get; set; }
 
     [Column("typ_id")]
     public int TypeTravailId { get; set; }
@@ -100,7 +101,7 @@ public class Branche : ObservableObject
     public int ModuleId { get; set; }
     
     [ForeignKey("ModuleId")]
-    public Module Module { get; set; }
+    public ScholarLog.Data.Module Module { get; set; }
     
     public List<Note> Notes { get; set; } = new List<Note>();
     
@@ -169,7 +170,7 @@ public class TypeTravailViewModel() : TypeTravail
     public double Somme { get; set; }
 }
 
-public class ModuleViewModel : Module
+public class ModuleViewModel : ScholarLog.Data.Module
 {
 
     public string ShortName => Nom.Length <= 3 ? Nom : Nom.Substring(0, 3).ToUpper();
