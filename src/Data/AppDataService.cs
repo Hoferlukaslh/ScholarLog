@@ -13,7 +13,7 @@ public class AppDataService
     public static AppDataService Instance => _instance ??= new AppDataService();
 
     // Collection globale partagée dans toute l'app
-    public ObservableCollection<ModuleViewModel> Modules { get; } = new ObservableCollection<ModuleViewModel>();
+    public ObservableRangeCollection<ModuleViewModel> Modules { get; } = new ObservableRangeCollection<ModuleViewModel>();
     
     public bool IsLoaded { get; private set; }
 

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -23,7 +22,7 @@ public class Module : ObservableObject
     [Column("mod_nom")]
     public string Nom { get; set; }
     
-    // Un module possède ses propres types de travaux, ses branches et son journal
+    // un module possède ses propres types de travaux, ses branches et son journal
     public List<Branche> Branches { get; set; } = new List<Branche>();
     public List<Entree> JournalDeTravail { get; set; } = new List<Entree>();
     public List<TypeTravail> TypesDeTravail { get; set; } = new List<TypeTravail>();
@@ -107,21 +106,14 @@ public class Branche : ObservableObject
     
     public double CalculerMoyenne()
     {
-        double sommeTotale = 0;
-        int nombreDeNotes = 0;
-
+        // vérifie que la liste existe et n'est pas vide
         if (Notes == null || Notes.Count == 0)
             return 0;
 
-        foreach (var note in Notes)
-        {
-            sommeTotale += note.Valeur;
-            nombreDeNotes++;
-        }
+        // LINQ calcule la moyenne exacte en interne (plus rapide et plus sûr)
+        double moyenneExacte = Notes.Average(n => n.Valeur);
 
-        double moyenneExacte = sommeTotale / nombreDeNotes;
-    
-        // 1er ARRONDI : La moyenne de la branche est arrondie au 0.5
+        // ARRONDI : la moyenne de la branche est arrondie au 0.5
         return Math.Round(moyenneExacte * 2.0, MidpointRounding.AwayFromZero) / 2.0;
     }
 }
@@ -190,24 +182,16 @@ public class ModuleViewModel : Module
         get
         {
             double moyenne = 0;
-            double noteProjetModule = 0;
         
-            if (base.Branches != null)
-            {
-                foreach (var branche in base.Branches)
-                {
-                    if (branche.Type == TypeCours.M && branche.Notes != null && branche.Notes.Count > 0)
-                    {
-                        noteProjetModule = branche.Notes.First().Valeur;
-                    }
-                }
-            }
-            
+            // trouve directement la branche M et sa première note, sans faire de boucle
+            var brancheM = base.Branches?.FirstOrDefault(b => b.Type == TypeCours.M);
+            double noteProjetModule = brancheM?.Notes?.FirstOrDefault()?.Valeur ?? 0;
+        
             if (noteProjetModule > 0 && AvgTheory > 0)
                 moyenne = (noteProjetModule + AvgTheory) / 2.0;
             else 
                 moyenne = noteProjetModule + AvgTheory; 
-            
+        
             return Math.Round(moyenne * 2.0, MidpointRounding.AwayFromZero) / 2.0;
         }
     }
