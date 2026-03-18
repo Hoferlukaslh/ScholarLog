@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using CommunityToolkit.Mvvm.Messaging;
 using ScholarLog.Data;
 using ScholarLog.Components.DonutDiagram;
 
@@ -100,13 +101,13 @@ public partial class HomeViewModel : ViewModelBase
         }));
     }
 
-    // --- COMMANDES ---
     [RelayCommand]
     private void AllerAuxJournaux()
     {
         if (DisplayedModule != null)
         {
-            NavigationVersJournalDemandee?.Invoke(this, DisplayedModule);
+            // On diffuse le message dans toute l'application
+            WeakReferenceMessenger.Default.Send(new MainWindowViewModel.ModuleNavigationMessage(DisplayedModule));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using ScholarLog.Pages;
 using ScholarLog.Data;
 
@@ -45,8 +46,22 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        // Initialiser avec la page d'accueil
-        CurrentPage = new HomeViewModel(); 
+        // Initialiser la page d'accueil par défaut
+        _homeViewModel = new HomeViewModel();
+        CurrentPage = _homeViewModel;
+        
+        WeakReferenceMessenger.Default.Register<ModuleNavigationMessage>(this, (recipient, message) =>
+        {
+            // 1. On prépare la page du journal
+            _journalViewModel ??= new JournalViewModel();
+            
+            // 2. On lui donne le module qu'on a reçu dans le message
+            _journalViewModel.SelectedModule = message.Module;
+            
+            // 3. On bascule l'affichage et on met à jour l'index du menu (2 = Journaux)
+            CurrentPage = _journalViewModel;
+            CurrentPageIndex = 2; 
+        });
     }
     
 
@@ -111,5 +126,15 @@ public partial class MainWindowViewModel : ViewModelBase
         
         await Task.Delay(150); // attente de la fin de l'animation
         IsLoading = false; // Le XAML réagira pour cacher le splash screen
+    }
+    
+    public class ModuleNavigationMessage
+    {
+        public ModuleViewModel Module { get; }
+    
+        public ModuleNavigationMessage(ModuleViewModel module)
+        {
+            Module = module;
+        }
     }
 }
