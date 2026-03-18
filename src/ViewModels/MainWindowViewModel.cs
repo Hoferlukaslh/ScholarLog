@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
-using ScholarLog.Pages;
+using ScholarLog.Views.Pages;
 using ScholarLog.Data;
 
 // fichier : MainWindowViewModel.cs

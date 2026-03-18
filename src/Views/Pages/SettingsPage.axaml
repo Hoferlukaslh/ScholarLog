@@ -1,0 +1,290 @@
+<!--
+    Fichier      :  SettingsPage.axaml
+    Projet       :  ScholarLog
+    
+    Description  :
+        Définit l'interface de la page des paramètres de l'application.
+        Cette vue permet à l'utilisateur de configurer certains éléments
+        globaux du programme, notamment :
+            - Le chemin du fichier de base de données SQLite
+            - La sélection du thème de l'application (clair / sombre)
+
+        La page contient également :
+            - Un message d'erreur via Flyout si le fichier n'existe pas
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  10.03.2026
+
+    Remarques    :
+        - Les ressources visuelles (polices, couleurs, tailles) proviennent de App.axaml.
+-->
+
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Pages="clr-namespace:ScholarLog.Views.Pages"
+             xmlns:vm="using:ScholarLog.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="740" d:DesignHeight="450"
+             x:Class="ScholarLog.Views.Pages.SettingsPage"
+             x:DataType="vm:SettingsViewModel">
+    
+    
+    <UserControl.Styles>
+        <Style Selector="FlyoutPresenter.alerteDanger">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}" /> 
+        
+            <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="{DynamicResource FieldCornerRadius}" />
+        
+
+        </Style>    
+        <Style Selector="Button.zoom">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" 
+                                                   Duration="0:0:0.1" 
+                                                   Easing="CubicEaseOut"/>
+                </Transitions>
+            </Setter>
+
+            <Setter Property="RenderTransform" Value="scale(1.00)" />
+
+            <Style Selector="^:pointerover">
+                <Setter Property="RenderTransform" Value="scale(1.00)" />
+                
+                
+            </Style>
+
+            <Style Selector="^:pressed">
+                <Setter Property="RenderTransform" Value="scale(1)" />
+            </Style>
+        </Style>
+    </UserControl.Styles>
+    
+    <StackPanel>
+        
+    
+        <!-- Premier pannel -->
+        <Grid Background="Transparent" ColumnSpacing="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/> 
+                <ColumnDefinition Width="0.25" MinWidth="187"/>
+            </Grid.ColumnDefinitions>
+            
+            
+            <!-- Container de la card BDD -->
+            <Border Grid.Column="0" Margin="0" Padding="10" 
+                    CornerRadius="{DynamicResource FieldCornerRadius}" 
+                    Background="{DynamicResource CardBackground}" 
+                    BorderBrush="{DynamicResource CardBorder}"
+                    BorderThickness="1">
+                
+                <StackPanel Orientation="Vertical" >
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal" >
+                        <TextBlock Padding="0,0,3,0" FontFamily="{DynamicResource Phosphor}" 
+                                   FontSize="{DynamicResource IconSizeSmall}" 
+                                   Foreground="{DynamicResource PrimaryForeground}" 
+                                   Text="{DynamicResource IconeBDD}"/>
+                        
+                        <TextBlock Padding="0,3,0,0" FontFamily="{DynamicResource Helvetica}"
+                                   FontSize="{DynamicResource FontSizeMedium}" 
+                                   Foreground="{DynamicResource PrimaryForeground}" 
+                                   Text="Base de données"/>
+                    </StackPanel>
+                    
+                    <TextBlock Padding="2,3,0,0" FontFamily="{DynamicResource Helvetica}" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SecondaryForeground}" Text="Configurez l'emplacement du fichier de sauvegarde SQLite"/>
+                    
+                    <TextBlock 
+                        Padding="0,20,0,0" 
+                        FontFamily="{DynamicResource Helvetica}" 
+                        FontSize="{DynamicResource FontSizeNormal}" 
+                        Foreground="{DynamicResource PrimaryForeground}" 
+                        FontStyle="Normal"
+                        Text="Chemin du fichier (.db) :"/>
+                    
+                    
+                    <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,5,0,0">
+                        
+                        <Border Grid.Column="0" Margin="0,0,10,0" Padding="5,2" 
+                                CornerRadius="{DynamicResource FieldCornerRadius}" 
+                                Background="{DynamicResource CardBackground}" 
+                                BorderBrush="{DynamicResource CardBorder}">
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" MinWidth="30"/> 
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Padding="5,0,5,3"
+                                           FontFamily="{DynamicResource Phosphor}"
+                                           FontSize="{DynamicResource IconSizeNormal}"
+                                           Foreground="{DynamicResource PrimaryForeground}"
+                                           Text="{DynamicResource IconeHDD}"/>
+                                
+                                <TextBlock Grid.Column="1" 
+                                           Name="userbddPath"
+                                           VerticalAlignment="Center" 
+                                           Padding="5,0,5,0"
+                                           FontFamily="{DynamicResource Helvetica}"
+                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           Foreground="{DynamicResource SecondaryForeground}"
+                                           Text="{Binding PathToBDD}">
+    
+                                    <FlyoutBase.AttachedFlyout>
+                                        <Flyout FlyoutPresenterClasses="alerteDanger">
+                                            
+                                            <StackPanel Orientation="Vertical" Spacing="5">
+                                                <Grid ColumnDefinitions="*,Auto,*" HorizontalAlignment="Stretch" MinWidth="250">
+
+                                                    <TextBlock Grid.Column="0" 
+                                                               Text="{DynamicResource IconeDanger}" 
+                                                               FontFamily="{DynamicResource Phosphor}"
+                                                               FontSize="{DynamicResource IconSizeNormal}"
+                                                               Foreground="{DynamicResource ErrorForeground}"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Center"/>
+
+                                                    <TextBlock Grid.Column="1" 
+                                                               Text="Le fichier est introuvable" 
+                                                               FontFamily="{DynamicResource Helvetica}"
+                                                               FontSize="{DynamicResource FontSizeNormal}"
+                                                               FontWeight="Bold"
+                                                               Foreground="{DynamicResource ErrorForeground}"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               Margin="15,0,15,0"/> 
+                                                               
+                                                    <TextBlock Grid.Column="2" 
+                                                               Text="{DynamicResource IconeDanger}" 
+                                                               FontFamily="{DynamicResource Phosphor}"
+                                                               FontSize="{DynamicResource IconSizeNormal}"
+                                                               Foreground="{DynamicResource ErrorForeground}"
+                                                               HorizontalAlignment="Right"
+                                                               VerticalAlignment="Center"/>
+                                                </Grid>
+                                                
+                                                <TextBlock Text="La modification n'a pas été enregistrée" 
+                                                           FontFamily="{DynamicResource Helvetica}"
+                                                           FontSize="{DynamicResource FontSizeNormal}"
+                                                           Foreground="{DynamicResource SecondaryForeground}"
+                                                           HorizontalAlignment="Center"/>
+                                                
+                                            </StackPanel>
+                                           
+                                        </Flyout>
+                                    </FlyoutBase.AttachedFlyout>
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                        
+                        <Button Grid.Column="1" Click="BrowseFile_Click" CornerRadius="{DynamicResource FieldCornerRadius}" Margin="0,0,10,0"
+                                Classes="zoom" 
+                                Background="{DynamicResource CardBackground}" 
+                                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
+                                Foreground="{DynamicResource PrimaryForeground}" 
+                                Padding="12,7" Cursor="Hand">
+                            <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                                <TextBlock Padding="0,5,0,0" 
+                                           FontFamily="{DynamicResource Phosphor}" 
+                                           FontSize="{DynamicResource FontSizeMedium}" 
+                                           Text="{DynamicResource IconeSearch}"/>
+                                <TextBlock 
+                                    Padding="0,0,0,0" 
+                                    FontFamily="{DynamicResource HelveticaBold}" 
+                                    FontSize="{DynamicResource FontSizeNormal}" 
+                                    Text="parcourir" />
+                            </StackPanel>
+                        </Button>
+                        
+                        <Button Grid.Column="2" CornerRadius="{DynamicResource FieldCornerRadius}" Margin="0"
+                                Classes="zoom"
+                                Command="{Binding SavePathCommand}"
+                                Background="{DynamicResource CardBackground}" 
+                                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
+                                Foreground="{DynamicResource PrimaryForeground}" 
+                                Padding="12,7" Cursor="Hand">
+                            <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                                <TextBlock 
+                                    Padding="0,5,0,0" 
+                                    FontFamily="{DynamicResource Phosphor}" 
+                                    FontSize="{DynamicResource FontSizeMedium}" 
+                                    Text="{DynamicResource IconeSave}"/>
+                                
+                                <TextBlock 
+                                    Padding="0,0,0,0" 
+                                    FontFamily="{DynamicResource HelveticaBold}" 
+                                    FontSize="{DynamicResource FontSizeNormal}" 
+                                    Text="sauvegarder" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                    
+                </StackPanel>
+            </Border>
+            
+            <!-- Container de la card Theme -->
+            <Border Grid.Column="1" Margin="0" Padding="15" 
+                    CornerRadius="{DynamicResource FieldCornerRadius}" 
+                    Background="{DynamicResource CardBackground}" 
+                    BorderBrush="{DynamicResource CardBorder}"
+                    BorderThickness="1">
+
+                <Grid RowDefinitions="Auto, *, Auto" VerticalAlignment="Stretch">
+                    <StackPanel Grid.Row="0" VerticalAlignment="Top">
+                        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                            <TextBlock FontFamily="{DynamicResource Phosphor}"
+                                       FontSize="{DynamicResource IconSizeSmall}"
+                                       Foreground="{DynamicResource PrimaryForeground}"
+                                       Text="{DynamicResource IconePalette}" 
+                                       VerticalAlignment="Center"/>
+                            
+                            <TextBlock FontFamily="{DynamicResource HelveticaBold}"
+                                       FontSize="{DynamicResource FontSizeMedium}"
+                                       Foreground="{DynamicResource PrimaryForeground}"
+                                       Text="Apparence"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <TextBlock FontFamily="{DynamicResource Helvetica}"
+                                   FontSize="{DynamicResource FontSizeSmall}"
+                                   Foreground="{DynamicResource SecondaryForeground}"
+                                   Text="Basculez entre le mode clair et le mode sombre"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <Canvas Grid.Row="1" VerticalAlignment="Stretch" />
+                    
+                    <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          ColumnDefinitions="Auto, Auto, Auto">
+                    
+                        <TextBlock Grid.Column="0" 
+                                   FontFamily="{DynamicResource Phosphor}"
+                                   FontSize="{DynamicResource IconSizeSmall}"
+                                   Foreground="{DynamicResource PrimaryForeground}"
+                                   Text="{DynamicResource IconeMoon}" 
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,20,0"/>
+
+                        <ToggleSwitch Grid.Column="1" 
+                                      IsChecked="{Binding !IsDarkModeEnabled, Mode=TwoWay}"
+                                      OnContent="" 
+                                      OffContent="" 
+                                      VerticalAlignment="Center"/>
+                        
+                        
+                        
+                        <TextBlock Grid.Column="2" 
+                                   FontFamily="{DynamicResource Phosphor}"
+                                   FontSize="{DynamicResource IconSizeSmall}"
+                                   Foreground="{DynamicResource PrimaryForeground}"
+                                   Text="{DynamicResource IconeSun}" 
+                                   VerticalAlignment="Center"
+                                   Margin="10,0,0,0"/>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </StackPanel>
+</UserControl>

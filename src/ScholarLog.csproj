@@ -74,4 +74,11 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Pages\HomePage.axaml" />
+      <AdditionalFiles Include="Views\Pages\JournalPage.axaml" />
+      <AdditionalFiles Include="Views\Pages\NotesPage.axaml" />
+      <AdditionalFiles Include="Views\Pages\SettingsPage.axaml" />
+    </ItemGroup>
 </Project>
