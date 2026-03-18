@@ -107,10 +107,10 @@ public partial class MainWindow : Window
         
         LoadingText.Text = "Chargement des données globales... ";
 
-// 1. On lance le chargement des données en arrière-plan (sans await ici)
+        // lance le chargement des données en arrière-plan
         Task chargementTask = AppDataService.Instance.ChargerDonneesGlobalesAsync();
 
-// 2. Animation de la barre
+        // animation de la barre
         for (int i = 0; i <= 100; i += 2)
         {
             LoadingBar.Value = i;
