@@ -19,12 +19,13 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:Pages="clr-namespace:ScholarLog.Pages"
              xmlns:data="clr-namespace:ScholarLog.Data"
+             xmlns:vm="clr-namespace:ScholarLog.ViewModels"
              xmlns:System="clr-namespace:System;assembly=System.Runtime"
              xmlns:controls="clr-namespace:ScholarLog.Components.DonutDiagram"
              x:Class="ScholarLog.Pages.JournalPage"
-             x:DataType="Pages:JournalPage">
+             x:DataType="vm:JournalViewModel">
     
-<UserControl.Styles>
+    <UserControl.Styles>
         <Style Selector="Button.icon-button">
             <Setter Property="FontFamily" Value="{DynamicResource Phosphor}" />
             <Setter Property="FontSize" Value="{DynamicResource IconSizeNormal}" />
@@ -146,7 +147,7 @@
                                                     FontSize="{DynamicResource IconSizeSmall}"  
                                                     Foreground="{DynamicResource PrimaryForeground}"
                                                     Background="Transparent" Padding="5" Cursor="Hand"
-                                                    Command="{Binding $parent[Pages:JournalPage].OuvrirModalModification}"
+                                                    Command="{Binding $parent[UserControl].((vm:JournalViewModel)DataContext).OuvrirModalModificationCommand}"
                                                     CommandParameter="{Binding}"/>
                                             
                                             <Button Content="{DynamicResource IconeTrash}" 
@@ -298,17 +299,19 @@
                                         
                                         <TextBox Grid.Column="0" Text="{Binding Nom}" Margin="0,0,10,0" VerticalAlignment="Center"/>
                                         
-                                        <Button Grid.Column="1" Content="{DynamicResource IconeSave}"  Foreground="{DynamicResource PrimaryForeground}"
+                                        <Button Grid.Column="1" Content="{DynamicResource IconeSave}"  
+                                                Foreground="{DynamicResource PrimaryForeground}"
                                                 FontFamily="{DynamicResource Phosphor}"
                                                 FontSize="{DynamicResource IconSizeNormal}"
-                                                Command="{Binding $parent[Pages:JournalPage].RenommerType}" 
+                                                Command="{Binding $parent[UserControl].((vm:JournalViewModel)DataContext).RenommerTypeCommand}" 
                                                 CommandParameter="{Binding}"
                                                 Background="Transparent" Padding="5" Cursor="Hand" ToolTip.Tip="Sauvegarder le nom"/>
-                                                
+        
                                         <Button Grid.Column="2" Content="{DynamicResource IconeTrash}" 
-                                                FontFamily="{DynamicResource Phosphor}" Foreground="{DynamicResource PrimaryForeground}"
+                                                FontFamily="{DynamicResource Phosphor}" 
+                                                Foreground="{DynamicResource PrimaryForeground}"
                                                 FontSize="{DynamicResource IconSizeNormal}"
-                                                Command="{Binding $parent[Pages:JournalPage].DemanderSuppressionType}" 
+                                                Command="{Binding $parent[UserControl].((vm:JournalViewModel)DataContext).DemanderSuppressionTypeCommand}" 
                                                 CommandParameter="{Binding}"
                                                 Background="Transparent" Padding="5" Cursor="Hand" ToolTip.Tip="Supprimer"/>
                                     </Grid>
@@ -455,22 +458,26 @@
                                                FontSize="{DynamicResource FontSizeSmall}"/>
                                 </ScrollViewer>
                             </Border>
-                            
-                            <Button Command="{Binding CopierPressePapier}" 
+    
+                            <Button Click="CopierPressePapier" 
                                     Background="{DynamicResource CardBackground}" 
                                     Foreground="{DynamicResource PrimaryForeground}" 
                                     CornerRadius="{DynamicResource ControlCornerRadius}" Padding="8" 
                                     HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" ToolTip.Tip="Copier le texte">
-                                <ContentControl Content="{DynamicResource IconeCopy}" FontFamily="{DynamicResource Phosphor}" Foreground="#FFF" />
+                                <ContentControl Content="{DynamicResource IconeCopy}" 
+                                                FontFamily="{DynamicResource Phosphor}" 
+                                                Foreground="#FFF" />
                             </Button>
                         </Grid>
 
-                        <Button Grid.Row="3" Command="{Binding SauvegarderFichierExportation}"
+                        <Button Grid.Row="3" Click="SauvegarderFichierExportation"
                                 Background="{DynamicResource CardBackground}" 
                                 Foreground="{DynamicResource PrimaryForeground}" 
                                 CornerRadius="{DynamicResource CardCornerRadius}" Padding="10"
                                 HorizontalAlignment="Right" ToolTip.Tip="Enregistrer sur l'ordinateur">
-                            <ContentControl Content="{DynamicResource IconeSave}" FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource IconSizeNormal}" />
+                            <ContentControl Content="{DynamicResource IconeSave}" 
+                                            FontFamily="{DynamicResource Phosphor}" 
+                                            FontSize="{DynamicResource IconSizeNormal}" />
                         </Button>
                         
                     </Grid>
