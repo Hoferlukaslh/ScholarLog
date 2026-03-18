@@ -231,7 +231,7 @@
                                 Click="Setting_OnClick" >
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" 
-                                       FontFamily="{DynamicResource PhosphorDuotone}" 
+                                       FontFamily="{DynamicResource Phosphor}" 
                                        Foreground="{DynamicResource PrimaryForeground}"
                                        FontSize="{DynamicResource IconSizeMedium}" HorizontalAlignment="Center" 
                                        Content="{DynamicResource IconeGear}"/>

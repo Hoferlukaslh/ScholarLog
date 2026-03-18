@@ -16,6 +16,6 @@ sealed class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            //.WithInterFont() // j'enlève quand meme, j'utilise pas le visual designer.
+            //.WithInterFont() j'utilise pas le visual designer.
             .LogToTrace();
 }

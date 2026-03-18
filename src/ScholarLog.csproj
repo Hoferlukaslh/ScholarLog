@@ -4,23 +4,40 @@
         <TargetFramework>net10.0</TargetFramework>
 
         <!-- Optimisation de la compilation -->
-        <InvariantGlobalization>true</InvariantGlobalization>
-	    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+        <InvariantGlobalization>true</InvariantGlobalization> <!-- QUE en suisse -->
+	    
         <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
         <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
         <EnableUnsafeAssemblyLoadSupport>false</EnableUnsafeAssemblyLoadSupport>
+
+
+        <!-- Pas de debug pour l'utilisateur final -->
         <DebugSymbols>false</DebugSymbols>
         <DebugType>none</DebugType>
         <StackTraceSupport>false</StackTraceSupport>
         <DebuggerSupport>false</DebuggerSupport>
+        <EventSourceSupport>false</EventSourceSupport>
+        <MetricsSupport>false</MetricsSupport>
+        <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+
+        <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport> <!-- Pas de requette web -->
+
+        <!-- pas sur un serveur, mais garde le GC -->
+        <ServerGarbageCollection>false</ServerGarbageCollection> 
+        <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+
         <!-- Voir pour désactiver TRIM en cas de problèmes -->
         <PublishTrimmed>true</PublishTrimmed> 
         <!--<TrimMode>link</TrimMode> EF core fonctionne mal -->
-        <TrimMode>partial</TrimMode>
+        <!--<TrimMode>partial</TrimMode> -->
+        <TrimMode>full</TrimMode>
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 
         <Nullable>enable</Nullable>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+
+
         <ApplicationIcon>Assets\Images\ScholarLogLogoEx.ico</ApplicationIcon>
         <Version>0.0.1</Version>
         <Title>ScholarLog</Title>
@@ -36,7 +53,7 @@
         <!-- Avec optimisation avec déclaration des ressources : 20Mo -->
         <AvaloniaResource Include="Assets\Fonts\Helvetica\Helvetica.ttf" />
         <AvaloniaResource Include="Assets\Fonts\Phosphor\Phosphor.ttf" />
-        <AvaloniaResource Include="Assets\Fonts\Phosphor\Phosphor-Duotone.ttf" />
+        <!--<AvaloniaResource Include="Assets\Fonts\Phosphor\Phosphor-Duotone.ttf" />-->
 
         <AvaloniaResource Include="Assets\Images\ScholarLogLogoTSombre.ico" />
         <AvaloniaResource Include="Assets\Images\ScholarLogLogoTClair.ico" />
@@ -53,7 +70,7 @@
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.1.1" />
+        <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.1.1" Condition="'$(Configuration)' == 'Debug'" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.4" />
