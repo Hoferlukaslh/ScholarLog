@@ -21,7 +21,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Module = ScholarLog.Data.Module; // Élimination de l'ambiguité avec système Module pour EF
 
-
 namespace ScholarLog.Data;
 
 
