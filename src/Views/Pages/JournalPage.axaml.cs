@@ -1,3 +1,22 @@
+/*
+    Fichier      :  JournalPage.axaml.cs
+    Projet       :  ScholarLog
+
+    Description  :
+        Code-behind de la vue JournalPage. 
+        Gère la logique purement visuelle et les interactions avec les services 
+        système (Presse-papier, Sélecteur de fichiers) qui ne peuvent pas être 
+        faits directement dans le ViewModel.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  19.03.2026
+
+    Remarques    :
+        - Gère le compte à rebours visuel de 3s pour la suppression sécurisée.
+        - Utilise le StorageProvider d'Avalonia pour l'exportation de fichiers.
+*/
+
+
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +35,7 @@ public partial class JournalPage : UserControl
         InitializeComponent();
     }
 
-    // --- GESTION VISUELLE DE LA SUPPRESSION (3s) ---
+    // gestion visuelle de la suppression (3s)
     private async void BoutonSupprimer_Tapped(object? sender, Avalonia.Input.TappedEventArgs e)
     {
         if (sender is Button btn && btn.DataContext is Entree entree && this.DataContext is JournalViewModel vm)
@@ -55,7 +74,7 @@ public partial class JournalPage : UserControl
         }
     }
 
-    // --- LOGIQUE UI : EXPORTATION ET SYSTEME DE FICHIERS ---
+    // exportation et systeme de fichier
     private void BoutonExporter_Tapped(object? sender, Avalonia.Input.TappedEventArgs e)
     {
         if (this.DataContext is JournalViewModel vm)
@@ -66,7 +85,7 @@ public partial class JournalPage : UserControl
 
             vm.SetExportAllModules(exportAll);
 
-            // Coche le bouton radio dans l'UI (Code-behind)
+            // coche le bouton radio dans l'UI (Code-behind)
             this.FindControl<RadioButton>("RbExportMd").IsChecked = true;
             
             vm.ChangerFormatExportationCommand.Execute("MD");

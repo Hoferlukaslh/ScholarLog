@@ -1,3 +1,21 @@
+<!--
+    Fichier      :  NotesPage.axaml
+    Projet       :  ScholarLog
+    
+    Description  :
+        Vue dédiée à la consultation et à la gestion des évaluations. 
+        Affiche la liste détaillée des notes par branche, permet de suivre 
+        les moyennes pondérées et d'ajouter de nouveaux résultats.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  19.03.2026
+
+    Remarques    :
+        - Utilise le NotesViewModel pour les calculs de moyennes dynamiques.
+        - Supporte le filtrage par module via la navigation globale.
+        - Inclut une interface de saisie avec gestion des coefficients et des types (TM/M).
+-->
+
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -123,7 +141,7 @@
                     <ScrollViewer Grid.Row="1" Margin="0,5,0,10">
                         <ItemsControl ItemsSource="{Binding AllNotes}">
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="vm:NoteDisplay">
+                                <DataTemplate x:DataType="data:NoteViewModel">
                                     <Grid ColumnDefinitions="1.5*, 1*, 2*, 2*, 1*, Auto" Margin="20,10">
                                         <TextBlock Grid.Column="0" Text="{Binding BrancheNom}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
                                         <TextBlock Grid.Column="1" Text="{Binding NoteData.Date, StringFormat={}{0:dd.MM.yyyy}}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>

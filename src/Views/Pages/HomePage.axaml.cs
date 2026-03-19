@@ -1,3 +1,17 @@
+/*
+    Fichier      :  HomePage.axaml.cs
+    Projet       :  ScholarLog
+
+    Description  :
+        Code-behind de la vue HomePage.
+        Initialise la collection de modules affichés dans la page
+        principale en récupérant les données depuis la base SQLite de manière asynchrone.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  19.03.2026
+*/
+
+
 using System;
 using System.Threading.Tasks;
 using Avalonia;
@@ -10,10 +24,11 @@ namespace ScholarLog.Views.Pages;
 
 public partial class HomePage : UserControl
 {
-    // On conserve cet événement car MainWindow y est abonné
+    // évenement de navigation 
     public event EventHandler<ModuleViewModel>? NavigationVersJournalDemandee;
 
-    // --- PROPRIÉTÉS D'ANIMATION (Purement UI) ---
+    //  propriété d'animation UI
+    
     public static readonly StyledProperty<double> RightPanelWidthStarProperty =
         AvaloniaProperty.Register<HomePage, double>(nameof(RightPanelWidthStar), 0.0);
 
@@ -38,7 +53,7 @@ public partial class HomePage : UserControl
     {
         InitializeComponent();
         
-        // On s'abonne au changement de contexte pour écouter le ViewModel
+        // abonnement au changement de contexte pour écouter le ViewModel
         this.DataContextChanged += HomePage_DataContextChanged;
     }
 
@@ -46,10 +61,10 @@ public partial class HomePage : UserControl
     {
         if (this.DataContext is HomeViewModel vm)
         {
-            // On écoute les changements de données pour déclencher les animations
+            // écoute les changements de données pour déclencher les animations
             vm.PropertyChanged += Vm_PropertyChanged;
             
-            // On relaye l'événement de navigation du ViewModel vers l'extérieur (MainWindow)
+            // relaye l'événement de navigation du ViewModel vers l'extérieur (MainWindow)
             vm.NavigationVersJournalDemandee += (s, module) => 
             {
                 NavigationVersJournalDemandee?.Invoke(this, module);
@@ -63,13 +78,13 @@ public partial class HomePage : UserControl
         {
             var newVal = vm.SelectedModule;
 
-            // Déclenche l'animation d'ouverture
+            // déclenche l'animation d'ouverture
             if (_lastSelectedModule == null && newVal != null)       
             {
                 RightPanelWidthStar = 3.0;
                 BottomPanelHeightStar = 40.0;
             }
-            // Déclenche l'animation de fermeture
+            // déclenche l'animation de fermeture
             else if (_lastSelectedModule != null && newVal == null)  
             {
                 RightPanelWidthStar = 0.0;
@@ -86,7 +101,7 @@ public partial class HomePage : UserControl
         }
     }
 
-    // Applique les valeurs animées aux GridLength en temps réel
+    // applique les valeurs animées aux GridLength en temps réel
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);

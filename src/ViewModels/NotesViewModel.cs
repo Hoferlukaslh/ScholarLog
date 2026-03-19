@@ -1,4 +1,23 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿/*
+    Fichier      :  NotesViewModel.cs
+    Projet       :  ScholarLog
+
+    Description  :
+        ViewModel responsable de la gestion des notes (évaluations).
+        Traite la logique d'ajout, de modification et de suppression des notes 
+        pour chaque branche, et maintient à jour les listes filtrées pour l'affichage.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  19.03.2026
+
+    Remarques    :
+        - Utilise un modèle intermédiaire (NoteViewModel) pour lier visuellement une note brute à son module parent.
+        - Gère le changement de module/branche parent lors de la modification d'une note existante.
+        - Synchronise les modifications en direct avec la base de données SQLite via le DataRepository.
+*/
+
+
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Linq;
@@ -7,22 +26,15 @@ using ScholarLog.Data;
 
 namespace ScholarLog.ViewModels;
 
-// Classe locale pour aplatir les données de la vue Liste
-public class NoteDisplay
-{
-    public Note NoteData { get; set; } = new();
-    public string BrancheNom { get; set; } = string.Empty;
-    public string ModuleNom { get; set; } = string.Empty;
-}
 
 public partial class NotesViewModel : ViewModelBase
 {
-    // --- ÉTAT DE LA VUE ---
+    // état de la vue
     [ObservableProperty]
     private bool _isListView = true;
 
     [ObservableProperty]
-    private ObservableRangeCollection<NoteDisplay> _allNotes = new();
+    private ObservableRangeCollection<NoteViewModel> _allNotes = new();
 
     [ObservableProperty]
     private ObservableRangeCollection<Branche> _selectedModuleBranchesWithNotes = new();
@@ -33,7 +45,7 @@ public partial class NotesViewModel : ViewModelBase
     [ObservableProperty]
     private ModuleViewModel? _selectedModule;
 
-    // --- ÉTAT DE LA MODALE ---
+    // état du modal
     [ObservableProperty]
     private bool _isModalOpen = false;
 
@@ -56,7 +68,7 @@ public partial class NotesViewModel : ViewModelBase
 
     public NotesViewModel()
     {
-        // Récupérer les données depuis le service
+        // récupére les données depuis le service
         Modules = AppDataService.Instance.Modules;
 
         if (Modules.Count > 0)
@@ -66,8 +78,7 @@ public partial class NotesViewModel : ViewModelBase
 
         RefreshAllNotes();
     }
-
-    // --- DÉCLENCHEURS AUTOMATIQUES (Remplacent OnPropertyChanged) ---
+    
 
     partial void OnSelectedModuleChanged(ModuleViewModel? value)
     {
@@ -91,11 +102,12 @@ public partial class NotesViewModel : ViewModelBase
         }
     }
 
-    // --- LOGIQUE MÉTIER ---
+#region Logique Métier
+  
 
     private void RefreshAllNotes()
     {
-        var listeTemporaire = new System.Collections.Generic.List<NoteDisplay>();
+        var listeTemporaire = new System.Collections.Generic.List<NoteViewModel>();
 
         foreach (var module in Modules)
         {
@@ -105,7 +117,7 @@ public partial class NotesViewModel : ViewModelBase
                 if (branche.Notes == null) continue;
                 foreach (var note in branche.Notes)
                 {
-                    listeTemporaire.Add(new NoteDisplay
+                    listeTemporaire.Add(new NoteViewModel
                     {
                         NoteData = note,
                         BrancheNom = branche.Nom,
@@ -129,8 +141,8 @@ public partial class NotesViewModel : ViewModelBase
         var branchesFiltrees = SelectedModule.Branches.Where(b => b.Notes != null && b.Notes.Count > 0);
         SelectedModuleBranchesWithNotes.ReplaceAll(branchesFiltrees);
     }
+    
 
-    // --- COMMANDES ---
 
     [RelayCommand]
     private void OuvrirModalAjout()
@@ -258,4 +270,6 @@ public partial class NotesViewModel : ViewModelBase
             Console.WriteLine($"Erreur lors de la suppression : {ex.Message}");
         }
     }
+
+#endregion
 }

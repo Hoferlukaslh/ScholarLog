@@ -1,4 +1,24 @@
-﻿using System;
+﻿/*
+    Fichier      :  JournalViewModel.cs
+    Projet       :  ScholarLog
+
+    Description  :
+        ViewModel dédié à la gestion du journal de travail étudiant.
+        Gère les opérations CRUD pour les entrées du journal et les catégories 
+        (Types de travail). Gère également la logique complexe de génération 
+        des rapports d'exportation (Markdown, CSV, JSON).
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  19.03.2026
+
+    Remarques    :
+        - Gère les états de plusieurs modales (Ajout/Édition, Catégories, Export, Graphique).
+        - Les méthodes de génération de contenu calculent les totaux et groupements à la volée.
+        - Implémente une sécurité (DeleteWarningMessage) lors de la suppression d'une catégorie liée à des entrées.
+*/
+
+
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,9 +33,10 @@ using ScholarLog.Components.DonutDiagram;
 
 namespace ScholarLog.ViewModels;
 
+
 public partial class JournalViewModel : ViewModelBase
 {
-    // --- ÉTAT GLOBAL ---
+    // état global
     [ObservableProperty]
     private ObservableRangeCollection<ModuleViewModel> _modules;
 
@@ -31,7 +52,8 @@ public partial class JournalViewModel : ViewModelBase
     [ObservableProperty]
     private string _totalHeures = "0.0h";
 
-    // --- MODAL : AJOUT/ÉDITION ENTRÉE ---
+    
+    // modal : Ajout/Edition Entrée
     [ObservableProperty]
     private bool _isModalOpen = false;
 
@@ -52,7 +74,8 @@ public partial class JournalViewModel : ViewModelBase
 
     private bool _isEditingExisting;
 
-    // --- MODAL : TYPES DE TRAVAIL ---
+    
+    // modal : types de travail
     [ObservableProperty]
     private bool _isModalTypesOpen = false;
 
@@ -67,14 +90,15 @@ public partial class JournalViewModel : ViewModelBase
 
     private TypeTravailViewModel? _typeToDelete;
 
-    // --- MODAL : GRAPHIQUE ---
+    // modal : graphique
     [ObservableProperty]
     private bool _isModalGraphOpen = false;
 
     [ObservableProperty]
     private ObservableRangeCollection<DonutItem> _graphiqueDonnees = new();
 
-    // --- MODAL : EXPORTATION ---
+    
+    // modal : exportation
     [ObservableProperty]
     private bool _isExportModalOpen = false;
 
@@ -84,7 +108,7 @@ public partial class JournalViewModel : ViewModelBase
     private string _currentExportFormat = "MD";
     private bool _exportAllModules = false;
 
-    // Constructeur
+
     public JournalViewModel()
     {
         Modules = AppDataService.Instance.Modules;
@@ -95,7 +119,7 @@ public partial class JournalViewModel : ViewModelBase
         }
     }
 
-    // --- DÉCLENCHEURS (Remplacent OnPropertyChanged) ---
+    // déclencheurs
     partial void OnSelectedModuleChanged(ModuleViewModel? value)
     {
         if (value != null)
@@ -119,7 +143,7 @@ public partial class JournalViewModel : ViewModelBase
         }
     }
 
-    // --- LOGIQUE MÉTIER : ACTUALISATION ---
+    // actualisation
     private async void ActualiserJournalTypeTravail(ModuleViewModel moduleVM)
     {
         Journal.Clear();
@@ -207,7 +231,8 @@ public partial class JournalViewModel : ViewModelBase
         }
     }
 
-    // --- COMMANDES : CRUD ENTRÉES ---
+#region Commandes : CRUD Entrées 
+
     [RelayCommand]
     private void OuvrirModalAjout()
     {
@@ -326,8 +351,12 @@ public partial class JournalViewModel : ViewModelBase
             Console.WriteLine($"Erreur : {ex.Message}");
         }
     }
+#endregion
 
-    // --- COMMANDES : CRUD TYPES DE TRAVAIL ---
+#region Commandes : CRUD Types de travail
+
+
+
     [RelayCommand]
     private void OuvrirModalTypesTravail()
     {
@@ -448,8 +477,11 @@ public partial class JournalViewModel : ViewModelBase
         ActualiserJournalTypeTravail(SelectedModule);
         ActualiserModalTypesTravail(SelectedModule);
     }
+    
+#endregion
 
-    // --- COMMANDES : GRAPHIQUE ---
+
+    // graphique
     [RelayCommand]
     private void OuvrirModalGraphique()
     {
@@ -469,7 +501,7 @@ public partial class JournalViewModel : ViewModelBase
     [RelayCommand]
     private void FermerModalGraphique() => IsModalGraphOpen = false;
 
-    // --- COMMANDES : EXPORTATION ---
+    // exportation
     [RelayCommand]
     private void ChangerFormatExportation(string format)
     {
@@ -493,7 +525,7 @@ public partial class JournalViewModel : ViewModelBase
             sb.AppendLine("# Rapport Global - Tous les modules\n");
         }
 
-        double grandTotalHeuresFichier = 0.0; // Pour le total final de tout le fichier
+        double grandTotalHeuresFichier = 0.0; // pour le total final de tout le fichier
 
         foreach (var mod in modules)
         {

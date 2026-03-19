@@ -263,4 +263,16 @@ public class ModuleViewModel : ScholarLog.Data.Module
         }
     }
 }
+
+/// <summary>
+/// Extension de la classe Note pour l'affichage dans l'interface utilisateur.
+/// Permet de lier une évaluation à ses métadonnées de contexte (Nom du module et de la branche)
+/// afin de faciliter l'affichage dans des listes globales ou des tableaux de bord.
+/// </summary>
+public class NoteViewModel : Note
+{
+    public Note NoteData { get; set; } = new();
+    public string BrancheNom { get; set; } = string.Empty;
+    public string ModuleNom { get; set; } = string.Empty;
+}
 # endregion

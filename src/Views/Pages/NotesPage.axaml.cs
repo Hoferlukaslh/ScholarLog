@@ -1,3 +1,24 @@
+/*
+    Fichier      :  NotesPage.axaml.cs
+    Projet       :  ScholarLog
+
+    Description  :
+        Code-behind de la vue NotesPage. 
+        Gère les interactions spécifiques à l'interface utilisateur pour la gestion 
+        des notes, notamment la sécurité lors de la suppression (timer) et 
+        la validation des dates via le contrôle calendrier.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  19.03.2026
+
+    Remarques    :
+        - Utilise un système de confirmation visuelle (IsDeletePending) de 3 secondes
+          pour éviter les suppressions accidentelles de notes.
+        - L'appuis de Ctrl, Alt ou Shit + la corbeille permet une suppression instantanée.
+        - Supporte la suppression rapide via les touches modificatrices (Ctrl/Shift/Alt).
+*/
+
+
 using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -13,7 +34,7 @@ public partial class NotesPage : UserControl
         InitializeComponent();
     }
 
-    // Gestion de la sécurité sur la date (logique de contrôle UI)
+    // gestion de la sécurité sur la date (logique de contrôle UI)
     private void CalendarDatePicker_OnSelectedDateChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (sender is CalendarDatePicker picker && this.DataContext is NotesViewModel vm)
@@ -31,14 +52,14 @@ public partial class NotesPage : UserControl
         }
     }
 
-    // Logique de l'interface (clic avec modificateur, timer de 3 secondes)
+    // logique de l'interface (clic avec modificateur, timer de 3 secondes)
     private async void BoutonSupprimer_Tapped(object? sender, Avalonia.Input.TappedEventArgs e)
     {
         if (sender is Button btn && this.DataContext is NotesViewModel vm)
         {
             Note? noteASupprimer = null;
 
-            if (btn.DataContext is NoteDisplay nd)
+            if (btn.DataContext is NoteViewModel nd)
                 noteASupprimer = nd.NoteData;
             else if (btn.DataContext is Note n)
                 noteASupprimer = n;
@@ -51,7 +72,6 @@ public partial class NotesPage : UserControl
 
             if (isModifierPressed || noteASupprimer.IsDeletePending)
             {
-                // On délègue l'action métier au ViewModel
                 await vm.ExecuterSuppressionCommand.ExecuteAsync(noteASupprimer);
             }
             else

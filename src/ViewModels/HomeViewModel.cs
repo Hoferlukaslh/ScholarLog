@@ -1,4 +1,24 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿/*
+    Fichier      :  HomeViewModel.cs
+    Projet       :  ScholarLog
+
+    Description  :
+        ViewModel de la page d'accueil (Tableau de bord).
+        Agrège les données globales pour afficher un résumé des modules, 
+        calculer les moyennes par branche (Théorie vs Modules) et préparer 
+        les données pour le graphique Donut de répartition du travail.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  19.03.2026
+
+    Remarques    :
+        - Calcule les tendances (BrancheTrend) pour chaque évaluation.
+        - Utilise le WeakReferenceMessenger pour déclencher la navigation vers le Journal 
+          sans coupler fortement les ViewModels.
+*/
+
+
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Linq;
@@ -9,9 +29,10 @@ using ScholarLog.Components.DonutDiagram;
 
 namespace ScholarLog.ViewModels;
 
+
 public partial class HomeViewModel : ViewModelBase
 {
-    // --- ÉTAT GLOBAL ---
+    // état global
     [ObservableProperty]
     private ObservableRangeCollection<ModuleViewModel> _modules;
 
@@ -21,7 +42,7 @@ public partial class HomeViewModel : ViewModelBase
     [ObservableProperty]
     private ModuleViewModel? _displayedModule;
 
-    // --- COLLECTIONS POUR L'AFFICHAGE ---
+    // collection pour l'affichage
     [ObservableProperty]
     private ObservableRangeCollection<BrancheViewModel> _branchesTM = new();
 
@@ -34,7 +55,7 @@ public partial class HomeViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableRangeCollection<DonutItem> _graphiqueDonnees = new();
 
-    // Événement pour communiquer avec MainWindow (sans couplage fort)
+    // événement pour communiquer avec MainWindow (sans couplage fort)
     public event EventHandler<ModuleViewModel>? NavigationVersJournalDemandee;
 
     public HomeViewModel()
@@ -42,19 +63,19 @@ public partial class HomeViewModel : ViewModelBase
         Modules = AppDataService.Instance.Modules;
     }
 
-    // --- DÉCLENCHEURS AUTOMATIQUES ---
+    // déclencheurs automatiques
     
-    // Remplace l'ancien événement OnModuleSelectionChanged du XAML
+    
     partial void OnSelectedModuleChanged(ModuleViewModel? value)
     {
         if (value == null) return;
 
         DisplayedModule = value;
 
-        // 1. Tri du journal
+        // tri du journal
         var journalTrie = value.JournalDeTravail?.OrderByDescending(e => e.Date).ToList() ?? new List<Entree>();
 
-        // 2. Regroupement pour le graphique Donut
+        // regroupement pour le graphique Donut
         var typesTravailCalcules = value.JournalDeTravail?
             .Where(e => e.Type != null)
             .GroupBy(e => e.Type)
@@ -66,7 +87,7 @@ public partial class HomeViewModel : ViewModelBase
                 Somme = g.Sum(e => e.Duree)
             }).ToList() ?? new List<TypeTravailViewModel>();
 
-        // 3. Dispatching des branches (Théorie vs Modules)
+        // dispatching des branches (Théorie vs Modules)
         var branchesTM = new List<BrancheViewModel>();
         var branchesM = new List<BrancheViewModel>();
 
@@ -89,7 +110,7 @@ public partial class HomeViewModel : ViewModelBase
             }
         }
         
-        // 4. Injection des données
+        // injection des données
         BranchesTM.ReplaceAll(branchesTM);
         BranchesM.ReplaceAll(branchesM);
         Journal.ReplaceAll(journalTrie);
@@ -106,7 +127,7 @@ public partial class HomeViewModel : ViewModelBase
     {
         if (DisplayedModule != null)
         {
-            // On diffuse le message dans toute l'application
+            // diffuse le message dans toute l'application
             WeakReferenceMessenger.Default.Send(new MainWindowViewModel.ModuleNavigationMessage(DisplayedModule));
         }
     }

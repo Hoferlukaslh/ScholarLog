@@ -1,11 +1,29 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿/*
+    Fichier      :  MainWindowViewModel.cs
+    Projet       :  ScholarLog
+
+    Description  :
+        ViewModel principal agissant comme chef d'orchestre de l'application.
+        Contrôle la navigation globale entre les pages, gère l'état du menu latéral 
+        et orchestre l'écran de chargement initial.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  19.03.2026
+
+    Remarques    :
+        - Cache les instances des sous-ViewModels (Home, Notes, Journal, Settings) pour optimiser les performances.
+        - Écoute les messages de navigation (ModuleNavigationMessage) émis par d'autres ViewModels.
+        - Gère la progression asynchrone (ChargerDonneesInitialesAsync) au démarrage de l'application.
+*/
+
+
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using ScholarLog.Views.Pages;
 using ScholarLog.Data;
 
-// fichier : MainWindowViewModel.cs
 
 namespace ScholarLog.ViewModels;
 
