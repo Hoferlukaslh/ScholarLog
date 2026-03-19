@@ -19,7 +19,7 @@
 - [Technologies](#technologies)
 - [Utilisateurs cibles](#utilisateurs-cibles)
 - [Fonctionnalités principales](#fonctionnalités-principales)
-- [Ressources utilisés](#ressources-utilisés)
+- [Ressources utilisées](#ressources-utilisées)
   - [Logiciels](#logiciels)
   - [Police d'écriture](#police-décriture)
 
@@ -34,9 +34,12 @@ Lien vers maquette interractif -> [Penpot/Maquette](https://penpot.kreativcam.ch
 Développer une application de bureau permettant à un élève de gérer et suivre ses résultats scolaires de manière locale et autonome.
 
 ## Technologies
-- Langage : C#
-- Framework UI : Avalonia UI
-- Base de données : SQLite (stockage local)
+
+| Catégorie        | Technologie    | Détails                   | Version   |
+|---               |---             |---                        |---        |
+| Langage          | C#             | Développement principal   | 14.0      |
+| Framework UI     | Avalonia UI    | Interface multiplateforme | 11.3.11   |
+| Base de données  | SQLite         | Stockage local            | 10.0.4    |
 
 ## Utilisateurs cibles
 - Usage individuel
@@ -59,7 +62,7 @@ Développer une application de bureau permettant à un élève de gérer et suiv
   - Fichier tableur (type Excel)
   - Fichier CSV
 
-# Ressources utilisés
+# Ressources utilisées
 ## Logiciels
 | Logo | Application | Version | Utilité | Licence |
 | :---: | :--- | :--- | :---: | :--- |
@@ -73,5 +76,5 @@ Développer une application de bureau permettant à un élève de gérer et suiv
 ## Police d'écriture
 | Logo      | Nom       | Lien                                      | Utilité               | 
 | ---       | ---       | ---                                       | ---                   |
-| <img src="Images/Logos_Icones/Helvetica.svg" width="48"/> | Hevletica | https://font.download/font/helvetica-255  | Textes                |
+| <img src="Images/Logos_Icones/Helvetica.svg" width="48"/> | Helvetica | https://font.download/font/helvetica-255  | Textes                |
 | <img src="Images/Logos_Icones/Phosphor.svg" width="48"/>       | Phosphor  | https://phosphoricons.com/                | Affichage des icones  |

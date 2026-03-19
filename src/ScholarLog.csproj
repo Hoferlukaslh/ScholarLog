@@ -25,7 +25,7 @@
 
         <!-- Voir pour désactiver TRIM en cas de problèmes -->
         <PublishTrimmed>true</PublishTrimmed> 
-        <TrimMode>full</TrimMode> <!-- sûr : partial-->
+        <TrimMode>full</TrimMode> <!-- sûr : partial. Incertain : full-->
         <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 
         <Nullable>enable</Nullable>
@@ -43,13 +43,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <!--<AvaloniaResource Include="Assets\**" /> avec : 84Mo --> 
+        <!--  déclaration des ressources -->
 
-        <!-- Avec optimisation avec déclaration des ressources : 20Mo -->
-        <AvaloniaResource Include="Assets\Fonts\Helvetica\Helvetica.ttf" />
-        <AvaloniaResource Include="Assets\Fonts\Phosphor\Phosphor.ttf" />
-        <!--<AvaloniaResource Include="Assets\Fonts\Phosphor\Phosphor-Duotone.ttf" />-->
+        <!-- Polices d'écriture -->
+        <AvaloniaResource Include="Assets\Fonts\Helvetica\Helvetica.ttf" /> <!-- Textes -->
+        <AvaloniaResource Include="Assets\Fonts\Phosphor\Phosphor.ttf" />   <!-- Pictogrammes -->
 
+        <!-- Logos -->
         <AvaloniaResource Include="Assets\Images\ScholarLogLogoTSombre.ico" />
         <AvaloniaResource Include="Assets\Images\ScholarLogLogoTClair.ico" />
         <AvaloniaResource Include="Assets\Images\ScholarLogLogoEx.ico" />
@@ -60,12 +60,14 @@
         <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.11" />
         <PackageReference Include="Avalonia.Desktop" Version="11.3.11" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.11" />
+
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Include="Avalonia.Diagnostics" Version="11.3.11">
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
         <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.1.1" Condition="'$(Configuration)' == 'Debug'" />
+
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.4" />
