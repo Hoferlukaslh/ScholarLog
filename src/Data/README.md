@@ -365,6 +365,8 @@ classDiagram
 Le DbContext utilise un modèle compilé pour accélérer le démarrage :   
 ```.UseModel(ScholarLog.Data.CompiledModels.MonDbContextModel.Instance)```
 
+> Note : Ce projet n'utilise pas les EF Migrations. La base est générée dynamiquement au premier lancement via EnsureCreated
+
 ### ATTENTION
 
 Si vous modifiez la structure des entités dans `models.cs` (ajout de
@@ -372,7 +374,7 @@ table, modification de colonne), vous devez impérativement régénérer les
 modèles compilés en exécutant la commande suivante :
 
 ``` bash
-dotnet ef dbcontext optimize -c MonDbContext -o CompiledModels --namespace ScholarLog.D
+dotnet ef dbcontext optimize -c MonDbContext -o CompiledModels --namespace ScholarLog.Data.CompiledModels
 ```
 
 
