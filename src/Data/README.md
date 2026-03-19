@@ -188,6 +188,86 @@ flowchart TD
     VM --> UI
 ```
 
+### Diagramme d'accès aux données et Services
+``` mermaid
+classDiagram
+    %% Interfaces et classes de base du framework
+    class DbContext {
+        <<Entity Framework Core>>
+    }
+    class IDisposable {
+        <<Interface>>
+    }
+
+    %% Contexte de base de données
+    class MonDbContext {
+        +DbSet~Note~ Note
+        +DbSet~Module~ Module
+        +DbSet~Branche~ Branche
+        +DbSet~Entree~ Entree
+        +DbSet~TypeTravail~ TypeTravail
+        #OnConfiguring(DbContextOptionsBuilder options)
+    }
+
+    %% Pattern Repository
+    class DataRepository {
+        -MonDbContext _context
+        +DataRepository()
+        -InitialiserBaseDeDonnees()
+        +GetModulesAsync() Task~List~Module~~
+        
+        %% Méthodes d'ajout
+        +AjouterModuleAsync(Module m) Task
+        +AjouterEntreeAsync(Entree e) Task
+        +AjouterNoteAsync(Note n) Task
+        +AjouterBrancheAsync(Branche b) Task
+        +AjouterTypeTravailAsync(TypeTravail t) Task
+        
+        %% Méthodes de modification
+        +ModifierModuleAsync(Module m) Task
+        +ModifierBrancheAsync(Branche b) Task
+        +ModifierTypeTravailAsync(TypeTravail t) Task
+        +ModifierNoteAsync(Note n) Task
+        +ModifierEntreeAsync(Entree e) Task
+        
+        %% Méthodes de suppression
+        +SupprimerModuleAsync(Module m) Task
+        +SupprimerBrancheAsync(Branche b) Task
+        +SupprimerTypeTravailAsync(TypeTravail t) Task
+        +SupprimerNoteAsync(Note n) Task
+        +SupprimerEntreeAsync(Entree e) Task
+        
+        +Dispose()
+    }
+
+    %% Pattern Singleton & Logique Métier
+    class AppDataService {
+        <<Singleton>>
+        -AppDataService _instance$
+        +AppDataService Instance$
+        +ObservableRangeCollection~ModuleViewModel~ Modules
+        +bool IsLoaded
+        -AppDataService()
+        +ChargerDonneesGlobalesAsync() Task
+        -CreerModulesParDefautAsync(DataRepository repo) Task
+        +ObtenirMoyenne(List~Branche~ liste) double
+        +DeterminerTendance(List~Branche~ branches, double moyenneActuelle) Trend
+    }
+
+    %% Relations d'héritage et d'implémentation
+    MonDbContext --|> DbContext : Étend
+    DataRepository ..|> IDisposable : Implémente
+
+    %% Relations de dépendance et de composition
+    DataRepository "1" *-- "1" MonDbContext : Contient et gère
+    AppDataService ..> DataRepository : Instancie (via using)
+```
+
+Explication de l'architecture modélisée :
+- Couche ORM (MonDbContext) : Elle fait le pont entre les entités C# et SQLite en héritant du DbContext natif d'Entity Framework.
+- Couche d'Accès aux Données (DataRepository) : Elle encapsule complètement MonDbContext. L'interface IDisposable, assures que la connexion à la base est bien fermée après chaque opération.
+- Couche Service/Métier (AppDataService) : C'est le chef d'orchestre. Le $ dans le diagramme Mermaid (à côté de _instance et Instance) indique des membres statiques, ce qui représente bien le pattern Singleton. Le service instancie temporairement le repository pour charger les entités, puis les convertit en ModuleViewModel pour l'interface Avalonia.
+
 ### Diagramme des entités (Relations)
 
 ``` mermaid
