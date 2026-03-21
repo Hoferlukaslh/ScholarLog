@@ -25,7 +25,7 @@ class Program
     static async Task Main(string[] args)
     {
         
-        string pdf = @"C:\Users\lukas\Desktop\CBZ\TEST\base.pdf";
+        string pdf = @"C:\Users\lukas\Desktop\ScholarLog\PoC\CBZ\TEST\base.pdf";
         
         string pdfName = "";
         string pdfBaseDirectory = "";
@@ -37,14 +37,79 @@ class Program
         }
 
         string imageFolder = Path.Combine(pdfBaseDirectory, pdfName);
-        ExtractPdfPages(pdf, imageFolder, SKEncodedImageFormat.Webp, 5);                   // Extrait les image dans un dossier
+        ExtractPdfPages(pdf, imageFolder, SKEncodedImageFormat.Webp, 40);                  // Extrait les image dans un dossier
         CompresserRepertoire(imageFolder, imageFolder + ".cbz");   // Créer une archive CBZ
-        
         if (Directory.Exists(imageFolder)) Directory.Delete(imageFolder, true);          // Supprime le dossier d'image précédement crée
         
         ExtractCbzImages(imageFolder + ".cbz", imageFolder);                         // Extrait les image de l'archive
-        
         if(File.Exists(imageFolder + ".cbz"))  File.Delete(imageFolder + ".cbz");      // Supprime l'archive
+        
+
+        CreatePDF(imageFolder, Path.Combine(pdfBaseDirectory, "Generated.pdf"));                 // Génération du PDF
+        if (Directory.Exists(imageFolder)) Directory.Delete(imageFolder, true);          // Supprime le dossier d'image précédement crée
+    }
+    
+    // Crée un fichier PDF à partir d'un dossier contenant des images.
+    public static void CreatePDF(string imagesFolder, string pdfPath, int quality = 50)
+    {
+        if (Directory.Exists(imagesFolder))
+        {
+            // Récupérer et trier les images (important pour l'ordre des pages)
+            // Ne prendre que des images compatibles (Webp, Jpg, Png)
+            var imageFiles = Directory.GetFiles(imagesFolder)
+                                      .Where(f => f.EndsWith(".webp", StringComparison.OrdinalIgnoreCase) || 
+                                                  f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) || 
+                                                  f.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                                      .OrderBy(f => f) // Trie alphabétiquement
+                                      .ToList();
+
+            if (imageFiles.Count > 0)
+            {
+                var pdfMetadata = new SKDocumentPdfMetadata{EncodingQuality = quality };
+
+                try
+                {
+                    Console.WriteLine($"Création du PDF avec {imageFiles.Count} pages...");
+                    
+                    
+
+                    // Création du flux de sortie et du document PDF SkiaSharp
+                    using (var stream = File.Create(pdfPath))
+                    using (var document = SKDocument.CreatePdf(stream, pdfMetadata))
+                    {
+                        foreach (var imagePath in imageFiles)
+                        {
+                            // Charger l'image en mémoire
+                            using (var bitmap = SKBitmap.Decode(imagePath))
+                            {
+                                if (bitmap == null) continue;
+
+                                //  Créer une nouvelle page PDF à la taille exacte de l'image
+                                using (var canvas = document.BeginPage(bitmap.Width, bitmap.Height))
+                                {
+                                    // Dessiner l'image sur la page
+                                    canvas.DrawBitmap(bitmap, 0, 0);
+                                } // Le canvas est libéré ici
+                            
+                                document.EndPage();
+                            } // Le bitmap est libéré ici
+                        }
+                        
+                        document.Close(); // Finaliser et fermer le document
+                    }
+
+                    Console.WriteLine($"Succès : PDF généré dans '{pdfPath}'.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Une erreur est survenue lors de la création du PDF : {ex.Message}");
+                }
+            }
+            
+            else Console.WriteLine("Erreur : Aucune image trouvée dans le dossier.");
+        }
+        
+        else Console.WriteLine($"Erreur : Le dossier d'images '{imagesFolder}' n'existe pas.");
     }
 
     private static void ExtractCbzImages(string pathToArchive, string folderPath)
