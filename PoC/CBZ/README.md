@@ -11,30 +11,29 @@ classDiagram
 
   class ImageProcessor {
     %% Responsabilité : Manipulation d'images en mémoire %%
-    +ResizeToMaxPixels(SKBitmap source, double maxPixels) SKBitmap
+    +ResizeToMaxPixels(source: SKBitmap, maxPixels: double) SKBitmap$
   }
 
   class PdfManager {
     %% Responsabilité : Génération et lecture de PDF %%
-    +CreatePdf(IEnumerable~SKBitmap~ images, string pdfPath, int quality)
-    +ExtractImages(string pdfPath) IEnumerable~SKBitmap~
+    +CreatePdf(images: IEnumerable~SKBitmap~, pdfPath: string, quality: int)$
+    +ExtractImages(pdfPath: string) IEnumerable~SKBitmap~$
   }
 
   class ArchiveManager {
     %% Responsabilité : Manipulation de fichiers compressés %%
-    +ExtractImages(string pathToArchive) IEnumerable~SKBitmap~
-    +CompressDirectory(string sourceDirectory, string destinationZipFilePath)
-    ~IsSupportedImageFilePDF(string file) bool
+    +ExtractImages(pathToArchive: string) IEnumerable~SKBitmap~$
+    +CompressDirectory(sourceDirectory: string, destinationZipFilePath: string)$
+    ~IsSupportedImageFilePDF(filePath: string) bool$
   }
 
-  class ImageStorageManager {
-    %% Responsabilité : Sauvegarde physique des fichiers %%
-    +SaveImages(IEnumerable~SKBitmap~ images, string outputFolder, SKEncodedImageFormat format, int quality)
+  class DirectoryManager {
+    %% Responsabilité : Interactions avec les dossiers classiques %%
+    +GetImagesFromDirectory(folderPath: string) IEnumerable~SKBitmap~$
+    +SaveImages(images: IEnumerable~SKBitmap~, outputFolder: string, format: SKEncodedImageFormat, quality: int)$
   }
 
   %% Relations d'utilisation (dépendances) %%
-  PdfManager ..> ImageProcessor : utilise
-  ArchiveManager ..> ImageProcessor : utilise
-
+  DirectoryManager ..> ArchiveManager : utilise (IsImageFile)
     
 ```
