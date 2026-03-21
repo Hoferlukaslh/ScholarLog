@@ -1,8 +1,15 @@
 # ScanHandler
-explication
+Ce module a pour objectif de transformer des documents PDF volumineux en archives CBZ (Comic Book Archive) optimisées. Cette transformation permet de réduire drastiquement l'empreinte mémoire des documents avant leur stockage dans une base de données SQLite sous forme de BLOB.
 
-but
-objectif
+Le but ultime est de garantir que le stockage total des scans ne dépasse pas 60 Mo pour l'ensemble de la base de données, tout en conservant une lisibilité optimale.
+
+
+| Classe           | Rôle Principal                                                             |
+|------------------|----------------------------------------------------------------------------|
+| ImageProcessor   | Calculs géométriques et redimensionnement haute qualité.                   |
+| PdfManager       | Extraction des flux d'images depuis un PDF et génération de fichiers .pdf. |
+| ArchiveManager   | Lecture/Écriture des archives .cbz et filtrage des formats supportés.      |
+| DirectoryManager | Pont entre les flux d'images en mémoire et le système de fichiers          |
 
 
 ## Diagramme de classe 
@@ -34,6 +41,6 @@ classDiagram
   }
 
   %% Relations d'utilisation (dépendances) %%
-  DirectoryManager ..> ArchiveManager : utilise (IsImageFile)
+  DirectoryManager ..> ArchiveManager : utilise (IsSupportedImageFilePDF)
     
 ```
