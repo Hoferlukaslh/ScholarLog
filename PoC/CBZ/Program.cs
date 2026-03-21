@@ -26,9 +26,9 @@ class Program
         string cbzPath = imageFolder + ".cbz";
         string finalPdfPath = Path.Combine(pdfBaseDirectory, "Generated.pdf");
 
-        // --------------------------------------------------------------------------------
-        // Étape 1 : Extraire le PDF, redimensionner à la volée, et sauvegarder en WebP
-        // --------------------------------------------------------------------------------
+        
+        // Extraire le PDF, redimensionner à la volée, et sauvegarder en WebP
+        
         Console.WriteLine("--- Étape 1 : Extraction et redimensionnement du PDF ---");
         var pdfImages = PdfManager.ExtractImages(pdf);
         
@@ -37,31 +37,23 @@ class Program
         
         // On sauvegarde le résultat physique dans le dossier
         DirectoryManager.SaveImages(resizedImages, imageFolder, SKEncodedImageFormat.Webp, 40);
-
-        // --------------------------------------------------------------------------------
-        // Étape 2 : Créer l'archive CBZ à partir du dossier
-        // --------------------------------------------------------------------------------
-        Console.WriteLine("\n--- Étape 2 : Création de l'archive CBZ ---");
+        
+        // Créer l'archive CBZ à partir du dossier
+        Console.WriteLine("\n--- Étape 2 : Création de l'archive CBZ");
         ArchiveManager.CompressDirectory(imageFolder, cbzPath);
-
-        // --------------------------------------------------------------------------------
-        // Étape 3 : Supprimer le dossier temporaire d'images
-        // --------------------------------------------------------------------------------
+        
+        // Supprimer le dossier temporaire d'images
         Console.WriteLine("\n--- Étape 3 : Nettoyage du dossier temporaire ---");
         if (Directory.Exists(imageFolder)) Directory.Delete(imageFolder, true);
-
-        // --------------------------------------------------------------------------------
-        // Étape 4 : Générer le nouveau PDF DIRECTEMENT depuis l'archive CBZ (En mémoire)
-        // --------------------------------------------------------------------------------
+        
+        // Générer le nouveau PDF DIRECTEMENT depuis l'archive CBZ (En mémoire)
         Console.WriteLine("\n--- Étape 4 : Génération du PDF final depuis le CBZ ---");
-        // Magie du SRP : ArchiveManager lit le CBZ, PdfManager consomme les images. 
-        // Zéro fichier temporaire créé sur le disque !
-        var cbzImages = ArchiveManager.ExtractImages(cbzPath);
+        
+        // ArchiveManager lit le CBZ, PdfManager consomme les images. 
+        var cbzImages = ArchiveManager.ExtractImages(cbzPath);  
         PdfManager.CreatePdf(cbzImages, finalPdfPath, quality: 50);
-
-        // --------------------------------------------------------------------------------
-        // Étape 5 : Supprimer l'archive CBZ de test
-        // --------------------------------------------------------------------------------
+        
+        // Supprimer l'archive CBZ de test
         Console.WriteLine("\n--- Étape 5 : Nettoyage de l'archive ---");
         if (File.Exists(cbzPath)) File.Delete(cbzPath);
 
