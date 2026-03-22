@@ -12,4 +12,16 @@
       <PackageReference Include="SkiaSharp" Version="3.119.3-preview.1.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="TestUnitaire\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="TestUnitaire\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="TestUnitaire\**" />
+    </ItemGroup>
+
 </Project>

@@ -23,6 +23,12 @@ namespace CBZ;
 /// </summary>
 public static class ImageProcessor
 {
+    /// <summary>
+    /// Redimmentionne une image bitmap vers une définition maximal
+    /// </summary>
+    /// <param name="source">Image source</param>
+    /// <param name="maxPixels">Mp maximal que dois faire l'image de sortie</param>
+    /// <returns>Image de sortie</returns>
     public static SKBitmap ResizeToMaxPixels(SKBitmap source, double maxPixels)
     {
         double currentPixels = (double)source.Width * source.Height;
@@ -52,6 +58,9 @@ public static class PdfManager
     /// <summary>
     /// Crée un PDF en consommant un flux d'images
     /// </summary>
+    /// <param name="images">Flux d'images</param>
+    /// <param name="pdfPath">Chemin cible du PDF généré</param>
+    /// <param name="quality">Qualité de compression : 0=mauvais, 100=bon</param>
     public static void CreatePdf(IEnumerable<SKBitmap> images, string pdfPath, int quality = 50)
     {
         var pdfMetadata = new SKDocumentPdfMetadata { EncodingQuality = quality };
@@ -86,6 +95,8 @@ public static class PdfManager
     /// <summary>
     /// Extrait les pages d'un PDF et les retourne une par une
     /// </summary>
+    /// <param name="pdfPath">Chemin vers le PDF source</param>
+    /// <returns>Flux d'images</returns>
     public static IEnumerable<SKBitmap> ExtractImages(string pdfPath)
     {
         if (!File.Exists(pdfPath)) yield break;
@@ -112,6 +123,8 @@ public static class ArchiveManager
     /// <summary>
     /// Extrait les images d'un CBZ/ZIP à la volée, SANS les écrire sur le disque
     /// </summary>
+    /// <param name="pathToArchive">Chemin vers l'archive source</param>
+    /// <returns>Flux d'images</returns>
     public static IEnumerable<SKBitmap> ExtractImages(string pathToArchive)
     {
         if (!File.Exists(pathToArchive)) yield break;
@@ -140,9 +153,12 @@ public static class ArchiveManager
         }
     }
 
-    /// <summary>
-    /// Compresse le répertoire en archive zip
-    /// </summary>
+   /// <summary>
+   /// Compresse le répertoire en archive zip
+   /// </summary>
+   /// <param name="sourceDirectory">Répertoire source</param>
+   /// <param name="destinationZipFilePath">Répertoire de destination</param>
+   /// <exception cref="DirectoryNotFoundException">Erreur</exception>
     public static void CompressDirectory(string sourceDirectory, string destinationZipFilePath)
     {
         try
@@ -165,10 +181,94 @@ public static class ArchiveManager
         }
     }
 
-    internal static bool IsSupportedImageFilePDF(string filePath)
+    /// <summary>
+    /// Compart les format supporté avec le format du fichier
+    /// </summary>
+    /// <param name="filePath">Chemin vers fichier</param>
+    /// <returns>Oui = format supporté, non = non-supporté</returns>
+    public static bool IsSupportedImageFilePDF(string filePath)
     {
         string ext = Path.GetExtension(filePath).ToLowerInvariant();
         return ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".webp";
+    }
+    
+   /// <summary>
+   /// Crée une archive CBZ en mémoire et retourne les octets (idéal pour un BLOB SQLite)
+   /// </summary>
+   /// <param name="images">Flux d'images</param>
+   /// <param name="format">Format d'encodage des images</param>
+   /// <param name="quality">Qualité : 0=mauvais, 100=bon</param>
+   /// <returns></returns>
+    public static byte[] CreateCbzInMemory(IEnumerable<SKBitmap> images, SKEncodedImageFormat format = SKEncodedImageFormat.Webp, int quality = 40)
+    {
+        using (var ms = new MemoryStream())
+        {
+            // On crée le ZIP directement dans le MemoryStream
+            using (var archive = new ZipArchive(ms, ZipArchiveMode.Create, true))
+            {
+                int i = 1;
+                foreach (var bitmap in images)
+                {
+                    if (bitmap == null || bitmap.IsEmpty) continue;
+
+                    string ext = format.ToString().ToLowerInvariant();
+                    if (ext == "jpeg") ext = "jpg";
+
+                    // Création de l'entrée dans le zip
+                    var entry = archive.CreateEntry($"{i:D3}.{ext}", CompressionLevel.Optimal);
+                    
+                    using (var entryStream = entry.Open())
+                    using (var image = SKImage.FromBitmap(bitmap))
+                    using (var data = image.Encode(format, quality))
+                    {
+                        // On écrit l'image compressée (WebP) directement dans le ZIP
+                        if (data != null) data.SaveTo(entryStream);
+                    }
+
+                    bitmap.Dispose(); // Libération immédiate
+                    i++;
+                }
+            } // Le ZIP est finalisé ici
+            
+            return ms.ToArray(); // Retourne le fichier complet sous forme de tableau d'octets
+        }
+    }
+
+    /// <summary>
+    /// Extrait les images d'un CBZ stocké en mémoire (byte[])
+    /// </summary>
+    /// <param name="cbzData">Blob de données brut</param>
+    /// <returns>Flux d'images</returns>
+    public static IEnumerable<SKBitmap> ExtractImagesFromMemory(byte[] cbzData)
+    {
+        // Pas de bloc "using" sur le MemoryStream principal car le flux doit 
+        // rester ouvert pendant tout le "yield return"
+        var ms = new MemoryStream(cbzData);
+        var archive = new ZipArchive(ms, ZipArchiveMode.Read);
+
+        var entries = archive.Entries
+            .Where(e => IsSupportedImageFilePDF(e.FullName))
+            .OrderBy(e => e.FullName);
+
+        foreach (var entry in entries)
+        {
+            using (var entryStream = entry.Open())
+            using (var tempMs = new MemoryStream()) 
+            {
+                entryStream.CopyTo(tempMs);
+                tempMs.Position = 0;
+
+                var bitmap = SKBitmap.Decode(tempMs);
+                if (bitmap != null)
+                {
+                    yield return bitmap;
+                }
+            }
+        }
+
+        // Nettoyage manuel à la fin de l'itération
+        archive.Dispose();
+        ms.Dispose();
     }
 }
 
@@ -181,6 +281,8 @@ public static class DirectoryManager
     /// <summary>
     /// Lit un dossier et retourne les images une par une dans un flux d'image
     /// </summary>
+    /// <param name="folderPath">Dossier source</param>
+    /// <returns>Flux d'images</returns>
     public static IEnumerable<SKBitmap> GetImagesFromDirectory(string folderPath)
     {
         if (!Directory.Exists(folderPath)) yield break;
@@ -202,8 +304,12 @@ public static class DirectoryManager
     /// <summary>
     /// Prend un flux d'images et les sauvegarde physiquement dans un dossier
     /// </summary>
+    /// <param name="images">Flux d'images</param>
+    /// <param name="outputFolder">Dossier de sortie</param>
+    /// <param name="format">Format d'image</param>
+    /// <param name="quality">Qualité : 0=mauvais, 100=bon</param>
     public static void SaveImages(IEnumerable<SKBitmap> images, string outputFolder, 
-        SKEncodedImageFormat format = SKEncodedImageFormat.Webp, int quality = 25)
+        SKEncodedImageFormat format = SKEncodedImageFormat.Webp, int quality = 35)
     {
         if (!Directory.Exists(outputFolder)) Directory.CreateDirectory(outputFolder);
 
