@@ -107,14 +107,22 @@ Service implémenté sous forme de Singleton (AppDataService.Instance) agissant 
 | Notes     | List<Note> | Évaluations associées.               |
 
 ### Note
-| Propriété       | Type     | Description                              |
-|:----------------|:---------|:-----------------------------------------|
-| Id              | int      | Clé primaire (not_id).                   |
-| Valeur          | double   | Note obtenue (1–6).                      |
-| Date            | DateTime | Date de l'évaluation.                    |
-| titre           | string   | Titre de l'épreuve.                      |
-| BrancheId       | int      | Clé étrangère vers la branche parente.   |
-| IsDeletePending | bool     | État local (non mappé en BDD) pour l'UI. |
+| Propriété       | Type         | Description                              |
+|:----------------|:-------------|:-----------------------------------------|
+| Id              | int          | Clé primaire (not_id).                   |
+| Valeur          | double       | Note obtenue (1–6).                      |
+| Date            | DateTime     | Date de l'évaluation.                    |
+| titre           | string       | Titre de l'épreuve.                      |
+| BrancheId       | int          | Clé étrangère vers la branche parente.   |
+| ArchiveCbz      | NoteArchive? | Relation 1 à 0..1 vers l'archive (BLOB). |
+| IsDeletePending | bool         | État local (non mappé en BDD) pour l'UI. |
+
+### NoteArchive
+| Propriété   | Type     | Description                                            |
+|:------------|:---------|:-------------------------------------------------------|
+| Id          | int      | Clé primaire (arc_id).                                 |
+| Donnees     | byte[]   | Fichier compressé CBZ brut (BLOB).                     |
+| NoteId      | int      | Clé étrangère vers la note correspondante (not_id).    |
 
 ### Entree
 | Propriété       | Type     | Description                                 |
@@ -144,19 +152,21 @@ Service implémenté sous forme de Singleton (AppDataService.Instance) agissant 
 | ModuleViewModel        | ShortName, AvgTheory, TravailModule, TheoryTrend, GlobalAverage | Synthèse et calculs globaux pour le tableau de bord          |
 
 ## DataRepository (Opérations CRUD)
-| Action   | Méthodes Implémentées                                                                                                        |
-|----------|------------------------------------------------------------------------------------------------------------------------------|
-| Create   | AjouterModuleAsync, AjouterEntreeAsync, AjouterNoteAsync, AjouterBrancheAsync, AjouterTypeTravailAsync (gère les doublons)   |
-| Read     | GetModulesAsync (Eager Loading complet)                                                                                      |
-| Update   | ModifierModuleAsync, ModifierBrancheAsync, ModifierTypeTravailAsync, ModifierNoteAsync, ModifierEntreeAsync                  |
-| Delete   | SupprimerModuleAsync (Cascading), SupprimerBrancheAsync, SupprimerTypeTravailAsync, SupprimerNoteAsync, SupprimerEntreeAsync |
+| Action         | Méthodes Implémentées                                                                                                        |
+|----------------|------------------------------------------------------------------------------------------------------------------------------|
+| Create         | AjouterModuleAsync, AjouterEntreeAsync, AjouterNoteAsync, AjouterBrancheAsync, AjouterTypeTravailAsync (gère les doublons)   |
+| Read           | GetModulesAsync (Eager Loading complet)                                                                                      |
+| Update         | ModifierModuleAsync, ModifierBrancheAsync, ModifierTypeTravailAsync, ModifierNoteAsync, ModifierEntreeAsync                  |
+| Delete         | SupprimerModuleAsync (Cascading), SupprimerBrancheAsync, SupprimerTypeTravailAsync, SupprimerNoteAsync, SupprimerEntreeAsync |
+| **BLOB I/O**   | **GetArchiveCbzPourNoteAsync (Lecture isolée), SauvegarderArchiveCbzAsync (Création/Mise à jour d'archive)**                 |
 
 ## AppDbContext
-| Élément  | Description                                                |
-|----------|------------------------------------------------------------|
-| Moteur   | SQLite                                                     |
-| Fichier  | BDD.db (situé dans le répertoire AppContext.BaseDirectory) |
-| ORM      | Entity Framework Core (optimisé avec CompiledModels)       |
+| Élément   | Description                                                                 |
+|-----------|-----------------------------------------------------------------------------|
+| Moteur    | SQLite                                                                      |
+| Fichier   | BDD.db (situé dans le répertoire AppContext.BaseDirectory)                  |
+| ORM       | Entity Framework Core (optimisé avec CompiledModels)                        |
+| **DbSet** | **NoteArchive (Gérée séparément pour éviter de saturer la RAM au Start)**   |
 
 ## AppDataService
 | Élément              | Rôle                                                            |
@@ -206,6 +216,7 @@ classDiagram
         +DbSet~Branche~ Branche
         +DbSet~Entree~ Entree
         +DbSet~TypeTravail~ TypeTravail
+        +DbSet~NoteArchive~ NoteArchive
         #OnConfiguring(DbContextOptionsBuilder options)
     }
 
@@ -215,6 +226,8 @@ classDiagram
         +DataRepository()
         -InitialiserBaseDeDonnees()
         +GetModulesAsync() Task~List~Module~~
+        +GetArchiveCbzPourNoteAsync(int noteId) Task~byte[]~
+        +SauvegarderArchiveCbzAsync(int noteId, byte[] cbzData) Task
         
         %% Méthodes d'ajout
         +AjouterModuleAsync(Module m) Task
@@ -315,6 +328,12 @@ classDiagram
         +string titre
         +bool IsDeletePending
     }
+    
+    class NoteArchive {
+        +int Id
+        +byte[] Donnees
+        +int NoteId
+    }
 
     %% Modèles de vue (MVVM pour Avalonia)
     class ModuleViewModel {
@@ -342,6 +361,8 @@ classDiagram
     Module "1" *-- "*" Entree : Journalise
     Module "1" *-- "*" TypeTravail : Définit
     Branche "1" *-- "*" Note : Contient
+    
+    Note "1" *-- "0..1" NoteArchive : Possède une archive
 
     %% Associations simples
     Entree "*" --> "1" TypeTravail : Est classé par
