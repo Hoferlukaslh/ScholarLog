@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -159,7 +160,16 @@ public class DataRepository : IDisposable
         _context?.Dispose();
     }
     
-    
+    /// <summary>
+    /// Retourne uniquement les identifiants (ID) des notes qui possèdent une archive CBZ.
+    /// Requête ultra-légère pour l'affichage des icônes dans les listes.
+    /// </summary>
+    public async Task<List<int>> GetNoteIdsWithArchiveAsync()
+    {
+        return await _context.NoteArchive
+            .Select(a => a.NoteId)
+            .ToListAsync();
+    }
 
     /// <summary>
     /// Récupère l'archive CBZ d'une note spécifique. 

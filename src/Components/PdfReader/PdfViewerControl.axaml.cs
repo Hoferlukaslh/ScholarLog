@@ -1,12 +1,13 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using SkiaSharp;
 
 
 namespace ScholarLog.Components.PdfReader;
@@ -19,6 +20,16 @@ public partial class PdfViewerControl : UserControl
     // Seule image lourde (décompressée) active en RAM à un instant T
     private Avalonia.Media.Imaging.Bitmap? _imageCourante; 
     
+    // Déclaration de la propriété de liaison 
+    public static readonly StyledProperty<byte[]?> CbzDataProperty =
+        AvaloniaProperty.Register<PdfViewerControl, byte[]?>(nameof(CbzData));
+
+    public byte[]? CbzData
+    {
+        get => GetValue(CbzDataProperty);
+        set => SetValue(CbzDataProperty, value);
+    }
+    
     private int _pageCouranteIndex = -1;
     private CancellationTokenSource? _cancellationTokenSource;
 
@@ -26,6 +37,65 @@ public partial class PdfViewerControl : UserControl
     {
         InitializeComponent();
         MettreAJourInterface();
+    }
+    protected override async void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        // On vérifie si c'est bien notre propriété CbzData qui a changé
+        if (change.Property == CbzDataProperty)
+        {
+            // On récupère la nouvelle valeur
+            var data = change.GetNewValue<byte[]?>();
+            
+            if (data != null && data.Length > 0)
+            {
+                await LoadFromMemoryAsync(data);
+            }
+            else
+            {
+                CloseDocument(); // On ferme si le binding devient nul
+            }
+        }
+    }
+    
+    public async Task LoadFromMemoryAsync(byte[] cbzData)
+    {
+        CloseDocument();
+        
+        if (cbzData == null || cbzData.Length == 0) return;
+
+        _cancellationTokenSource = new CancellationTokenSource();
+        IndicateurStatut.Text = "Lecture du document de la BDD...";
+
+        try
+        {
+            // 1. Extraction asynchrone depuis le BLOB via ton gestionnaire existing
+            var fluxImages = ArchiveManager.ExtractImagesFromMemoryAsync(cbzData, _cancellationTokenSource.Token);
+            
+            // 2. Redimensionnement (ex: 2Mp) pour la légèreté
+            var fluxResized = ImageProcessor.ResizeImagesAsync(fluxImages, 2_000_000, _cancellationTokenSource.Token);
+
+            await foreach (var skBitmap in fluxResized)
+            {
+                // 3. Compression WebP RAM agressive
+                byte[] compressedPage = await Task.Run(() => 
+                {
+                    using var image = SKImage.FromBitmap(skBitmap);
+                    using var data = image.Encode(SKEncodedImageFormat.Webp, 40); 
+                    return data.ToArray();
+                }, _cancellationTokenSource.Token);
+                
+                _pagesCompresses.Add(compressedPage);
+                skBitmap.Dispose(); // Vital
+
+                if (_pagesCompresses.Count == 1) await AfficherPageAsync(0);
+                MettreAJourInterface();
+            }
+            IndicateurStatut.Text = "Lecture terminée.";
+        }
+        catch (OperationCanceledException) { IndicateurStatut.Text = "Lecture annulée."; }
+        catch (Exception ex) { IndicateurStatut.Text = $"Erreur : {ex.Message}"; }
     }
 
     /// <summary>

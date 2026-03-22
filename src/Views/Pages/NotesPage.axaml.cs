@@ -22,8 +22,10 @@
 using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using ScholarLog.Data;
 using ScholarLog.ViewModels;
+using ScholarLog.Component;
 
 namespace ScholarLog.Views.Pages;
 
@@ -82,6 +84,27 @@ public partial class NotesPage : UserControl
                 if (noteASupprimer != null)
                     noteASupprimer.IsDeletePending = false;
             }
+        }
+    }
+    
+    // Nouvelle méthode pour ouvrir l'explorateur de fichiers
+    private async void BoutonJoindrePdf_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel == null) return;
+
+        // Ouvre le FilePicker natif de l'OS
+        var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Sélectionner un fichier PDF",
+            AllowMultiple = false,
+            FileTypeFilter = new[] { new FilePickerFileType("Documents PDF") { Patterns = new[] { "*.pdf" } } }
+        });
+
+        if (files.Count > 0 && this.DataContext is NotesViewModel vm)
+        {
+            // On envoie le chemin du fichier au ViewModel pour qu'il le traite
+            await vm.TraiterPdfAttacheAsync(files[0].Path.LocalPath, files[0].Name);
         }
     }
 }

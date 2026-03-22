@@ -195,6 +195,16 @@ public class Note : ObservableObject
     [NotMapped]
     private bool _isDeletePending;
     
+    [NotMapped]
+    private bool _hasDocument;
+
+    [NotMapped]
+    public bool HasDocument
+    {
+        get => _hasDocument;
+        set => SetProperty(ref _hasDocument, value); 
+    }
+    
     public NoteArchive? ArchiveCbz { get; set; }
 
     [NotMapped]

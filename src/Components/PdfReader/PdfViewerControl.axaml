@@ -7,7 +7,7 @@
     <UserControl.Styles>
         <Style Selector="Button.icon-button">
             <Setter Property="FontFamily" Value="{DynamicResource Phosphor}" />
-            <Setter Property="FontSize" Value="{DynamicResource IconSizeNormal}" />
+            <Setter Property="FontSize" Value="{DynamicResource IconSizeSmall}" />
             <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
             <Setter Property="Width" Value="35" />
             <Setter Property="Height" Value="35" />
@@ -37,13 +37,13 @@
                            FontSize="{DynamicResource FontSizeSmall}"/>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="15" HorizontalAlignment="Right">
-                    <Button Content="{DynamicResource IconeRetract}" Classes="icon-button" Click="BoutonPrecedent_Click" ToolTip.Tip="Page précédente"/>
+                    <Button Content="{DynamicResource IconeNavBack}" Classes="icon-button" Click="BoutonPrecedent_Click" ToolTip.Tip="Page précédente"/>
                     
                     <TextBlock x:Name="IndicateurPage" Text="0 / 0" 
                                VerticalAlignment="Center" FontWeight="SemiBold"
                                Foreground="{DynamicResource PrimaryForeground}"/>
                     
-                    <Button Content="{DynamicResource IconeFoward}" Classes="icon-button" Click="BoutonSuivant_Click" ToolTip.Tip="Page suivante"/>
+                    <Button Content="{DynamicResource IconeNavFoward}" Classes="icon-button" Click="BoutonSuivant_Click" ToolTip.Tip="Page suivante"/>
                 </StackPanel>
             </Grid>
         </Border>
