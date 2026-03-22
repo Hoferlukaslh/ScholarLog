@@ -11,7 +11,7 @@ namespace ScholarLog.Data.CompiledModels
     public partial class MonDbContextModel
     {
         private MonDbContextModel()
-            : base(skipDetectChanges: false, modelId: new Guid("9a657415-e899-4a61-a77a-3ef2f14f09a0"), entityTypeCount: 5)
+            : base(skipDetectChanges: false, modelId: new Guid("45bd6c47-b893-45eb-a4da-317aceb67572"), entityTypeCount: 6)
         {
         }
 
@@ -21,18 +21,21 @@ namespace ScholarLog.Data.CompiledModels
             var entree = EntreeEntityType.Create(this);
             var module = ModuleEntityType.Create(this);
             var note = NoteEntityType.Create(this);
+            var noteArchive = NoteArchiveEntityType.Create(this);
             var typeTravail = TypeTravailEntityType.Create(this);
 
             BrancheEntityType.CreateForeignKey1(branche, module);
             EntreeEntityType.CreateForeignKey1(entree, module);
             EntreeEntityType.CreateForeignKey2(entree, typeTravail);
             NoteEntityType.CreateForeignKey1(note, branche);
+            NoteArchiveEntityType.CreateForeignKey1(noteArchive, note);
             TypeTravailEntityType.CreateForeignKey1(typeTravail, module);
 
             BrancheEntityType.CreateAnnotations(branche);
             EntreeEntityType.CreateAnnotations(entree);
             ModuleEntityType.CreateAnnotations(module);
             NoteEntityType.CreateAnnotations(note);
+            NoteArchiveEntityType.CreateAnnotations(noteArchive);
             TypeTravailEntityType.CreateAnnotations(typeTravail);
 
             AddAnnotation("ProductVersion", "10.0.4");

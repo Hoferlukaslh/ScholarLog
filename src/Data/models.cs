@@ -194,6 +194,8 @@ public class Note : ObservableObject
     
     [NotMapped]
     private bool _isDeletePending;
+    
+    public NoteArchive? ArchiveCbz { get; set; }
 
     [NotMapped]
     public bool IsDeletePending
@@ -201,6 +203,26 @@ public class Note : ObservableObject
         get => _isDeletePending;
         set => SetProperty(ref _isDeletePending, value); 
     }
+}
+
+/// <summary>
+/// Entité séparée pour stocker l'archive CBZ associée à une note.
+/// L'isolation du BLOB permet de ne le charger en RAM qu'à la demande.
+/// </summary>
+[Table("note_archive")]
+public class NoteArchive : ObservableObject
+{
+    [Key][Column("arc_id")]
+    public int Id { get; set; }
+
+    [Column("arc_donnees")]
+    public byte[] Donnees { get; set; } // Le fichier CBZ brut
+
+    [Column("not_id")]
+    public int NoteId { get; set; }
+
+    [ForeignKey("NoteId")]
+    public Note Note { get; set; }
 }
 #endregion
 

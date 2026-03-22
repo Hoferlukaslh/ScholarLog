@@ -158,4 +158,50 @@ public class DataRepository : IDisposable
     {
         _context?.Dispose();
     }
+    
+    
+
+    /// <summary>
+    /// Récupère l'archive CBZ d'une note spécifique. 
+    /// Cette méthode est isolée pour ne charger le gros BLOB en RAM que lorsque c'est nécessaire (ex: ouverture du lecteur).
+    /// </summary>
+    /// <param name="noteId">Identifiant de la note</param>
+    /// <returns>Blob de données</returns>
+    public async Task<byte[]?> GetArchiveCbzPourNoteAsync(int noteId)
+    {
+        var archive = await _context.NoteArchive
+            .AsNoTracking() // Optimisation : on ne track pas un BLOB
+            .FirstOrDefaultAsync(a => a.NoteId == noteId);
+        return archive?.Donnees;
+    }
+    
+    
+     /// <summary>
+     /// Ajoute ou met à jour l'archive CBZ d'une note.
+     /// </summary>
+     /// <param name="noteId">Identifiant de la note</param>
+     /// <param name="cbzData">Blob de données</param>
+    public async Task SauvegarderArchiveCbzAsync(int noteId, byte[] cbzData)
+    {
+        var archiveExistante = await _context.NoteArchive.FirstOrDefaultAsync(a => a.NoteId == noteId);
+
+        if (archiveExistante != null)
+        {
+            // Mise à jour si l'archive existe déjà
+            archiveExistante.Donnees = cbzData;
+            _context.NoteArchive.Update(archiveExistante);
+        }
+        else
+        {
+            // Création d'une nouvelle archive
+            var nouvelleArchive = new NoteArchive 
+            { 
+                NoteId = noteId, 
+                Donnees = cbzData 
+            };
+            _context.NoteArchive.Add(nouvelleArchive);
+        }
+
+        await _context.SaveChangesAsync();
+    }
 }

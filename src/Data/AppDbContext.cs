@@ -38,6 +38,9 @@ public class MonDbContext : DbContext
 
     /// <summary> Table stockant les catégories de travaux personnalisées. </summary>
     public DbSet<TypeTravail> TypeTravail { get; set; }
+    
+    /// <summary> Table stockant les archives CBZ (BLOB) liées aux notes. </summary>
+    public DbSet<NoteArchive> NoteArchive { get; set; }
 
     /// <summary>
     /// Configure le moteur de base de données et le chemin du fichier de stockage.
@@ -53,13 +56,13 @@ public class MonDbContext : DbContext
 
         options
             .UseSqlite($"Data Source={dbPath}")
-            // Utilisation du modèle compilé pour accélérer le démarrage de l'application
-            .UseModel(ScholarLog.Data.CompiledModels.MonDbContextModel.Instance); 
-        
-        /* Note de maintenance : 
-           En cas de modification du fichier models.cs, il faut régénérer 
+        // Utilisation du modèle compilé pour accélérer le démarrage de l'application
+        .UseModel(ScholarLog.Data.CompiledModels.MonDbContextModel.Instance); 
+
+        /* Note de maintenance :
+           En cas de modification du fichier models.cs, il faut régénérer
            les CompiledModels avec la commande suivante dans le terminal :
-           
+
            dotnet ef dbcontext optimize -c MonDbContext -o CompiledModels --namespace ScholarLog.Data.CompiledModels
         */
     }

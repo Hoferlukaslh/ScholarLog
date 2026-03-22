@@ -93,6 +93,7 @@
             <x:String x:Key="IconeTrash">&#xE4A6;</x:String>
             <x:String x:Key="IconeCrayon">&#xE3AE;</x:String>
             <x:String x:Key="IconeCopy">&#xE1CA;</x:String>
+            <x:String x:Key="IconeDocument">&#xE230;</x:String>
             
             
             <!-- Couleurs text-->

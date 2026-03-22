@@ -21,7 +21,7 @@ namespace ScholarLog.Data.CompiledModels
                 typeof(Note),
                 baseEntityType,
                 propertyCount: 5,
-                navigationCount: 1,
+                navigationCount: 2,
                 foreignKeyCount: 1,
                 unnamedIndexCount: 1,
                 keyCount: 1);
