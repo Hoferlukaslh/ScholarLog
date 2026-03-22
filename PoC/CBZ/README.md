@@ -31,7 +31,10 @@ classDiagram
     %% Responsabilité : Manipulation de fichiers compressés %%
     +ExtractImages(pathToArchive: string) IEnumerable~SKBitmap~$
     +CompressDirectory(sourceDirectory: string, destinationZipFilePath: string)$
-    ~IsSupportedImageFilePDF(filePath: string) bool$
+    +IsSupportedImageFilePDF(filePath: string) bool$
+    +CreateCbzInMemory(images : IEnumerable<SKBitmap>, format : SKEncodedImageFormat, quality : int)$
+    +ExtractImagesFromMemory(cbzData : byte[]) IEnumerable<SKBitmap>$
+    
   }
 
   class DirectoryManager {
