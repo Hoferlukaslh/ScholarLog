@@ -1,0 +1,60 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ScholarLog.Components.PdfReader.PdfViewerControl">
+    <UserControl.Styles>
+        <Style Selector="Button.icon-button">
+            <Setter Property="FontFamily" Value="{DynamicResource Phosphor}" />
+            <Setter Property="FontSize" Value="{DynamicResource IconSizeNormal}" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
+            <Setter Property="Width" Value="35" />
+            <Setter Property="Height" Value="35" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+            <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
+            <Setter Property="Padding"  Value="-0.5, 0, 0,0" />
+        </Style>
+        <Style Selector="Button.icon-button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource CardBorder}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *">
+        
+        <Border Grid.Row="0" Margin="0,0,0,10" 
+                Background="{DynamicResource CardBackground}" 
+                CornerRadius="{DynamicResource ControlCornerRadius}"
+                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
+                Padding="10,5">
+            
+            <Grid ColumnDefinitions="Auto, *, Auto">
+                <TextBlock x:Name="IndicateurStatut" Grid.Column="0" 
+                           Text="Prêt" VerticalAlignment="Center" 
+                           Foreground="{DynamicResource SecondaryForeground}"
+                           FontSize="{DynamicResource FontSizeSmall}"/>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="15" HorizontalAlignment="Right">
+                    <Button Content="{DynamicResource IconeRetract}" Classes="icon-button" Click="BoutonPrecedent_Click" ToolTip.Tip="Page précédente"/>
+                    
+                    <TextBlock x:Name="IndicateurPage" Text="0 / 0" 
+                               VerticalAlignment="Center" FontWeight="SemiBold"
+                               Foreground="{DynamicResource PrimaryForeground}"/>
+                    
+                    <Button Content="{DynamicResource IconeFoward}" Classes="icon-button" Click="BoutonSuivant_Click" ToolTip.Tip="Page suivante"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
+                CornerRadius="{DynamicResource CardCornerRadius}" 
+                Background="#0A000000">
+             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Image x:Name="ImagePdf" Stretch="Uniform" Margin="15"/>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

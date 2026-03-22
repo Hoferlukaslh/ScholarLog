@@ -39,7 +39,7 @@ public partial class MainWindow : Window
         
         this.Loaded += MainWindow_Loaded;
         // On s'abonne au changement de DataContext pour écouter le ViewModel
-        this.DataContextChanged += MainWindow_DataContextChanged; 
+        this.DataContextChanged += MainWindow_DataContextChanged;
     }
 
     private void MainWindow_DataContextChanged(object? sender, EventArgs e)

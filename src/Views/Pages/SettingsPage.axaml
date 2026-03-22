@@ -24,6 +24,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Pages="clr-namespace:ScholarLog.Views.Pages"
+             xmlns:controls="clr-namespace:ScholarLog.Components.PdfReader"
              xmlns:vm="using:ScholarLog.ViewModels"
              mc:Ignorable="d" d:DesignWidth="740" d:DesignHeight="450"
              x:Class="ScholarLog.Views.Pages.SettingsPage"
@@ -285,6 +286,12 @@
                     </Grid>
                 </Grid>
             </Border>
+        </Grid>
+        
+        <Grid RowDefinitions="Auto, *">
+            <Button Grid.Row="0" Content="Ouvrir un PDF Test" Click="BoutonOuvrirTest_Click" Margin="10"/>
+
+            <controls:PdfViewerControl x:Name="MonLecteurPdf" Grid.Row="1" Margin="10"/>
         </Grid>
     </StackPanel>
 </UserControl>

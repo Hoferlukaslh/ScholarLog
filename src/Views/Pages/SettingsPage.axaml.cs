@@ -24,6 +24,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using ScholarLog.ViewModels;
+using ScholarLog.Component;
 
 namespace ScholarLog.Views.Pages;
 
@@ -75,5 +76,12 @@ public partial class SettingsPage : UserControl
             // met à jour la propriété du ViewModel directement
             vm.PathToBDD = files[0].Path.LocalPath;
         }
+    }
+    
+    private async void BoutonOuvrirTest_Click(object? sender, RoutedEventArgs e)
+    {
+        // Tu peux appeler le FilePicker ici, puis passer le chemin au composant
+        string cheminPdf = @"C:\Users\lukas\Desktop\base.pdf";
+        await MonLecteurPdf.LoadPdfAsync(cheminPdf);
     }
 }

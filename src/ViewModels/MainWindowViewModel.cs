@@ -66,6 +66,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         // Initialiser la page d'accueil par défaut
         _homeViewModel = new HomeViewModel();
+
+        
+        
         CurrentPage = _homeViewModel;
         
         WeakReferenceMessenger.Default.Register<ModuleNavigationMessage>(this, (recipient, message) =>
