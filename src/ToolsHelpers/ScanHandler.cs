@@ -1,22 +1,27 @@
 ﻿/*
     Fichier :   ScanHandler.cs
     Auteur  :   Lukas Hofer - TINF2
-    Date    :   21.03.2026
+    Date    :   22.03.2026
     
     Projet  :   ScholarLog
     
-    But     :   Démontrer l'archivage et l'extraction d'image (+compression) d'un scan pdf.
-                Dans l'objectif de sauvegarder les scans dans la base de donnée SQLite.
+    But     :   Module principal de traitement, compression et restitution des documents PDF.
             
-                Des estimations montre que dans le pire des cas, les pdf de la BDD prendront
-                un espace maximal de 60 Mo.
- */
+                Objectif technique : Maintenir l'empreinte de la BDD extrêmement basse 
+                (estimation max ~60 Mo) tout en garantissant une lecture haute qualité 
+                et une gestion stricte de la RAM (Stream/In-Memory).
+*/
 
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using SkiaSharp;
 using PdfConvert = PDFtoImage.Conversion;
 
-namespace CBZ;
+namespace ScholarLog;
+
 
 /// <summary>
 /// Responsable de la manipulation d'image
