@@ -55,12 +55,13 @@
                     Padding="10,5">
                 
                 <Grid ColumnDefinitions="Auto, *, Auto">
+                    
                     <TextBlock x:Name="IndicateurStatut" Grid.Column="0" 
                                Text="Prêt" VerticalAlignment="Center" 
                                Foreground="{DynamicResource SecondaryForeground}"
                                FontSize="{DynamicResource FontSizeSmall}"/>
 
-                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="15" HorizontalAlignment="Right">
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="15" HorizontalAlignment="Center">
                         <Button Content="{DynamicResource IconeNavBack}" Classes="icon-button-small" Click="BoutonPrecedent_Click" ToolTip.Tip="Page précédente (Gauche)"/>
                         
                         <TextBlock x:Name="IndicateurPage" Text="0 / 0" 
@@ -69,6 +70,28 @@
                         
                         <Button Content="{DynamicResource IconeNavFoward}" Classes="icon-button-small" Click="BoutonSuivant_Click" ToolTip.Tip="Page suivante (Droite)"/>
                     </StackPanel>
+
+                    <Button Grid.Column="2" Classes="icon-button-small" 
+                            Click="BoutonTelecharger_Click" 
+                            Background="{DynamicResource CardBackground}" 
+                            BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
+                            Foreground="{DynamicResource PrimaryForeground}" 
+                            Padding="12,5" Cursor="Hand"
+                            ToolTip.Tip="Télécharger l'archive du document" 
+                            HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                            <TextBlock Text="{DynamicResource IconeSave}" 
+                                       VerticalAlignment="Center" FontFamily="{DynamicResource Phosphor}" 
+                                       FontSize="{DynamicResource IconSizeSmall}"/>
+                            
+                            <TextBlock Text="Télécharger" 
+                                       FontFamily="{DynamicResource Helvetica}" 
+                                       FontSize="{DynamicResource FontSizeSmall}" 
+                                       VerticalAlignment="Center" 
+                                       Foreground="{DynamicResource PrimaryForeground}"/>
+                        </StackPanel>
+                    </Button>
+                    
                 </Grid>
             </Border>
         </Grid>

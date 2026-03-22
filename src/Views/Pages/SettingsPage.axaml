@@ -195,7 +195,7 @@
                                     Padding="0,0,0,0" 
                                     FontFamily="{DynamicResource HelveticaBold}" 
                                     FontSize="{DynamicResource FontSizeNormal}" 
-                                    Text="parcourir" />
+                                    Text="Parcourir" />
                             </StackPanel>
                         </Button>
                         
@@ -217,7 +217,7 @@
                                     Padding="0,0,0,0" 
                                     FontFamily="{DynamicResource HelveticaBold}" 
                                     FontSize="{DynamicResource FontSizeNormal}" 
-                                    Text="sauvegarder" />
+                                    Text="Sauvegarder" />
                             </StackPanel>
                         </Button>
                     </Grid>
@@ -288,10 +288,5 @@
             </Border>
         </Grid>
         
-        <Grid RowDefinitions="Auto, *">
-            <Button Grid.Row="0" Content="Ouvrir un PDF Test" Click="BoutonOuvrirTest_Click" Margin="10"/>
-
-            <controls:PdfViewerControl x:Name="MonLecteurPdf" Grid.Row="1" Margin="10"/>
-        </Grid>
     </StackPanel>
 </UserControl>

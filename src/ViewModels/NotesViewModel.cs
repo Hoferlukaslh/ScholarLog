@@ -147,6 +147,7 @@ public partial class NotesViewModel : ViewModelBase
     {
         if (noteCible == null || noteCible.Id == 0) return;
 
+        ActiveDocumentTitle = noteCible.titre;
         IsPdfViewerOpen = true; // Affiche le modal de lecture
 
         try 
@@ -219,7 +220,8 @@ public partial class NotesViewModel : ViewModelBase
         IsModalOpen = true;
     }
 
-    
+    [ObservableProperty]
+    private string _activeDocumentTitle = "Document PDF";
 
     [RelayCommand]
     private void FermerModal() => IsModalOpen = false;
@@ -345,6 +347,7 @@ public partial class NotesViewModel : ViewModelBase
     {
         if (EditingNote == null || EditingNote.Id == 0) return;
 
+        ActiveDocumentTitle = EditingNote.titre;
         PdfStatusText = "Chargement du document de la BDD..."; 
 
         try {
@@ -375,24 +378,41 @@ public partial class NotesViewModel : ViewModelBase
     /// Ouvre le modal de modification (asyncTask)
     /// </summary>
     [RelayCommand]
-    private async Task OuvrirModalModification(Note noteAModifier) // Modifié async Task
+    private async Task OuvrirModalModification(Note noteAModifier)
     {
-        // ... (garde le code d'initialisation de EditingNote, etc.) ...
-        _isEditingExisting = true;
-        EditingNote = noteAModifier; // liaison directe
+        if (noteAModifier == null) return;
 
-        // 1. Reset states visuels
-        
-        IsDocumentAttached = false; // Par défaut
-        
+        ModalTitle = "Modifier la note";
+        _isEditingExisting = true;
+
+        // 1. On CLONE la note pour éviter que la vue derrière ne se mette à jour 
+        // en temps réel pendant la frappe (avant d'avoir cliqué sur Sauvegarder)
+        EditingNote = new Note
+        {
+            Id = noteAModifier.Id,
+            Date = noteAModifier.Date,
+            Valeur = noteAModifier.Valeur,
+            titre = noteAModifier.titre,
+            BrancheId = noteAModifier.BrancheId
+        };
+
+        // 2. On retrouve le module parent et la branche pour pré-remplir les ComboBox
+        var moduleParent = Modules.FirstOrDefault(m => m.Branches.Any(b => b.Id == noteAModifier.BrancheId));
+        if (moduleParent != null)
+        {
+            ModalSelectedModule = moduleParent; // Déclenche le remplissage des branches
+            ModalSelectedBranche = ModalBranches.FirstOrDefault(b => b.Id == noteAModifier.BrancheId);
+        }
+
+        // 3. Reset states visuels
+        IsDocumentAttached = false; 
         ActiveCbzBlob = null;
         IsPdfViewerOpen = false;
-        IsModalOpen = true; // Ouvre l'overlay
         PdfStatusText = "Laissez vide pour conserver le document existant.";
         _pendingCbzData = null;
-        IsModalOpen = true;
+        IsModalOpen = true; // Ouvre l'overlay
 
-        // 2. Interroge la base de données en arrière-plan
+        // 4. Interroge la base de données en arrière-plan pour savoir s'il y a un PDF
         try
         {
             using (var repo = new DataRepository())
@@ -403,7 +423,7 @@ public partial class NotesViewModel : ViewModelBase
                 {
                     double sizeKb = archiveExistante.Length / 1024.0;
                     PdfStatusText = $"Document enregistré ({sizeKb:F0} Ko). Laissez vide pour conserver.";
-                    IsDocumentAttached = true; // --- NOUVEAU : Affiche l'icône ---
+                    IsDocumentAttached = true; // Affiche l'icône de document
                 }
                 else
                 {

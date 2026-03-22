@@ -77,11 +77,4 @@ public partial class SettingsPage : UserControl
             vm.PathToBDD = files[0].Path.LocalPath;
         }
     }
-    
-    private async void BoutonOuvrirTest_Click(object? sender, RoutedEventArgs e)
-    {
-        // Tu peux appeler le FilePicker ici, puis passer le chemin au composant
-        string cheminPdf = @"C:\Users\lukas\Desktop\base.pdf";
-        await MonLecteurPdf.LoadPdfAsync(cheminPdf);
-    }
 }

@@ -271,7 +271,7 @@
         </Grid>
         
        <Grid Background="#A0000000" ZIndex="100" IsVisible="{Binding IsModalOpen}">
-            <Border Width="450" Background="{DynamicResource ModalBackground}" 
+            <Border Width="550" Background="{DynamicResource ModalBackground}" 
                     CornerRadius="8" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                     BoxShadow="0 10 30 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center">
                 
@@ -315,9 +315,12 @@
                         <Grid ColumnDefinitions="*, Auto">
                             <TextBlock Grid.Column="0" Text="{Binding PdfStatusText}" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryForeground}" TextTrimming="CharacterEllipsis" Margin="0,0,10,0"/>
                             
-                            <Button Grid.Column="1" Click="BoutonJoindrePdf_Click" Background="Transparent" Padding="5" Cursor="Hand" ToolTip.Tip="Joindre un PDF">
+                            <Button Grid.Column="1" Click="BoutonJoindrePdf_Click" 
+                                    Background="{DynamicResource CardBackground}" 
+                                    BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
+                                    Padding="5" Cursor="Hand" ToolTip.Tip="Joindre un PDF">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <TextBlock Text="📁" FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource IconSizeNormal}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource IconeFolder}" FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource IconSizeNormal}" VerticalAlignment="Center"/>
                                     <TextBlock Text="Parcourir" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryForeground}"/>
                                 </StackPanel>
                             </Button>
@@ -335,19 +338,36 @@
         </Grid>
 
         <Grid Background="#A0000000" ZIndex="101" IsVisible="{Binding IsPdfViewerOpen}">
-            <Border Background="{DynamicResource ModalBackground}" CornerRadius="8" Padding="10"
-                    Width="800" Height="600" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
-                    BoxShadow="0 10 30 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Border Background="{DynamicResource ModalBackground}" 
+                    CornerRadius="8" 
+                    Padding="10"
+                    BorderBrush="{DynamicResource CardBorder}" 
+                    BorderThickness="1"
+                    BoxShadow="0 10 30 0 #40000000" 
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch"
+                    Margin="40">
                 
                 <Grid RowDefinitions="Auto, *">
                     <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-                        <TextBlock Grid.Column="0" Text="Aperçu du document" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryForeground}" FontSize="{DynamicResource FontSizeMedium}"/>
+                        
+                        <TextBlock Grid.Column="0" 
+                                   Text="{Binding ActiveDocumentTitle, StringFormat='Aperçu : {0}'}" 
+                                   VerticalAlignment="Center" 
+                                   Foreground="{DynamicResource PrimaryForeground}" 
+                                   FontSize="{DynamicResource FontSizeMedium}"
+                                   FontWeight="SemiBold"
+                                   TextTrimming="CharacterEllipsis"
+                                   Margin="0,0,20,0"/>
+                        
                         <Button Grid.Column="1" Command="{Binding FermerPdfCommand}" Classes="icon-button-small">
                             <TextBlock Text="{DynamicResource IconeClose}" FontFamily="{DynamicResource Phosphor}"/>
                         </Button>
                     </Grid>
                     
-                    <controls:PdfViewerControl Grid.Row="1" CbzData="{Binding ActiveCbzBlob}"/>
+                    <controls:PdfViewerControl Grid.Row="1" 
+                                               CbzData="{Binding ActiveCbzBlob}" 
+                                               DocumentTitle="{Binding ActiveDocumentTitle}"/>
                 </Grid>
             </Border>
         </Grid>

@@ -26,6 +26,8 @@ public partial class PdfViewerControl : UserControl
     public static readonly StyledProperty<byte[]?> CbzDataProperty =
         AvaloniaProperty.Register<PdfViewerControl, byte[]?>(nameof(CbzData));
     
+    private int _currentPageIndex = 0;
+    
     // propriété zoom
     private double _currentZoomScale = 1.0;
     private Size _currentOriginalImageSize; // Stocke la taille native de la page chargée
@@ -42,6 +44,16 @@ public partial class PdfViewerControl : UserControl
     {
         get => GetValue(CbzDataProperty);
         set => SetValue(CbzDataProperty, value);
+    }
+    
+    // Déclaration de la propriété pour le titre du document
+    public static readonly StyledProperty<string> DocumentTitleProperty =
+        AvaloniaProperty.Register<PdfViewerControl, string>(nameof(DocumentTitle), "Evaluation");
+
+    public string DocumentTitle
+    {
+        get => GetValue(DocumentTitleProperty);
+        set => SetValue(DocumentTitleProperty, value);
     }
     
     private int _pageCouranteIndex = -1;
@@ -74,6 +86,7 @@ public partial class PdfViewerControl : UserControl
             if (data != null && data.Length > 0)
             {
                 await LoadFromMemoryAsync(data);
+                this.Focus();
             }
             else
             {
@@ -148,8 +161,8 @@ public partial class PdfViewerControl : UserControl
             // 1. Extraction asynchrone depuis le BLOB via ton gestionnaire existing
             var fluxImages = ArchiveManager.ExtractImagesFromMemoryAsync(cbzData, _cancellationTokenSource.Token);
             
-            // 2. Redimensionnement (ex: 2Mp) pour la légèreté
-            var fluxResized = ImageProcessor.ResizeImagesAsync(fluxImages, 2_000_000, _cancellationTokenSource.Token);
+            // 2. Redimensionnement (ex: 2.5Mp) pour la légèreté
+            var fluxResized = ImageProcessor.ResizeImagesAsync(fluxImages, 2_500_000, _cancellationTokenSource.Token);
 
             await foreach (var skBitmap in fluxResized)
             {
@@ -157,7 +170,7 @@ public partial class PdfViewerControl : UserControl
                 byte[] compressedPage = await Task.Run(() => 
                 {
                     using var image = SKImage.FromBitmap(skBitmap);
-                    using var data = image.Encode(SKEncodedImageFormat.Webp, 40); 
+                    using var data = image.Encode(SKEncodedImageFormat.Webp, 45); 
                     return data.ToArray();
                 }, _cancellationTokenSource.Token);
                 
@@ -194,8 +207,8 @@ public partial class PdfViewerControl : UserControl
             // 1. Extraction asynchrone
             var fluxImages = PdfManager.ExtractImagesAsync(pdfPath, _cancellationTokenSource.Token);
             
-            // 2. Redimensionnement (ex: 2Mp) pour éviter de saturer la RAM, géré sur thread secondaire
-            var fluxResized = ImageProcessor.ResizeImagesAsync(fluxImages, 2_000_000, _cancellationTokenSource.Token);
+            // 2. Redimensionnement (ex: 2.5Mp) pour éviter de saturer la RAM, géré sur thread secondaire
+            var fluxResized = ImageProcessor.ResizeImagesAsync(fluxImages, 2_500_000, _cancellationTokenSource.Token);
 
             await foreach (var skBitmap in fluxResized)
             {
@@ -203,8 +216,8 @@ public partial class PdfViewerControl : UserControl
                 byte[] compressedData = await Task.Run(() => 
                 {
                     using var image = SKImage.FromBitmap(skBitmap);
-                    // Compression agressive (qualité 40) type "CBZ/BDD"
-                    using var data = image.Encode(SKEncodedImageFormat.Webp, 40); 
+                    // Compression agressive (qualité 45) type "CBZ/BDD"
+                    using var data = image.Encode(SKEncodedImageFormat.Webp, 45); 
                     return data.ToArray();
                 }, _cancellationTokenSource.Token);
                 
@@ -240,7 +253,7 @@ public partial class PdfViewerControl : UserControl
     {
         if (index < 0 || index >= _pagesCompresses.Count) return;
 
-        IndicateurStatut.Text = $"Décompression de la page {index+1}...";
+        //IndicateurStatut.Text = $"Décompression de la page {index+1}...";
         
         // Capture du token d'annulation actuel
         var token = _cancellationTokenSource?.Token ?? CancellationToken.None;
@@ -282,7 +295,7 @@ public partial class PdfViewerControl : UserControl
                 _currentOriginalImageSize = _imageCourante.Size; 
 
                 MettreAJourInterface();
-                AjusterALaLargeurDefaut();
+                AjusterALaHauteurDefaut();
             });
         }
         catch (OperationCanceledException)
@@ -292,9 +305,9 @@ public partial class PdfViewerControl : UserControl
     }
     
     /// <summary>
-    /// Calcule le zoom pour que l'image tienne sur toute la largeur disponible
+    /// Calcule le zoom pour que l'image tienne sur toute la hauteur disponible
     /// </summary>
-    private void AjusterALaLargeurDefaut()
+    private void AjusterALaHauteurDefaut()
     {
         if (_imageCourante == null || MainScrollViewer == null) return;
 
@@ -302,15 +315,15 @@ public partial class PdfViewerControl : UserControl
         Dispatcher.UIThread.InvokeAsync(() =>
         {
             // Récupère la largeur disponible réelle (Viewport)
-            double availableWidth = MainScrollViewer.Bounds.Width;
+            double availableHeight = MainScrollViewer.Bounds.Height;
 
             // Récupère la largeur native de l'image (plus la marge de 10px définies dans le XAML)
-            double imageWidth = _currentOriginalImageSize.Width + 20;
+            double imageHeight = _currentOriginalImageSize.Height + 20;
 
-            if (availableWidth > 0 && imageWidth > 0)
+            if (availableHeight > 0 && imageHeight > 0)
             {
                 // Calcule le facteur de zoom nécessaire
-                SetZoom(availableWidth / imageWidth);
+                SetZoom(availableHeight / imageHeight);
             }
         }, DispatcherPriority.Loaded);
     }
@@ -400,6 +413,56 @@ public partial class PdfViewerControl : UserControl
                 ApplyZoomWithAnchor(newScale, center);
             }
         }
+        
+        switch (e.Key)
+        {
+            case Key.Left:
+            case Key.PageUp:
+                PagePrecedente();
+                e.Handled = true;
+                break;
+
+            case Key.Right:
+            case Key.PageDown:
+            case Key.Space: 
+                PageSuivante();
+                e.Handled = true;
+                break;
+        
+            case Key.Home:
+                AllerAPage(0);
+                e.Handled = true;
+                break;
+
+            case Key.End:
+                AllerAPage(_pagesCompresses.Count - 1);
+                e.Handled = true;
+                break;
+        }
+    }
+    public async void PageSuivante()
+    {
+        // On utilise _pagesCompresses qui est ta vraie liste de données
+        if (_pagesCompresses != null && _pageCouranteIndex < _pagesCompresses.Count - 1)
+        {
+            await AfficherPageAsync(_pageCouranteIndex + 1);
+        }
+    }
+
+    public async void PagePrecedente()
+    {
+        if (_pageCouranteIndex > 0)
+        {
+            await AfficherPageAsync(_pageCouranteIndex - 1);
+        }
+    }
+
+    public async void AllerAPage(int index)
+    {
+        if (_pagesCompresses != null && index >= 0 && index < _pagesCompresses.Count)
+        {
+            await AfficherPageAsync(index);
+        }
     }
 
     /// <summary>
@@ -479,5 +542,53 @@ public partial class PdfViewerControl : UserControl
     {
         // Affiche le pourcentage brut dans l'indicateur de statut
         IndicateurStatut.Text = $"Zoom : {(_currentZoomScale * 100):F0} %";
+    }
+    
+    private async void BoutonTelecharger_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (CbzData == null || CbzData.Length == 0)
+        {
+            IndicateurStatut.Text = "Aucun document à télécharger.";
+            return;
+        }
+
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel == null) return;
+
+        // Nettoyage du nom pour enlever les caractères interdits par Windows (ex: \ / : * ? " < > |)
+        string safeTitle = string.IsNullOrWhiteSpace(DocumentTitle) ? "Evaluation" : string.Join("_", DocumentTitle.Split(Path.GetInvalidFileNameChars()));
+
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new Avalonia.Platform.Storage.FilePickerSaveOptions
+        {
+            Title = "Télécharger le document",
+            DefaultExtension = "pdf",
+            SuggestedFileName = $"{safeTitle}.pdf",
+            FileTypeChoices = new[] 
+            { 
+                new Avalonia.Platform.Storage.FilePickerFileType("Document PDF") { Patterns = new[] { "*.pdf" } }
+            }
+        });
+
+        if (file != null)
+        {
+            try
+            {
+                IndicateurStatut.Text = "Création du PDF en cours...";
+                
+                string localPath = file.Path.LocalPath;
+                
+                // Extrait les images de notre archive WebP en mémoire
+                var fluxImages = ArchiveManager.ExtractImagesFromMemoryAsync(CbzData);
+                
+                // Utilise ton gestionnaire pour ré-assembler un vrai PDF sur le disque
+                await PdfManager.CreatePdfAsync(fluxImages, localPath, 75);
+                
+                IndicateurStatut.Text = "PDF sauvegardé avec succès.";
+            }
+            catch (Exception ex)
+            {
+                IndicateurStatut.Text = $"Erreur : {ex.Message}";
+            }
+        }
     }
 }

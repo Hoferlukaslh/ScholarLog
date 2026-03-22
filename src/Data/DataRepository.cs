@@ -33,11 +33,22 @@ public class DataRepository : IDisposable
 
     /// <summary>
     /// Initialise une nouvelle instance du dépôt et s'assure que la base de données est prête à l'emploi.
+    /// Nettoie la base de donnée.
     /// </summary>
     public DataRepository()
     {
         _context = new MonDbContext();
+        
         InitialiserBaseDeDonnees();
+        
+        try 
+        {
+            _context.Database.ExecuteSqlRaw("VACUUM;");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Nettoyage base de données ignoré : {ex.Message}");
+        }
     }
 
     /// <summary>
@@ -62,6 +73,8 @@ public class DataRepository : IDisposable
                 Console.WriteLine("Tables créées dans la base existante.");
             }
         }
+        
+        
     }
 
     /// <summary>
@@ -116,6 +129,15 @@ public class DataRepository : IDisposable
             t.Id = existant.Id;
         }
     }
+    
+    /// <summary>
+    /// Force SQLite à récupérer l'espace disque non utilisé après des suppressions massives.
+    /// Exécute la commande SQL 'VACUUM'.
+    /// </summary>
+    public async Task OptimiserBaseDeDonneesAsync()
+    {
+        await _context.Database.ExecuteSqlRawAsync("VACUUM;");
+    }
 
     // --- MODIFICATION ASYNCHRONE ---
 
@@ -145,8 +167,20 @@ public class DataRepository : IDisposable
     /// <summary>Supprime un type de travail.</summary>
     public async Task SupprimerTypeTravailAsync(TypeTravail t) { _context.TypeTravail.Remove(t); await _context.SaveChangesAsync(); }
     
-    /// <summary>Supprime une note de la base de données.</summary>
-    public async Task SupprimerNoteAsync(Note n) { _context.Note.Remove(n); await _context.SaveChangesAsync(); }
+    /// <summary>Supprime une note de la base de données, ainsi que son document PDF/CBZ associé s'il existe.</summary>
+    public async Task SupprimerNoteAsync(Note n) 
+    { 
+        // cherche d'abord s'il y a une archive (Blob) liée à cette note
+        var archiveAssociee = await _context.NoteArchive.FirstOrDefaultAsync(a => a.NoteId == n.Id);
+        
+        // Si archive trouvée, on demande sa suppression
+        if (archiveAssociee != null) _context.NoteArchive.Remove(archiveAssociee);
+        
+        _context.Note.Remove(n);  // supprime la note elle-même
+        
+        // 4. On valide les changements dans la base (exécutera les deux suppressions d'un coup)
+        await _context.SaveChangesAsync(); 
+    }
     
     /// <summary>Supprime une entrée spécifique du journal de travail.</summary>
     public async Task SupprimerEntreeAsync(Entree e) { _context.Entree.Remove(e); await _context.SaveChangesAsync(); }
@@ -157,7 +191,12 @@ public class DataRepository : IDisposable
     /// </summary>
     public void Dispose()
     {
-        _context?.Dispose();
+        // On ferme proprement la connexion à la base de données
+        if (_context != null)
+        {
+            _context.Database.CloseConnection();
+            _context.Dispose();
+        }
     }
     
     /// <summary>
@@ -191,27 +230,28 @@ public class DataRepository : IDisposable
      /// </summary>
      /// <param name="noteId">Identifiant de la note</param>
      /// <param name="cbzData">Blob de données</param>
-    public async Task SauvegarderArchiveCbzAsync(int noteId, byte[] cbzData)
-    {
-        var archiveExistante = await _context.NoteArchive.FirstOrDefaultAsync(a => a.NoteId == noteId);
+     public async Task SauvegarderArchiveCbzAsync(int noteId, byte[] cbzData)
+     {
+         //  On cherche si la note possède déjà une archive
+         var archiveExistante = await _context.NoteArchive.FirstOrDefaultAsync(a => a.NoteId == noteId);
 
-        if (archiveExistante != null)
-        {
-            // Mise à jour si l'archive existe déjà
-            archiveExistante.Donnees = cbzData;
-            _context.NoteArchive.Update(archiveExistante);
-        }
-        else
-        {
-            // Création d'une nouvelle archive
-            var nouvelleArchive = new NoteArchive 
-            { 
-                NoteId = noteId, 
-                Donnees = cbzData 
-            };
-            _context.NoteArchive.Add(nouvelleArchive);
-        }
-
-        await _context.SaveChangesAsync();
-    }
+         if (archiveExistante != null)
+         {
+             // On écrase l'ancien Blob par le nouveau
+             archiveExistante.Donnees = cbzData;
+             _context.NoteArchive.Update(archiveExistante);
+         }
+         else
+         {
+             // Ajout du contenu
+             var nouvelleArchive = new NoteArchive 
+             { 
+                 NoteId = noteId, 
+                 Donnees = cbzData 
+             };
+             _context.NoteArchive.Add(nouvelleArchive);
+         }
+         
+         await _context.SaveChangesAsync();
+     }
 }

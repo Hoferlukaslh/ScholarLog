@@ -98,6 +98,7 @@
             
             <x:String x:Key="IconeNavBack">&#xE5A4;</x:String>
             <x:String x:Key="IconeNavFoward">&#xE5A6;</x:String>
+            <x:String x:Key="IconeFolder">&#xE24A;</x:String>
             
             
             
