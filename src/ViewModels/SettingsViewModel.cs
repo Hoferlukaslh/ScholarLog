@@ -16,6 +16,7 @@
 */
 
 
+using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.IO;
@@ -34,6 +35,62 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty] private bool _isDarkModeEnabled;
     [ObservableProperty] private bool _showPathError = false; // déclencheur pour dire à la vue d'afficher le message d'erreur
     
+    
+    [ObservableProperty] private bool _isEditModuleModalOpen = false;
+    [ObservableProperty] private ModuleViewModel? _editingModule;
+    [ObservableProperty] private string _nouvelleBrancheNom = string.Empty;
+    
+    [RelayCommand]
+    private void CloseEditModuleModal()
+    {
+        IsEditModuleModalOpen = false;
+        EditingModule = null;
+        NouvelleBrancheNom = string.Empty;
+    }
+
+    // Remplacez la méthode EditModule existante par celle-ci
+    [RelayCommand]
+    private void EditModule(ModuleViewModel module)
+    {
+        if (module == null) return;
+        
+        EditingModule = module;
+        IsEditModuleModalOpen = true;
+    }
+
+    [RelayCommand]
+    private void SaveModuleName()
+    {
+        if (EditingModule == null || string.IsNullOrWhiteSpace(EditingModule.Nom)) return;
+        
+        // Logique de sauvegarde en base de données pour le nom du module ici
+        Console.WriteLine($"Action : Sauvegarder le nom du module {EditingModule.Nom}");
+    }
+
+    [RelayCommand]
+    private void AddBrancheToEditingModule()
+    {
+        if (EditingModule == null || string.IsNullOrWhiteSpace(NouvelleBrancheNom)) return;
+
+        // Logique pour créer et ajouter la nouvelle branche en base de données ici
+        Console.WriteLine($"Action : Ajouter la branche {NouvelleBrancheNom} au module {EditingModule.Nom}");
+        
+        // Simulation d'ajout visuel (à adapter avec votre vrai modèle)
+        // EditingModule.Branches.Add(new BrancheViewModel { Nom = NouvelleBrancheNom });
+
+        NouvelleBrancheNom = string.Empty;
+    }
+
+    [RelayCommand]
+    private void RenameBranche(object branche)
+    {
+        if (branche == null) return;
+
+        // Logique de sauvegarde en base de données pour le nom de la branche ici
+        // Cast l'objet en BrancheViewModel (ou le type correspondant) pour accéder à sa propriété Nom
+        Console.WriteLine("Action : Sauvegarder le nouveau nom de la branche");
+    }
+    
     [ObservableProperty]
     private ObservableRangeCollection<ModuleViewModel> _modules = new();
 
@@ -45,6 +102,56 @@ public partial class SettingsViewModel : ViewModelBase
             IsDarkModeEnabled = Application.Current.ActualThemeVariant == ThemeVariant.Dark;
             Modules = AppDataService.Instance.Modules;
         }
+    }
+    
+    // --- Propriétés pour le Modal de Confirmation ---
+    [ObservableProperty] private bool _isConfirmDialogOpen = false;
+    [ObservableProperty] private string _confirmDialogMessage = string.Empty;
+    
+    // Variables temporaires pour stocker l'action et l'élément à supprimer
+    private object? _itemToDelete;
+    private Action<object>? _deleteAction;
+
+    // --- Nouvelles Commandes d'interception ---
+
+    [RelayCommand]
+    private void PromptDeleteModule(ModuleViewModel module)
+    {
+        if (module == null) return;
+        _itemToDelete = module;
+        _deleteAction = (item) => DeleteModule((ModuleViewModel)item);
+        
+        ConfirmDialogMessage = $"Êtes-vous sûr de vouloir supprimer le module '{module.ShortName}' et toutes ses branches ?";
+        IsConfirmDialogOpen = true;
+    }
+
+    [RelayCommand]
+    private void PromptDeleteBranche(object branche)
+    {
+        if (branche == null) return;
+        _itemToDelete = branche;
+        _deleteAction = (item) => DeleteBranche(item);
+        
+        ConfirmDialogMessage = $"Êtes-vous sûr de vouloir supprimer cette branche ?";
+        IsConfirmDialogOpen = true;
+    }
+
+    [RelayCommand]
+    private void ConfirmDelete()
+    {
+        if (_deleteAction != null && _itemToDelete != null)
+        {
+            _deleteAction(_itemToDelete);
+        }
+        CancelDelete(); // Réinitialise et ferme le modal
+    }
+
+    [RelayCommand]
+    private void CancelDelete()
+    {
+        IsConfirmDialogOpen = false;
+        _itemToDelete = null;
+        _deleteAction = null;
     }
 
     // Cette méthode magique est appelée automatiquement par le Toolkit
@@ -60,23 +167,17 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     private void AddModule()
     {
-        System.Console.WriteLine("Action : Ajouter un nouveau module");
+        Console.WriteLine("Action : Ajouter un nouveau module");
     }
 
-    [RelayCommand]
-    private void EditModule(ModuleViewModel module)
-    {
-        if (module == null) return;
-        
-        System.Console.WriteLine($"Action : Editer le module {module.ShortName}");
-    }
+
     
     [RelayCommand]
     private void DeleteModule(ModuleViewModel module)
     {
         if (module == null) return;
         
-        System.Console.WriteLine($"Action : Supprimer le module {module.ShortName}");
+        Console.WriteLine($"Action : Supprimer le module {module.ShortName}");
     }
 
     // --- Actions CRUD pour les Branches ---
@@ -86,7 +187,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         if (parentModule == null) return;
 
-        System.Console.WriteLine($"Action : Ajouter une branche au module {parentModule.ShortName}");
+        Console.WriteLine($"Action : Ajouter une branche au module {parentModule.ShortName}");
     }
     
     [RelayCommand]
@@ -94,7 +195,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         if (branche == null) return;
 
-        System.Console.WriteLine("Action : Editer la branche");
+        Console.WriteLine("Action : Editer la branche");
     }
 
     [RelayCommand]
@@ -102,7 +203,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         if (branche == null) return;
 
-        System.Console.WriteLine("Action : Supprimer la branche");
+        Console.WriteLine("Action : Supprimer la branche");
     }
 
     [RelayCommand]
@@ -114,11 +215,11 @@ public partial class SettingsViewModel : ViewModelBase
         {
             PathToBDD = cleanedPath;
             ShowPathError = false;
-            System.Console.WriteLine($"Chemin sauvegarde : {cleanedPath}");
+            Console.WriteLine($"Chemin sauvegarde : {cleanedPath}");
         }
         else
         {
-            System.Console.WriteLine($"Chemin invalide : {cleanedPath}");
+            Console.WriteLine($"Chemin invalide : {cleanedPath}");
             // On lève le drapeau, la Vue s'occupera d'afficher le Flyout
             ShowPathError = true; 
         }
