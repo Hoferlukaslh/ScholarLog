@@ -1,24 +1,3 @@
-<!--
-    Fichier      :  SettingsPage.axaml
-    Projet       :  ScholarLog
-    
-    Description  :
-        Définit l'interface de la page des paramètres de l'application.
-        Cette vue permet à l'utilisateur de configurer certains éléments
-        globaux du programme, notamment :
-            - Le chemin du fichier de base de données SQLite
-            - La sélection du thème de l'application (clair / sombre)
-
-        La page contient également :
-            - Un message d'erreur via Flyout si le fichier n'existe pas
-
-    Auteur       :  Lukas Hofer - TINF2
-    Date         :  10.03.2026
-
-    Remarques    :
-        - Les ressources visuelles (polices, couleurs, tailles) proviennent de App.axaml.
--->
-
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -26,21 +5,19 @@
              xmlns:Pages="clr-namespace:ScholarLog.Views.Pages"
              xmlns:controls="clr-namespace:ScholarLog.Components.PdfReader"
              xmlns:vm="using:ScholarLog.ViewModels"
+             xmlns:data="clr-namespace:ScholarLog.Data"
              mc:Ignorable="d" d:DesignWidth="740" d:DesignHeight="450"
              x:Class="ScholarLog.Views.Pages.SettingsPage"
              x:DataType="vm:SettingsViewModel">
     
-    
     <UserControl.Styles>
         <Style Selector="FlyoutPresenter.alerteDanger">
             <Setter Property="Background" Value="{DynamicResource CardBackground}" /> 
-        
             <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="{DynamicResource FieldCornerRadius}" />
-        
-
         </Style>    
+        
         <Style Selector="Button.zoom">
             <Setter Property="Transitions">
                 <Transitions>
@@ -49,33 +26,24 @@
                                                    Easing="CubicEaseOut"/>
                 </Transitions>
             </Setter>
-
             <Setter Property="RenderTransform" Value="scale(1.00)" />
-
             <Style Selector="^:pointerover">
                 <Setter Property="RenderTransform" Value="scale(1.00)" />
-                
-                
             </Style>
-
             <Style Selector="^:pressed">
                 <Setter Property="RenderTransform" Value="scale(1)" />
             </Style>
         </Style>
     </UserControl.Styles>
     
-    <StackPanel>
+    <Grid RowDefinitions="Auto, Auto, *">
         
-    
-        <!-- Premier pannel -->
-        <Grid Background="Transparent" ColumnSpacing="10">
+        <Grid Grid.Row="0" Background="Transparent" ColumnSpacing="10" Margin="0,0,0,30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/> 
                 <ColumnDefinition Width="0.25" MinWidth="187"/>
             </Grid.ColumnDefinitions>
             
-            
-            <!-- Container de la card BDD -->
             <Border Grid.Column="0" Margin="0" Padding="10" 
                     CornerRadius="{DynamicResource FieldCornerRadius}" 
                     Background="{DynamicResource CardBackground}" 
@@ -105,9 +73,7 @@
                         FontStyle="Normal"
                         Text="Chemin du fichier (.db) :"/>
                     
-                    
                     <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,5,0,0">
-                        
                         <Border Grid.Column="0" Margin="0,0,10,0" Padding="5,2" 
                                 CornerRadius="{DynamicResource FieldCornerRadius}" 
                                 Background="{DynamicResource CardBackground}" 
@@ -135,10 +101,8 @@
     
                                     <FlyoutBase.AttachedFlyout>
                                         <Flyout FlyoutPresenterClasses="alerteDanger">
-                                            
                                             <StackPanel Orientation="Vertical" Spacing="5">
                                                 <Grid ColumnDefinitions="*,Auto,*" HorizontalAlignment="Stretch" MinWidth="250">
-
                                                     <TextBlock Grid.Column="0" 
                                                                Text="{DynamicResource IconeDanger}" 
                                                                FontFamily="{DynamicResource Phosphor}"
@@ -146,7 +110,6 @@
                                                                Foreground="{DynamicResource ErrorForeground}"
                                                                HorizontalAlignment="Left"
                                                                VerticalAlignment="Center"/>
-
                                                     <TextBlock Grid.Column="1" 
                                                                Text="Le fichier est introuvable" 
                                                                FontFamily="{DynamicResource Helvetica}"
@@ -156,7 +119,6 @@
                                                                HorizontalAlignment="Center"
                                                                VerticalAlignment="Center"
                                                                Margin="15,0,15,0"/> 
-                                                               
                                                     <TextBlock Grid.Column="2" 
                                                                Text="{DynamicResource IconeDanger}" 
                                                                FontFamily="{DynamicResource Phosphor}"
@@ -171,9 +133,7 @@
                                                            FontSize="{DynamicResource FontSizeNormal}"
                                                            Foreground="{DynamicResource SecondaryForeground}"
                                                            HorizontalAlignment="Center"/>
-                                                
                                             </StackPanel>
-                                           
                                         </Flyout>
                                     </FlyoutBase.AttachedFlyout>
                                 </TextBlock>
@@ -221,11 +181,9 @@
                             </StackPanel>
                         </Button>
                     </Grid>
-                    
                 </StackPanel>
             </Border>
             
-            <!-- Container de la card Theme -->
             <Border Grid.Column="1" Margin="0" Padding="15" 
                     CornerRadius="{DynamicResource FieldCornerRadius}" 
                     Background="{DynamicResource CardBackground}" 
@@ -274,8 +232,6 @@
                                       OffContent="" 
                                       VerticalAlignment="Center"/>
                         
-                        
-                        
                         <TextBlock Grid.Column="2" 
                                    FontFamily="{DynamicResource Phosphor}"
                                    FontSize="{DynamicResource IconSizeSmall}"
@@ -288,5 +244,197 @@
             </Border>
         </Grid>
         
-    </StackPanel>
+        <StackPanel Grid.Row="1" Margin="0,0,0,15">
+            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,5">
+                <TextBlock FontFamily="{DynamicResource Phosphor}" 
+                           FontSize="{DynamicResource IconSizeMedium}" 
+                           Foreground="{DynamicResource PrimaryForeground}" 
+                           Text="{DynamicResource IconeFolder}" 
+                           VerticalAlignment="Center"/>
+                <TextBlock FontFamily="{DynamicResource HelveticaBold}" 
+                           FontSize="{DynamicResource FontSizeMedium}" 
+                           Foreground="{DynamicResource PrimaryForeground}" 
+                           Text="Cours" 
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+            <TextBlock FontFamily="{DynamicResource Helvetica}" 
+                       FontSize="{DynamicResource FontSizeSmall}" 
+                       Foreground="{DynamicResource SecondaryForeground}" 
+                       Text="Configurez les modules et les branches" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="2" 
+                      VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Disabled"
+                      Padding="0,0,15,0">
+            
+            <StackPanel Spacing="15">
+                
+                <ItemsControl ItemsSource="{Binding Modules}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding $parent[Pages:SettingsPage].GridColumns}" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="data:ModuleViewModel">
+        
+                            <Border MinWidth="200" Height="320" Margin="7.5,0,7.5,15" 
+                                    Padding="15" 
+                                    HorizontalAlignment="Stretch"
+                                    CornerRadius="{DynamicResource FieldCornerRadius}" 
+                                    Background="{DynamicResource CardBackground}" 
+                                    BorderBrush="{DynamicResource CardBorder}" 
+                                    BorderThickness="1">
+                                
+                                <Grid RowDefinitions="Auto, *, Auto">
+                                    
+                                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto, Auto" Margin="0,0,0,10">
+                                        <TextBlock Grid.Column="0" 
+                                                   Text="{Binding ShortName}" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="{DynamicResource PrimaryForeground}" 
+                                                   TextWrapping="Wrap" 
+                                                   VerticalAlignment="Center"/>
+                                        
+                                        <Border Grid.Column="1" 
+                                                Background="#333333" 
+                                                CornerRadius="10" 
+                                                Padding="8,3" 
+                                                Margin="10,0">
+                                            <TextBlock Text="{Binding Branches.Count, StringFormat='{}{0} Branches'}" 
+                                                       FontSize="11" 
+                                                       Foreground="{DynamicResource SecondaryForeground}"/>
+                                        </Border>
+                                        
+                                        <Button Grid.Column="2" 
+                                                Classes="zoom" 
+                                                Background="Transparent" 
+                                                Padding="5" 
+                                                Cursor="Hand"
+                                                Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).EditModuleCommand}"
+                                                CommandParameter="{Binding}">
+                                            <TextBlock FontFamily="{DynamicResource Phosphor}" 
+                                                       Text="{DynamicResource IconeEdit}" 
+                                                       Foreground="{DynamicResource SecondaryForeground}"/>
+                                        </Button>
+                                    </Grid>
+
+                                    <ScrollViewer Grid.Row="1" Margin="0,0,-10,0" Padding="0,0,10,0" 
+                                                  VerticalScrollBarVisibility="Auto" 
+                                                  HorizontalScrollBarVisibility="Disabled">
+                                        
+                                        <ItemsControl ItemsSource="{Binding Branches}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid ColumnDefinitions="Auto, *, Auto" Margin="0,6">
+                                                        
+                                                        <TextBlock Grid.Column="0" 
+                                                                   FontFamily="{DynamicResource Phosphor}" 
+                                                                   Text="{DynamicResource IconeScreen}" 
+                                                                   Foreground="{DynamicResource SecondaryForeground}" 
+                                                                   Margin="0,0,10,0" 
+                                                                   VerticalAlignment="Center"/>
+                                                        
+                                                        <TextBlock Grid.Column="1" 
+                                                                   Text="{Binding Nom}" 
+                                                                   Foreground="{DynamicResource PrimaryForeground}" 
+                                                                   VerticalAlignment="Center"
+                                                                   TextWrapping="Wrap"/>
+                                                        
+                                                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
+                                                            
+                                                            <Button Content="{DynamicResource IconeCrayon}" 
+                                                                    FontFamily="{DynamicResource Phosphor}" 
+                                                                    FontSize="{DynamicResource IconSizeSmall}"  
+                                                                    Foreground="{DynamicResource PrimaryForeground}"
+                                                                    Background="Transparent" Padding="5" Cursor="Hand"
+                                                                    Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).EditBrancheCommand}"
+                                                                    CommandParameter="{Binding}"
+                                                                    ToolTip.Tip="Modifier la branche"/>
+                                                            
+                                                            <Button Content="{DynamicResource IconeTrash}" 
+                                                                    FontFamily="{DynamicResource Phosphor}" 
+                                                                    FontSize="{DynamicResource IconSizeSmall}" 
+                                                                    Foreground="{DynamicResource PrimaryForeground}"
+                                                                    Background="Transparent" Padding="5" Cursor="Hand"
+                                                                    Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).DeleteBrancheCommand}"
+                                                                    CommandParameter="{Binding}"
+                                                                    ToolTip.Tip="Supprimer la branche">
+                                                                
+                                                                <Button.Styles>
+                                                                    <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                                                        <Setter Property="Foreground" Value="Red"/>
+                                                                    </Style>
+                                                                </Button.Styles>
+                                                            </Button>
+                                                            
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+
+                                    <Border Grid.Row="2" 
+                                            BorderBrush="{DynamicResource CardBorder}" 
+                                            BorderThickness="0,1,0,0" 
+                                            Margin="-15,10,-15,-15" 
+                                            Padding="0">
+                                        <Button Background="Transparent" 
+                                                HorizontalAlignment="Stretch" 
+                                                HorizontalContentAlignment="Center" 
+                                                Padding="10"
+                                                Cursor="Hand"
+                                                Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).AddBrancheCommand}" 
+                                                CommandParameter="{Binding}">
+                                            <TextBlock Text="+ Ajouter une branche" 
+                                                       Foreground="{DynamicResource SecondaryForeground}"/>
+                                        </Button>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                
+                <UniformGrid Columns="{Binding $parent[Pages:SettingsPage].GridColumns}">
+                    
+                    <Border Height="320" Margin="7.5,0,7.5,15" 
+                            CornerRadius="{DynamicResource FieldCornerRadius}" 
+                            Background="{DynamicResource CardBackground}" 
+                            BorderBrush="{DynamicResource CardBorder}" 
+                            BorderThickness="1"
+                            HorizontalAlignment="Stretch">
+                        
+                        <Button Background="Transparent" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch" 
+                                Cursor="Hand"
+                                Command="{Binding AddModuleCommand}">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+                                
+                                <TextBlock Text="{DynamicResource IconePlus}" 
+                                           FontFamily="{DynamicResource Phosphor}" 
+                                           FontSize="30" 
+                                           Foreground="{DynamicResource SecondaryForeground}" 
+                                           HorizontalAlignment="Center"/>
+                                
+                                <TextBlock Text="Ajouter un module" 
+                                           Foreground="{DynamicResource SecondaryForeground}" 
+                                           FontSize="{DynamicResource FontSizeMedium}"
+                                           HorizontalAlignment="Center"/>
+                                           
+                            </StackPanel>
+                        </Button>
+                    </Border>
+                    
+                </UniformGrid>
+
+                
+                
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

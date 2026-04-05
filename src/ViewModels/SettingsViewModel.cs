@@ -21,22 +21,21 @@ using CommunityToolkit.Mvvm.Input;
 using System.IO;
 using Avalonia;
 using Avalonia.Styling;
+using ScholarLog.Data;
 
 namespace ScholarLog.ViewModels;
 
 
 public partial class SettingsViewModel : ViewModelBase
 {
-    // état
+    
+    
+    [ObservableProperty] private string _pathToBDD = "/home/lukas/Documents/CloudSync/App.db";
+    [ObservableProperty] private bool _isDarkModeEnabled;
+    [ObservableProperty] private bool _showPathError = false; // déclencheur pour dire à la vue d'afficher le message d'erreur
+    
     [ObservableProperty]
-    private string _pathToBDD = "/home/lukas/Documents/CloudSync/App.db";
-
-    [ObservableProperty]
-    private bool _isDarkModeEnabled;
-
-    // déclencheur pour dire à la vue d'afficher le message d'erreur
-    [ObservableProperty]
-    private bool _showPathError = false;
+    private ObservableRangeCollection<ModuleViewModel> _modules = new();
 
     public SettingsViewModel()
     {
@@ -44,6 +43,7 @@ public partial class SettingsViewModel : ViewModelBase
         if (Application.Current != null)
         {
             IsDarkModeEnabled = Application.Current.ActualThemeVariant == ThemeVariant.Dark;
+            Modules = AppDataService.Instance.Modules;
         }
     }
 
@@ -57,6 +57,53 @@ public partial class SettingsViewModel : ViewModelBase
         }
     }
     
+    [RelayCommand]
+    private void AddModule()
+    {
+        System.Console.WriteLine("Action : Ajouter un nouveau module");
+    }
+
+    [RelayCommand]
+    private void EditModule(ModuleViewModel module)
+    {
+        if (module == null) return;
+        
+        System.Console.WriteLine($"Action : Editer le module {module.ShortName}");
+    }
+    
+    [RelayCommand]
+    private void DeleteModule(ModuleViewModel module)
+    {
+        if (module == null) return;
+        
+        System.Console.WriteLine($"Action : Supprimer le module {module.ShortName}");
+    }
+
+    // --- Actions CRUD pour les Branches ---
+
+    [RelayCommand]
+    private void AddBranche(ModuleViewModel parentModule)
+    {
+        if (parentModule == null) return;
+
+        System.Console.WriteLine($"Action : Ajouter une branche au module {parentModule.ShortName}");
+    }
+    
+    [RelayCommand]
+    private void EditBranche(object branche) 
+    {
+        if (branche == null) return;
+
+        System.Console.WriteLine("Action : Editer la branche");
+    }
+
+    [RelayCommand]
+    private void DeleteBranche(object branche)
+    {
+        if (branche == null) return;
+
+        System.Console.WriteLine("Action : Supprimer la branche");
+    }
 
     [RelayCommand]
     private void SavePath()
@@ -67,7 +114,7 @@ public partial class SettingsViewModel : ViewModelBase
         {
             PathToBDD = cleanedPath;
             ShowPathError = false;
-            System.Console.WriteLine($"Chemin sauvegardé : {cleanedPath}");
+            System.Console.WriteLine($"Chemin sauvegarde : {cleanedPath}");
         }
         else
         {
