@@ -104,15 +104,13 @@ public partial class SettingsViewModel : ViewModelBase
         }
     }
     
-    // --- Propriétés pour le Modal de Confirmation ---
+    //  Propriétés pour le Modal de Confirmation 
     [ObservableProperty] private bool _isConfirmDialogOpen = false;
     [ObservableProperty] private string _confirmDialogMessage = string.Empty;
     
     // Variables temporaires pour stocker l'action et l'élément à supprimer
     private object? _itemToDelete;
     private Action<object>? _deleteAction;
-
-    // --- Nouvelles Commandes d'interception ---
 
     [RelayCommand]
     private void PromptDeleteModule(ModuleViewModel module)
@@ -180,7 +178,7 @@ public partial class SettingsViewModel : ViewModelBase
         Console.WriteLine($"Action : Supprimer le module {module.ShortName}");
     }
 
-    // --- Actions CRUD pour les Branches ---
+    // Actions CRUD pour les Branches 
 
     [RelayCommand]
     private void AddBranche(ModuleViewModel parentModule)
