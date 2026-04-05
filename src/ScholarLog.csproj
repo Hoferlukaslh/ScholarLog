@@ -25,7 +25,7 @@
 
         <!-- Voir pour désactiver TRIM en cas de problèmes -->
         <PublishTrimmed>true</PublishTrimmed> 
-        <TrimMode>full</TrimMode> <!-- sûr : partial. Incertain : full-->
+        <TrimMode>partial</TrimMode> <!-- sûr : partial. Incertain : full-->
         <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 
         <Nullable>enable</Nullable>
