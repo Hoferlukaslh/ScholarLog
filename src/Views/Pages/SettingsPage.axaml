@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Pages="clr-namespace:ScholarLog.Views.Pages"
-             xmlns:controls="clr-namespace:ScholarLog.Components.PdfReader"
              xmlns:vm="using:ScholarLog.ViewModels"
              xmlns:data="clr-namespace:ScholarLog.Data"
              mc:Ignorable="d" d:DesignWidth="740" d:DesignHeight="450"
@@ -497,7 +496,7 @@
                     <TextBlock Text="Branches existantes" FontSize="{DynamicResource FontSizeMedium}" FontWeight="SemiBold" Margin="0,10,0,0" Foreground="{DynamicResource PrimaryForeground}"/>
 
                     <ScrollViewer MaxHeight="250">
-                        <ItemsControl ItemsSource="{Binding EditingModule.Branches}">
+                        <ItemsControl ItemsSource="{Binding ModalBranches}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,5">
