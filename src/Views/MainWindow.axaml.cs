@@ -24,6 +24,7 @@ using Avalonia.Threading;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using ScholarLog.ViewModels;
+using Avalonia.Media.Transformation;
 
 namespace ScholarLog.Views;
 
@@ -91,8 +92,9 @@ public partial class MainWindow : Window
         }
     }
 
-    // --- LOGIQUE PUREMENT VISUELLE (ANIMATIONS & GEOMÉTRIE) ---
-
+    
+    
+    // logique purement visuelle (animations & geométrie) 
     private void MoveLights()
     {
         double windowWidth = this.Bounds.Width > 0 ? this.Bounds.Width : 1280;
@@ -103,8 +105,12 @@ public partial class MainWindow : Window
             double newX = _random.NextDouble() * windowWidth - (light.Width / 2);
             double newY = _random.NextDouble() * windowHeight - (light.Height / 2);
 
-            Canvas.SetLeft(light, newX);
-            Canvas.SetTop(light, newY);
+            // Formatage neutre obligatoire pour Avalonia (évite les virgules suisses/françaises "10,5px" qui font crasher le parser)
+            string xStr = newX.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            string yStr = newY.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+            // Déplacement matériel ultra-léger
+            light.RenderTransform = TransformOperations.Parse($"translate({xStr}px, {yStr}px)");
         }
 
         if (this.FindControl<Ellipse>("Light1") is { } l1) SetRandomPosition(l1);
@@ -194,6 +200,7 @@ public partial class MainWindow : Window
             }
         }
     }
+    
 }
 
 /// <summary>

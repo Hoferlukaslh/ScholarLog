@@ -72,10 +72,10 @@
         </Style>
 
         <Style Selector="Ellipse.ambient-light">
+            <Setter Property="RenderTransform" Value="translate(0px, 0px)" />
             <Setter Property="Transitions">
                 <Transitions>
-                    <DoubleTransition Property="Canvas.Left" Duration="0:0:8" Easing="SineEaseInOut"/>
-                    <DoubleTransition Property="Canvas.Top" Duration="0:0:8" Easing="SineEaseInOut"/>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:8" Easing="SineEaseInOut"/>
                 </Transitions>
             </Setter>
         </Style>
