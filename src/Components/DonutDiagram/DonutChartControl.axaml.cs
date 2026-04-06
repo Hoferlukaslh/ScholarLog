@@ -127,7 +127,7 @@ public partial class DonutChartControl : UserControl
                 StrokeThickness = 1
             };
             
-            ToolTip.SetTip(path, $"{item.Label} : {item.Value:0.#}h ({proportion:0.#}%)");
+            ToolTip.SetTip(path, $"{item.Label} : {item.Value:0.#}h ({proportion*100:0.#}%)");
             DonutCanvas.Children.Add(path);
 
             // Création de la légende
@@ -149,7 +149,7 @@ public partial class DonutChartControl : UserControl
 
             var label = new TextBlock 
             { 
-                Text = $"{item.Label} : {item.Value:0.#}h ({proportion:0.#}%)", 
+                Text = $"{item.Label} : {item.Value:0.#}h ({proportion*100:0.#}%)", 
                 FontSize = 12,
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
             };
