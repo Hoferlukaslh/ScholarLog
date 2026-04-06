@@ -4,8 +4,8 @@
 
     Description  :
         ViewModel dédié à la gestion du journal de travail étudiant.
-        Gère les opérations CRUD pour les entrées du journal et les catégories 
-        (Types de travail). Gère également la logique complexe de génération 
+        Gère les opérations CRUD pour les entrées du journal et les catégories
+        (Types de travail). Gère également la logique complexe de génération
         des rapports d'exportation (Markdown, CSV, JSON).
 
     Auteur       :  Lukas Hofer - TINF2
@@ -33,77 +33,57 @@ using ScholarLog.Components.DonutDiagram;
 
 namespace ScholarLog.ViewModels;
 
-
 public partial class JournalViewModel : ViewModelBase
 {
     // état global
-    [ObservableProperty]
-    private ObservableRangeCollection<ModuleViewModel> _modules;
+    [ObservableProperty] private ObservableRangeCollection<ModuleViewModel> _modules;
 
-    [ObservableProperty]
-    private ModuleViewModel? _selectedModule;
+    [ObservableProperty] private ModuleViewModel? _selectedModule;
 
-    [ObservableProperty]
-    private ObservableRangeCollection<Entree> _journal = new();
+    [ObservableProperty] private ObservableRangeCollection<Entree> _journal = new();
 
-    [ObservableProperty]
-    private ObservableRangeCollection<TypeTravailViewModel> _typesTravail = new();
+    [ObservableProperty] private ObservableRangeCollection<TypeTravailViewModel> _typesTravail = new();
 
-    [ObservableProperty]
-    private string _totalHeures = "0.0h";
+    [ObservableProperty] private string _totalHeures = "0.0h";
 
-    
+
     // modal : Ajout/Edition Entrée
-    [ObservableProperty]
-    private bool _isModalOpen = false;
+    [ObservableProperty] private bool _isModalOpen = false;
 
-    [ObservableProperty]
-    private string _modalTitle = "Nouvelle entrée";
+    [ObservableProperty] private string _modalTitle = "Nouvelle entrée";
 
-    [ObservableProperty]
-    private Entree _editingEntree = new();
+    [ObservableProperty] private Entree _editingEntree = new();
 
-    [ObservableProperty]
-    private bool _isNewEntry = true;
+    [ObservableProperty] private bool _isNewEntry = true;
 
-    [ObservableProperty]
-    private ModuleViewModel? _modalSelectedModule;
+    [ObservableProperty] private ModuleViewModel? _modalSelectedModule;
 
-    [ObservableProperty]
-    private ObservableCollection<TypeTravailViewModel> _modalTypesTravail = new();
+    [ObservableProperty] private ObservableCollection<TypeTravailViewModel> _modalTypesTravail = new();
 
     private bool _isEditingExisting;
 
-    
+
     // modal : types de travail
-    [ObservableProperty]
-    private bool _isModalTypesOpen = false;
+    [ObservableProperty] private bool _isModalTypesOpen = false;
 
-    [ObservableProperty]
-    private string _nouveauTypeNom = string.Empty;
+    [ObservableProperty] private string _nouveauTypeNom = string.Empty;
 
-    [ObservableProperty]
-    private bool _isConfirmDeleteTypeOpen = false;
+    [ObservableProperty] private bool _isConfirmDeleteTypeOpen = false;
 
-    [ObservableProperty]
-    private string _deleteWarningMessage = string.Empty;
+    [ObservableProperty] private string _deleteWarningMessage = string.Empty;
 
     private TypeTravailViewModel? _typeToDelete;
 
     // modal : graphique
-    [ObservableProperty]
-    private bool _isModalGraphOpen = false;
+    [ObservableProperty] private bool _isModalGraphOpen = false;
 
-    [ObservableProperty]
-    private ObservableRangeCollection<DonutItem> _graphiqueDonnees = new();
+    [ObservableProperty] private ObservableRangeCollection<DonutItem> _graphiqueDonnees = new();
 
-    
+
     // modal : exportation
-    [ObservableProperty]
-    private bool _isExportModalOpen = false;
+    [ObservableProperty] private bool _isExportModalOpen = false;
 
-    [ObservableProperty]
-    private string _exportPreviewText = string.Empty;
+    [ObservableProperty] private string _exportPreviewText = string.Empty;
 
     private string _currentExportFormat = "MD";
     private bool _exportAllModules = false;
@@ -156,7 +136,8 @@ public partial class JournalViewModel : ViewModelBase
             {
                 if (entree.Type != null && !TypesTravail.Any(t => t.Id == entree.Type.Id))
                 {
-                    TypesTravail.Add(new TypeTravailViewModel { Id = entree.Type.Id, Nom = entree.Type.Nom, ModuleId = entree.Type.ModuleId });
+                    TypesTravail.Add(new TypeTravailViewModel
+                        { Id = entree.Type.Id, Nom = entree.Type.Nom, ModuleId = entree.Type.ModuleId });
                 }
             }
         }
@@ -167,7 +148,8 @@ public partial class JournalViewModel : ViewModelBase
             {
                 if (!TypesTravail.Any(t => t.Id == type.Id))
                 {
-                    TypesTravail.Add(new TypeTravailViewModel { Id = type.Id, Nom = type.Nom, ModuleId = type.ModuleId });
+                    TypesTravail.Add(
+                        new TypeTravailViewModel { Id = type.Id, Nom = type.Nom, ModuleId = type.ModuleId });
                 }
             }
         }
@@ -179,10 +161,13 @@ public partial class JournalViewModel : ViewModelBase
             {
                 await repo.AjouterTypeTravailAsync(typeDefaut);
             }
-            TypesTravail.Add(new TypeTravailViewModel { Id = typeDefaut.Id, Nom = typeDefaut.Nom, ModuleId = typeDefaut.ModuleId });
+
+            TypesTravail.Add(new TypeTravailViewModel
+                { Id = typeDefaut.Id, Nom = typeDefaut.Nom, ModuleId = typeDefaut.ModuleId });
         }
 
-        var journalTrie = moduleVM.JournalDeTravail?.OrderByDescending(entree => entree.Date).ToList() ?? new List<Entree>();
+        var journalTrie = moduleVM.JournalDeTravail?.OrderByDescending(entree => entree.Date).ToList() ??
+                          new List<Entree>();
 
         Journal.ReplaceAll(journalTrie);
         totalDuree = journalTrie.Sum(e => e.Duree);
@@ -199,7 +184,8 @@ public partial class JournalViewModel : ViewModelBase
             foreach (var type in moduleVM.TypesDeTravail)
             {
                 if (!ModalTypesTravail.Any(t => t.Id == type.Id))
-                    ModalTypesTravail.Add(new TypeTravailViewModel { Id = type.Id, Nom = type.Nom, ModuleId = type.ModuleId });
+                    ModalTypesTravail.Add(new TypeTravailViewModel
+                        { Id = type.Id, Nom = type.Nom, ModuleId = type.ModuleId });
             }
         }
 
@@ -208,7 +194,8 @@ public partial class JournalViewModel : ViewModelBase
             foreach (var entree in moduleVM.JournalDeTravail)
             {
                 if (entree.Type != null && !ModalTypesTravail.Any(t => t.Id == entree.Type.Id))
-                    ModalTypesTravail.Add(new TypeTravailViewModel { Id = entree.Type.Id, Nom = entree.Type.Nom, ModuleId = entree.Type.ModuleId });
+                    ModalTypesTravail.Add(new TypeTravailViewModel
+                        { Id = entree.Type.Id, Nom = entree.Type.Nom, ModuleId = entree.Type.ModuleId });
             }
         }
 
@@ -219,7 +206,9 @@ public partial class JournalViewModel : ViewModelBase
             {
                 await repo.AjouterTypeTravailAsync(typeDefaut);
             }
-            ModalTypesTravail.Add(new TypeTravailViewModel { Id = typeDefaut.Id, Nom = typeDefaut.Nom, ModuleId = typeDefaut.ModuleId });
+
+            ModalTypesTravail.Add(new TypeTravailViewModel
+                { Id = typeDefaut.Id, Nom = typeDefaut.Nom, ModuleId = typeDefaut.ModuleId });
         }
 
         if (EditingEntree != null && !ModalTypesTravail.Any(t => t.Id == EditingEntree.TypeTravailId))
@@ -228,7 +217,7 @@ public partial class JournalViewModel : ViewModelBase
         }
     }
 
-#region Commandes : CRUD Entrées 
+    #region Commandes : CRUD Entrées
 
     [RelayCommand]
     private void OuvrirModalAjout()
@@ -303,7 +292,8 @@ public partial class JournalViewModel : ViewModelBase
 
             if (typeSelectionne != null)
             {
-                EditingEntree.Type = new TypeTravail { Id = typeSelectionne.Id, Nom = typeSelectionne.Nom, ModuleId = typeSelectionne.ModuleId };
+                EditingEntree.Type = new TypeTravail
+                    { Id = typeSelectionne.Id, Nom = typeSelectionne.Nom, ModuleId = typeSelectionne.ModuleId };
             }
 
             var moduleDestination = Modules?.FirstOrDefault(m => m.Id == EditingEntree.ModuleId);
@@ -312,9 +302,11 @@ public partial class JournalViewModel : ViewModelBase
                 moduleDestination.JournalDeTravail ??= new List<Entree>();
                 if (_isEditingExisting)
                 {
-                    var ancienneEntree = moduleDestination.JournalDeTravail.FirstOrDefault(e => e.Id == EditingEntree.Id);
+                    var ancienneEntree =
+                        moduleDestination.JournalDeTravail.FirstOrDefault(e => e.Id == EditingEntree.Id);
                     if (ancienneEntree != null) moduleDestination.JournalDeTravail.Remove(ancienneEntree);
                 }
+
                 moduleDestination.JournalDeTravail.Add(EditingEntree);
             }
 
@@ -348,11 +340,10 @@ public partial class JournalViewModel : ViewModelBase
             Console.WriteLine($"Erreur : {ex.Message}");
         }
     }
-#endregion
 
-#region Commandes : CRUD Types de travail
+    #endregion
 
-
+    #region Commandes : CRUD Types de travail
 
     [RelayCommand]
     private void OuvrirModalTypesTravail()
@@ -428,7 +419,8 @@ public partial class JournalViewModel : ViewModelBase
         }
         else
         {
-            DeleteWarningMessage = $"Voulez-vous vraiment supprimer la catégorie '{typeVM.Nom}' ?\nCela supprimera également {count} entrée(s) de journal qui y sont associée(s).";
+            DeleteWarningMessage =
+                $"Voulez-vous vraiment supprimer la catégorie '{typeVM.Nom}' ?\nCela supprimera également {count} entrée(s) de journal qui y sont associée(s).";
             IsConfirmDeleteTypeOpen = true;
         }
     }
@@ -455,7 +447,8 @@ public partial class JournalViewModel : ViewModelBase
         {
             if (SelectedModule.JournalDeTravail != null)
             {
-                var entreesASupprimer = SelectedModule.JournalDeTravail.Where(e => e.Type != null && e.Type.Id == _typeToDelete.Id).ToList();
+                var entreesASupprimer = SelectedModule.JournalDeTravail
+                    .Where(e => e.Type != null && e.Type.Id == _typeToDelete.Id).ToList();
                 foreach (var entree in entreesASupprimer)
                 {
                     var entreeStub = new Entree { Id = entree.Id };
@@ -474,8 +467,8 @@ public partial class JournalViewModel : ViewModelBase
         ActualiserJournalTypeTravail(SelectedModule);
         ActualiserModalTypesTravail(SelectedModule);
     }
-    
-#endregion
+
+    #endregion
 
 
     // graphique
@@ -512,7 +505,7 @@ public partial class JournalViewModel : ViewModelBase
         };
     }
 
-     private string GenererContenuMD()
+    private string GenererContenuMD()
     {
         var sb = new StringBuilder();
         var modules = GetModulesAExporter();
@@ -530,7 +523,7 @@ public partial class JournalViewModel : ViewModelBase
             {
                 if (_exportAllModules) sb.AppendLine($"## Module : {mod.Nom}");
                 else sb.AppendLine($"# {mod.Nom}");
-                
+
                 sb.AppendLine();
 
                 // calcul des heures 
@@ -540,7 +533,7 @@ public partial class JournalViewModel : ViewModelBase
                 foreach (var entree in mod.JournalDeTravail)
                 {
                     totalHeuresModule += entree.Duree;
-                    
+
                     string categorie = entree.Type?.Nom ?? "Général";
                     if (repartitionDict.ContainsKey(categorie))
                     {
@@ -564,7 +557,7 @@ public partial class JournalViewModel : ViewModelBase
                     string duree = entree.Duree.ToString("0.00").Replace(",", ".");
                     string type = (entree.Type?.Nom ?? "Général").PadRight(15);
                     string desc = entree.Description?.Replace("\n", " ").Replace("|", "-") ?? "";
-                    
+
                     sb.AppendLine($"| {date} | {duree}  | {type} | {desc}");
                 }
 
@@ -579,12 +572,12 @@ public partial class JournalViewModel : ViewModelBase
                 }
 
                 sb.AppendLine();
-                
+
                 //  total du module à la fin
                 sb.AppendLine($"**Total des heures :** {totalHeuresModule.ToString("0.00").Replace(",", ".")}h");
                 sb.AppendLine();
 
-                if (_exportAllModules) sb.AppendLine("---\n"); 
+                if (_exportAllModules) sb.AppendLine("---\n");
             }
         }
 
@@ -602,34 +595,37 @@ public partial class JournalViewModel : ViewModelBase
     {
         var sb = new StringBuilder();
         sb.AppendLine("Module;Date;Temps;Type;Description");
-        
+
         foreach (var mod in GetModulesAExporter())
         {
             if (mod.JournalDeTravail != null)
             {
                 foreach (var e in mod.JournalDeTravail)
                 {
-                    sb.AppendLine($"{mod.Nom};{e.Date:dd.MM.yyyy};{e.Duree};{e.Type?.Nom ?? "Général"};{e.Description?.Replace(";", ",")}");
+                    sb.AppendLine(
+                        $"{mod.Nom};{e.Date:dd.MM.yyyy};{e.Duree};{e.Type?.Nom ?? "Général"};{e.Description?.Replace(";", ",")}");
                 }
             }
         }
+
         return sb.ToString();
     }
 
     private string GenererContenuJSON()
     {
         var modules = GetModulesAExporter();
-        
+
         if (modules.Count == 1 && !_exportAllModules)
         {
             return CreerJsonPourModule(modules[0]).ToJsonString(new JsonSerializerOptions { WriteIndented = true });
         }
-        
+
         var jsonArrayGlobal = new JsonArray();
         foreach (var mod in modules)
         {
             jsonArrayGlobal.Add((JsonNode)CreerJsonPourModule(mod));
         }
+
         return jsonArrayGlobal.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
     }
 
@@ -645,9 +641,10 @@ public partial class JournalViewModel : ViewModelBase
                 .GroupBy(e => e.Type?.Nom ?? "Général")
                 .Select(g => new { Categorie = g.Key, Total = g.Sum(e => e.Duree) });
 
-            foreach (var item in repartition) 
+            foreach (var item in repartition)
                 totalHeuresObject[item.Categorie] = JsonValue.Create(item.Total);
         }
+
         jsonRoot["TotalHeures"] = totalHeuresObject;
 
         var jsonArray = new JsonArray();
@@ -662,10 +659,11 @@ public partial class JournalViewModel : ViewModelBase
                     ["Type"] = JsonValue.Create(e.Type?.Nom ?? "Général"),
                     ["Description"] = JsonValue.Create(e.Description ?? "")
                 };
-                
+
                 jsonArray.Add((JsonNode)jsonObject);
             }
         }
+
         jsonRoot["Entrees"] = jsonArray;
 
         return jsonRoot;
@@ -679,17 +677,18 @@ public partial class JournalViewModel : ViewModelBase
     {
         _exportAllModules = exportAll;
     }
+
     private List<ModuleViewModel> GetModulesAExporter()
     {
         if (_exportAllModules)
             return Modules.Where(m => m.JournalDeTravail != null && m.JournalDeTravail.Any()).ToList();
-        
+
         if (SelectedModule != null && SelectedModule.JournalDeTravail != null && SelectedModule.JournalDeTravail.Any())
             return new List<ModuleViewModel> { SelectedModule };
-            
+
         return new List<ModuleViewModel>();
     }
-    
+
 
     public string GetCurrentExportFormat() => _currentExportFormat;
     public bool GetExportAllModules() => _exportAllModules;

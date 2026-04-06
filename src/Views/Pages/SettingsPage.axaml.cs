@@ -28,18 +28,16 @@ using ScholarLog.ViewModels;
 
 namespace ScholarLog.Views.Pages;
 
-
-
 public partial class SettingsPage : UserControl
 {
     public SettingsPage()
     {
         InitializeComponent();
-        
+
         // abonnement aux changements du ViewModel pour afficher le Flyout
         this.DataContextChanged += SettingsPage_DataContextChanged;
     }
-    
+
     public static readonly StyledProperty<int> GridColumnsProperty =
         AvaloniaProperty.Register<SettingsPage, int>(nameof(GridColumns), 4);
 
@@ -48,7 +46,7 @@ public partial class SettingsPage : UserControl
         get => GetValue(GridColumnsProperty);
         set => SetValue(GridColumnsProperty, value);
     }
-    
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -58,10 +56,9 @@ public partial class SettingsPage : UserControl
         {
             var bounds = change.GetNewValue<Rect>();
 
-            if (bounds.Width < 900)       GridColumns = 2;            
+            if (bounds.Width < 900) GridColumns = 2;
             else if (bounds.Width < 1200) GridColumns = 3;
-            else                          GridColumns = 4;
-                
+            else GridColumns = 4;
         }
     }
 
@@ -75,7 +72,7 @@ public partial class SettingsPage : UserControl
                 if (args.PropertyName == nameof(SettingsViewModel.ShowPathError) && vm.ShowPathError)
                 {
                     FlyoutBase.ShowAttachedFlyout(this.FindControl<TextBlock>("userbddPath"));
-                    vm.ShowPathError = false; 
+                    vm.ShowPathError = false;
                 }
             };
         }
@@ -91,9 +88,9 @@ public partial class SettingsPage : UserControl
         {
             Title = "Sélectionner la base de données",
             AllowMultiple = false,
-            FileTypeFilter = new[] 
-            { 
-                new FilePickerFileType("SQLite") { Patterns = new[] { "*.db", "*.sqlite" } } 
+            FileTypeFilter = new[]
+            {
+                new FilePickerFileType("SQLite") { Patterns = new[] { "*.db", "*.sqlite" } }
             }
         });
 
@@ -103,9 +100,4 @@ public partial class SettingsPage : UserControl
             vm.PathToBDD = files[0].Path.LocalPath;
         }
     }
-    
-    
 }
-
-
-

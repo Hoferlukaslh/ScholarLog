@@ -9,10 +9,10 @@
              BorderThickness="1"
              Background="{DynamicResource CardBackground}"
              Padding="0"
-             
+
              Focusable="True"
              KeyDown="UserControl_KeyDown">
-    
+
     <UserControl.Styles>
         <Style Selector="Button.icon-button-small">
             <Setter Property="FontFamily" Value="{DynamicResource Phosphor}" />
@@ -25,74 +25,77 @@
     </UserControl.Styles>
 
     <Grid RowDefinitions="*,Auto" Background="Transparent">
-            <Border Grid.Row="0" Margin="10" VerticalAlignment="Stretch">
-                 <Border CornerRadius="{DynamicResource CardCornerRadius}" 
-                         BorderBrush="{DynamicResource CardBorder}" 
-                         BorderThickness="1" 
-                         Background="{DynamicResource CardBackground}"
-                         ClipToBounds="True">
-        
-                    <Grid Background="#0A000000"> <ScrollViewer x:Name="MainScrollViewer" 
-                                                                HorizontalScrollBarVisibility="Auto" 
-                                                                VerticalScrollBarVisibility="Auto">
-                
-                            <Viewbox x:Name="ImageViewbox" 
-                                     Cursor="Hand"
-                                     PointerPressed="ImageViewbox_PointerPressed"
-                                     PointerMoved="ImageViewbox_PointerMoved"
-                                     PointerReleased="ImageViewbox_PointerReleased">
-                                <Image x:Name="ImagePdf" Stretch="None" Margin="10"/>
-                            </Viewbox>
-                        </ScrollViewer>
-                    </Grid>
-                </Border>
-            </Border>
-            
-            <Border Grid.Row="1" Margin="10,0,10,10" 
-                    Background="{DynamicResource CardBackground}" 
-                    CornerRadius="{DynamicResource ControlCornerRadius}"
-                    BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
-                    Padding="10,5">
-                
-                <Grid ColumnDefinitions="Auto, *, Auto">
-                    
-                    <TextBlock x:Name="IndicateurStatut" Grid.Column="0" 
-                               Text="Prêt" VerticalAlignment="Center" 
-                               Foreground="{DynamicResource SecondaryForeground}"
-                               FontSize="{DynamicResource FontSizeSmall}"/>
+        <Border Grid.Row="0" Margin="10" VerticalAlignment="Stretch">
+            <Border CornerRadius="{DynamicResource CardCornerRadius}"
+                    BorderBrush="{DynamicResource CardBorder}"
+                    BorderThickness="1"
+                    Background="{DynamicResource CardBackground}"
+                    ClipToBounds="True">
 
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="15" HorizontalAlignment="Center">
-                        <Button Content="{DynamicResource IconeNavBack}" Classes="icon-button-small" Click="BoutonPrecedent_Click" ToolTip.Tip="Page précédente (Gauche)"/>
-                        
-                        <TextBlock x:Name="IndicateurPage" Text="0 / 0" 
-                                   VerticalAlignment="Center" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource PrimaryForeground}"/>
-                        
-                        <Button Content="{DynamicResource IconeNavFoward}" Classes="icon-button-small" Click="BoutonSuivant_Click" ToolTip.Tip="Page suivante (Droite)"/>
-                    </StackPanel>
+                <Grid Background="#0A000000">
+                    <ScrollViewer x:Name="MainScrollViewer"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto">
 
-                    <Button Grid.Column="2" Classes="icon-button-small" 
-                            Click="BoutonTelecharger_Click" 
-                            Background="{DynamicResource CardBackground}" 
-                            BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
-                            Foreground="{DynamicResource PrimaryForeground}" 
-                            Padding="12,5" Cursor="Hand"
-                            ToolTip.Tip="Télécharger l'archive du document" 
-                            HorizontalAlignment="Right">
-                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                            <TextBlock Text="{DynamicResource IconeSave}" 
-                                       VerticalAlignment="Center" FontFamily="{DynamicResource Phosphor}" 
-                                       FontSize="{DynamicResource IconSizeSmall}"/>
-                            
-                            <TextBlock Text="Télécharger" 
-                                       FontFamily="{DynamicResource Helvetica}" 
-                                       FontSize="{DynamicResource FontSizeSmall}" 
-                                       VerticalAlignment="Center" 
-                                       Foreground="{DynamicResource PrimaryForeground}"/>
-                        </StackPanel>
-                    </Button>
-                    
+                        <Viewbox x:Name="ImageViewbox"
+                                 Cursor="Hand"
+                                 PointerPressed="ImageViewbox_PointerPressed"
+                                 PointerMoved="ImageViewbox_PointerMoved"
+                                 PointerReleased="ImageViewbox_PointerReleased">
+                            <Image x:Name="ImagePdf" Stretch="None" Margin="10" />
+                        </Viewbox>
+                    </ScrollViewer>
                 </Grid>
             </Border>
-        </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Margin="10,0,10,10"
+                Background="{DynamicResource CardBackground}"
+                CornerRadius="{DynamicResource ControlCornerRadius}"
+                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
+                Padding="10,5">
+
+            <Grid ColumnDefinitions="Auto, *, Auto">
+
+                <TextBlock x:Name="IndicateurStatut" Grid.Column="0"
+                           Text="Prêt" VerticalAlignment="Center"
+                           Foreground="{DynamicResource SecondaryForeground}"
+                           FontSize="{DynamicResource FontSizeSmall}" />
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="15" HorizontalAlignment="Center">
+                    <Button Content="{DynamicResource IconeNavBack}" Classes="icon-button-small"
+                            Click="BoutonPrecedent_Click" ToolTip.Tip="Page précédente (Gauche)" />
+
+                    <TextBlock x:Name="IndicateurPage" Text="0 / 0"
+                               VerticalAlignment="Center" FontWeight="SemiBold"
+                               Foreground="{DynamicResource PrimaryForeground}" />
+
+                    <Button Content="{DynamicResource IconeNavFoward}" Classes="icon-button-small"
+                            Click="BoutonSuivant_Click" ToolTip.Tip="Page suivante (Droite)" />
+                </StackPanel>
+
+                <Button Grid.Column="2" Classes="icon-button-small"
+                        Click="BoutonTelecharger_Click"
+                        Background="{DynamicResource CardBackground}"
+                        BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
+                        Foreground="{DynamicResource PrimaryForeground}"
+                        Padding="12,5" Cursor="Hand"
+                        ToolTip.Tip="Télécharger l'archive du document"
+                        HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                        <TextBlock Text="{DynamicResource IconeSave}"
+                                   VerticalAlignment="Center" FontFamily="{DynamicResource Phosphor}"
+                                   FontSize="{DynamicResource IconSizeSmall}" />
+
+                        <TextBlock Text="Télécharger"
+                                   FontFamily="{DynamicResource Helvetica}"
+                                   FontSize="{DynamicResource FontSizeSmall}"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource PrimaryForeground}" />
+                    </StackPanel>
+                </Button>
+
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>

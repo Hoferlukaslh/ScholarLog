@@ -6,16 +6,16 @@
              x:Class="ScholarLog.Component.LoadingView">
     <Grid Background="Transparent">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                
-            <ProgressBar IsIndeterminate="True" 
-                         Width="200" 
-                         Height="20" 
-                         Margin="0,0,0,10"/>
-                
-            <TextBlock Text="Chargement en cours..." 
-                       FontSize="16" 
+
+            <ProgressBar IsIndeterminate="True"
+                         Width="200"
+                         Height="20"
+                         Margin="0,0,0,10" />
+
+            <TextBlock Text="Chargement en cours..."
+                       FontSize="16"
                        HorizontalAlignment="Center"
-                       Foreground="Gray"/>
+                       Foreground="Gray" />
         </StackPanel>
     </Grid>
 </UserControl>

@@ -28,7 +28,7 @@ public partial class HomePage : UserControl
     public event EventHandler<ModuleViewModel>? NavigationVersJournalDemandee;
 
     //  propriété d'animation UI
-    
+
     public static readonly StyledProperty<double> RightPanelWidthStarProperty =
         AvaloniaProperty.Register<HomePage, double>(nameof(RightPanelWidthStar), 0.0);
 
@@ -49,14 +49,14 @@ public partial class HomePage : UserControl
 
     private ModuleViewModel? _lastSelectedModule = null;
 
-    
+
     private Grid? _mjetGrid;
     private Grid? _moduleGrid;
-    
+
     public HomePage()
     {
         InitializeComponent();
-        
+
         _mjetGrid = this.FindControl<Grid>("MJETBrancheGraph");
         _moduleGrid = this.FindControl<Grid>("ModuleEtJournal");
     }
@@ -68,29 +68,28 @@ public partial class HomePage : UserControl
             var newVal = vm.SelectedModule;
 
             // déclenche l'animation d'ouverture
-            if (_lastSelectedModule == null && newVal != null)       
+            if (_lastSelectedModule == null && newVal != null)
             {
                 RightPanelWidthStar = 3.0;
                 BottomPanelHeightStar = 40.0;
             }
             // déclenche l'animation de fermeture
-            else if (_lastSelectedModule != null && newVal == null)  
+            else if (_lastSelectedModule != null && newVal == null)
             {
                 RightPanelWidthStar = 0.0;
                 BottomPanelHeightStar = 0.0;
-                
-                Task.Delay(350).ContinueWith(_ => 
-                    Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => 
+
+                Task.Delay(350).ContinueWith(_ =>
+                    Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         if (vm.SelectedModule == null) vm.DisplayedModule = null;
                     }));
             }
-            
+
             _lastSelectedModule = newVal;
         }
     }
-    
-    
+
 
     // applique les valeurs animées aux GridLength en temps réel
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -123,7 +122,7 @@ public partial class HomePage : UserControl
         else if (change.Property == BottomPanelHeightStarProperty)
         {
             double val = Math.Max(0, change.GetNewValue<double>());
-            
+
             _moduleGrid.RowDefinitions[1].Height = new GridLength(val, GridUnitType.Star);
         }
     }

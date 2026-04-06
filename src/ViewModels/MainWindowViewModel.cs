@@ -4,7 +4,7 @@
 
     Description  :
         ViewModel principal agissant comme chef d'orchestre de l'application.
-        Contrôle la navigation globale entre les pages, gère l'état du menu latéral 
+        Contrôle la navigation globale entre les pages, gère l'état du menu latéral
         et orchestre l'écran de chargement initial.
 
     Auteur       :  Lukas Hofer - TINF2
@@ -29,62 +29,53 @@ namespace ScholarLog.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    
     // cache des viewModel
     private HomeViewModel? _homeViewModel;
     private NotesViewModel? _notesViewModel;
     private JournalViewModel? _journalViewModel;
     private SettingsViewModel? _settingsViewModel;
-    
+
     // etat de l'interface
-    
-    [ObservableProperty]
-    private ViewModelBase? _currentPage;
 
-    [ObservableProperty]
-    private int _currentPageIndex = 0;
+    [ObservableProperty] private ViewModelBase? _currentPage;
 
-    [ObservableProperty]
-    private bool _isSidebarOpen = true;
-    
+    [ObservableProperty] private int _currentPageIndex = 0;
 
-    [ObservableProperty]
-    private double _splashOpacity = 1.0;
+    [ObservableProperty] private bool _isSidebarOpen = true;
+
+
+    [ObservableProperty] private double _splashOpacity = 1.0;
 
     // etat de chargement 
-    
-    [ObservableProperty]
-    private bool _isLoading = true;
 
-    [ObservableProperty]
-    private int _loadingProgress = 0;
+    [ObservableProperty] private bool _isLoading = true;
 
-    [ObservableProperty]
-    private string _loadingText = "Initialisation...";
+    [ObservableProperty] private int _loadingProgress = 0;
+
+    [ObservableProperty] private string _loadingText = "Initialisation...";
 
     public MainWindowViewModel()
     {
         // Initialiser la page d'accueil par défaut
         _homeViewModel = new HomeViewModel();
 
-        
-        
+
         CurrentPage = _homeViewModel;
-        
+
         WeakReferenceMessenger.Default.Register<ModuleNavigationMessage>(this, (recipient, message) =>
         {
             // 1. On prépare la page du journal
             _journalViewModel ??= new JournalViewModel();
-            
+
             // 2. On lui donne le module qu'on a reçu dans le message
             _journalViewModel.SelectedModule = message.Module;
-            
+
             // 3. On bascule l'affichage et on met à jour l'index du menu (2 = Journaux)
             CurrentPage = _journalViewModel;
-            CurrentPageIndex = 2; 
+            CurrentPageIndex = 2;
         });
     }
-    
+
 
     // commandes (Remplacent les événements Click)
 
@@ -126,7 +117,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public async Task ChargerDonneesInitialesAsync()
     {
         LoadingText = "Chargement des données globales... ";
-        
+
         Task chargementTask = AppDataService.Instance.ChargerDonneesGlobalesAsync();
 
         for (int i = 0; i <= 100; i += 2)
@@ -136,23 +127,24 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 await chargementTask;
             }
-            int delais = chargementTask.IsCompleted ? 5 : 70; 
+
+            int delais = chargementTask.IsCompleted ? 5 : 70;
             await Task.Delay(delais);
         }
 
         LoadingProgress = 100;
         LoadingText = "Terminé !";
-        
+
         SplashOpacity = 0;
-        
+
         await Task.Delay(150); // attente de la fin de l'animation
         IsLoading = false; // Le XAML réagira pour cacher le splash screen
     }
-    
+
     public class ModuleNavigationMessage
     {
         public ModuleViewModel Module { get; }
-    
+
         public ModuleNavigationMessage(ModuleViewModel module)
         {
             Module = module;

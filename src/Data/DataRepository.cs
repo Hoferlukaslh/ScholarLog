@@ -4,7 +4,7 @@
 
     Description  :
         Assure la persistence des données entre l'application et la base SQLite.
-        Implémente le pattern Repository pour centraliser les opérations CRUD 
+        Implémente le pattern Repository pour centraliser les opérations CRUD
         (Create, Read, Update, Delete) et l'initialisation du schéma de la base.
 
     Auteur       :  Lukas Hofer - TINF2
@@ -20,7 +20,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace ScholarLog.Data;
-
 
 /// <summary>
 /// Dépôt de données (Repository) responsable de toutes les interactions avec la base de données SQLite.
@@ -38,10 +37,10 @@ public class DataRepository : IDisposable
     public DataRepository()
     {
         _context = new MonDbContext();
-        
+
         InitialiserBaseDeDonnees();
-        
-        try 
+
+        try
         {
             _context.Database.ExecuteSqlRaw("VACUUM;");
         }
@@ -63,18 +62,17 @@ public class DataRepository : IDisposable
         {
             command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='module';";
             _context.Database.OpenConnection();
-        
+
             var result = command.ExecuteScalar();
-        
+
             if (result == null)
             {
-                var databaseCreator = (Microsoft.EntityFrameworkCore.Storage.RelationalDatabaseCreator)_context.Database.GetService<Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator>();
+                var databaseCreator = (Microsoft.EntityFrameworkCore.Storage.RelationalDatabaseCreator)_context.Database
+                    .GetService<Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator>();
                 databaseCreator.CreateTables();
                 Console.WriteLine("Tables créées dans la base existante.");
             }
         }
-        
-        
     }
 
     /// <summary>
@@ -86,7 +84,7 @@ public class DataRepository : IDisposable
     {
         return await _context.Module
             .Include(m => m.Branches).ThenInclude(b => b.Notes)
-            .Include(m => m.JournalDeTravail).ThenInclude(e => e.Type) 
+            .Include(m => m.JournalDeTravail).ThenInclude(e => e.Type)
             .Include(m => m.TypesDeTravail)
             .AsSplitQuery()
             .ToListAsync();
@@ -95,17 +93,33 @@ public class DataRepository : IDisposable
     // --- CRÉATION ASYNCHRONE ---
 
     /// <summary>Ajoute un nouveau module à la base de données.</summary>
-    public async Task AjouterModuleAsync(Module m) { _context.Module.Add(m); await _context.SaveChangesAsync(); }
-    
+    public async Task AjouterModuleAsync(Module m)
+    {
+        _context.Module.Add(m);
+        await _context.SaveChangesAsync();
+    }
+
     /// <summary>Ajoute une nouvelle entrée au journal de travail.</summary>
-    public async Task AjouterEntreeAsync(Entree e) { _context.Entree.Add(e); await _context.SaveChangesAsync(); }
-    
+    public async Task AjouterEntreeAsync(Entree e)
+    {
+        _context.Entree.Add(e);
+        await _context.SaveChangesAsync();
+    }
+
     /// <summary>Ajoute une nouvelle note associée à une branche.</summary>
-    public async Task AjouterNoteAsync(Note n) { _context.Note.Add(n); await _context.SaveChangesAsync(); }
-    
+    public async Task AjouterNoteAsync(Note n)
+    {
+        _context.Note.Add(n);
+        await _context.SaveChangesAsync();
+    }
+
     /// <summary>Ajoute une nouvelle branche (cours) à un module.</summary>
-    public async Task AjouterBrancheAsync(Branche b) { _context.Branche.Add(b); await _context.SaveChangesAsync(); }
-    
+    public async Task AjouterBrancheAsync(Branche b)
+    {
+        _context.Branche.Add(b);
+        await _context.SaveChangesAsync();
+    }
+
     /// <summary>
     /// Ajoute un nouveau type de travail. Vérifie d'abord s'il existe déjà pour éviter les doublons.
     /// S'il existe déjà, met à jour l'ID de l'objet passé en paramètre avec celui de la base de données.
@@ -116,7 +130,7 @@ public class DataRepository : IDisposable
         // On cherche si le type existe déjà en base
         var existant = await _context.TypeTravail
             .FirstOrDefaultAsync(type => type.Nom == t.Nom && type.ModuleId == t.ModuleId);
-        
+
         if (existant == null)
         {
             // Il n'existe pas, on l'ajoute (EF Core va mettre à jour t.Id automatiquement)
@@ -129,7 +143,7 @@ public class DataRepository : IDisposable
             t.Id = existant.Id;
         }
     }
-    
+
     /// <summary>
     /// Force SQLite à récupérer l'espace disque non utilisé après des suppressions massives.
     /// Exécute la commande SQL 'VACUUM'.
@@ -142,48 +156,84 @@ public class DataRepository : IDisposable
     // --- MODIFICATION ASYNCHRONE ---
 
     /// <summary>Met à jour les informations d'un module existant.</summary>
-    public async Task ModifierModuleAsync(Module m) { _context.Module.Update(m); await _context.SaveChangesAsync(); }
-    
+    public async Task ModifierModuleAsync(Module m)
+    {
+        _context.Module.Update(m);
+        await _context.SaveChangesAsync();
+    }
+
     /// <summary>Met à jour les informations d'une branche existante.</summary>
-    public async Task ModifierBrancheAsync(Branche b) { _context.Branche.Update(b); await _context.SaveChangesAsync(); }
-    
+    public async Task ModifierBrancheAsync(Branche b)
+    {
+        _context.Branche.Update(b);
+        await _context.SaveChangesAsync();
+    }
+
     /// <summary>Met à jour le nom d'un type de travail existant.</summary>
-    public async Task ModifierTypeTravailAsync(TypeTravail t) { _context.TypeTravail.Update(t); await _context.SaveChangesAsync(); }
-    
+    public async Task ModifierTypeTravailAsync(TypeTravail t)
+    {
+        _context.TypeTravail.Update(t);
+        await _context.SaveChangesAsync();
+    }
+
     /// <summary>Met à jour les valeurs d'une note existante.</summary>
-    public async Task ModifierNoteAsync(Note n) { _context.Note.Update(n); await _context.SaveChangesAsync(); }
-    
+    public async Task ModifierNoteAsync(Note n)
+    {
+        _context.Note.Update(n);
+        await _context.SaveChangesAsync();
+    }
+
     /// <summary>Met à jour les détails d'une entrée du journal de travail.</summary>
-    public async Task ModifierEntreeAsync(Entree e) { _context.Entree.Update(e); await _context.SaveChangesAsync(); }
+    public async Task ModifierEntreeAsync(Entree e)
+    {
+        _context.Entree.Update(e);
+        await _context.SaveChangesAsync();
+    }
 
     // --- SUPPRESSION ASYNCHRONE ---
 
     /// <summary>Supprime un module et toutes ses dépendances (cascading delete géré par la BDD).</summary>
-    public async Task SupprimerModuleAsync(Module m) { _context.Module.Remove(m); await _context.SaveChangesAsync(); }
-    
+    public async Task SupprimerModuleAsync(Module m)
+    {
+        _context.Module.Remove(m);
+        await _context.SaveChangesAsync();
+    }
+
     /// <summary>Supprime une branche de la base de données.</summary>
-    public async Task SupprimerBrancheAsync(Branche b) { _context.Branche.Remove(b); await _context.SaveChangesAsync(); }
-    
+    public async Task SupprimerBrancheAsync(Branche b)
+    {
+        _context.Branche.Remove(b);
+        await _context.SaveChangesAsync();
+    }
+
     /// <summary>Supprime un type de travail.</summary>
-    public async Task SupprimerTypeTravailAsync(TypeTravail t) { _context.TypeTravail.Remove(t); await _context.SaveChangesAsync(); }
-    
+    public async Task SupprimerTypeTravailAsync(TypeTravail t)
+    {
+        _context.TypeTravail.Remove(t);
+        await _context.SaveChangesAsync();
+    }
+
     /// <summary>Supprime une note de la base de données, ainsi que son document PDF/CBZ associé s'il existe.</summary>
-    public async Task SupprimerNoteAsync(Note n) 
-    { 
+    public async Task SupprimerNoteAsync(Note n)
+    {
         // cherche d'abord s'il y a une archive (Blob) liée à cette note
         var archiveAssociee = await _context.NoteArchive.FirstOrDefaultAsync(a => a.NoteId == n.Id);
-        
+
         // Si archive trouvée, on demande sa suppression
         if (archiveAssociee != null) _context.NoteArchive.Remove(archiveAssociee);
-        
-        _context.Note.Remove(n);  // supprime la note elle-même
-        
+
+        _context.Note.Remove(n); // supprime la note elle-même
+
         // 4. On valide les changements dans la base (exécutera les deux suppressions d'un coup)
-        await _context.SaveChangesAsync(); 
+        await _context.SaveChangesAsync();
     }
-    
+
     /// <summary>Supprime une entrée spécifique du journal de travail.</summary>
-    public async Task SupprimerEntreeAsync(Entree e) { _context.Entree.Remove(e); await _context.SaveChangesAsync(); }
+    public async Task SupprimerEntreeAsync(Entree e)
+    {
+        _context.Entree.Remove(e);
+        await _context.SaveChangesAsync();
+    }
 
     /// <summary>
     /// Libère les ressources non managées et supprime le contexte de base de données.
@@ -198,7 +248,7 @@ public class DataRepository : IDisposable
             _context.Dispose();
         }
     }
-    
+
     /// <summary>
     /// Retourne uniquement les identifiants (ID) des notes qui possèdent une archive CBZ.
     /// Requête ultra-légère pour l'affichage des icônes dans les listes.
@@ -223,35 +273,35 @@ public class DataRepository : IDisposable
             .FirstOrDefaultAsync(a => a.NoteId == noteId);
         return archive?.Donnees;
     }
-    
-    
-     /// <summary>
-     /// Ajoute ou met à jour l'archive CBZ d'une note.
-     /// </summary>
-     /// <param name="noteId">Identifiant de la note</param>
-     /// <param name="cbzData">Blob de données</param>
-     public async Task SauvegarderArchiveCbzAsync(int noteId, byte[] cbzData)
-     {
-         //  On cherche si la note possède déjà une archive
-         var archiveExistante = await _context.NoteArchive.FirstOrDefaultAsync(a => a.NoteId == noteId);
 
-         if (archiveExistante != null)
-         {
-             // On écrase l'ancien Blob par le nouveau
-             archiveExistante.Donnees = cbzData;
-             _context.NoteArchive.Update(archiveExistante);
-         }
-         else
-         {
-             // Ajout du contenu
-             var nouvelleArchive = new NoteArchive 
-             { 
-                 NoteId = noteId, 
-                 Donnees = cbzData 
-             };
-             _context.NoteArchive.Add(nouvelleArchive);
-         }
-         
-         await _context.SaveChangesAsync();
-     }
+
+    /// <summary>
+    /// Ajoute ou met à jour l'archive CBZ d'une note.
+    /// </summary>
+    /// <param name="noteId">Identifiant de la note</param>
+    /// <param name="cbzData">Blob de données</param>
+    public async Task SauvegarderArchiveCbzAsync(int noteId, byte[] cbzData)
+    {
+        //  On cherche si la note possède déjà une archive
+        var archiveExistante = await _context.NoteArchive.FirstOrDefaultAsync(a => a.NoteId == noteId);
+
+        if (archiveExistante != null)
+        {
+            // On écrase l'ancien Blob par le nouveau
+            archiveExistante.Donnees = cbzData;
+            _context.NoteArchive.Update(archiveExistante);
+        }
+        else
+        {
+            // Ajout du contenu
+            var nouvelleArchive = new NoteArchive
+            {
+                NoteId = noteId,
+                Donnees = cbzData
+            };
+            _context.NoteArchive.Add(nouvelleArchive);
+        }
+
+        await _context.SaveChangesAsync();
+    }
 }

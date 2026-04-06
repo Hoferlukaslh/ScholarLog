@@ -25,7 +25,7 @@
              x:Class="ScholarLog.Views.Pages.JournalPage"
              x:DataType="vm:JournalViewModel"
              x:CompileBindings="True">
-    
+
     <UserControl.Styles>
         <Style Selector="Button.icon-button">
             <Setter Property="FontFamily" Value="{DynamicResource Phosphor}" />
@@ -36,53 +36,54 @@
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="{DynamicResource CardBackground}" />
-            <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
-            <Setter Property="Padding"  Value="-0.5, 0, 0,0" />
+            <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+            <Setter Property="Padding" Value="-0.5, 0, 0,0" />
         </Style>
         <Style Selector="Button.icon-button:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource CardBorder}" />
         </Style>
-    
-    <!-- Boutons export -->
-    <Style Selector="RadioButton.export-toggle">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource SecondaryForeground}"/>
-        <Setter Property="Padding" Value="0,8"/>
-        <Setter Property="Margin" Value="2"/> <Setter Property="CornerRadius" Value="7"/> <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="Template">
-            <ControlTemplate>
-                <Border Background="{TemplateBinding Background}" 
-                        CornerRadius="{TemplateBinding CornerRadius}">
-                    <ContentPresenter Content="{TemplateBinding Content}" 
-                                      Margin="{TemplateBinding Padding}" 
-                                      HorizontalAlignment="Center" 
-                                      VerticalAlignment="Center"/>
-                </Border>
-            </ControlTemplate>
-        </Setter>
-    </Style>
-    
-    <Style Selector="RadioButton.export-toggle:checked">
-        <Setter Property="Background" Value="{DynamicResource CardBorder}"/>
-        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}"/>
-    </Style>
+
+        <!-- Boutons export -->
+        <Style Selector="RadioButton.export-toggle">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryForeground}" />
+            <Setter Property="Padding" Value="0,8" />
+            <Setter Property="Margin" Value="2" /> <Setter Property="CornerRadius" Value="7" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="RadioButton.export-toggle:checked">
+            <Setter Property="Background" Value="{DynamicResource CardBorder}" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
+        </Style>
     </UserControl.Styles>
-    
-    
+
+
     <Grid>
-        
+
         <Grid RowDefinitions="Auto, *">
-            
+
             <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto, *, Auto" Margin="10,20,10,20">
-                
-                <TextBlock Grid.Column="0" Text="Mes Journaux" FontSize="{DynamicResource FontSizeLarge}" 
-                           Foreground="{DynamicResource PrimaryForeground}" 
-                           VerticalAlignment="Center" Margin="0,0,30,0"/>
-                
-                <ComboBox Grid.Column="1" 
-                          ItemsSource="{Binding Modules}" 
-                          SelectedItem="{Binding SelectedModule}" 
+
+                <TextBlock Grid.Column="0" Text="Mes Journaux" FontSize="{DynamicResource FontSizeLarge}"
+                           Foreground="{DynamicResource PrimaryForeground}"
+                           VerticalAlignment="Center" Margin="0,0,30,0" />
+
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding Modules}"
+                          SelectedItem="{Binding SelectedModule}"
                           Width="250" VerticalAlignment="Center"
                           HorizontalAlignment="Center"
                           PlaceholderText="Sélectionner un module...">
@@ -92,105 +93,126 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                
+
                 <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,15,0">
-                        <TextBlock Text="Total" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SecondaryForeground}" HorizontalAlignment="Right"/>
-                        <TextBlock Text="{Binding TotalHeures}" FontSize="{DynamicResource FontSizeNormal}"  Foreground="{DynamicResource PrimaryForeground}" HorizontalAlignment="Right"/>
+                        <TextBlock Text="Total" FontSize="{DynamicResource FontSizeSmall}"
+                                   Foreground="{DynamicResource SecondaryForeground}" HorizontalAlignment="Right" />
+                        <TextBlock Text="{Binding TotalHeures}" FontSize="{DynamicResource FontSizeNormal}"
+                                   Foreground="{DynamicResource PrimaryForeground}" HorizontalAlignment="Right" />
                     </StackPanel>
-                    
+
                     <StackPanel Orientation="Horizontal" Spacing="10">
-                        <Button Content="{DynamicResource IconeGear}" Classes="icon-button" 
+                        <Button Content="{DynamicResource IconeGear}" Classes="icon-button"
                                 Command="{Binding OuvrirModalTypesTravailCommand}" />
-            
-                        <Button Content="{DynamicResource IconeGraph}" Classes="icon-button" 
+
+                        <Button Content="{DynamicResource IconeGraph}" Classes="icon-button"
                                 Command="{Binding OuvrirModalGraphiqueCommand}" />
-            
-                        <Button Content="{DynamicResource IconePlus}" Classes="icon-button" 
-                                Command="{Binding OuvrirModalAjoutCommand}"/>
+
+                        <Button Content="{DynamicResource IconePlus}" Classes="icon-button"
+                                Command="{Binding OuvrirModalAjoutCommand}" />
                     </StackPanel>
-                    
+
                     <Button Tapped="BoutonExporter_Tapped"
-                            Background="{DynamicResource CardBackground}" Height="35" CornerRadius="{DynamicResource ControlCornerRadius}" VerticalContentAlignment="Center" Padding="15,0">
+                            Background="{DynamicResource CardBackground}" Height="35"
+                            CornerRadius="{DynamicResource ControlCornerRadius}" VerticalContentAlignment="Center"
+                            Padding="15,0">
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="Exporter" VerticalAlignment="Center"/>
-                            <ContentControl Content="{DynamicResource IconeExport}" FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource IconSizeNormal}" VerticalAlignment="Center"/>
+                            <TextBlock Text="Exporter" VerticalAlignment="Center" />
+                            <ContentControl Content="{DynamicResource IconeExport}"
+                                            FontFamily="{DynamicResource Phosphor}"
+                                            FontSize="{DynamicResource IconSizeNormal}" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </StackPanel>
             </Grid>
 
             <Border Grid.Row="1" Margin="10,0,10,10" VerticalAlignment="Stretch"
-                    BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
-                    CornerRadius="{DynamicResource CardCornerRadius}" 
+                    BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
+                    CornerRadius="{DynamicResource CardCornerRadius}"
                     Background="{DynamicResource CardBackground}">
-                
+
                 <Grid RowDefinitions="Auto,*">
                     <Grid Grid.Row="0" ColumnDefinitions="1.5*, 1*, 2*, 4*, Auto" Margin="20,20,20,10">
-                        <TextBlock Grid.Column="0" Text="Date" Foreground="{DynamicResource PrimaryForeground}"/>
-                        <TextBlock Grid.Column="1" Text="Temps" Foreground="{DynamicResource PrimaryForeground}"/>
-                        <TextBlock Grid.Column="2" Text="Type de travail" Foreground="{DynamicResource PrimaryForeground}"/>
-                        <TextBlock Grid.Column="3" Text="Description" Foreground="{DynamicResource PrimaryForeground}"/>
-                        <TextBlock Grid.Column="4" Text="Action" Foreground="{DynamicResource PrimaryForeground}" Width="80" TextAlignment="Right"/>
+                        <TextBlock Grid.Column="0" Text="Date" Foreground="{DynamicResource PrimaryForeground}" />
+                        <TextBlock Grid.Column="1" Text="Temps" Foreground="{DynamicResource PrimaryForeground}" />
+                        <TextBlock Grid.Column="2" Text="Type de travail"
+                                   Foreground="{DynamicResource PrimaryForeground}" />
+                        <TextBlock Grid.Column="3" Text="Description" Foreground="{DynamicResource PrimaryForeground}" />
+                        <TextBlock Grid.Column="4" Text="Action" Foreground="{DynamicResource PrimaryForeground}"
+                                   Width="80" TextAlignment="Right" />
                     </Grid>
 
-                    <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}" VerticalAlignment="Bottom" Margin="10,0"/>
-                    
+                    <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}"
+                            VerticalAlignment="Bottom" Margin="10,0" />
+
                     <!-- Entrées du Journal -->
                     <ItemsControl Grid.Row="1" Margin="0,5,0,10" ItemsSource="{Binding Journal}">
                         <ItemsControl.Template>
                             <ControlTemplate>
-                                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                              VerticalScrollBarVisibility="Auto">
                                     <ItemsPresenter />
                                 </ScrollViewer>
                             </ControlTemplate>
                         </ItemsControl.Template>
-                        
+
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
-                        
+
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="data:Entree">
                                 <Grid ColumnDefinitions="1.5*, 1*, 2*, 4*, Auto" Margin="20,10">
-                                    <TextBlock Grid.Column="0" Text="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="1" Text="{Binding Duree, StringFormat={}{0}h}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="2" Text="{Binding Type.Nom}" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="3" Text="{Binding Description}" Foreground="{DynamicResource PrimaryForeground}" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                    
-                                    <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="10" Width="80" HorizontalAlignment="Right">
-                                        <Button Content="{DynamicResource IconeCrayon}" 
-                                                FontFamily="{DynamicResource Phosphor}" 
-                                                FontSize="{DynamicResource IconSizeSmall}"  
+                                    <TextBlock Grid.Column="0" Text="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}"
+                                               Foreground="{DynamicResource PrimaryForeground}"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Duree, StringFormat={}{0}h}"
+                                               Foreground="{DynamicResource PrimaryForeground}"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Type.Nom}"
+                                               Foreground="{DynamicResource PrimaryForeground}"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="3" Text="{Binding Description}"
+                                               Foreground="{DynamicResource PrimaryForeground}" TextWrapping="Wrap"
+                                               VerticalAlignment="Center" />
+
+                                    <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="10" Width="80"
+                                                HorizontalAlignment="Right">
+                                        <Button Content="{DynamicResource IconeCrayon}"
+                                                FontFamily="{DynamicResource Phosphor}"
+                                                FontSize="{DynamicResource IconSizeSmall}"
                                                 Foreground="{DynamicResource PrimaryForeground}"
                                                 Background="Transparent" Padding="5" Cursor="Hand"
                                                 Command="{Binding $parent[UserControl].((vm:JournalViewModel)DataContext).OuvrirModalModificationCommand}"
-                                                CommandParameter="{Binding}"/>
-                                        
-                                        <Button Content="{DynamicResource IconeTrash}" 
-                                                FontFamily="{DynamicResource Phosphor}" 
-                                                FontSize="{DynamicResource IconSizeSmall}" 
+                                                CommandParameter="{Binding}" />
+
+                                        <Button Content="{DynamicResource IconeTrash}"
+                                                FontFamily="{DynamicResource Phosphor}"
+                                                FontSize="{DynamicResource IconSizeSmall}"
                                                 Background="Transparent" Padding="5" Cursor="Hand"
                                                 Tapped="BoutonSupprimer_Tapped">
 
                                             <Button.Styles>
                                                 <Style Selector="Button">
-                                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}"/>
+                                                    <Setter Property="Foreground"
+                                                            Value="{DynamicResource PrimaryForeground}" />
                                                 </Style>
-    
+
                                                 <Style Selector="Button[IsDefault=True]">
-                                                    <Setter Property="Foreground" Value="Red"/>
+                                                    <Setter Property="Foreground" Value="Red" />
                                                 </Style>
-    
-                                                <Style Selector="Button[IsDefault=True]:pointerover /template/ ContentPresenter">
-                                                    <Setter Property="Foreground" Value="Red"/>
+
+                                                <Style
+                                                    Selector="Button[IsDefault=True]:pointerover /template/ ContentPresenter">
+                                                    <Setter Property="Foreground" Value="Red" />
                                                 </Style>
                                             </Button.Styles>
 
                                             <Button.IsDefault>
-                                                <Binding Path="IsDeletePending"/>
+                                                <Binding Path="IsDeletePending" />
                                             </Button.IsDefault>
                                         </Button>
                                     </StackPanel>
@@ -201,27 +223,31 @@
                 </Grid>
             </Border>
         </Grid>
-        
+
         <!-- Modal pour editer les entrées -->
         <Grid Background="Transparent" ZIndex="100" IsVisible="{Binding IsModalOpen}">
-            <Border Width="450" Background="{DynamicResource ModalBackground}" 
+            <Border Width="450" Background="{DynamicResource ModalBackground}"
                     CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center"
                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                     BoxShadow="0 10 30 0 #40000000">
-                
-                <StackPanel Margin="20" Spacing="15">
-                    
-                    <Grid>
-                        <TextBlock Text="{Binding ModalTitle}" FontSize="{DynamicResource FontSizeNormal}"  FontWeight="SemiBold" VerticalAlignment="Center"/>
-                        <Button Content="✕" Background="Transparent" HorizontalAlignment="Right" Command="{Binding FermerModalCommand}"/>
-                    </Grid>
-                    
-                    <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5"/>
 
-                    <TextBlock Text="Module" IsVisible="{Binding IsNewEntry}" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
-                    <ComboBox IsVisible="{Binding IsNewEntry}" 
-                              ItemsSource="{Binding Modules}" 
-                              SelectedItem="{Binding ModalSelectedModule}" 
+                <StackPanel Margin="20" Spacing="15">
+
+                    <Grid>
+                        <TextBlock Text="{Binding ModalTitle}" FontSize="{DynamicResource FontSizeNormal}"
+                                   FontWeight="SemiBold" VerticalAlignment="Center" />
+                        <Button Content="✕" Background="Transparent" HorizontalAlignment="Right"
+                                Command="{Binding FermerModalCommand}" />
+                    </Grid>
+
+                    <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5" />
+
+                    <TextBlock Text="Module" IsVisible="{Binding IsNewEntry}"
+                               FontSize="{DynamicResource FontSizeSmall}"
+                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
+                    <ComboBox IsVisible="{Binding IsNewEntry}"
+                              ItemsSource="{Binding Modules}"
+                              SelectedItem="{Binding ModalSelectedModule}"
                               HorizontalAlignment="Stretch">
                         <ComboBox.ItemTemplate>
                             <DataTemplate x:DataType="data:ModuleViewModel">
@@ -230,10 +256,11 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <TextBlock Text="Date" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
-                    <CalendarDatePicker 
-                        SelectedDateFormat="Custom" 
-                        CustomDateFormatString="dd.MM.yyyy" 
+                    <TextBlock Text="Date" FontSize="{DynamicResource FontSizeSmall}"
+                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
+                    <CalendarDatePicker
+                        SelectedDateFormat="Custom"
+                        CustomDateFormatString="dd.MM.yyyy"
                         DisplayDateStart="2024-01-01"
                         SelectedDate="{Binding EditingEntree.Date}"
                         SelectedDateChanged="CalendarDatePicker_OnSelectedDateChanged"
@@ -242,14 +269,17 @@
                         HorizontalAlignment="Stretch">
                     </CalendarDatePicker>
 
-                    <TextBlock Text="Temps (heures)" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
-                    <NumericUpDown Value="{Binding EditingEntree.Duree}" Increment="0.5" Minimum="0" FormatString="0.0" HorizontalAlignment="Stretch"/>
+                    <TextBlock Text="Temps (heures)" FontSize="{DynamicResource FontSizeSmall}"
+                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
+                    <NumericUpDown Value="{Binding EditingEntree.Duree}" Increment="0.5" Minimum="0" FormatString="0.0"
+                                   HorizontalAlignment="Stretch" />
 
-                    <TextBlock Text="Type de travail" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
+                    <TextBlock Text="Type de travail" FontSize="{DynamicResource FontSizeSmall}"
+                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
 
-                    <ComboBox ItemsSource="{Binding ModalTypesTravail}" 
-                              SelectedValue="{Binding EditingEntree.TypeTravailId}" 
-                              SelectedValueBinding="{Binding Id}" 
+                    <ComboBox ItemsSource="{Binding ModalTypesTravail}"
+                              SelectedValue="{Binding EditingEntree.TypeTravailId}"
+                              SelectedValueBinding="{Binding Id}"
                               HorizontalAlignment="Stretch">
                         <ComboBox.ItemTemplate>
                             <DataTemplate x:DataType="data:TypeTravailViewModel">
@@ -258,80 +288,90 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <TextBlock Text="Description" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
-                    <TextBox Text="{Binding EditingEntree.Description}" HorizontalAlignment="Stretch" MinHeight="60" TextWrapping="Wrap"/>
+                    <TextBlock Text="Description" FontSize="{DynamicResource FontSizeSmall}"
+                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
+                    <TextBox Text="{Binding EditingEntree.Description}" HorizontalAlignment="Stretch" MinHeight="60"
+                             TextWrapping="Wrap" />
 
                     <Button Command="{Binding SauvegarderEntreeCommand}"
-                            HorizontalAlignment="Right" 
-                            Margin="0,10,0,0" 
+                            HorizontalAlignment="Right"
+                            Margin="0,10,0,0"
                             Padding="15,8"
-                            Background="{DynamicResource CardBackground}" 
-                            Foreground="{DynamicResource PrimaryForeground}" 
+                            Background="{DynamicResource CardBackground}"
+                            Foreground="{DynamicResource PrimaryForeground}"
                             CornerRadius="{DynamicResource ControlCornerRadius}">
-    
+
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="{StaticResource IconeSave}" 
-                                       FontFamily="{StaticResource Phosphor}" 
+                            <TextBlock Text="{StaticResource IconeSave}"
+                                       FontFamily="{StaticResource Phosphor}"
                                        VerticalAlignment="Center"
-                                       FontSize="{DynamicResource IconSizeNormal}"/>
-        
-                            <TextBlock Text="Sauvegarder" 
-                                       FontFamily="{StaticResource Helvetica}" 
+                                       FontSize="{DynamicResource IconSizeNormal}" />
+
+                            <TextBlock Text="Sauvegarder"
+                                       FontFamily="{StaticResource Helvetica}"
                                        FontSize="{DynamicResource FontSizeNormal}"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
-                    
+
                 </StackPanel>
             </Border>
         </Grid>
-        
+
         <!-- Modal pour editer les typeTravail -->
         <Grid Background="Transparent" ZIndex="101" IsVisible="{Binding IsModalTypesOpen}">
-            <Border Width="450" Background="{DynamicResource ModalBackground}" 
+            <Border Width="450" Background="{DynamicResource ModalBackground}"
                     CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center"
                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                     BoxShadow="0 10 30 0 #40000000">
-                
+
                 <StackPanel Margin="20" Spacing="15">
                     <Grid>
-                        <TextBlock Text="Gérer les catégories" FontSize="{DynamicResource FontSizeNormal}"  FontWeight="SemiBold" VerticalAlignment="Center"/>
-                        <Button Content="✕" Background="Transparent" HorizontalAlignment="Right" Command="{Binding FermerModalTypesCommand}"/>
+                        <TextBlock Text="Gérer les catégories" FontSize="{DynamicResource FontSizeNormal}"
+                                   FontWeight="SemiBold" VerticalAlignment="Center" />
+                        <Button Content="✕" Background="Transparent" HorizontalAlignment="Right"
+                                Command="{Binding FermerModalTypesCommand}" />
                     </Grid>
-                    
-                    <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5"/>
+
+                    <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5" />
 
                     <Grid ColumnDefinitions="*, Auto">
-                        <TextBox Grid.Column="0" Text="{Binding NouveauTypeNom}" Watermark="Nouvelle catégorie..." VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <Button Grid.Column="1" Content="Ajouter" Command="{Binding AjouterNouveauTypeCommand}" 
-                                Background="#3A3A3A" Foreground="White" CornerRadius="{DynamicResource ControlCornerRadius}"/>
+                        <TextBox Grid.Column="0" Text="{Binding NouveauTypeNom}" Watermark="Nouvelle catégorie..."
+                                 VerticalAlignment="Center" Margin="0,0,10,0" />
+                        <Button Grid.Column="1" Content="Ajouter" Command="{Binding AjouterNouveauTypeCommand}"
+                                Background="#3A3A3A" Foreground="White"
+                                CornerRadius="{DynamicResource ControlCornerRadius}" />
                     </Grid>
 
-                    <TextBlock Text="Catégories existantes" FontSize="{DynamicResource FontSizeMedium}" FontWeight="SemiBold" Margin="0,10,0,0"/>
+                    <TextBlock Text="Catégories existantes" FontSize="{DynamicResource FontSizeMedium}"
+                               FontWeight="SemiBold" Margin="0,10,0,0" />
 
                     <ScrollViewer MaxHeight="250">
                         <ItemsControl ItemsSource="{Binding TypesTravail}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="data:TypeTravailViewModel">
                                     <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,5">
-                                        
-                                        <TextBox Grid.Column="0" Text="{Binding Nom}" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                                        
-                                        <Button Grid.Column="1" Content="{DynamicResource IconeSave}"  
+
+                                        <TextBox Grid.Column="0" Text="{Binding Nom}" Margin="0,0,10,0"
+                                                 VerticalAlignment="Center" />
+
+                                        <Button Grid.Column="1" Content="{DynamicResource IconeSave}"
                                                 Foreground="{DynamicResource PrimaryForeground}"
                                                 FontFamily="{DynamicResource Phosphor}"
                                                 FontSize="{DynamicResource IconSizeNormal}"
-                                                Command="{Binding $parent[UserControl].((vm:JournalViewModel)DataContext).RenommerTypeCommand}" 
+                                                Command="{Binding $parent[UserControl].((vm:JournalViewModel)DataContext).RenommerTypeCommand}"
                                                 CommandParameter="{Binding}"
-                                                Background="Transparent" Padding="5" Cursor="Hand" ToolTip.Tip="Sauvegarder le nom"/>
-        
-                                        <Button Grid.Column="2" Content="{DynamicResource IconeTrash}" 
-                                                FontFamily="{DynamicResource Phosphor}" 
+                                                Background="Transparent" Padding="5" Cursor="Hand"
+                                                ToolTip.Tip="Sauvegarder le nom" />
+
+                                        <Button Grid.Column="2" Content="{DynamicResource IconeTrash}"
+                                                FontFamily="{DynamicResource Phosphor}"
                                                 Foreground="{DynamicResource PrimaryForeground}"
                                                 FontSize="{DynamicResource IconSizeNormal}"
-                                                Command="{Binding $parent[UserControl].((vm:JournalViewModel)DataContext).DemanderSuppressionTypeCommand}" 
+                                                Command="{Binding $parent[UserControl].((vm:JournalViewModel)DataContext).DemanderSuppressionTypeCommand}"
                                                 CommandParameter="{Binding}"
-                                                Background="Transparent" Padding="5" Cursor="Hand" ToolTip.Tip="Supprimer"/>
+                                                Background="Transparent" Padding="5" Cursor="Hand"
+                                                ToolTip.Tip="Supprimer" />
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -343,52 +383,57 @@
 
         <!-- Modal pour la confirmation de la suppression du typeTravail !+ ENTREE ! -->
         <Grid Background="#A0000000" ZIndex="102" IsVisible="{Binding IsConfirmDeleteTypeOpen}">
-            <Border Width="400" Background="{DynamicResource ModalBackground}" 
+            <Border Width="400" Background="{DynamicResource ModalBackground}"
                     CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center"
                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                     BoxShadow="0 10 30 0 #40000000">
                 <StackPanel Margin="20" Spacing="15">
-                    <TextBlock Text="⚠️ Confirmer la suppression" 
-                               FontSize="{DynamicResource FontSizeNormal}"  
-                               FontWeight="SemiBold" Foreground="Red"/>
-                    <TextBlock Text="{Binding DeleteWarningMessage}" 
-                               TextWrapping="Wrap" 
-                               Foreground="{DynamicResource PrimaryForeground}"/>
+                    <TextBlock Text="⚠️ Confirmer la suppression"
+                               FontSize="{DynamicResource FontSizeNormal}"
+                               FontWeight="SemiBold" Foreground="Red" />
+                    <TextBlock Text="{Binding DeleteWarningMessage}"
+                               TextWrapping="Wrap"
+                               Foreground="{DynamicResource PrimaryForeground}" />
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,10,0,0">
-                        <Button Content="Annuler" Command="{Binding AnnulerSuppressionTypeCommand}" CornerRadius="{DynamicResource ControlCornerRadius}" Background="{DynamicResource CardBorder}"/>
-                        <Button Content="Supprimer" Command="{Binding ConfirmerSuppressionTypeCommand}" Background="Red" Foreground="White" CornerRadius="{DynamicResource ControlCornerRadius}"/>
+                        <Button Content="Annuler" Command="{Binding AnnulerSuppressionTypeCommand}"
+                                CornerRadius="{DynamicResource ControlCornerRadius}"
+                                Background="{DynamicResource CardBorder}" />
+                        <Button Content="Supprimer" Command="{Binding ConfirmerSuppressionTypeCommand}"
+                                Background="Red" Foreground="White"
+                                CornerRadius="{DynamicResource ControlCornerRadius}" />
                     </StackPanel>
                 </StackPanel>
             </Border>
         </Grid>
-        
+
         <!-- Graphique répartition des heures -->
-        <Grid Background="Transparent" ZIndex="103" IsVisible="{Binding IsModalGraphOpen}" >
+        <Grid Background="Transparent" ZIndex="103" IsVisible="{Binding IsModalGraphOpen}">
             <Grid ColumnDefinitions="*, 3*, *" RowDefinitions="*, 3*, *">
                 <Border Grid.Column="1" Grid.Row="1"
                         MinWidth="500" MinHeight="450"
-                        Background="{DynamicResource ModalBackground}" 
+                        Background="{DynamicResource ModalBackground}"
                         CornerRadius="8"
-                        BorderBrush="{DynamicResource CardBorder}" 
+                        BorderBrush="{DynamicResource CardBorder}"
                         BorderThickness="1"
                         BoxShadow="0 0 30 0 #50000000">
-            
+
                     <Grid RowDefinitions="Auto, *">
                         <StackPanel Grid.Row="0" Margin="20" Spacing="15">
                             <Grid>
-                                <TextBlock Text="Répartition des heures" 
-                                           FontSize="{DynamicResource FontSizeNormal}" 
-                                           FontWeight="SemiBold" 
+                                <TextBlock Text="Répartition des heures"
+                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           FontWeight="SemiBold"
                                            FontFamily="{DynamicResource Helvetica}"
-                                           VerticalAlignment="Center"/>
-                                <Button Content="✕" Background="Transparent" HorizontalAlignment="Right" Command="{Binding FermerModalGraphiqueCommand}"/>
+                                           VerticalAlignment="Center" />
+                                <Button Content="✕" Background="Transparent" HorizontalAlignment="Right"
+                                        Command="{Binding FermerModalGraphiqueCommand}" />
                             </Grid>
-                            <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5"/>
+                            <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5" />
                         </StackPanel>
 
                         <Grid Grid.Row="1" Margin="20,0,20,20">
-                            <controls:DonutChartControl ItemsSource="{Binding GraphiqueDonnees}" 
+                            <controls:DonutChartControl ItemsSource="{Binding GraphiqueDonnees}"
                                                         HorizontalAlignment="Stretch"
                                                         VerticalAlignment="Stretch" />
                         </Grid>
@@ -401,76 +446,81 @@
         <Grid Background="#A0000000" ZIndex="104" IsVisible="{Binding IsExportModalOpen}">
             <Grid ColumnDefinitions="*, 3*, *" RowDefinitions="*, 3*, *">
                 <Border Grid.Column="1" Grid.Row="1"
-                        MinWidth="550" MinHeight="450" 
-                        Background="{DynamicResource ModalBackground}" 
-                        CornerRadius="8" 
+                        MinWidth="550" MinHeight="450"
+                        Background="{DynamicResource ModalBackground}"
+                        CornerRadius="8"
                         BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                         BoxShadow="0 10 30 0 #40000000">
-                    
-                    <Grid RowDefinitions="Auto, Auto, *, Auto" Margin="20">
-                        
-                        <Grid Grid.Row="0" Margin="0,0,0,15">
-                            <TextBlock Text="Exporter les entrées" FontSize="{DynamicResource FontSizeMedium}" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                            <Button Content="✕" Background="Transparent" HorizontalAlignment="Right" Command="{Binding FermerModalExportationCommand}" Cursor="Hand"/>
-                        </Grid>
-                        <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}" VerticalAlignment="Bottom" Margin="-20,0"/>
 
-                        <Border Grid.Row="1" Margin="0,20,0,15" 
-                                Background="{DynamicResource CardBackground}" 
-                                CornerRadius="8" 
-                                Padding="2"> 
+                    <Grid RowDefinitions="Auto, Auto, *, Auto" Margin="20">
+
+                        <Grid Grid.Row="0" Margin="0,0,0,15">
+                            <TextBlock Text="Exporter les entrées" FontSize="{DynamicResource FontSizeMedium}"
+                                       FontWeight="SemiBold" VerticalAlignment="Center" />
+                            <Button Content="✕" Background="Transparent" HorizontalAlignment="Right"
+                                    Command="{Binding FermerModalExportationCommand}" Cursor="Hand" />
+                        </Grid>
+                        <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}"
+                                VerticalAlignment="Bottom" Margin="-20,0" />
+
+                        <Border Grid.Row="1" Margin="0,20,0,15"
+                                Background="{DynamicResource CardBackground}"
+                                CornerRadius="8"
+                                Padding="2">
                             <Grid ColumnDefinitions="*,*,*">
-                                <RadioButton Name="RbExportMd" Grid.Column="0" Classes="export-toggle" 
-                                             Content="MD" Command="{Binding ChangerFormatExportationCommand}" 
-                                             CommandParameter="MD" GroupName="ExportFormat"/>
-        
-                                <RadioButton Name="RbExportCsv" Grid.Column="1" Classes="export-toggle" 
-                                             Content="CSV" Command="{Binding ChangerFormatExportationCommand}" 
-                                             CommandParameter="CSV" GroupName="ExportFormat"/>
-        
-                                <RadioButton Name="RbExportJson" Grid.Column="2" Classes="export-toggle" 
-                                             Content="JSON" Command="{Binding ChangerFormatExportationCommand}" 
-                                             CommandParameter="JSON" GroupName="ExportFormat"/>
+                                <RadioButton Name="RbExportMd" Grid.Column="0" Classes="export-toggle"
+                                             Content="MD" Command="{Binding ChangerFormatExportationCommand}"
+                                             CommandParameter="MD" GroupName="ExportFormat" />
+
+                                <RadioButton Name="RbExportCsv" Grid.Column="1" Classes="export-toggle"
+                                             Content="CSV" Command="{Binding ChangerFormatExportationCommand}"
+                                             CommandParameter="CSV" GroupName="ExportFormat" />
+
+                                <RadioButton Name="RbExportJson" Grid.Column="2" Classes="export-toggle"
+                                             Content="JSON" Command="{Binding ChangerFormatExportationCommand}"
+                                             CommandParameter="JSON" GroupName="ExportFormat" />
                             </Grid>
                         </Border>
 
                         <Grid Grid.Row="2" Margin="0,0,0,15">
                             <Border Background="#0A0A0A" CornerRadius="8" BorderBrush="#333" BorderThickness="1">
-                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="15">
-                                    <TextBlock Text="{Binding ExportPreviewText}" 
-                                               FontFamily="Consolas, Courier New, Monospace" 
-                                               Foreground="#CCCCCC" 
-                                               FontSize="{DynamicResource FontSizeSmall}"/>
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                              Margin="15">
+                                    <TextBlock Text="{Binding ExportPreviewText}"
+                                               FontFamily="Consolas, Courier New, Monospace"
+                                               Foreground="#CCCCCC"
+                                               FontSize="{DynamicResource FontSizeSmall}" />
                                 </ScrollViewer>
                             </Border>
-    
-                            <Button Click="CopierPressePapier" 
-                                    Background="{DynamicResource CardBackground}" 
-                                    Foreground="{DynamicResource PrimaryForeground}" 
-                                    CornerRadius="{DynamicResource ControlCornerRadius}" Padding="8" 
-                                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" ToolTip.Tip="Copier le texte">
-                                <ContentControl Content="{DynamicResource IconeCopy}" 
-                                                FontFamily="{DynamicResource Phosphor}" 
+
+                            <Button Click="CopierPressePapier"
+                                    Background="{DynamicResource CardBackground}"
+                                    Foreground="{DynamicResource PrimaryForeground}"
+                                    CornerRadius="{DynamicResource ControlCornerRadius}" Padding="8"
+                                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"
+                                    ToolTip.Tip="Copier le texte">
+                                <ContentControl Content="{DynamicResource IconeCopy}"
+                                                FontFamily="{DynamicResource Phosphor}"
                                                 Foreground="#FFF" />
                             </Button>
                         </Grid>
 
                         <Button Grid.Row="3" Click="SauvegarderFichierExportation"
-                                Background="{DynamicResource CardBackground}" 
-                                Foreground="{DynamicResource PrimaryForeground}" 
+                                Background="{DynamicResource CardBackground}"
+                                Foreground="{DynamicResource PrimaryForeground}"
                                 CornerRadius="{DynamicResource CardCornerRadius}" Padding="10"
                                 HorizontalAlignment="Right" ToolTip.Tip="Enregistrer sur l'ordinateur">
-                            <ContentControl Content="{DynamicResource IconeSave}" 
-                                            FontFamily="{DynamicResource Phosphor}" 
+                            <ContentControl Content="{DynamicResource IconeSave}"
+                                            FontFamily="{DynamicResource Phosphor}"
                                             FontSize="{DynamicResource IconSizeNormal}" />
                         </Button>
-                        
+
                     </Grid>
                 </Border>
             </Grid>
         </Grid>
-        
-        
+
+
     </Grid>
-    
+
 </UserControl>

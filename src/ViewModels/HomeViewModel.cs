@@ -4,8 +4,8 @@
 
     Description  :
         ViewModel de la page d'accueil (Tableau de bord).
-        Agrège les données globales pour afficher un résumé des modules, 
-        calculer les moyennes par branche (Théorie vs Modules) et préparer 
+        Agrège les données globales pour afficher un résumé des modules,
+        calculer les moyennes par branche (Théorie vs Modules) et préparer
         les données pour le graphique Donut de répartition du travail.
 
     Auteur       :  Lukas Hofer - TINF2
@@ -13,7 +13,7 @@
 
     Remarques    :
         - Calcule les tendances (BrancheTrend) pour chaque évaluation.
-        - Utilise le WeakReferenceMessenger pour déclencher la navigation vers le Journal 
+        - Utilise le WeakReferenceMessenger pour déclencher la navigation vers le Journal
           sans coupler fortement les ViewModels.
 */
 
@@ -30,31 +30,23 @@ using ScholarLog.Components.DonutDiagram;
 
 namespace ScholarLog.ViewModels;
 
-
 public partial class HomeViewModel : ViewModelBase
 {
     // état global
-    [ObservableProperty]
-    private ObservableRangeCollection<ModuleViewModel> _modules;
+    [ObservableProperty] private ObservableRangeCollection<ModuleViewModel> _modules;
 
-    [ObservableProperty]
-    private ModuleViewModel? _selectedModule;
+    [ObservableProperty] private ModuleViewModel? _selectedModule;
 
-    [ObservableProperty]
-    private ModuleViewModel? _displayedModule;
+    [ObservableProperty] private ModuleViewModel? _displayedModule;
 
     // collection pour l'affichage
-    [ObservableProperty]
-    private ObservableRangeCollection<BrancheViewModel> _branchesTM = new();
+    [ObservableProperty] private ObservableRangeCollection<BrancheViewModel> _branchesTM = new();
 
-    [ObservableProperty]
-    private ObservableRangeCollection<BrancheViewModel> _branchesM = new();
+    [ObservableProperty] private ObservableRangeCollection<BrancheViewModel> _branchesM = new();
 
-    [ObservableProperty]
-    private ObservableRangeCollection<Entree> _journal = new();
+    [ObservableProperty] private ObservableRangeCollection<Entree> _journal = new();
 
-    [ObservableProperty]
-    private ObservableRangeCollection<DonutItem> _graphiqueDonnees = new();
+    [ObservableProperty] private ObservableRangeCollection<DonutItem> _graphiqueDonnees = new();
 
     // événement pour communiquer avec MainWindow (sans couplage fort)
     public event EventHandler<ModuleViewModel>? NavigationVersJournalDemandee;
@@ -65,8 +57,8 @@ public partial class HomeViewModel : ViewModelBase
     }
 
     // déclencheurs automatiques
-    
-    
+
+
     partial void OnSelectedModuleChanged(ModuleViewModel? value)
     {
         if (value == null) return;

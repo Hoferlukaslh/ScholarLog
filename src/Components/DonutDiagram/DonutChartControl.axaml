@@ -1,7 +1,7 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ScholarLog.Components.DonutDiagram.DonutChartControl">
-    
+
     <Grid RowDefinitions="60*, Auto">
         <Canvas Name="DonutCanvas"
                 Grid.Row="0"
@@ -9,14 +9,14 @@
                 VerticalAlignment="Stretch"
                 Background="Transparent"
                 Margin="0,0,0,10"
-                SizeChanged="OnDonutCanvasSizeChanged"/>
-        
+                SizeChanged="OnDonutCanvasSizeChanged" />
+
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled">
             <StackPanel Name="LegendPanel"
                         HorizontalAlignment="Center"
-                        Orientation="Vertical"/>
+                        Orientation="Vertical" />
         </ScrollViewer>
     </Grid>
 </UserControl>

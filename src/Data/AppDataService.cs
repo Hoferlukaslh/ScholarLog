@@ -18,7 +18,6 @@ using System.Threading.Tasks;
 
 namespace ScholarLog.Data;
 
-
 /// <summary>
 /// Service gérant l'état global des données de l'application.
 /// Fait le lien entre le DataRepository et les ViewModels de l'interface.
@@ -30,12 +29,15 @@ public class AppDataService
     public static AppDataService Instance => _instance ??= new AppDataService();
 
     /// <summary> Collection des modules chargés, partagée par toute l'application. </summary>
-    public ObservableRangeCollection<ModuleViewModel> Modules { get; } = new ObservableRangeCollection<ModuleViewModel>();
-    
+    public ObservableRangeCollection<ModuleViewModel> Modules { get; } =
+        new ObservableRangeCollection<ModuleViewModel>();
+
     /// <summary> Indique si le chargement initial a déjà été effectué. </summary>
     public bool IsLoaded { get; private set; }
 
-    private AppDataService() { }
+    private AppDataService()
+    {
+    }
 
     /// <summary>
     /// Charge les données depuis la base SQLite de manière asynchrone.
@@ -43,11 +45,11 @@ public class AppDataService
     /// </summary>
     public async Task ChargerDonneesGlobalesAsync()
     {
-        if (IsLoaded) return; 
+        if (IsLoaded) return;
 
         var nouveauxModules = new List<ModuleViewModel>();
 
-        await Task.Run(async () => 
+        await Task.Run(async () =>
         {
             using (var repo = new DataRepository())
             {
@@ -55,8 +57,8 @@ public class AppDataService
 
                 if (!rawModules.Any())
                 {
-                    await CreerModulesParDefautAsync(repo); 
-                    rawModules = await repo.GetModulesAsync(); 
+                    await CreerModulesParDefautAsync(repo);
+                    rawModules = await repo.GetModulesAsync();
                 }
 
                 foreach (var mod in rawModules)
@@ -64,7 +66,7 @@ public class AppDataService
                     // Filtrage utilisant l'énumération TypeCours
                     var branchesTM = mod.Branches.Where(b => b.Type == TypeCours.TM).ToList();
                     var module = mod.Branches.FirstOrDefault(b => b.Type == TypeCours.M) ?? new Branche();
-                    
+
                     double avgTM = ObtenirMoyenne(branchesTM);
                     double noteModule = module.Notes.Count == 1 ? module.Notes[0].Valeur : 0;
 
@@ -83,9 +85,9 @@ public class AppDataService
             }
         });
 
-        foreach (var mod in nouveauxModules) 
+        foreach (var mod in nouveauxModules)
             Modules.Add(mod);
-            
+
         IsLoaded = true;
     }
 
@@ -111,7 +113,7 @@ public class AppDataService
         {
             if (b.Notes != null && b.Notes.Count > 0)
             {
-                sommeDesMoyennes += b.CalculerMoyenne(); 
+                sommeDesMoyennes += b.CalculerMoyenne();
                 nombreDeBranchesValides++;
             }
         }

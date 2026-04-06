@@ -3,9 +3,9 @@
     Projet       :  ScholarLog
 
     Description  :
-        Code-behind de la vue JournalPage. 
-        Gère la logique purement visuelle et les interactions avec les services 
-        système (Presse-papier, Sélecteur de fichiers) qui ne peuvent pas être 
+        Code-behind de la vue JournalPage.
+        Gère la logique purement visuelle et les interactions avec les services
+        système (Presse-papier, Sélecteur de fichiers) qui ne peuvent pas être
         faits directement dans le ViewModel.
 
     Auteur       :  Lukas Hofer - TINF2
@@ -87,7 +87,7 @@ public partial class JournalPage : UserControl
 
             // coche le bouton radio dans l'UI (Code-behind)
             this.FindControl<RadioButton>("RbExportMd").IsChecked = true;
-            
+
             vm.ChangerFormatExportationCommand.Execute("MD");
             vm.IsExportModalOpen = true;
         }
@@ -98,7 +98,7 @@ public partial class JournalPage : UserControl
         if (this.DataContext is JournalViewModel vm && !string.IsNullOrEmpty(vm.ExportPreviewText))
         {
             var topLevel = TopLevel.GetTopLevel(this);
-            if (topLevel?.Clipboard != null) 
+            if (topLevel?.Clipboard != null)
                 await topLevel.Clipboard.SetTextAsync(vm.ExportPreviewText);
         }
     }
@@ -114,7 +114,7 @@ public partial class JournalPage : UserControl
 
                 string extension = vm.GetCurrentExportFormat().ToLower();
                 string trigramme = "ALL";
-                
+
                 if (!vm.GetExportAllModules())
                 {
                     string nomModule = vm.SelectedModule?.ShortName ?? "MOD";

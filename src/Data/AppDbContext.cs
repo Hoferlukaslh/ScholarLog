@@ -17,7 +17,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ScholarLog.Data;
 
-
 /// <summary>
 /// Contexte de base de données principal de l'application.
 /// Assure la liaison entre les classes C# (Models) et les tables SQLite.
@@ -28,7 +27,7 @@ public class MonDbContext : DbContext
     public DbSet<Note> Note { get; set; }
 
     /// <summary> Table stockant les modules d'enseignement. </summary>
-    public DbSet<Module> Module { get; set; }   
+    public DbSet<Module> Module { get; set; }
 
     /// <summary> Table stockant les branches (cours) liées aux modules. </summary>
     public DbSet<Branche> Branche { get; set; }
@@ -38,7 +37,7 @@ public class MonDbContext : DbContext
 
     /// <summary> Table stockant les catégories de travaux personnalisées. </summary>
     public DbSet<TypeTravail> TypeTravail { get; set; }
-    
+
     /// <summary> Table stockant les archives CBZ (BLOB) liées aux notes. </summary>
     public DbSet<NoteArchive> NoteArchive { get; set; }
 
@@ -50,14 +49,14 @@ public class MonDbContext : DbContext
     {
         // Définit le chemin de la base de données dans le répertoire de l'exécutable
         string dbPath = Path.Combine(AppContext.BaseDirectory, "BDD.db");
-        
+
         // Journalisation du chemin pour le débogage console
         Console.WriteLine($"Base de données située à : {dbPath}");
 
         options
             .UseSqlite($"Data Source={dbPath}")
-        // Utilisation du modèle compilé pour accélérer le démarrage de l'application
-        .UseModel(ScholarLog.Data.CompiledModels.MonDbContextModel.Instance); 
+            // Utilisation du modèle compilé pour accélérer le démarrage de l'application
+            .UseModel(ScholarLog.Data.CompiledModels.MonDbContextModel.Instance);
 
         /* Note de maintenance :
            En cas de modification du fichier models.cs, il faut régénérer

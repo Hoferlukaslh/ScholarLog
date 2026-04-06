@@ -15,7 +15,8 @@ namespace AvaloniaUI.CustomTransitions
         public TimeSpan Duration { get; set; } = TimeSpan.FromMilliseconds(500);
 
         // Méthode principale qui exécute l'animation
-        public async Task Start(Visual from, Visual to, bool forward, System.Threading.CancellationToken cancellationToken)
+        public async Task Start(Visual from, Visual to, bool forward,
+            System.Threading.CancellationToken cancellationToken)
         {
             // Éviter les animations si une page est nulle
             if (from == null || to == null) return;
@@ -55,7 +56,10 @@ namespace AvaloniaUI.CustomTransitions
                     },
                     new KeyFrame
                     {
-                        Setters = { new Setter(TranslateTransform.YProperty, -from.Bounds.Height) }, // Glisser vers le haut (Y négatif)
+                        Setters =
+                        {
+                            new Setter(TranslateTransform.YProperty, -from.Bounds.Height)
+                        }, // Glisser vers le haut (Y négatif)
                         Cue = new Cue(1.0)
                     }
                 }
@@ -91,7 +95,10 @@ namespace AvaloniaUI.CustomTransitions
                 {
                     new KeyFrame
                     {
-                        Setters = { new Setter(TranslateTransform.YProperty, from.Bounds.Height) }, // Glisser depuis le bas (Y positif)
+                        Setters =
+                        {
+                            new Setter(TranslateTransform.YProperty, from.Bounds.Height)
+                        }, // Glisser depuis le bas (Y positif)
                         Cue = new Cue(0.0)
                     },
                     new KeyFrame

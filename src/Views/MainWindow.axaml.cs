@@ -2,7 +2,7 @@
     Fichier      :  MainWindow.axaml.cs
     Projet       :  ScholarLog
 
-    Description  : 
+    Description  :
         Code-behind de la fenêtre principale. STRICTEMENT limité à la logique visuelle (UI).
         Écoute le ViewModel pour animer l'interface :
             - Déplacement aléatoire des lumières (Timer)
@@ -37,7 +37,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        
+
         this.Loaded += MainWindow_Loaded;
         // On s'abonne au changement de DataContext pour écouter le ViewModel
         this.DataContextChanged += MainWindow_DataContextChanged;
@@ -72,7 +72,6 @@ public partial class MainWindow : Window
 
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
-
         // Timer pour les lumières de fond animées
         _lightTimer = new DispatcherTimer
         {
@@ -92,8 +91,7 @@ public partial class MainWindow : Window
         }
     }
 
-    
-    
+
     // logique purement visuelle (animations & geométrie) 
     private void MoveLights()
     {
@@ -130,21 +128,22 @@ public partial class MainWindow : Window
             toggleIcon.Classes.Remove("rotated");
             SetMenuTextOpacity(1);
         }
-        else 
+        else
         {
             sidebar.Width = 60;
-            if (!toggleIcon.Classes.Contains("rotated")) 
+            if (!toggleIcon.Classes.Contains("rotated"))
                 toggleIcon.Classes.Add("rotated");
-            
+
             SetMenuTextOpacity(0);
         }
     }
 
     private void SetMenuTextOpacity(double opacity)
     {
-        string[] controlNames = { 
-            "TextLogo", "TextAccueil", "TextNotes", 
-            "TextJournaux", "TextCollapse", "TextSettings" 
+        string[] controlNames =
+        {
+            "TextLogo", "TextAccueil", "TextNotes",
+            "TextJournaux", "TextCollapse", "TextSettings"
         };
 
         foreach (var name in controlNames)
@@ -160,7 +159,7 @@ public partial class MainWindow : Window
     {
         var sidebar = this.FindControl<Grid>("Sidebar");
         var navCursor = this.FindControl<Border>("NavCursor");
-        
+
         // On associe l'index à son bouton physique
         Button? targetButton = pageIndex switch
         {
@@ -174,14 +173,14 @@ public partial class MainWindow : Window
         if (targetButton == null || navCursor == null || sidebar == null) return;
 
         var pointRelatif = targetButton.TranslatePoint(new Point(0, 0), sidebar);
-    
+
         if (pointRelatif.HasValue)
         {
             double yPos = pointRelatif.Value.Y;
-            double decalage = targetButton.Bounds.Height > 0 
-                ? (targetButton.Bounds.Height - navCursor.Height) / 2 
-                : 6; 
-            
+            double decalage = targetButton.Bounds.Height > 0
+                ? (targetButton.Bounds.Height - navCursor.Height) / 2
+                : 6;
+
             Canvas.SetTop(navCursor, yPos + decalage);
         }
     }
@@ -200,7 +199,6 @@ public partial class MainWindow : Window
             }
         }
     }
-    
 }
 
 /// <summary>
@@ -209,16 +207,16 @@ public partial class MainWindow : Window
 public class MyPageSlide : PageSlide
 {
     private Easing _easing = new LinearEasing();
-    public bool SensManuel { get; set; } = true; 
+    public bool SensManuel { get; set; } = true;
 
-    public Easing Easing 
-    { 
-        set 
-        { 
-            _easing = value; 
-            SlideInEasing = value; 
-            SlideOutEasing = value; 
-        } 
+    public Easing Easing
+    {
+        set
+        {
+            _easing = value;
+            SlideInEasing = value;
+            SlideOutEasing = value;
+        }
     }
 
     public MyPageSlide()
@@ -226,7 +224,7 @@ public class MyPageSlide : PageSlide
         SlideInEasing = _easing;
         SlideOutEasing = _easing;
     }
-    
+
     public override Task Start(Visual? from, Visual? to, bool forward, CancellationToken cancellationToken)
     {
         return base.Start(from, to, SensManuel, cancellationToken);

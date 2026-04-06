@@ -20,72 +20,72 @@
              x:Class="ScholarLog.App"
              xmlns:local="using:ScholarLog"
              xmlns:System="clr-namespace:System;assembly=mscorlib"
-             RequestedThemeVariant="Default">  
+             RequestedThemeVariant="Default">
 
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <local:ViewLocator />
     </Application.DataTemplates>
-  
+
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="Styles/AppDefaultStyle.axaml"></StyleInclude>
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
     </Application.Styles>
-             
+
     <Application.Resources>
         <ResourceDictionary>
-            
+
             <!-- Police d'écriture -->
             <FontFamily x:Key="Helvetica">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica.ttf#Helvetica</FontFamily>
             <FontFamily x:Key="Phosphor">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor.ttf#Phosphor</FontFamily>
             <!--<FontFamily x:Key="PhosphorDuotone">avares://ScholarLog/Assets/Fonts/Phosphor/Phosphor-Duotone.ttf#Phosphor</FontFamily> -->
             <!--<FontFamily x:Key="HelveticaBold">avares://ScholarLog/Assets/Fonts/Helvetica/Helvetica-Bold.ttf#Helvetica</FontFamily>-->
-            
+
             <!-- Taille des textes -->
             <System:Double x:Key="FontSizeLarge">22</System:Double>
             <System:Double x:Key="FontSizeMedium">18</System:Double>
             <System:Double x:Key="FontSizeNormal">16</System:Double>
             <System:Double x:Key="FontSizeSmall">13</System:Double>
             <System:Double x:Key="FontSizeLogo">25</System:Double>
-            
+
             <!-- Taille des icones -->
-            <System:Double x:Key="IconSizeLarge">32</System:Double> 
+            <System:Double x:Key="IconSizeLarge">32</System:Double>
             <System:Double x:Key="IconSizeMedium">28</System:Double>
-            <System:Double x:Key="IconSizeNormal">25</System:Double> 
+            <System:Double x:Key="IconSizeNormal">25</System:Double>
             <System:Double x:Key="IconSizeSmall">20</System:Double>
-            <System:Double x:Key="IconSizeLogo">35</System:Double> 
-            
+            <System:Double x:Key="IconSizeLogo">35</System:Double>
+
             <!-- Bords arrondies -->
             <CornerRadius x:Key="CardCornerRadius">12</CornerRadius>
             <CornerRadius x:Key="ControlCornerRadius">8</CornerRadius>
             <CornerRadius x:Key="FieldCornerRadius">7</CornerRadius>
-            
-            
+
+
             <!-- Les icones dans l'application, des caracter UTF dans la police phophorIcone -->
             <x:String x:Key="IconeScholarHat">&#xE62C;</x:String>
-            
+
             <x:String x:Key="IconeHome">&#xE2C2;</x:String>
             <x:String x:Key="IconeHashtag">&#xE2A2;</x:String>
             <x:String x:Key="IconePen">&#xE3AC;</x:String>
             <x:String x:Key="IconeRetract">&#xE128;</x:String>
             <x:String x:Key="IconeGear">&#xE272;</x:String>
-            
+
             <x:String x:Key="IconeBDD">&#xE1DE;</x:String>
             <x:String x:Key="IconeHDD">&#xE29E;</x:String>
             <x:String x:Key="IconeSearch">&#xE30C;</x:String>
             <x:String x:Key="IconeSave">&#xEAF4;</x:String>
-            
+
             <x:String x:Key="IconePalette">&#xE6C8;</x:String>
             <x:String x:Key="IconeMoon">&#xE58E;</x:String>
             <x:String x:Key="IconeSun">&#xE472;</x:String>
-            
+
             <x:String x:Key="IconeDanger">&#xE4E0;</x:String>
-            
+
             <x:String x:Key="IconeUp">&#xE4AE;</x:String>
             <x:String x:Key="IconeDown">&#xE4AC;</x:String>
             <x:String x:Key="IconeStable">&#xE06C;</x:String>
             <x:String x:Key="IconeFoward">&#xE6A6;</x:String>
-            
+
             <x:String x:Key="IconeTime">&#xE19A;</x:String>
             <x:String x:Key="IconePlus">&#xE3D4;</x:String>
             <x:String x:Key="IconeExport">&#xEAF0;</x:String>
@@ -95,38 +95,37 @@
             <x:String x:Key="IconeCopy">&#xE1CA;</x:String>
             <x:String x:Key="IconeDocument">&#xE230;</x:String>
             <x:String x:Key="IconeClose">&#xE4F6;</x:String>
-            
+
             <x:String x:Key="IconeNavBack">&#xE5A4;</x:String>
             <x:String x:Key="IconeNavFoward">&#xE5A6;</x:String>
             <x:String x:Key="IconeFolder">&#xE24A;</x:String>
-            
-            
-            
+
+
             <!-- Couleurs text-->
             <SolidColorBrush x:Key="ErrorForeground">Red</SolidColorBrush>
 
-            
+
             <!-- Ressources en fonction du thème de l'appareil -->
             <ResourceDictionary.ThemeDictionaries>
-                
+
                 <!-- Thème sombre -->
-                <ResourceDictionary x:Key="Dark"> 
+                <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="PrimaryBackground">#DD14172D</SolidColorBrush>
-                    
+
                     <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
                         <GradientStop Offset="0" Color="#CC111214"></GradientStop>
                         <GradientStop Offset="1" Color="#CC151E3E"></GradientStop>
                     </LinearGradientBrush>
-                    
+
                     <!-- ReSharper disable once Xaml.UnexpectedTextToken -->
                     <WindowIcon x:Key="AppIcon">/Assets/Images/ScholarLogLogoTSombre.ico</WindowIcon>
-                    
+
                     <!-- Couleur du texte -->
-                    <SolidColorBrush x:Key="PrimaryForeground">#F5F5F7</SolidColorBrush> 
+                    <SolidColorBrush x:Key="PrimaryForeground">#F5F5F7</SolidColorBrush>
                     <SolidColorBrush x:Key="SecondaryForeground">#A0A0AB</SolidColorBrush>
-                    
-                    <SolidColorBrush x:Key="CardBackground">#15FFFFFF</SolidColorBrush> 
-                    <SolidColorBrush x:Key="ModalBackground">#EE14172D</SolidColorBrush> 
+
+                    <SolidColorBrush x:Key="CardBackground">#15FFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="ModalBackground">#EE14172D</SolidColorBrush>
                     <SolidColorBrush x:Key="CardBorder">#20FFFFFF</SolidColorBrush>
                 </ResourceDictionary>
 
@@ -134,21 +133,21 @@
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="PrimaryBackground">#DDF0F2F8</SolidColorBrush>
                     <SolidColorBrush x:Key="PrimaryBackgroundLinux">#F7F0F2F8</SolidColorBrush>
-                    
+
                     <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
                         <GradientStop Offset="0" Color="#CCDDE1F0"></GradientStop>
                         <GradientStop Offset="1" Color="#CCFFFFFF"></GradientStop>
                     </LinearGradientBrush>
-                    
+
                     <!-- ReSharper disable once Xaml.UnexpectedTextToken -->
                     <WindowIcon x:Key="AppIcon">/Assets/Images/ScholarLogLogoTClair.ico</WindowIcon>
-                    
+
                     <!-- Couleur du texte -->
-                    <SolidColorBrush x:Key="PrimaryForeground">#1C1E26</SolidColorBrush> 
+                    <SolidColorBrush x:Key="PrimaryForeground">#1C1E26</SolidColorBrush>
                     <SolidColorBrush x:Key="SecondaryForeground">#6E7681</SolidColorBrush>
-                    
-                    <SolidColorBrush x:Key="CardBackground">#AAFFFFFF</SolidColorBrush> 
-                    <SolidColorBrush x:Key="ModalBackground">#EEFFFFFF</SolidColorBrush> 
+
+                    <SolidColorBrush x:Key="CardBackground">#AAFFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="ModalBackground">#EEFFFFFF</SolidColorBrush>
                     <SolidColorBrush x:Key="CardBorder">#80D1D5DB</SolidColorBrush>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>

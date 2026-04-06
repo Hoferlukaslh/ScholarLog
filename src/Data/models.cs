@@ -13,30 +13,38 @@
 
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 using Module = ScholarLog.Data.Module; // Élimination de l'ambiguité avec système Module pour EF
 
 namespace ScholarLog.Data;
 
-
 /// <summary>
 /// Définit le type d'une branche ou d'un cours (ex: M, TM, PM).
 /// </summary>
-public enum TypeCours { M, TM, PM } 
+public enum TypeCours
+{
+    M,
+    TM,
+    PM
+}
 
 /// <summary>
 /// Représente la tendance d'une moyenne pour l'affichage des indicateurs visuels (en hausse, en baisse ou stable).
 /// </summary>
-public enum Trend {Up, Down, Stable}
-
+public enum Trend
+{
+    Up,
+    Down,
+    Stable
+}
 
 // ==========================================
+
 #region Modèles de données (Entités)
+
 // Ces classes représentent le modèle orienté objet (domaine métier) de l'application.
 // Elles sont mappées aux tables de la base de données relationnelle locale SQLite 
 // via le framework Entity Framework Core (ORM).
@@ -49,12 +57,10 @@ public enum Trend {Up, Down, Stable}
 [Table("module")]
 public class Module : ObservableObject
 {
-    [Key][Column("mod_id")]
-    public int Id { get; set; }
-    
-    [Column("mod_nom")]
-    public string Nom { get; set; }
-    
+    [Key] [Column("mod_id")] public int Id { get; set; }
+
+    [Column("mod_nom")] public string Nom { get; set; }
+
     // un module possède ses propres types de travaux, ses branches et son journal
     public List<Branche> Branches { get; set; } = new List<Branche>();
     public List<Entree> JournalDeTravail { get; set; } = new List<Entree>();
@@ -68,19 +74,14 @@ public class Module : ObservableObject
 [Table("type_travail")]
 public class TypeTravail : ObservableObject
 {
-    [Key][Column("typ_id")]
-    public int Id { get; set; }
+    [Key] [Column("typ_id")] public int Id { get; set; }
 
-    [Column("typ_nom")]
-    public string Nom { get; set; }
-    
-    [Column("mod_id")]
-    public int ModuleId { get; set; }
+    [Column("typ_nom")] public string Nom { get; set; }
 
-    [ForeignKey("ModuleId")]
-    public ScholarLog.Data.Module Module { get; set; }
+    [Column("mod_id")] public int ModuleId { get; set; }
+
+    [ForeignKey("ModuleId")] public ScholarLog.Data.Module Module { get; set; }
 }
-
 
 /// <summary>
 /// Entité représentant une entrée journalisée pour le suivi du temps de travail de l'étudiant.
@@ -89,38 +90,29 @@ public class TypeTravail : ObservableObject
 [Table("entree")]
 public class Entree : ObservableObject
 {
-    [Key][Column("ent_id")]
-    public int Id { get; set; }
+    [Key] [Column("ent_id")] public int Id { get; set; }
 
-    [Column("ent_duree")]
-    public double Duree { get; set; }
+    [Column("ent_duree")] public double Duree { get; set; }
 
-    [Column("ent_date")]
-    public DateTime Date { get; set; }
+    [Column("ent_date")] public DateTime Date { get; set; }
 
-    [Column("ent_description")]
-    public string Description { get; set; }
+    [Column("ent_description")] public string Description { get; set; }
 
-    [Column("mod_id")]
-    public int ModuleId { get; set; }
-    
-    [ForeignKey("ModuleId")]
-    public ScholarLog.Data.Module Module { get; set; }
+    [Column("mod_id")] public int ModuleId { get; set; }
 
-    [Column("typ_id")]
-    public int TypeTravailId { get; set; }
-    
-    [ForeignKey("TypeTravailId")]
-    public TypeTravail Type { get; set; }
-    
-    [NotMapped]
-    private bool _isDeletePending;
+    [ForeignKey("ModuleId")] public ScholarLog.Data.Module Module { get; set; }
+
+    [Column("typ_id")] public int TypeTravailId { get; set; }
+
+    [ForeignKey("TypeTravailId")] public TypeTravail Type { get; set; }
+
+    [NotMapped] private bool _isDeletePending;
 
     [NotMapped]
     public bool IsDeletePending
     {
         get => _isDeletePending;
-        set => SetProperty(ref _isDeletePending, value); 
+        set => SetProperty(ref _isDeletePending, value);
         // SetProperty notifiera l'interface que la valeur a changé (grâce à ObservableObject)
     }
 }
@@ -132,23 +124,18 @@ public class Entree : ObservableObject
 [Table("branche")]
 public class Branche : ObservableObject
 {
-    [Key][Column("bra_id")]
-    public int Id { get; set; }
-    
-    [Column("bra_nom")]
-    public string Nom { get; set; }
-    
-    [Column("bra_type")]
-    public TypeCours Type { get; set; }
+    [Key] [Column("bra_id")] public int Id { get; set; }
 
-    [Column("mod_id")]
-    public int ModuleId { get; set; }
-    
-    [ForeignKey("ModuleId")]
-    public ScholarLog.Data.Module Module { get; set; }
-    
+    [Column("bra_nom")] public string Nom { get; set; }
+
+    [Column("bra_type")] public TypeCours Type { get; set; }
+
+    [Column("mod_id")] public int ModuleId { get; set; }
+
+    [ForeignKey("ModuleId")] public ScholarLog.Data.Module Module { get; set; }
+
     public List<Note> Notes { get; set; } = new List<Note>();
-    
+
     /// <summary>
     /// Calcule la moyenne des notes associées à cette branche.
     /// </summary>
@@ -175,43 +162,35 @@ public class Branche : ObservableObject
 [Table("note")]
 public class Note : ObservableObject
 {
-    [Key][Column("not_id")]
-    public int Id { get; set; }
-    [Column("not_valeur")]
-    public double Valeur { get; set; }
-    
-    [Column("not_date")]
-    public DateTime Date { get; set; }
-    
-    [Column("not_titre")]
-    public string titre { get; set; }
+    [Key] [Column("not_id")] public int Id { get; set; }
+    [Column("not_valeur")] public double Valeur { get; set; }
 
-    [Column("bra_id")]
-    public int BrancheId { get; set; }
-    
-    [ForeignKey("BrancheId")]
-    public Branche Branche { get; set; }
-    
-    [NotMapped]
-    private bool _isDeletePending;
-    
-    [NotMapped]
-    private bool _hasDocument;
+    [Column("not_date")] public DateTime Date { get; set; }
+
+    [Column("not_titre")] public string titre { get; set; }
+
+    [Column("bra_id")] public int BrancheId { get; set; }
+
+    [ForeignKey("BrancheId")] public Branche Branche { get; set; }
+
+    [NotMapped] private bool _isDeletePending;
+
+    [NotMapped] private bool _hasDocument;
 
     [NotMapped]
     public bool HasDocument
     {
         get => _hasDocument;
-        set => SetProperty(ref _hasDocument, value); 
+        set => SetProperty(ref _hasDocument, value);
     }
-    
+
     public NoteArchive? ArchiveCbz { get; set; }
 
     [NotMapped]
     public bool IsDeletePending
     {
         get => _isDeletePending;
-        set => SetProperty(ref _isDeletePending, value); 
+        set => SetProperty(ref _isDeletePending, value);
     }
 }
 
@@ -222,22 +201,21 @@ public class Note : ObservableObject
 [Table("note_archive")]
 public class NoteArchive : ObservableObject
 {
-    [Key][Column("arc_id")]
-    public int Id { get; set; }
+    [Key] [Column("arc_id")] public int Id { get; set; }
 
-    [Column("arc_donnees")]
-    public byte[] Donnees { get; set; } // Le fichier CBZ brut
+    [Column("arc_donnees")] public byte[] Donnees { get; set; } // Le fichier CBZ brut
 
-    [Column("not_id")]
-    public int NoteId { get; set; }
+    [Column("not_id")] public int NoteId { get; set; }
 
-    [ForeignKey("NoteId")]
-    public Note Note { get; set; }
+    [ForeignKey("NoteId")] public Note Note { get; set; }
 }
+
 #endregion
 
 // ==========================================
+
 #region Affichage (MVVM)
+
 // Modèles de vue (ViewModels du pattern MVVM)
 // Ces classes sont dédiées au fonctionnement de l'interface Avalonia UI et étendent le domaine métier.
 // ==========================================
@@ -267,7 +245,6 @@ public class TypeTravailViewModel() : TypeTravail
 /// </summary>
 public class ModuleViewModel : ScholarLog.Data.Module
 {
-
     public string ShortName => Nom.Length <= 3 ? Nom : Nom.Substring(0, 3).ToUpper();
     public double AvgTheory { get; set; }
     public double TravailModule { get; set; }
@@ -281,16 +258,16 @@ public class ModuleViewModel : ScholarLog.Data.Module
         get
         {
             double moyenne = 0;
-        
+
             // trouve directement la branche M et sa première note, sans faire de boucle
             var brancheM = base.Branches?.FirstOrDefault(b => b.Type == TypeCours.M);
             double noteProjetModule = brancheM?.Notes?.FirstOrDefault()?.Valeur ?? 0;
-        
+
             if (noteProjetModule > 0 && AvgTheory > 0)
                 moyenne = (noteProjetModule + AvgTheory) / 2.0;
-            else 
-                moyenne = noteProjetModule + AvgTheory; 
-        
+            else
+                moyenne = noteProjetModule + AvgTheory;
+
             return Math.Round(moyenne * 2.0, MidpointRounding.AwayFromZero) / 2.0;
         }
     }
@@ -307,4 +284,5 @@ public class NoteViewModel : Note
     public string BrancheNom { get; set; } = string.Empty;
     public string ModuleNom { get; set; } = string.Empty;
 }
+
 # endregion

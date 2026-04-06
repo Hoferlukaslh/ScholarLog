@@ -13,7 +13,7 @@ sealed class Program
     {
         var builder = AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            
+
             // Gestion stricte du moteur de rendu (Skia) pour la RAM / VRAM
             .With(new SkiaOptions
             {
@@ -21,9 +21,9 @@ sealed class Program
                 MaxGpuResourceSizeBytes = 256 * 1024 * 1024
             });
 
-            // Les logs coûtent de la RAM (allocation de chaînes). À exclure en production.
+        // Les logs coûtent de la RAM (allocation de chaînes). À exclure en production.
 #if DEBUG
-            builder.LogToTrace(Avalonia.Logging.LogEventLevel.Warning);
+        builder.LogToTrace(Avalonia.Logging.LogEventLevel.Warning);
 #endif
 
         return builder;

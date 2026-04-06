@@ -4,7 +4,7 @@
 
     Description  :
         ViewModel responsable de la gestion des notes (évaluations).
-        Traite la logique d'ajout, de modification et de suppression des notes 
+        Traite la logique d'ajout, de modification et de suppression des notes
         pour chaque branche, et maintient à jour les listes filtrées pour l'affichage.
 
     Auteur       :  Lukas Hofer - TINF2
@@ -27,63 +27,46 @@ using ScholarLog.Data;
 
 namespace ScholarLog.ViewModels;
 
-
 public partial class NotesViewModel : ViewModelBase
 {
     // état de la vue
-    [ObservableProperty]
-    private bool _isListView = true;
+    [ObservableProperty] private bool _isListView = true;
 
-    [ObservableProperty]
-    private ObservableRangeCollection<NoteViewModel> _allNotes = new();
+    [ObservableProperty] private ObservableRangeCollection<NoteViewModel> _allNotes = new();
 
-    [ObservableProperty]
-    private ObservableRangeCollection<Branche> _selectedModuleBranchesWithNotes = new();
+    [ObservableProperty] private ObservableRangeCollection<Branche> _selectedModuleBranchesWithNotes = new();
 
-    [ObservableProperty]
-    private ObservableRangeCollection<ModuleViewModel> _modules;
+    [ObservableProperty] private ObservableRangeCollection<ModuleViewModel> _modules;
 
-    [ObservableProperty]
-    private ModuleViewModel? _selectedModule;
+    [ObservableProperty] private ModuleViewModel? _selectedModule;
 
     // état du modal
-    [ObservableProperty]
-    private bool _isModalOpen = false;
+    [ObservableProperty] private bool _isModalOpen = false;
 
-    [ObservableProperty]
-    private string _modalTitle = "Nouvelle note";
+    [ObservableProperty] private string _modalTitle = "Nouvelle note";
 
-    [ObservableProperty]
-    private Note _editingNote = new();
+    [ObservableProperty] private Note _editingNote = new();
 
-    [ObservableProperty]
-    private ModuleViewModel? _modalSelectedModule;
+    [ObservableProperty] private ModuleViewModel? _modalSelectedModule;
 
-    [ObservableProperty]
-    private ObservableRangeCollection<Branche> _modalBranches = new();
+    [ObservableProperty] private ObservableRangeCollection<Branche> _modalBranches = new();
 
-    [ObservableProperty]
-    private Branche? _modalSelectedBranche;
+    [ObservableProperty] private Branche? _modalSelectedBranche;
 
     private bool _isEditingExisting;
-    
-    
-    
-    [ObservableProperty]
-    private string _pdfStatusText = "Aucun document joint.";
+
+
+    [ObservableProperty] private string _pdfStatusText = "Aucun document joint.";
 
     // Stocke le BLOB temporairement avant la sauvegarde définitive
     private byte[]? _pendingCbzData = null;
     private System.Threading.CancellationTokenSource? _pdfCts;
-    
-    [ObservableProperty]
-    private bool _isDocumentAttached = false; // Pour la visibilité de l'icône
 
-    [ObservableProperty]
-    private bool _isPdfViewerOpen = false; // Pour swapper le modal
+    [ObservableProperty] private bool _isDocumentAttached = false; // Pour la visibilité de l'icône
 
-    [ObservableProperty]
-    private byte[]? _activeCbzBlob = null; // Pour liaison directe au lecteur PDF
+    [ObservableProperty] private bool _isPdfViewerOpen = false; // Pour swapper le modal
+
+    [ObservableProperty] private byte[]? _activeCbzBlob = null; // Pour liaison directe au lecteur PDF
 
     public NotesViewModel()
     {
@@ -98,14 +81,14 @@ public partial class NotesViewModel : ViewModelBase
         RefreshAllNotes();
         _ = ActualiserIndicateursDocumentsAsync();
     }
-    
+
     private async Task ActualiserIndicateursDocumentsAsync()
     {
-        try 
+        try
         {
             using var repo = new DataRepository();
             var idsAvecDocument = await repo.GetNoteIdsWithArchiveAsync();
-            
+
             foreach (var module in Modules)
             foreach (var branche in module.Branches)
             foreach (var note in branche.Notes)
@@ -113,7 +96,10 @@ public partial class NotesViewModel : ViewModelBase
                 note.HasDocument = idsAvecDocument.Contains(note.Id);
             }
         }
-        catch { /* Ignorer en cas d'erreur de lecture */ }
+        catch
+        {
+            /* Ignorer en cas d'erreur de lecture */
+        }
     }
 
     partial void OnSelectedModuleChanged(ModuleViewModel? value)
@@ -138,8 +124,7 @@ public partial class NotesViewModel : ViewModelBase
         }
     }
 
-#region Logique Métier
-  
+    #region Logique Métier
 
     // Ouvre le lecteur depuis la liste ---
     [RelayCommand]
@@ -150,14 +135,17 @@ public partial class NotesViewModel : ViewModelBase
         ActiveDocumentTitle = noteCible.titre;
         IsPdfViewerOpen = true; // Affiche le modal de lecture
 
-        try 
+        try
         {
-            using (var repo = new DataRepository()) 
+            using (var repo = new DataRepository())
             {
                 ActiveCbzBlob = await repo.GetArchiveCbzPourNoteAsync(noteCible.Id);
             }
-        } 
-        catch { ActiveCbzBlob = null; }
+        }
+        catch
+        {
+            ActiveCbzBlob = null;
+        }
     }
 
     private void RefreshAllNotes()
@@ -176,7 +164,7 @@ public partial class NotesViewModel : ViewModelBase
                     {
                         NoteData = note,
                         BrancheNom = branche.Nom,
-                        ModuleNom = module.Nom 
+                        ModuleNom = module.Nom
                     });
                 }
             }
@@ -187,7 +175,7 @@ public partial class NotesViewModel : ViewModelBase
 
     private void RefreshSelectedModuleBranches()
     {
-        if (SelectedModule?.Branches == null) 
+        if (SelectedModule?.Branches == null)
         {
             SelectedModuleBranchesWithNotes.Clear();
             return;
@@ -196,7 +184,6 @@ public partial class NotesViewModel : ViewModelBase
         var branchesFiltrees = SelectedModule.Branches.Where(b => b.Notes != null && b.Notes.Count > 0);
         SelectedModuleBranchesWithNotes.ReplaceAll(branchesFiltrees);
     }
-    
 
 
     [RelayCommand]
@@ -207,12 +194,12 @@ public partial class NotesViewModel : ViewModelBase
         PdfStatusText = "Aucun document joint.";
         IsDocumentAttached = false;
         _pendingCbzData = null;
-        
-        
-        EditingNote = new Note 
-        { 
+
+
+        EditingNote = new Note
+        {
             Date = DateTime.Today,
-            Valeur = 4.0, 
+            Valeur = 4.0,
             titre = string.Empty
         };
 
@@ -220,8 +207,7 @@ public partial class NotesViewModel : ViewModelBase
         IsModalOpen = true;
     }
 
-    [ObservableProperty]
-    private string _activeDocumentTitle = "Document PDF";
+    [ObservableProperty] private string _activeDocumentTitle = "Document PDF";
 
     [RelayCommand]
     private void FermerModal() => IsModalOpen = false;
@@ -229,10 +215,10 @@ public partial class NotesViewModel : ViewModelBase
     [RelayCommand]
     private async Task SauvegarderNote()
     {
-        try 
+        try
         {
             if (ModalSelectedBranche == null || string.IsNullOrWhiteSpace(EditingNote.titre))
-                return; 
+                return;
 
             EditingNote.BrancheId = ModalSelectedBranche.Id;
 
@@ -258,14 +244,14 @@ public partial class NotesViewModel : ViewModelBase
                 {
                     if (_isEditingExisting)
                     {
-                        foreach(var m in Modules)
-                        foreach(var b in m.Branches)
+                        foreach (var m in Modules)
+                        foreach (var b in m.Branches)
                         {
                             var oldNote = b.Notes.FirstOrDefault(n => n.Id == EditingNote.Id);
                             if (oldNote != null) b.Notes.Remove(oldNote);
                         }
                     }
-                    
+
                     brancheDest.Notes.Add(EditingNote);
                     brancheDest.Notes = brancheDest.Notes.OrderByDescending(n => n.Date).ToList();
                 }
@@ -275,7 +261,6 @@ public partial class NotesViewModel : ViewModelBase
             RefreshSelectedModuleBranches();
             _ = ActualiserIndicateursDocumentsAsync();
             FermerModal();
-            
         }
         catch (Exception ex)
         {
@@ -315,6 +300,7 @@ public partial class NotesViewModel : ViewModelBase
             Console.WriteLine($"Erreur lors de la suppression : {ex.Message}");
         }
     }
+
     /// <summary>
     /// Récupère le PDF, le redimensionne et le convertit en CBZ In-Memory
     /// </summary>
@@ -322,7 +308,7 @@ public partial class NotesViewModel : ViewModelBase
     {
         PdfStatusText = $"Compression de '{fileName}' en cours...";
         _pendingCbzData = null;
-        
+
         _pdfCts?.Cancel();
         _pdfCts = new System.Threading.CancellationTokenSource();
 
@@ -332,35 +318,49 @@ public partial class NotesViewModel : ViewModelBase
             var fluxResized = ImageProcessor.ResizeImagesAsync(fluxImages, 2_000_000, _pdfCts.Token);
 
             // NE GARDER QU'UNE SEULE FOIS CE BLOC
-            _pendingCbzData = await ArchiveManager.CreateCbzInMemoryAsync(fluxResized, SkiaSharp.SKEncodedImageFormat.Webp, 40, _pdfCts.Token);
+            _pendingCbzData = await ArchiveManager.CreateCbzInMemoryAsync(fluxResized,
+                SkiaSharp.SKEncodedImageFormat.Webp, 40, _pdfCts.Token);
             double sizeKb = _pendingCbzData.Length / 1024.0;
-            
+
             PdfStatusText = $"Document prêt à être sauvegardé ({sizeKb:F0} Ko)";
             IsDocumentAttached = true;
         }
-        catch (OperationCanceledException) { PdfStatusText = "Opération annulée."; }
-        catch (Exception ex) { PdfStatusText = $"Erreur : {ex.Message}"; }
+        catch (OperationCanceledException)
+        {
+            PdfStatusText = "Opération annulée.";
+        }
+        catch (Exception ex)
+        {
+            PdfStatusText = $"Erreur : {ex.Message}";
+        }
     }
-    
+
     [RelayCommand]
     private async Task AfficherDocument()
     {
         if (EditingNote == null || EditingNote.Id == 0) return;
 
         ActiveDocumentTitle = EditingNote.titre;
-        PdfStatusText = "Chargement du document de la BDD..."; 
+        PdfStatusText = "Chargement du document de la BDD...";
 
-        try {
-            using (var repo = new DataRepository()) {
+        try
+        {
+            using (var repo = new DataRepository())
+            {
                 // On charge le Blob uniquement pour l'affichage (RAM respectée)
                 ActiveCbzBlob = await repo.GetArchiveCbzPourNoteAsync(EditingNote.Id);
-                if (ActiveCbzBlob != null) {
+                if (ActiveCbzBlob != null)
+                {
                     IsPdfViewerOpen = true; // --- NOUVEAU : Swap visuel vers le lecteur ---
                 }
             }
-        } catch { PdfStatusText = "Erreur lors de l'ouverture."; }
+        }
+        catch
+        {
+            PdfStatusText = "Erreur lors de l'ouverture.";
+        }
     }
-    
+
     /// <summary>
     /// Ferme le lecteur PDF pour revenir à l'éditeur
     /// </summary>
@@ -370,13 +370,12 @@ public partial class NotesViewModel : ViewModelBase
         IsPdfViewerOpen = false;
         ActiveCbzBlob = null; // Libère le blob
         PdfStatusText = "Laissez vide pour conserver le document existant.";
-        
+
         GC.Collect();
         GC.WaitForPendingFinalizers();
     }
-    
-    
-    
+
+
     /// <summary>
     /// Ouvre le modal de modification (asyncTask)
     /// </summary>
@@ -408,7 +407,7 @@ public partial class NotesViewModel : ViewModelBase
         }
 
         // 3. Reset states visuels
-        IsDocumentAttached = false; 
+        IsDocumentAttached = false;
         ActiveCbzBlob = null;
         IsPdfViewerOpen = false;
         PdfStatusText = "Laissez vide pour conserver le document existant.";
@@ -421,7 +420,7 @@ public partial class NotesViewModel : ViewModelBase
             using (var repo = new DataRepository())
             {
                 var archiveExistante = await repo.GetArchiveCbzPourNoteAsync(noteAModifier.Id);
-                
+
                 if (archiveExistante != null)
                 {
                     double sizeKb = archiveExistante.Length / 1024.0;
@@ -434,9 +433,11 @@ public partial class NotesViewModel : ViewModelBase
                 }
             }
         }
-        catch (Exception) { PdfStatusText = "Erreur lors de la vérification du document."; }
+        catch (Exception)
+        {
+            PdfStatusText = "Erreur lors de la vérification du document.";
+        }
     }
-    
 
-#endregion
+    #endregion
 }

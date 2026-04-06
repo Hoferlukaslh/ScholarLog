@@ -3,9 +3,9 @@
     Projet       :  ScholarLog
 
     Description  :
-        Code-behind de la vue NotesPage. 
-        Gère les interactions spécifiques à l'interface utilisateur pour la gestion 
-        des notes, notamment la sécurité lors de la suppression (timer) et 
+        Code-behind de la vue NotesPage.
+        Gère les interactions spécifiques à l'interface utilisateur pour la gestion
+        des notes, notamment la sécurité lors de la suppression (timer) et
         la validation des dates via le contrôle calendrier.
 
     Auteur       :  Lukas Hofer - TINF2
@@ -80,13 +80,13 @@ public partial class NotesPage : UserControl
             {
                 noteASupprimer.IsDeletePending = true;
                 await Task.Delay(3000);
-                
+
                 if (noteASupprimer != null)
                     noteASupprimer.IsDeletePending = false;
             }
         }
     }
-    
+
     // Nouvelle méthode pour ouvrir l'explorateur de fichiers
     private async void BoutonJoindrePdf_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {

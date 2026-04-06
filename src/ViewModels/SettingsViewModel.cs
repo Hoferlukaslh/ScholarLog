@@ -4,7 +4,7 @@
 
     Description  :
         ViewModel gérant les paramètres de l'application.
-        Contrôle la sélection et la sauvegarde du chemin de la base de données 
+        Contrôle la sélection et la sauvegarde du chemin de la base de données
         SQLite locale ainsi que la bascule du thème (Clair/Sombre).
 
     Auteur       :  Lukas Hofer - TINF2
@@ -30,50 +30,51 @@ using ScholarLog.Data;
 
 namespace ScholarLog.ViewModels;
 
-
 public partial class SettingsViewModel : ViewModelBase
 {
     [ObservableProperty] private string _pathToBDD = "/home/lukas/Documents/CloudSync/App.db";
     [ObservableProperty] private bool _isDarkModeEnabled;
-    [ObservableProperty] private bool _showPathError = false; // déclencheur pour dire à la vue d'afficher le message d'erreur
-    
-    
+
+    [ObservableProperty]
+    private bool _showPathError = false; // déclencheur pour dire à la vue d'afficher le message d'erreur
+
+
     [ObservableProperty] private bool _isEditModuleModalOpen = false;
     [ObservableProperty] private ModuleViewModel? _editingModule;
     [ObservableProperty] private string _nouvelleBrancheNom = string.Empty;
-    
+
     [ObservableProperty] private ObservableCollection<Branche> _modalBranches = new();
-    
+
 
     [RelayCommand]
     private void PromptDeleteBranche(object branche)
     {
         if (branche == null) return;
-        
+
         _itemToDelete = branche;
         _deleteAction = (item) => DeleteBranche(item);
-        
+
         string nomBranche = branche is Branche b ? b.Nom : "cette branche";
-        
+
         ConfirmDialogMessage = $"Êtes-vous sûr de vouloir supprimer {nomBranche} ?";
         IsConfirmDialogOpen = true;
     }
-    
+
     [RelayCommand]
     private void PromptDeleteModule(ModuleViewModel module)
     {
         if (module == null) return;
-        
+
         _itemToDelete = module;
         _deleteAction = (item) => DeleteModule((ModuleViewModel)item);
-        
-        ConfirmDialogMessage = $"Êtes-vous sûr de vouloir supprimer le module '{module.ShortName}' et toutes ses branches ?";
+
+        ConfirmDialogMessage =
+            $"Êtes-vous sûr de vouloir supprimer le module '{module.ShortName}' et toutes ses branches ?";
         IsConfirmDialogOpen = true;
     }
 
-    
-    [ObservableProperty]
-    private ObservableRangeCollection<ModuleViewModel> _modules = new();
+
+    [ObservableProperty] private ObservableRangeCollection<ModuleViewModel> _modules = new();
 
     public SettingsViewModel()
     {
@@ -84,16 +85,14 @@ public partial class SettingsViewModel : ViewModelBase
             Modules = AppDataService.Instance.Modules;
         }
     }
-    
+
     //  Propriétés pour le Modal de Confirmation 
     [ObservableProperty] private bool _isConfirmDialogOpen = false;
     [ObservableProperty] private string _confirmDialogMessage = string.Empty;
-    
+
     // Variables temporaires pour stocker l'action et l'élément à supprimer
     private object? _itemToDelete;
     private Action<object>? _deleteAction;
-
-
 
 
     [RelayCommand]
@@ -103,6 +102,7 @@ public partial class SettingsViewModel : ViewModelBase
         {
             _deleteAction(_itemToDelete);
         }
+
         CancelDelete(); // Réinitialise et ferme le modal
     }
 
@@ -123,7 +123,7 @@ public partial class SettingsViewModel : ViewModelBase
             Application.Current.RequestedThemeVariant = value ? ThemeVariant.Dark : ThemeVariant.Light;
         }
     }
-    
+
 
     [RelayCommand]
     private void SavePath()
@@ -140,19 +140,19 @@ public partial class SettingsViewModel : ViewModelBase
         {
             Console.WriteLine($"Chemin invalide : {cleanedPath}");
             // On lève le drapeau, la Vue s'occupera d'afficher le Flyout
-            ShowPathError = true; 
+            ShowPathError = true;
         }
     }
-    
-    
+
+
     //  Commandes pour les Modules 
 
     [RelayCommand]
     private async Task AddModule()
     {
-        var nouveauModule = new Module 
-        { 
-            Nom = "Nouveau Module" 
+        var nouveauModule = new Module
+        {
+            Nom = "Nouveau Module"
         };
 
         try
@@ -195,7 +195,7 @@ public partial class SettingsViewModel : ViewModelBase
 
             // Mise à jour de l'interface
             Modules.Remove(module);
-            
+
             // Si le module était en cours d'édition, on ferme le modal
             if (EditingModule?.Id == module.Id)
             {
@@ -207,14 +207,13 @@ public partial class SettingsViewModel : ViewModelBase
             Console.WriteLine($"Erreur lors de la suppression du module : {ex.Message}");
         }
     }
-    
-    
-    
+
+
     [RelayCommand]
     private void EditModule(ModuleViewModel module)
     {
         if (module == null) return;
-        
+
         EditingModule = module;
         // On remplit la liste dynamique du modal au moment de l'ouverture
         ModalBranches = new ObservableCollection<Branche>(module.Branches ?? new List<Branche>());
@@ -242,14 +241,17 @@ public partial class SettingsViewModel : ViewModelBase
                 var modToUpdate = new Module { Id = EditingModule.Id, Nom = EditingModule.Nom.Trim() };
                 await repo.ModifierModuleAsync(modToUpdate);
             }
-            
+
             // Mise à jour de la tuile en arrière-plan
             var index = Modules.IndexOf(EditingModule);
             if (index >= 0) Modules[index] = EditingModule;
-            
+
             OnPropertyChanged(nameof(EditingModule)); // Met à jour le titre du header du modal
         }
-        catch (Exception ex) { Console.WriteLine($"Erreur : {ex.Message}"); }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur : {ex.Message}");
+        }
     }
 
     [RelayCommand]
@@ -257,11 +259,11 @@ public partial class SettingsViewModel : ViewModelBase
     {
         if (EditingModule == null || string.IsNullOrWhiteSpace(NouvelleBrancheNom)) return;
 
-        var nouvelleBranche = new Branche 
-        { 
-            Nom = NouvelleBrancheNom.Trim(), 
+        var nouvelleBranche = new Branche
+        {
+            Nom = NouvelleBrancheNom.Trim(),
             ModuleId = EditingModule.Id,
-            Type = TypeCours.TM 
+            Type = TypeCours.TM
         };
 
         try
@@ -274,7 +276,7 @@ public partial class SettingsViewModel : ViewModelBase
             // Sauvegarde en mémoire
             EditingModule.Branches ??= new List<Branche>();
             EditingModule.Branches.Add(nouvelleBranche);
-            
+
             // Mise à jour de l'UI du modal SANS artefacts visuels
             ModalBranches.Add(nouvelleBranche);
 
@@ -284,7 +286,10 @@ public partial class SettingsViewModel : ViewModelBase
             var index = Modules.IndexOf(EditingModule);
             if (index >= 0) Modules[index] = EditingModule;
         }
-        catch (Exception ex) { Console.WriteLine($"Erreur : {ex.Message}"); }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur : {ex.Message}");
+        }
     }
 
     [RelayCommand]
@@ -296,12 +301,19 @@ public partial class SettingsViewModel : ViewModelBase
         {
             using (var repo = new DataRepository())
             {
-                var brancheToUpdate = new Branche { Id = branche.Id, Nom = branche.Nom.Trim(), ModuleId = branche.ModuleId, Type = branche.Type };
+                var brancheToUpdate = new Branche
+                    { Id = branche.Id, Nom = branche.Nom.Trim(), ModuleId = branche.ModuleId, Type = branche.Type };
                 await repo.ModifierBrancheAsync(brancheToUpdate);
             }
         }
-        catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException) { /* Ignoré */ }
-        catch (Exception ex) { Console.WriteLine($"Erreur : {ex.Message}"); }
+        catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException)
+        {
+            /* Ignoré */
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur : {ex.Message}");
+        }
     }
 
     private async void DeleteBranche(object brancheObj)
@@ -315,10 +327,10 @@ public partial class SettingsViewModel : ViewModelBase
                 var brancheStub = new Branche { Id = branche.Id };
                 await repo.SupprimerBrancheAsync(brancheStub);
             }
-            
+
             // Suppression de la mémoire
             EditingModule.Branches?.Remove(branche);
-            
+
             // Mise à jour de l'UI du modal SANS artefacts
             var brancheToRemove = ModalBranches.FirstOrDefault(b => b.Id == branche.Id);
             if (brancheToRemove != null) ModalBranches.Remove(brancheToRemove);
@@ -332,6 +344,9 @@ public partial class SettingsViewModel : ViewModelBase
             // Sécurité anti-crash si la branche n'est déjà plus dans la BDD
             Console.WriteLine("Info: Suppression ignorée (déjà traitée).");
         }
-        catch (Exception ex) { Console.WriteLine($"Erreur : {ex.Message}"); }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur : {ex.Message}");
+        }
     }
 }

@@ -27,12 +27,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScholarLog.Views"
-        mc:Ignorable="d" 
+        mc:Ignorable="d"
         d:DesignWidth="960" d:DesignHeight="720"
-        
-        MinWidth="960" 
+
+        MinWidth="960"
         MinHeight="560"
-        
+
         x:Class="ScholarLog.Views.MainWindow"
         TransparencyLevelHint="AcrylicBlur, Blur, Transparent"
 
@@ -40,31 +40,31 @@
         Icon="{DynamicResource AppIcon}"
         Title="ScholarLog"
         x:CompileBindings="True">
-    
+
     <Window.Styles>
-       
+
         <Style Selector="Label.menu-text, TextBlock.menu-text">
-            <Setter Property="Opacity" Value="1"/>
+            <Setter Property="Opacity" Value="1" />
             <Setter Property="Transitions">
                 <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="0:0:0.2"/>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
                 </Transitions>
             </Setter>
         </Style>
 
         <Style Selector=".collapsed Label.menu-text, .collapsed TextBlock.menu-text">
-            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="Opacity" Value="0" />
         </Style>
-        
+
         <Style Selector="Window">
-            <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"/>
+            <Setter Property="Background" Value="{DynamicResource PrimaryBackground}" />
         </Style>
 
         <Style Selector="Label#ToggleIcon">
             <Setter Property="RenderTransform" Value="rotate(0deg)" />
             <Setter Property="Transitions">
                 <Transitions>
-                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4" Easing="CubicEaseOut"/>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4" Easing="CubicEaseOut" />
                 </Transitions>
             </Setter>
         </Style>
@@ -76,35 +76,35 @@
             <Setter Property="RenderTransform" Value="translate(0px, 0px)" />
             <Setter Property="Transitions">
                 <Transitions>
-                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:8" Easing="SineEaseInOut"/>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:8" Easing="SineEaseInOut" />
                 </Transitions>
             </Setter>
         </Style>
     </Window.Styles>
-    
+
     <Window.DataTemplates>
-        
+
         <DataTemplate DataType="{x:Type vm:HomeViewModel}">
             <Pages:HomePage />
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type vm:NotesViewModel}">
             <Pages:NotesPage />
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type vm:JournalViewModel}">
             <Pages:JournalPage />
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
             <Pages:SettingsPage />
         </DataTemplate>
-        
+
     </Window.DataTemplates>
 
     <Grid>
         <Canvas x:Name="BackgroundCanvas" ClipToBounds="True">
-            <Ellipse x:Name="Light1" Classes="ambient-light" Width="600" Height="600" Opacity="0.4" 
+            <Ellipse x:Name="Light1" Classes="ambient-light" Width="600" Height="600" Opacity="0.4"
                      Canvas.Left="0" Canvas.Top="0">
                 <Ellipse.Fill>
                     <RadialGradientBrush Center="50%,50%" GradientOrigin="50%,50%" RadiusX="50%" RadiusY="50%">
@@ -114,7 +114,7 @@
                 </Ellipse.Fill>
             </Ellipse>
 
-            <Ellipse x:Name="Light2" Classes="ambient-light" Width="500" Height="500" Opacity="0.3" 
+            <Ellipse x:Name="Light2" Classes="ambient-light" Width="500" Height="500" Opacity="0.3"
                      Canvas.Left="500" Canvas.Top="300">
                 <Ellipse.Fill>
                     <RadialGradientBrush Center="50%,50%" GradientOrigin="50%,50%" RadiusX="50%" RadiusY="50%">
@@ -125,35 +125,34 @@
             </Ellipse>
         </Canvas>
 
-        
-        
+
         <Grid ColumnDefinitions="Auto, *">
             <!-- Bar de navigation -->
-            <Border Grid.Column="0" 
+            <Border Grid.Column="0"
                     Background="{DynamicResource PrimaryBackgroundGradient}"
-                    BorderBrush="#25ffffff" 
+                    BorderBrush="#25ffffff"
                     BorderThickness="0,0,1,0"
-                    Padding="10"> 
-                
+                    Padding="10">
+
                 <Grid x:Name="Sidebar" Width="212" RowDefinitions="Auto, *, Auto">
                     <Grid.Transitions>
                         <Transitions>
-                            <DoubleTransition Property="Width" Duration="0:0:0.3" Easing="CubicEaseOut"/>
+                            <DoubleTransition Property="Width" Duration="0:0:0.3" Easing="CubicEaseOut" />
                         </Transitions>
                     </Grid.Transitions>
 
                     <!-- Logo de l'application -->
                     <StackPanel Grid.Row="0" Spacing="20">
                         <Grid ColumnDefinitions="40, *" Margin="12,12,0,0">
-                            <Label Grid.Column="0" 
-                                   FontFamily="{DynamicResource Phosphor}" 
+                            <Label Grid.Column="0"
+                                   FontFamily="{DynamicResource Phosphor}"
                                    Foreground="{DynamicResource PrimaryForeground}"
                                    FontSize="{DynamicResource IconSizeLogo}"
-                                   Content="{DynamicResource IconeScholarHat}" 
-                                   HorizontalAlignment="Center"/>
-                            <Label x:Name="TextLogo" Classes="menu-text" Grid.Column="1" 
-                                   FontFamily="{DynamicResource HelveticaBold}" 
-                                   FontSize="{DynamicResource FontSizeLogo}" 
+                                   Content="{DynamicResource IconeScholarHat}"
+                                   HorizontalAlignment="Center" />
+                            <Label x:Name="TextLogo" Classes="menu-text" Grid.Column="1"
+                                   FontFamily="{DynamicResource HelveticaBold}"
+                                   FontSize="{DynamicResource FontSizeLogo}"
                                    Foreground="{DynamicResource PrimaryForeground}"
                                    VerticalAlignment="Bottom" Margin="10,0,0,0" Content="ScholarLog" />
                         </Grid>
@@ -161,187 +160,189 @@
 
                     <!-- Boutons de navigation -->
                     <StackPanel Grid.Row="1" Spacing="5" Margin="0,30,0,0">
-                        
+
                         <!-- Button Accueil -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonAccueil"
                                 Classes="nav-btn"
-                                Command="{Binding NavigateCommand}" 
+                                Command="{Binding NavigateCommand}"
                                 CommandParameter="Accueil">
                             <Grid ColumnDefinitions="40, *">
-                                <Label Grid.Column="0" 
-                                       FontFamily="{DynamicResource Phosphor}" 
+                                <Label Grid.Column="0"
+                                       FontFamily="{DynamicResource Phosphor}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       FontSize="{DynamicResource IconSizeMedium}"  
+                                       FontSize="{DynamicResource IconSizeMedium}"
                                        Content="{DynamicResource IconeHome}"
-                                       HorizontalAlignment="Center"/>
-                                <TextBlock x:Name="TextAccueil" Classes="menu-text" Grid.Column="1" 
+                                       HorizontalAlignment="Center" />
+                                <TextBlock x:Name="TextAccueil" Classes="menu-text" Grid.Column="1"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}" 
+                                           FontSize="{DynamicResource FontSizeNormal}"
                                            Text="Accueil" VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
                         </Button>
-                        
+
                         <!-- Button Notes -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonNotes"
                                 Classes="nav-btn"
-                                Command="{Binding NavigateCommand}" 
+                                Command="{Binding NavigateCommand}"
                                 CommandParameter="Notes">
                             <Grid ColumnDefinitions="40, *">
-                                <Label Grid.Column="0" 
-                                       FontFamily="{DynamicResource Phosphor}" 
+                                <Label Grid.Column="0"
+                                       FontFamily="{DynamicResource Phosphor}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       FontSize="{DynamicResource IconSizeMedium}" 
+                                       FontSize="{DynamicResource IconSizeMedium}"
                                        HorizontalAlignment="Center" Content="{DynamicResource IconeHashtag}" />
-                                <TextBlock x:Name="TextNotes" Classes="menu-text" Grid.Column="1" 
-                                           FontFamily="{DynamicResource Helvetica}" 
+                                <TextBlock x:Name="TextNotes" Classes="menu-text" Grid.Column="1"
+                                           FontFamily="{DynamicResource Helvetica}"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}" 
-                                           Text="Notes" 
+                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           Text="Notes"
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
                         </Button>
-                        
+
                         <!-- Button journaux -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Buttonjournaux"
                                 Classes="nav-btn"
-                                Command="{Binding NavigateCommand}" 
+                                Command="{Binding NavigateCommand}"
                                 CommandParameter="Journaux">
                             <Grid ColumnDefinitions="40, *">
-                                <Label Grid.Column="0" FontFamily="{DynamicResource Phosphor}" 
-                                       FontSize="{DynamicResource IconSizeMedium}" Foreground="{DynamicResource PrimaryForeground}"
+                                <Label Grid.Column="0" FontFamily="{DynamicResource Phosphor}"
+                                       FontSize="{DynamicResource IconSizeMedium}"
+                                       Foreground="{DynamicResource PrimaryForeground}"
                                        HorizontalAlignment="Center" Content="{DynamicResource IconePen}" />
-                                <TextBlock x:Name="TextJournaux" Classes="menu-text" Grid.Column="1" 
-                                           FontFamily="{DynamicResource Helvetica}" 
+                                <TextBlock x:Name="TextJournaux" Classes="menu-text" Grid.Column="1"
+                                           FontFamily="{DynamicResource Helvetica}"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}" 
-                                           Text="Journaux" 
+                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           Text="Journaux"
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
                         </Button>
                     </StackPanel>
-                    
-                    
+
+
                     <!-- Éléments du bas -->
                     <StackPanel Grid.Row="2" Margin="0,0,0,10" Spacing="5">
                         <!-- Bouton pour rétracter le menu -->
-                        <Button HorizontalAlignment="Stretch" Background="Transparent" Command="{Binding ToggleSidebarCommand}">
+                        <Button HorizontalAlignment="Stretch" Background="Transparent"
+                                Command="{Binding ToggleSidebarCommand}">
                             <Grid ColumnDefinitions="40, *">
-                                <Label x:Name="ToggleIcon" 
-                                       Grid.Column="0" 
-                                       FontFamily="{DynamicResource Phosphor}" 
+                                <Label x:Name="ToggleIcon"
+                                       Grid.Column="0"
+                                       FontFamily="{DynamicResource Phosphor}"
                                        Foreground="{DynamicResource SecondaryForeground}"
-                                       FontSize="{DynamicResource IconSizeMedium}" 
-                                       Content="{DynamicResource IconeRetract}" 
-                                       HorizontalAlignment="Center" 
+                                       FontSize="{DynamicResource IconSizeMedium}"
+                                       Content="{DynamicResource IconeRetract}"
+                                       HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        RenderTransformOrigin="50%,50%" />
-                                
-                                <TextBlock x:Name="TextCollapse" Classes="menu-text" Grid.Column="1" 
-                                           FontFamily="{DynamicResource Helvetica}" 
+
+                                <TextBlock x:Name="TextCollapse" Classes="menu-text" Grid.Column="1"
+                                           FontFamily="{DynamicResource Helvetica}"
                                            Foreground="{DynamicResource SecondaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}" 
-                                           Text="Fermer Menu" 
+                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           Text="Fermer Menu"
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
                         </Button>
-                        
+
                         <!-- Bouton paramètres -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="Setting"
                                 Classes="nav-btn"
-                                Command="{Binding NavigateCommand}" 
+                                Command="{Binding NavigateCommand}"
                                 CommandParameter="Settings">
                             <Grid ColumnDefinitions="40, *">
-                                <Label Grid.Column="0" 
-                                       FontFamily="{DynamicResource Phosphor}" 
+                                <Label Grid.Column="0"
+                                       FontFamily="{DynamicResource Phosphor}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       FontSize="{DynamicResource IconSizeMedium}" HorizontalAlignment="Center" 
-                                       Content="{DynamicResource IconeGear}"/>
-                                       
-                                
-                                <TextBlock x:Name="TextSettings" Classes="menu-text" Grid.Column="1" 
-                                           FontFamily="{DynamicResource Helvetica}" 
+                                       FontSize="{DynamicResource IconSizeMedium}" HorizontalAlignment="Center"
+                                       Content="{DynamicResource IconeGear}" />
+
+
+                                <TextBlock x:Name="TextSettings" Classes="menu-text" Grid.Column="1"
+                                           FontFamily="{DynamicResource Helvetica}"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}" 
+                                           FontSize="{DynamicResource FontSizeNormal}"
                                            Text="Paramètres"
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
                         </Button>
                     </StackPanel>
-                    
+
                     <!-- Indication de navigation -->
                     <Canvas Grid.Row="0" Grid.RowSpan="3" IsHitTestVisible="False">
                         <Border x:Name="NavCursor"
-                                Width="4" 
-                                Height="24" 
+                                Width="4"
+                                Height="24"
                                 CornerRadius="2"
                                 Background="{DynamicResource SecondaryForeground}"
                                 Canvas.Left="0"
                                 Canvas.Top="0">
                             <Border.Transitions>
                                 <Transitions>
-                                    <DoubleTransition Property="Canvas.Top" Duration="0:0:0.35" Easing="CubicEaseOut"/>
+                                    <DoubleTransition Property="Canvas.Top" Duration="0:0:0.35" Easing="CubicEaseOut" />
                                 </Transitions>
                             </Border.Transitions>
                         </Border>
                     </Canvas>
                 </Grid>
-                
+
             </Border>
 
             <!-- Controleur de contenu -->
-            <TransitioningContentControl Grid.Column="1" 
-                                         Name="MainContentControler" 
-                                         Content="{Binding CurrentPage}"  Padding="20">
+            <TransitioningContentControl Grid.Column="1"
+                                         Name="MainContentControler"
+                                         Content="{Binding CurrentPage}" Padding="20">
                 <TransitioningContentControl.PageTransition>
                     <CompositePageTransition>
                         <CrossFade Duration="0:0:0.3" />
-                        <local:MyPageSlide Duration="0:0:0.3" 
-                                           Orientation="Vertical" 
+                        <local:MyPageSlide Duration="0:0:0.3"
+                                           Orientation="Vertical"
                                            Easing="CircularEaseOut" />
                     </CompositePageTransition>
                 </TransitioningContentControl.PageTransition>
             </TransitioningContentControl>
         </Grid>
-        
+
         <!-- Écran de chargement -->
-        <Grid Background="{DynamicResource PrimaryBackground}" 
+        <Grid Background="{DynamicResource PrimaryBackground}"
               ZIndex="100"
               IsVisible="{Binding IsLoading}"
               Opacity="{Binding SplashOpacity}">
-            
+
             <Grid.Transitions>
                 <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="0:0:0.5" Easing="CubicEaseOut"/>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.5" Easing="CubicEaseOut" />
                 </Transitions>
             </Grid.Transitions>
-            
+
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
-                <Label FontFamily="{DynamicResource Phosphor}" 
-                       FontSize="100" 
+                <Label FontFamily="{DynamicResource Phosphor}"
+                       FontSize="100"
                        Foreground="{DynamicResource PrimaryForeground}"
-                       Content="{DynamicResource IconeScholarHat}" 
-                       HorizontalAlignment="Center"/>
-                
-                <TextBlock Text="ScholarLog" 
-                           FontFamily="{DynamicResource HelveticaBold}" 
-                           FontSize="40" 
-                           Foreground="{DynamicResource PrimaryForeground}" 
-                           HorizontalAlignment="Center"/>
-                
-                <ProgressBar Width="300" 
-                             Height="8" 
+                       Content="{DynamicResource IconeScholarHat}"
+                       HorizontalAlignment="Center" />
+
+                <TextBlock Text="ScholarLog"
+                           FontFamily="{DynamicResource HelveticaBold}"
+                           FontSize="40"
+                           Foreground="{DynamicResource PrimaryForeground}"
+                           HorizontalAlignment="Center" />
+
+                <ProgressBar Width="300"
+                             Height="8"
                              CornerRadius="4"
-                             Minimum="0" 
-                             Maximum="100" 
+                             Minimum="0"
+                             Maximum="100"
                              Value="{Binding LoadingProgress}"
                              Foreground="{DynamicResource SecondaryForeground}"
-                             ShowProgressText="False"/>
+                             ShowProgressText="False" />
 
-                <TextBlock Text="{Binding LoadingText}" 
-                           HorizontalAlignment="Center" 
+                <TextBlock Text="{Binding LoadingText}"
+                           HorizontalAlignment="Center"
                            Foreground="{DynamicResource SecondaryForeground}"
-                           Opacity="0.8"/>
+                           Opacity="0.8" />
             </StackPanel>
         </Grid>
-    </Grid> 
+    </Grid>
 </Window>

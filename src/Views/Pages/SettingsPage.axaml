@@ -9,21 +9,21 @@
              x:Class="ScholarLog.Views.Pages.SettingsPage"
              x:DataType="vm:SettingsViewModel"
              x:CompileBindings="True">
-    
+
     <UserControl.Styles>
         <Style Selector="FlyoutPresenter.alerteDanger">
-            <Setter Property="Background" Value="{DynamicResource CardBackground}" /> 
+            <Setter Property="Background" Value="{DynamicResource CardBackground}" />
             <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="{DynamicResource FieldCornerRadius}" />
-        </Style>    
-        
+        </Style>
+
         <Style Selector="Button.zoom">
             <Setter Property="Transitions">
                 <Transitions>
-                    <TransformOperationsTransition Property="RenderTransform" 
-                                                   Duration="0:0:0.1" 
-                                                   Easing="CubicEaseOut"/>
+                    <TransformOperationsTransition Property="RenderTransform"
+                                                   Duration="0:0:0.1"
+                                                   Easing="CubicEaseOut" />
                 </Transitions>
             </Setter>
             <Setter Property="RenderTransform" Value="scale(1.00)" />
@@ -35,158 +35,163 @@
             </Style>
         </Style>
     </UserControl.Styles>
-    
+
     <Grid RowDefinitions="Auto, Auto, *">
-        
+
         <Grid Grid.Row="0" Background="Transparent" ColumnSpacing="10" Margin="0,0,0,30">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/> 
-                <ColumnDefinition Width="0.25" MinWidth="187"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="0.25" MinWidth="187" />
             </Grid.ColumnDefinitions>
-            
-            <Border Grid.Column="0" Margin="0" Padding="10" 
-                    CornerRadius="{DynamicResource FieldCornerRadius}" 
-                    Background="{DynamicResource CardBackground}" 
+
+            <Border Grid.Column="0" Margin="0" Padding="10"
+                    CornerRadius="{DynamicResource FieldCornerRadius}"
+                    Background="{DynamicResource CardBackground}"
                     BorderBrush="{DynamicResource CardBorder}"
                     BorderThickness="1">
-                
-                <StackPanel Orientation="Vertical" >
-                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal" >
-                        <TextBlock Padding="0,0,3,0" FontFamily="{DynamicResource Phosphor}" 
-                                   FontSize="{DynamicResource IconSizeSmall}" 
-                                   Foreground="{DynamicResource PrimaryForeground}" 
-                                   Text="{DynamicResource IconeBDD}"/>
-                        
+
+                <StackPanel Orientation="Vertical">
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal">
+                        <TextBlock Padding="0,0,3,0" FontFamily="{DynamicResource Phosphor}"
+                                   FontSize="{DynamicResource IconSizeSmall}"
+                                   Foreground="{DynamicResource PrimaryForeground}"
+                                   Text="{DynamicResource IconeBDD}" />
+
                         <TextBlock Padding="0,3,0,0" FontFamily="{DynamicResource Helvetica}"
-                                   FontSize="{DynamicResource FontSizeMedium}" 
-                                   Foreground="{DynamicResource PrimaryForeground}" 
-                                   Text="Base de données"/>
+                                   FontSize="{DynamicResource FontSizeMedium}"
+                                   Foreground="{DynamicResource PrimaryForeground}"
+                                   Text="Base de données" />
                     </StackPanel>
-                    
-                    <TextBlock Padding="2,3,0,0" FontFamily="{DynamicResource Helvetica}" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SecondaryForeground}" Text="Configurez l'emplacement du fichier de sauvegarde SQLite"/>
-                    
-                    <TextBlock 
-                        Padding="0,20,0,0" 
-                        FontFamily="{DynamicResource Helvetica}" 
-                        FontSize="{DynamicResource FontSizeNormal}" 
-                        Foreground="{DynamicResource PrimaryForeground}" 
+
+                    <TextBlock Padding="2,3,0,0" FontFamily="{DynamicResource Helvetica}"
+                               FontSize="{DynamicResource FontSizeSmall}"
+                               Foreground="{DynamicResource SecondaryForeground}"
+                               Text="Configurez l'emplacement du fichier de sauvegarde SQLite" />
+
+                    <TextBlock
+                        Padding="0,20,0,0"
+                        FontFamily="{DynamicResource Helvetica}"
+                        FontSize="{DynamicResource FontSizeNormal}"
+                        Foreground="{DynamicResource PrimaryForeground}"
                         FontStyle="Normal"
-                        Text="Chemin du fichier (.db) :"/>
-                    
+                        Text="Chemin du fichier (.db) :" />
+
                     <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,5,0,0">
-                        <Border Grid.Column="0" Margin="0,0,10,0" Padding="5,2" 
-                                CornerRadius="{DynamicResource FieldCornerRadius}" 
-                                Background="{DynamicResource CardBackground}" 
+                        <Border Grid.Column="0" Margin="0,0,10,0" Padding="5,2"
+                                CornerRadius="{DynamicResource FieldCornerRadius}"
+                                Background="{DynamicResource CardBackground}"
                                 BorderBrush="{DynamicResource CardBorder}">
-                            
+
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" MinWidth="30"/> 
+                                    <ColumnDefinition Width="Auto" MinWidth="30" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" VerticalAlignment="Center" Padding="5,0,5,3"
                                            FontFamily="{DynamicResource Phosphor}"
                                            FontSize="{DynamicResource IconSizeNormal}"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           Text="{DynamicResource IconeHDD}"/>
-                                
-                                <TextBlock Grid.Column="1" 
+                                           Text="{DynamicResource IconeHDD}" />
+
+                                <TextBlock Grid.Column="1"
                                            Name="userbddPath"
-                                           VerticalAlignment="Center" 
+                                           VerticalAlignment="Center"
                                            Padding="5,0,5,0"
                                            FontFamily="{DynamicResource Helvetica}"
                                            FontSize="{DynamicResource FontSizeNormal}"
                                            Foreground="{DynamicResource SecondaryForeground}"
                                            Text="{Binding PathToBDD}">
-    
+
                                     <FlyoutBase.AttachedFlyout>
                                         <Flyout FlyoutPresenterClasses="alerteDanger">
                                             <StackPanel Orientation="Vertical" Spacing="5">
-                                                <Grid ColumnDefinitions="*,Auto,*" HorizontalAlignment="Stretch" MinWidth="250">
-                                                    <TextBlock Grid.Column="0" 
-                                                               Text="{DynamicResource IconeDanger}" 
+                                                <Grid ColumnDefinitions="*,Auto,*" HorizontalAlignment="Stretch"
+                                                      MinWidth="250">
+                                                    <TextBlock Grid.Column="0"
+                                                               Text="{DynamicResource IconeDanger}"
                                                                FontFamily="{DynamicResource Phosphor}"
                                                                FontSize="{DynamicResource IconSizeNormal}"
                                                                Foreground="{DynamicResource ErrorForeground}"
                                                                HorizontalAlignment="Left"
-                                                               VerticalAlignment="Center"/>
-                                                    <TextBlock Grid.Column="1" 
-                                                               Text="Le fichier est introuvable" 
+                                                               VerticalAlignment="Center" />
+                                                    <TextBlock Grid.Column="1"
+                                                               Text="Le fichier est introuvable"
                                                                FontFamily="{DynamicResource Helvetica}"
                                                                FontSize="{DynamicResource FontSizeNormal}"
                                                                FontWeight="Bold"
                                                                Foreground="{DynamicResource ErrorForeground}"
                                                                HorizontalAlignment="Center"
                                                                VerticalAlignment="Center"
-                                                               Margin="15,0,15,0"/> 
-                                                    <TextBlock Grid.Column="2" 
-                                                               Text="{DynamicResource IconeDanger}" 
+                                                               Margin="15,0,15,0" />
+                                                    <TextBlock Grid.Column="2"
+                                                               Text="{DynamicResource IconeDanger}"
                                                                FontFamily="{DynamicResource Phosphor}"
                                                                FontSize="{DynamicResource IconSizeNormal}"
                                                                Foreground="{DynamicResource ErrorForeground}"
                                                                HorizontalAlignment="Right"
-                                                               VerticalAlignment="Center"/>
+                                                               VerticalAlignment="Center" />
                                                 </Grid>
-                                                
-                                                <TextBlock Text="La modification n'a pas été enregistrée" 
+
+                                                <TextBlock Text="La modification n'a pas été enregistrée"
                                                            FontFamily="{DynamicResource Helvetica}"
                                                            FontSize="{DynamicResource FontSizeNormal}"
                                                            Foreground="{DynamicResource SecondaryForeground}"
-                                                           HorizontalAlignment="Center"/>
+                                                           HorizontalAlignment="Center" />
                                             </StackPanel>
                                         </Flyout>
                                     </FlyoutBase.AttachedFlyout>
                                 </TextBlock>
                             </Grid>
                         </Border>
-                        
-                        <Button Grid.Column="1" Click="BrowseFile_Click" CornerRadius="{DynamicResource FieldCornerRadius}" Margin="0,0,10,0"
-                                Classes="zoom" 
-                                Background="{DynamicResource CardBackground}" 
-                                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
-                                Foreground="{DynamicResource PrimaryForeground}" 
+
+                        <Button Grid.Column="1" Click="BrowseFile_Click"
+                                CornerRadius="{DynamicResource FieldCornerRadius}" Margin="0,0,10,0"
+                                Classes="zoom"
+                                Background="{DynamicResource CardBackground}"
+                                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
+                                Foreground="{DynamicResource PrimaryForeground}"
                                 Padding="12,7" Cursor="Hand">
                             <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                                <TextBlock Padding="0,5,0,0" 
-                                           FontFamily="{DynamicResource Phosphor}" 
-                                           FontSize="{DynamicResource FontSizeMedium}" 
-                                           Text="{DynamicResource IconeSearch}"/>
-                                <TextBlock 
-                                    Padding="0,0,0,0" 
-                                    FontFamily="{DynamicResource HelveticaBold}" 
-                                    FontSize="{DynamicResource FontSizeNormal}" 
+                                <TextBlock Padding="0,5,0,0"
+                                           FontFamily="{DynamicResource Phosphor}"
+                                           FontSize="{DynamicResource FontSizeMedium}"
+                                           Text="{DynamicResource IconeSearch}" />
+                                <TextBlock
+                                    Padding="0,0,0,0"
+                                    FontFamily="{DynamicResource HelveticaBold}"
+                                    FontSize="{DynamicResource FontSizeNormal}"
                                     Text="Parcourir" />
                             </StackPanel>
                         </Button>
-                        
+
                         <Button Grid.Column="2" CornerRadius="{DynamicResource FieldCornerRadius}" Margin="0"
                                 Classes="zoom"
                                 Command="{Binding SavePathCommand}"
-                                Background="{DynamicResource CardBackground}" 
-                                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" 
-                                Foreground="{DynamicResource PrimaryForeground}" 
+                                Background="{DynamicResource CardBackground}"
+                                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
+                                Foreground="{DynamicResource PrimaryForeground}"
                                 Padding="12,7" Cursor="Hand">
                             <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                                <TextBlock 
-                                    Padding="0,5,0,0" 
-                                    FontFamily="{DynamicResource Phosphor}" 
-                                    FontSize="{DynamicResource FontSizeMedium}" 
-                                    Text="{DynamicResource IconeSave}"/>
-                                
-                                <TextBlock 
-                                    Padding="0,0,0,0" 
-                                    FontFamily="{DynamicResource HelveticaBold}" 
-                                    FontSize="{DynamicResource FontSizeNormal}" 
+                                <TextBlock
+                                    Padding="0,5,0,0"
+                                    FontFamily="{DynamicResource Phosphor}"
+                                    FontSize="{DynamicResource FontSizeMedium}"
+                                    Text="{DynamicResource IconeSave}" />
+
+                                <TextBlock
+                                    Padding="0,0,0,0"
+                                    FontFamily="{DynamicResource HelveticaBold}"
+                                    FontSize="{DynamicResource FontSizeNormal}"
                                     Text="Sauvegarder" />
                             </StackPanel>
                         </Button>
                     </Grid>
                 </StackPanel>
             </Border>
-            
-            <Border Grid.Column="1" Margin="0" Padding="15" 
-                    CornerRadius="{DynamicResource FieldCornerRadius}" 
-                    Background="{DynamicResource CardBackground}" 
+
+            <Border Grid.Column="1" Margin="0" Padding="15"
+                    CornerRadius="{DynamicResource FieldCornerRadius}"
+                    Background="{DynamicResource CardBackground}"
                     BorderBrush="{DynamicResource CardBorder}"
                     BorderThickness="1">
 
@@ -196,329 +201,341 @@
                             <TextBlock FontFamily="{DynamicResource Phosphor}"
                                        FontSize="{DynamicResource IconSizeSmall}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       Text="{DynamicResource IconePalette}" 
-                                       VerticalAlignment="Center"/>
-                            
+                                       Text="{DynamicResource IconePalette}"
+                                       VerticalAlignment="Center" />
+
                             <TextBlock FontFamily="{DynamicResource HelveticaBold}"
                                        FontSize="{DynamicResource FontSizeMedium}"
                                        Foreground="{DynamicResource PrimaryForeground}"
                                        Text="Apparence"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" />
                         </StackPanel>
 
                         <TextBlock FontFamily="{DynamicResource Helvetica}"
                                    FontSize="{DynamicResource FontSizeSmall}"
                                    Foreground="{DynamicResource SecondaryForeground}"
                                    Text="Basculez entre le mode clair et le mode sombre"
-                                   TextWrapping="Wrap"/>
+                                   TextWrapping="Wrap" />
                     </StackPanel>
 
                     <Canvas Grid.Row="1" VerticalAlignment="Stretch" />
-                    
+
                     <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
                           ColumnDefinitions="Auto, Auto, Auto">
-                    
-                        <TextBlock Grid.Column="0" 
-                                   FontFamily="{DynamicResource Phosphor}"
-                                   FontSize="{DynamicResource IconSizeSmall}"
-                                   Foreground="{DynamicResource PrimaryForeground}"
-                                   Text="{DynamicResource IconeMoon}" 
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,20,0"/>
 
-                        <ToggleSwitch Grid.Column="1" 
-                                      IsChecked="{Binding !IsDarkModeEnabled, Mode=TwoWay}"
-                                      OnContent="" 
-                                      OffContent="" 
-                                      VerticalAlignment="Center"/>
-                        
-                        <TextBlock Grid.Column="2" 
+                        <TextBlock Grid.Column="0"
                                    FontFamily="{DynamicResource Phosphor}"
                                    FontSize="{DynamicResource IconSizeSmall}"
                                    Foreground="{DynamicResource PrimaryForeground}"
-                                   Text="{DynamicResource IconeSun}" 
+                                   Text="{DynamicResource IconeMoon}"
                                    VerticalAlignment="Center"
-                                   Margin="10,0,0,0"/>
+                                   Margin="0,0,20,0" />
+
+                        <ToggleSwitch Grid.Column="1"
+                                      IsChecked="{Binding !IsDarkModeEnabled, Mode=TwoWay}"
+                                      OnContent=""
+                                      OffContent=""
+                                      VerticalAlignment="Center" />
+
+                        <TextBlock Grid.Column="2"
+                                   FontFamily="{DynamicResource Phosphor}"
+                                   FontSize="{DynamicResource IconSizeSmall}"
+                                   Foreground="{DynamicResource PrimaryForeground}"
+                                   Text="{DynamicResource IconeSun}"
+                                   VerticalAlignment="Center"
+                                   Margin="10,0,0,0" />
                     </Grid>
                 </Grid>
             </Border>
         </Grid>
-        
+
         <StackPanel Grid.Row="1" Margin="0,0,0,15">
             <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,5">
-                <TextBlock FontFamily="{DynamicResource Phosphor}" 
-                           FontSize="{DynamicResource IconSizeMedium}" 
-                           Foreground="{DynamicResource PrimaryForeground}" 
-                           Text="{DynamicResource IconeFolder}" 
-                           VerticalAlignment="Center"/>
-                <TextBlock FontFamily="{DynamicResource HelveticaBold}" 
-                           FontSize="{DynamicResource FontSizeMedium}" 
-                           Foreground="{DynamicResource PrimaryForeground}" 
-                           Text="Cours" 
-                           VerticalAlignment="Center"/>
+                <TextBlock FontFamily="{DynamicResource Phosphor}"
+                           FontSize="{DynamicResource IconSizeMedium}"
+                           Foreground="{DynamicResource PrimaryForeground}"
+                           Text="{DynamicResource IconeFolder}"
+                           VerticalAlignment="Center" />
+                <TextBlock FontFamily="{DynamicResource HelveticaBold}"
+                           FontSize="{DynamicResource FontSizeMedium}"
+                           Foreground="{DynamicResource PrimaryForeground}"
+                           Text="Cours"
+                           VerticalAlignment="Center" />
             </StackPanel>
-            <TextBlock FontFamily="{DynamicResource Helvetica}" 
-                       FontSize="{DynamicResource FontSizeSmall}" 
-                       Foreground="{DynamicResource SecondaryForeground}" 
+            <TextBlock FontFamily="{DynamicResource Helvetica}"
+                       FontSize="{DynamicResource FontSizeSmall}"
+                       Foreground="{DynamicResource SecondaryForeground}"
                        Text="Configurez les modules et les branches" />
         </StackPanel>
 
-        <ScrollViewer Grid.Row="2" 
-                      VerticalScrollBarVisibility="Auto" 
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled"
                       Padding="0,0,15,0">
-            
+
             <StackPanel Spacing="15">
-                
+
                 <ItemsControl ItemsSource="{Binding Modules}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Columns="{Binding $parent[Pages:SettingsPage].GridColumns}" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    
+
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="data:ModuleViewModel">
-        
-                            <Border MinWidth="200" Height="200" Margin="7.5,0,7.5,15" 
-                                    Padding="15" 
+
+                            <Border MinWidth="200" Height="200" Margin="7.5,0,7.5,15"
+                                    Padding="15"
                                     HorizontalAlignment="Stretch"
-                                    CornerRadius="{DynamicResource FieldCornerRadius}" 
-                                    Background="{DynamicResource CardBackground}" 
-                                    BorderBrush="{DynamicResource CardBorder}" 
+                                    CornerRadius="{DynamicResource FieldCornerRadius}"
+                                    Background="{DynamicResource CardBackground}"
+                                    BorderBrush="{DynamicResource CardBorder}"
                                     BorderThickness="1">
-                                
+
                                 <Grid RowDefinitions="Auto, *, Auto">
-                                    
+
                                     <Grid Grid.Row="0" ColumnDefinitions="*, Auto, Auto, Auto" Margin="0,0,0,10">
-                                        
-                                        
-                                        <TextBlock Grid.Column="0" 
-                                                   Text="{Binding ShortName}" 
-                                                   FontWeight="Bold" 
-                                                   Foreground="{DynamicResource PrimaryForeground}" 
-                                                   TextWrapping="Wrap" 
-                                                   VerticalAlignment="Center"/>
-                                        
-                                        <Border Grid.Column="1" 
-                                                Background="{DynamicResource CardBackground}" 
-                                                CornerRadius="100" 
-                                                Padding="8,2" 
+
+
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding ShortName}"
+                                                   FontWeight="Bold"
+                                                   Foreground="{DynamicResource PrimaryForeground}"
+                                                   TextWrapping="Wrap"
+                                                   VerticalAlignment="Center" />
+
+                                        <Border Grid.Column="1"
+                                                Background="{DynamicResource CardBackground}"
+                                                CornerRadius="100"
+                                                Padding="8,2"
                                                 Margin="10,0">
-                                            <TextBlock Text="{Binding Branches.Count, StringFormat='{}{0} Branches'}" 
-                                                       FontSize="11" 
+                                            <TextBlock Text="{Binding Branches.Count, StringFormat='{}{0} Branches'}"
+                                                       FontSize="11"
                                                        Foreground="{DynamicResource SecondaryForeground}"
-                                                       VerticalAlignment="Center"/>
+                                                       VerticalAlignment="Center" />
                                         </Border>
-                                        
-                                        <Button Grid.Column="2" 
-                                                Classes="zoom" 
-                                                Background="Transparent" 
-                                                Padding="5" 
+
+                                        <Button Grid.Column="2"
+                                                Classes="zoom"
+                                                Background="Transparent"
+                                                Padding="5"
                                                 Cursor="Hand"
                                                 Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).EditModuleCommand}"
                                                 CommandParameter="{Binding}">
-                                            <TextBlock FontFamily="{DynamicResource Phosphor}" 
-                                                       Text="{DynamicResource IconeCrayon}" 
+                                            <TextBlock FontFamily="{DynamicResource Phosphor}"
+                                                       Text="{DynamicResource IconeCrayon}"
                                                        Foreground="{DynamicResource PrimaryForeground}"
-                                                       FontSize="{DynamicResource IconSizeSmall}"/>
+                                                       FontSize="{DynamicResource IconSizeSmall}" />
                                         </Button>
-                                        
-                                        <Button Grid.Column="3" 
-                                                Classes="zoom" 
-                                                Background="Transparent" 
-                                                Padding="5" 
+
+                                        <Button Grid.Column="3"
+                                                Classes="zoom"
+                                                Background="Transparent"
+                                                Padding="5"
                                                 Cursor="Hand"
                                                 Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).PromptDeleteModuleCommand}"
                                                 CommandParameter="{Binding}"
                                                 ToolTip.Tip="Supprimer le module">
-                                            <TextBlock FontFamily="{DynamicResource Phosphor}" 
-                                                       Text="{DynamicResource IconeTrash}" 
+                                            <TextBlock FontFamily="{DynamicResource Phosphor}"
+                                                       Text="{DynamicResource IconeTrash}"
                                                        Foreground="{DynamicResource PrimaryForeground}"
-                                                       FontSize="{DynamicResource IconSizeSmall}"/>
+                                                       FontSize="{DynamicResource IconSizeSmall}" />
                                         </Button>
-                                        
+
                                     </Grid>
 
-                                    <ScrollViewer Grid.Row="1" Margin="0,0,-10,0" Padding="0,0,10,0" 
-                                                  VerticalScrollBarVisibility="Auto" 
+                                    <ScrollViewer Grid.Row="1" Margin="0,0,-10,0" Padding="0,0,10,0"
+                                                  VerticalScrollBarVisibility="Auto"
                                                   HorizontalScrollBarVisibility="Disabled">
-                                        
+
                                         <ItemsControl ItemsSource="{Binding Branches}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid ColumnDefinitions="Auto, *, Auto" Margin="0,6">
-                                                        
-                                                        <TextBlock Grid.Column="0" 
-                                                                   FontFamily="{DynamicResource Phosphor}" 
-                                                                   Text="{DynamicResource IconeScreen}" 
-                                                                   Foreground="{DynamicResource SecondaryForeground}" 
-                                                                   Margin="0,0,10,0" 
-                                                                   VerticalAlignment="Center"/>
-                                                        
-                                                        <TextBlock Grid.Column="1" 
-                                                                   Text="{Binding Nom}" 
-                                                                   Foreground="{DynamicResource PrimaryForeground}" 
+
+                                                        <TextBlock Grid.Column="0"
+                                                                   FontFamily="{DynamicResource Phosphor}"
+                                                                   Text="{DynamicResource IconeScreen}"
+                                                                   Foreground="{DynamicResource SecondaryForeground}"
+                                                                   Margin="0,0,10,0"
+                                                                   VerticalAlignment="Center" />
+
+                                                        <TextBlock Grid.Column="1"
+                                                                   Text="{Binding Nom}"
+                                                                   Foreground="{DynamicResource PrimaryForeground}"
                                                                    VerticalAlignment="Center"
-                                                                   TextWrapping="Wrap"/>
+                                                                   TextWrapping="Wrap" />
                                                     </Grid>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
                                     </ScrollViewer>
-                                    
+
                                 </Grid>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                
+
                 <UniformGrid Columns="{Binding $parent[Pages:SettingsPage].GridColumns}">
-                    
-                    <Border Height="200" Margin="7.5,0,7.5,15" 
-                            CornerRadius="{DynamicResource FieldCornerRadius}" 
-                            Background="{DynamicResource CardBackground}" 
-                            BorderBrush="{DynamicResource CardBorder}" 
+
+                    <Border Height="200" Margin="7.5,0,7.5,15"
+                            CornerRadius="{DynamicResource FieldCornerRadius}"
+                            Background="{DynamicResource CardBackground}"
+                            BorderBrush="{DynamicResource CardBorder}"
                             BorderThickness="1"
                             HorizontalAlignment="Stretch">
-                        
-                        <Button Background="Transparent" 
-                                HorizontalAlignment="Stretch" 
-                                VerticalAlignment="Stretch" 
+
+                        <Button Background="Transparent"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
                                 Cursor="Hand"
                                 Command="{Binding AddModuleCommand}">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
-                                
-                                <TextBlock Text="{DynamicResource IconePlus}" 
-                                           FontFamily="{DynamicResource Phosphor}" 
-                                           FontSize="30" 
-                                           Foreground="{DynamicResource SecondaryForeground}" 
-                                           HorizontalAlignment="Center"/>
-                                
-                                <TextBlock Text="Ajouter un module" 
-                                           Foreground="{DynamicResource SecondaryForeground}" 
+
+                                <TextBlock Text="{DynamicResource IconePlus}"
+                                           FontFamily="{DynamicResource Phosphor}"
+                                           FontSize="30"
+                                           Foreground="{DynamicResource SecondaryForeground}"
+                                           HorizontalAlignment="Center" />
+
+                                <TextBlock Text="Ajouter un module"
+                                           Foreground="{DynamicResource SecondaryForeground}"
                                            FontSize="{DynamicResource FontSizeMedium}"
-                                           HorizontalAlignment="Center"/>
-                                           
+                                           HorizontalAlignment="Center" />
+
                             </StackPanel>
                         </Button>
                     </Border>
-                    
+
                 </UniformGrid>
 
-                
-                
+
             </StackPanel>
         </ScrollViewer>
-        
+
         <Grid Grid.RowSpan="3" IsVisible="{Binding IsConfirmDialogOpen}" Background="#B3000000" ZIndex="1000">
             <Border Background="{DynamicResource ModalBackground}"
-                    BorderBrush="{DynamicResource CardBorder}" 
+                    BorderBrush="{DynamicResource CardBorder}"
                     BorderThickness="1"
                     CornerRadius="{DynamicResource FieldCornerRadius}"
-                    HorizontalAlignment="Center" 
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Padding="25" 
+                    Padding="25"
                     MinWidth="350"
                     BoxShadow="0 8 16 0 #40000000">
                 <StackPanel Spacing="15">
-                    
+
                     <StackPanel Orientation="Horizontal" Spacing="10">
-                        <TextBlock FontFamily="{DynamicResource Phosphor}" 
-                                   Text="{DynamicResource IconeDanger}" 
-                                   FontSize="{DynamicResource IconSizeMedium}" 
-                                   Foreground="{DynamicResource ErrorForeground}"/>
-                        <TextBlock Text="Confirmation requise" 
-                                   FontFamily="{DynamicResource HelveticaBold}" 
-                                   FontSize="{DynamicResource FontSizeMedium}" 
+                        <TextBlock FontFamily="{DynamicResource Phosphor}"
+                                   Text="{DynamicResource IconeDanger}"
+                                   FontSize="{DynamicResource IconSizeMedium}"
+                                   Foreground="{DynamicResource ErrorForeground}" />
+                        <TextBlock Text="Confirmation requise"
+                                   FontFamily="{DynamicResource HelveticaBold}"
+                                   FontSize="{DynamicResource FontSizeMedium}"
                                    Foreground="{DynamicResource PrimaryForeground}"
-                                   VerticalAlignment="Center"/>
+                                   VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <TextBlock Text="{Binding ConfirmDialogMessage}" 
-                               Foreground="{DynamicResource SecondaryForeground}" 
+                    <TextBlock Text="{Binding ConfirmDialogMessage}"
+                               Foreground="{DynamicResource SecondaryForeground}"
                                FontFamily="{DynamicResource Helvetica}"
                                FontSize="{DynamicResource FontSizeNormal}"
-                               TextWrapping="Wrap"/>
-                    
+                               TextWrapping="Wrap" />
+
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="15" Margin="0,15,0,0">
-                        <Button Content="Annuler" 
-                                Command="{Binding CancelDeleteCommand}" 
-                                Classes="zoom" 
-                                Background="Transparent" 
-                                Foreground="{DynamicResource PrimaryForeground}" 
-                                Cursor="Hand"/>
-                        <Button Content="Supprimer" 
-                                Command="{Binding ConfirmDeleteCommand}" 
-                                Classes="zoom" 
-                                Background="{DynamicResource ErrorForeground}" 
-                                Foreground="White" 
+                        <Button Content="Annuler"
+                                Command="{Binding CancelDeleteCommand}"
+                                Classes="zoom"
+                                Background="Transparent"
+                                Foreground="{DynamicResource PrimaryForeground}"
+                                Cursor="Hand" />
+                        <Button Content="Supprimer"
+                                Command="{Binding ConfirmDeleteCommand}"
+                                Classes="zoom"
+                                Background="{DynamicResource ErrorForeground}"
+                                Foreground="White"
                                 Cursor="Hand"
                                 CornerRadius="{DynamicResource ControlCornerRadius}"
-                                Padding="15,8"/>
+                                Padding="15,8" />
                     </StackPanel>
                 </StackPanel>
             </Border>
         </Grid>
 
-        
+
         <Grid Grid.RowSpan="3" Background="#B3000000" ZIndex="999" IsVisible="{Binding IsEditModuleModalOpen}">
-            <Border Width="450" Background="{DynamicResource ModalBackground}" 
+            <Border Width="450" Background="{DynamicResource ModalBackground}"
                     CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center"
                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                     BoxShadow="0 10 30 0 #40000000">
-                
+
                 <StackPanel Margin="20" Spacing="15">
-                    
+
                     <Grid>
-                        <TextBlock Text="Éditer le module" FontSize="{DynamicResource FontSizeNormal}" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryForeground}"/>
-                        <Button Content="✕" Background="Transparent" HorizontalAlignment="Right" Command="{Binding CloseEditModuleModalCommand}" Foreground="{DynamicResource PrimaryForeground}" Cursor="Hand"/>
+                        <TextBlock Text="Éditer le module" FontSize="{DynamicResource FontSizeNormal}"
+                                   FontWeight="SemiBold" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource PrimaryForeground}" />
+                        <Button Content="✕" Background="Transparent" HorizontalAlignment="Right"
+                                Command="{Binding CloseEditModuleModalCommand}"
+                                Foreground="{DynamicResource PrimaryForeground}" Cursor="Hand" />
                     </Grid>
-                    
-                    <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5"/>
 
-                    <TextBlock Text="Nom du module" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10"/>
+                    <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5" />
+
+                    <TextBlock Text="Nom du module" FontSize="{DynamicResource FontSizeSmall}"
+                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
                     <Grid ColumnDefinitions="*, Auto">
-                        <TextBox Grid.Column="0" Text="{Binding EditingModule.Nom}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <Button Grid.Column="1" Content="{DynamicResource IconeSave}" 
+                        <TextBox Grid.Column="0" Text="{Binding EditingModule.Nom}" VerticalAlignment="Center"
+                                 Margin="0,0,10,0" />
+                        <Button Grid.Column="1" Content="{DynamicResource IconeSave}"
                                 FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource IconSizeNormal}"
-                                Foreground="{DynamicResource PrimaryForeground}" Background="Transparent" Padding="5" Cursor="Hand"
-                                Command="{Binding SaveModuleNameCommand}" ToolTip.Tip="Sauvegarder le nom du module"/>
+                                Foreground="{DynamicResource PrimaryForeground}" Background="Transparent" Padding="5"
+                                Cursor="Hand"
+                                Command="{Binding SaveModuleNameCommand}" ToolTip.Tip="Sauvegarder le nom du module" />
                     </Grid>
 
-                    <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,10"/>
+                    <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,10" />
 
                     <Grid ColumnDefinitions="*, Auto">
-                        <TextBox Grid.Column="0" Text="{Binding NouvelleBrancheNom}" Watermark="Nouvelle branche..." VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <Button Grid.Column="1" Content="Ajouter" Command="{Binding AddBrancheToEditingModuleCommand}" 
-                                Background="#3A3A3A" Foreground="White" CornerRadius="{DynamicResource ControlCornerRadius}"/>
+                        <TextBox Grid.Column="0" Text="{Binding NouvelleBrancheNom}" Watermark="Nouvelle branche..."
+                                 VerticalAlignment="Center" Margin="0,0,10,0" />
+                        <Button Grid.Column="1" Content="Ajouter" Command="{Binding AddBrancheToEditingModuleCommand}"
+                                Background="#3A3A3A" Foreground="White"
+                                CornerRadius="{DynamicResource ControlCornerRadius}" />
                     </Grid>
 
-                    <TextBlock Text="Branches existantes" FontSize="{DynamicResource FontSizeMedium}" FontWeight="SemiBold" Margin="0,10,0,0" Foreground="{DynamicResource PrimaryForeground}"/>
+                    <TextBlock Text="Branches existantes" FontSize="{DynamicResource FontSizeMedium}"
+                               FontWeight="SemiBold" Margin="0,10,0,0" Foreground="{DynamicResource PrimaryForeground}" />
 
                     <ScrollViewer MaxHeight="250">
                         <ItemsControl ItemsSource="{Binding ModalBranches}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,5">
-                                        
-                                        <TextBox Grid.Column="0" Text="{Binding Nom}" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                                        
-                                        <Button Grid.Column="1" Content="{DynamicResource IconeSave}"  
+
+                                        <TextBox Grid.Column="0" Text="{Binding Nom}" Margin="0,0,10,0"
+                                                 VerticalAlignment="Center" />
+
+                                        <Button Grid.Column="1" Content="{DynamicResource IconeSave}"
                                                 Foreground="{DynamicResource PrimaryForeground}"
                                                 FontFamily="{DynamicResource Phosphor}"
                                                 FontSize="{DynamicResource IconSizeNormal}"
-                                                Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).RenameBrancheCommand}" 
+                                                Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).RenameBrancheCommand}"
                                                 CommandParameter="{Binding}"
-                                                Background="Transparent" Padding="5" Cursor="Hand" ToolTip.Tip="Sauvegarder le nom"/>
-                                        
-                                        <Button Grid.Column="2" Content="{DynamicResource IconeTrash}" 
-                                                FontFamily="{DynamicResource Phosphor}" 
+                                                Background="Transparent" Padding="5" Cursor="Hand"
+                                                ToolTip.Tip="Sauvegarder le nom" />
+
+                                        <Button Grid.Column="2" Content="{DynamicResource IconeTrash}"
+                                                FontFamily="{DynamicResource Phosphor}"
                                                 Foreground="{DynamicResource PrimaryForeground}"
                                                 FontSize="{DynamicResource IconSizeNormal}"
-                                                Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).PromptDeleteBrancheCommand}" 
+                                                Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).PromptDeleteBrancheCommand}"
                                                 CommandParameter="{Binding}"
-                                                Background="Transparent" Padding="5" Cursor="Hand" ToolTip.Tip="Supprimer"/>
+                                                Background="Transparent" Padding="5" Cursor="Hand"
+                                                ToolTip.Tip="Supprimer" />
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -528,5 +545,5 @@
             </Border>
         </Grid>
     </Grid>
-    
+
 </UserControl>

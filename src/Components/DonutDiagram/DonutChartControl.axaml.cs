@@ -79,14 +79,15 @@ public partial class DonutChartControl : UserControl
         double centerX = largeur / 2;
         double centerY = hauteur / 2;
         double dimensionMinimale = Math.Min(largeur, hauteur);
-        
-        double outerRadius = (dimensionMinimale / 2) - 5; 
-        if (outerRadius <= 0) return; 
-        
-        double innerRadius = outerRadius * 0.6; 
-        double currentAngle = -Math.PI / 2; 
-        
-        string[] colorPalette = { "#CC4A90E2", "#CC50E3C2", "#CCF5A623", "#CCD0021B", "#CCBD10E0", "#CCB8E986", "#CC8B572A" };
+
+        double outerRadius = (dimensionMinimale / 2) - 5;
+        if (outerRadius <= 0) return;
+
+        double innerRadius = outerRadius * 0.6;
+        double currentAngle = -Math.PI / 2;
+
+        string[] colorPalette =
+            { "#CC4A90E2", "#CC50E3C2", "#CCF5A623", "#CCD0021B", "#CCBD10E0", "#CCB8E986", "#CC8B572A" };
         int colorIndex = 0;
 
         foreach (var item in donnees)
@@ -97,10 +98,10 @@ public partial class DonutChartControl : UserControl
             double angleProportion = proportion * 2 * Math.PI;
 
             if (angleProportion >= 2 * Math.PI)
-                angleProportion = 2 * Math.PI - 0.001; 
+                angleProportion = 2 * Math.PI - 0.001;
 
             double nextAngle = currentAngle + angleProportion;
-            int isLargeArc = angleProportion > Math.PI ? 1 : 0; 
+            int isLargeArc = angleProportion > Math.PI ? 1 : 0;
 
             // Calculs trigonométriques
             double startX_Outer = centerX + outerRadius * Math.Cos(currentAngle);
@@ -123,33 +124,33 @@ public partial class DonutChartControl : UserControl
             {
                 Data = StreamGeometry.Parse(pathData),
                 Fill = sliceColor,
-                Stroke = Brushes.Transparent, 
+                Stroke = Brushes.Transparent,
                 StrokeThickness = 1
             };
-            
-            ToolTip.SetTip(path, $"{item.Label} : {item.Value:0.#}h ({proportion*100:0.#}%)");
+
+            ToolTip.SetTip(path, $"{item.Label} : {item.Value:0.#}h ({proportion * 100:0.#}%)");
             DonutCanvas.Children.Add(path);
 
             // Création de la légende
-            var legendItem = new StackPanel 
-            { 
-                Orientation = Avalonia.Layout.Orientation.Horizontal, 
+            var legendItem = new StackPanel
+            {
+                Orientation = Avalonia.Layout.Orientation.Horizontal,
                 Spacing = 5,
                 Margin = new Thickness(10, 2),
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
             };
 
-            var colorBox = new Border 
-            { 
-                Width = 10, Height = 10, 
-                CornerRadius = new CornerRadius(5), 
+            var colorBox = new Border
+            {
+                Width = 10, Height = 10,
+                CornerRadius = new CornerRadius(5),
                 Background = sliceColor,
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
             };
 
-            var label = new TextBlock 
-            { 
-                Text = $"{item.Label} : {item.Value:0.#}h ({proportion*100:0.#}%)", 
+            var label = new TextBlock
+            {
+                Text = $"{item.Label} : {item.Value:0.#}h ({proportion * 100:0.#}%)",
                 FontSize = 12,
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
             };
