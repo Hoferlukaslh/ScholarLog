@@ -26,7 +26,8 @@
              xmlns:vm="using:ScholarLog.ViewModels"
              mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
              x:Class="ScholarLog.Views.Pages.NotesPage"
-             x:DataType="vm:NotesViewModel">
+             x:DataType="vm:NotesViewModel"
+             x:CompileBindings="True">
 
     <UserControl.Styles>
         <Style Selector="Button.icon-button">

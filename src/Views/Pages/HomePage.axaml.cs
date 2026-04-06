@@ -52,24 +52,6 @@ public partial class HomePage : UserControl
     public HomePage()
     {
         InitializeComponent();
-        
-        // abonnement au changement de contexte pour écouter le ViewModel
-        this.DataContextChanged += HomePage_DataContextChanged;
-    }
-
-    private void HomePage_DataContextChanged(object? sender, EventArgs e)
-    {
-        if (this.DataContext is HomeViewModel vm)
-        {
-            // écoute les changements de données pour déclencher les animations
-            vm.PropertyChanged += Vm_PropertyChanged;
-            
-            // relaye l'événement de navigation du ViewModel vers l'extérieur (MainWindow)
-            vm.NavigationVersJournalDemandee += (s, module) => 
-            {
-                NavigationVersJournalDemandee?.Invoke(this, module);
-            };
-        }
     }
 
     private void Vm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -106,17 +88,39 @@ public partial class HomePage : UserControl
     {
         base.OnPropertyChanged(change);
 
-        if (change.Property == RightPanelWidthStarProperty)
+        // Gestion du DataContext (Prévention des fuites de mémoire)
+        if (change.Property == DataContextProperty)
+        {
+            if (change.OldValue is HomeViewModel oldVm)
+            {
+                oldVm.PropertyChanged -= Vm_PropertyChanged;
+                oldVm.NavigationVersJournalDemandee -= Vm_NavigationVersJournalDemandee;
+            }
+
+            if (change.NewValue is HomeViewModel newVm)
+            {
+                newVm.PropertyChanged += Vm_PropertyChanged;
+                newVm.NavigationVersJournalDemandee += Vm_NavigationVersJournalDemandee;
+            }
+        }
+        // Panneau de droite
+        else if (change.Property == RightPanelWidthStarProperty)
         {
             double val = Math.Max(0, change.GetNewValue<double>());
             if (this.FindControl<Grid>("MJETBrancheGraph") is { } grid)
                 grid.ColumnDefinitions[1].Width = new GridLength(val, GridUnitType.Star);
         }
+        // Panneau du bas (Journal)
         else if (change.Property == BottomPanelHeightStarProperty)
         {
             double val = Math.Max(0, change.GetNewValue<double>());
             if (this.FindControl<Grid>("ModuleEtJournal") is { } grid)
                 grid.RowDefinitions[1].Height = new GridLength(val, GridUnitType.Star);
         }
+    }
+
+    private void Vm_NavigationVersJournalDemandee(object? sender, ModuleViewModel module)
+    {
+        NavigationVersJournalDemandee?.Invoke(this, module);
     }
 }

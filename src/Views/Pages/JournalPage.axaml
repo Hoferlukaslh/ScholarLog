@@ -23,7 +23,8 @@
              xmlns:System="clr-namespace:System;assembly=System.Runtime"
              xmlns:controls="clr-namespace:ScholarLog.Components.DonutDiagram"
              x:Class="ScholarLog.Views.Pages.JournalPage"
-             x:DataType="vm:JournalViewModel">
+             x:DataType="vm:JournalViewModel"
+             x:CompileBindings="True">
     
     <UserControl.Styles>
         <Style Selector="Button.icon-button">

@@ -38,7 +38,8 @@
 
         x:DataType="vm:MainWindowViewModel"
         Icon="{DynamicResource AppIcon}"
-        Title="ScholarLog">
+        Title="ScholarLog"
+        x:CompileBindings="True">
     
     <Window.Styles>
        

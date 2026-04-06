@@ -7,7 +7,8 @@
              xmlns:data="clr-namespace:ScholarLog.Data"
              mc:Ignorable="d" d:DesignWidth="740" d:DesignHeight="450"
              x:Class="ScholarLog.Views.Pages.SettingsPage"
-             x:DataType="vm:SettingsViewModel">
+             x:DataType="vm:SettingsViewModel"
+             x:CompileBindings="True">
     
     <UserControl.Styles>
         <Style Selector="FlyoutPresenter.alerteDanger">
