@@ -34,7 +34,7 @@
         MinHeight="560"
         
         x:Class="ScholarLog.Views.MainWindow"
-        TransparencyLevelHint="AcrylicBlur"
+        TransparencyLevelHint="AcrylicBlur, Blur, Transparent"
 
         x:DataType="vm:MainWindowViewModel"
         Icon="{DynamicResource AppIcon}"
@@ -57,11 +57,6 @@
         
         <Style Selector="Window">
             <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"/>
-        </Style>
-        
-        <!-- Cas exceptionnel pour Linux -> gère mal AcrylicBlur -->
-        <Style Selector="Window.linux">
-            <Setter Property="Background" Value="{DynamicResource PrimaryBackgroundLinux}"/>
         </Style>
 
         <Style Selector="Label#ToggleIcon">

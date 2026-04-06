@@ -71,9 +71,6 @@ public partial class MainWindow : Window
 
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
-        // Fix spécifique Linux
-        if (OperatingSystem.IsLinux()) 
-            this.Classes.Add("linux");
 
         // Timer pour les lumières de fond animées
         _lightTimer = new DispatcherTimer

@@ -112,7 +112,6 @@
                 <!-- Thème sombre -->
                 <ResourceDictionary x:Key="Dark"> 
                     <SolidColorBrush x:Key="PrimaryBackground">#DD14172D</SolidColorBrush>
-                    <SolidColorBrush x:Key="PrimaryBackgroundLinux">#F714172D</SolidColorBrush>
                     
                     <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
                         <GradientStop Offset="0" Color="#CC111214"></GradientStop>
