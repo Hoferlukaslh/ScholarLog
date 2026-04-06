@@ -141,5 +141,4 @@ public partial class JournalPage : UserControl
             }
         }
     }
-    
 }

@@ -4,24 +4,23 @@
         <TargetFramework>net10.0</TargetFramework>
 
         <!-- Optimisation de la compilation -->
-        <InvariantGlobalization>true</InvariantGlobalization>
+        <InvariantGlobalization>false</InvariantGlobalization>
 	    
         <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
         <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
         <EnableUnsafeAssemblyLoadSupport>false</EnableUnsafeAssemblyLoadSupport>
 
-
-        <!-- Pas de debug pour l'utilisateur final -->
         <DebugSymbols>false</DebugSymbols>
         <DebugType>none</DebugType>
-        <StackTraceSupport>false</StackTraceSupport>
+        <StackTraceSupport>true</StackTraceSupport> <!-- Mieux pour la prod -->
         <DebuggerSupport>false</DebuggerSupport>
         <EventSourceSupport>false</EventSourceSupport>
         <MetricsSupport>false</MetricsSupport>
         <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
 
         <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport> <!-- Pas de requette web -->
-        <ServerGarbageCollection>false</ServerGarbageCollection> <!-- pas un serveur-->
+        <ServerGarbageCollection>false</ServerGarbageCollection>
+        <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
 
         <!-- Voir pour désactiver TRIM en cas de problèmes -->
         <PublishTrimmed>true</PublishTrimmed> 
@@ -31,6 +30,9 @@
         <Nullable>enable</Nullable>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+
+        
+        
 
 
         <ApplicationIcon>Assets\Images\ScholarLogLogoEx.ico</ApplicationIcon>

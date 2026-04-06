@@ -5,17 +5,25 @@ using System;
 
 sealed class Program
 {
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
     [STAThread]
     public static void Main(string[] args) => BuildAvaloniaApp()
         .StartWithClassicDesktopLifetime(args);
 
-    // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        var builder = AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            //.WithInterFont() j'utilise pas le visual designer.
-            .LogToTrace();
+            
+            .With(new SkiaOptions
+            {
+                MaxGpuResourceSizeBytes = 256 * 1024 * 1024
+            });
+
+        // Les logs ne sont compilés et exécutés qu'en environnement de développement
+        // builder.LogToTrace(Avalonia.Logging.LogEventLevel.Warning);
+
+
+        return builder;
+    }
+
 }

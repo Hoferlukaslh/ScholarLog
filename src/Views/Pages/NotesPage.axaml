@@ -138,63 +138,75 @@
                     </Grid>
 
                     <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}" VerticalAlignment="Bottom" Margin="10,0"/>
-
-                    <ScrollViewer Grid.Row="1" Margin="0,5,0,10">
-                        <ItemsControl ItemsSource="{Binding AllNotes}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="data:NoteViewModel">
-                                    <Grid ColumnDefinitions="1.5*, 1*, 2*, 2*, 1*, 120" Margin="20,10">
-                                        <TextBlock Grid.Column="0" Text="{Binding BrancheNom}" 
-                                                   TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding BrancheNom}" 
-                                                   Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                    
+                    <ItemsControl Grid.Row="1" Margin="0,5,0,10" ItemsSource="{Binding AllNotes}">
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+    
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="data:NoteViewModel">
+                                <Grid ColumnDefinitions="1.5*, 1*, 2*, 2*, 1*, 120" Margin="20,10">
+                                    <TextBlock Grid.Column="0" Text="{Binding BrancheNom}" 
+                                               TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding BrancheNom}" 
+                                               Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                    
+                                    <TextBlock Grid.Column="1" Text="{Binding NoteData.Date, StringFormat={}{0:dd.MM.yyyy}}" 
+                                               Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                    
+                                    <TextBlock Grid.Column="2" Text="{Binding ModuleNom}" 
+                                               TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding ModuleNom}" 
+                                               Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                    
+                                    <TextBlock Grid.Column="3" Text="{Binding NoteData.titre}" 
+                                               TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding NoteData.titre}" 
+                                               Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                    
+                                    <TextBlock Grid.Column="4" Text="{Binding NoteData.Valeur, StringFormat={}{0:0.0}}" 
+                                               Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                    
+                                    <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+                                        <Button Content="{DynamicResource IconeDocument}" Classes="icon-button-small" 
+                                                IsVisible="{Binding NoteData.HasDocument}"
+                                                Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirLecteurPdfCommand}" 
+                                                CommandParameter="{Binding NoteData}"
+                                                ToolTip.Tip="Lire le PDF"/>
                                         
-                                        <TextBlock Grid.Column="1" Text="{Binding NoteData.Date, StringFormat={}{0:dd.MM.yyyy}}" 
-                                                   Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
+                                        <Button Content="{DynamicResource IconeCrayon}" Classes="icon-button-small" 
+                                                Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirModalModificationCommand}" 
+                                                CommandParameter="{Binding NoteData}"/>
                                         
-                                        <TextBlock Grid.Column="2" Text="{Binding ModuleNom}" 
-                                                   TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding ModuleNom}" 
-                                                   Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
-                                        
-                                        <TextBlock Grid.Column="3" Text="{Binding NoteData.titre}" 
-                                                   TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding NoteData.titre}" 
-                                                   Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
-                                        
-                                        <TextBlock Grid.Column="4" Text="{Binding NoteData.Valeur, StringFormat={}{0:0.0}}" 
-                                                   Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"/>
-                                        
-                                        <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
-                                            <Button Content="{DynamicResource IconeDocument}" Classes="icon-button-small" 
-                                                    IsVisible="{Binding NoteData.HasDocument}"
-                                                    Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirLecteurPdfCommand}" 
-                                                    CommandParameter="{Binding NoteData}"
-                                                    ToolTip.Tip="Lire le PDF"/>
-                                            
-                                            <Button Content="{DynamicResource IconeCrayon}" Classes="icon-button-small" 
-                                                    Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirModalModificationCommand}" 
-                                                    CommandParameter="{Binding NoteData}"/>
-                                            
-                                            <Button Content="{DynamicResource IconeTrash}" Classes="icon-button-small" Tapped="BoutonSupprimer_Tapped">
-                                                <Button.Styles>
-                                                    <Style Selector="Button">
-                                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}"/>
-                                                    </Style>
-                                                    <Style Selector="Button[IsDefault=True]">
-                                                        <Setter Property="Foreground" Value="Red"/>
-                                                    </Style>
-                                                    <Style Selector="Button[IsDefault=True]:pointerover /template/ ContentPresenter">
-                                                        <Setter Property="Foreground" Value="Red"/>
-                                                    </Style>
-                                                </Button.Styles>
-                                                <Button.IsDefault>
-                                                    <Binding Path="NoteData.IsDeletePending"/>
-                                                </Button.IsDefault>
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
+                                        <Button Content="{DynamicResource IconeTrash}" Classes="icon-button-small" Tapped="BoutonSupprimer_Tapped">
+                                            <Button.Styles>
+                                                <Style Selector="Button">
+                                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}"/>
+                                                </Style>
+                                                <Style Selector="Button[IsDefault=True]">
+                                                    <Setter Property="Foreground" Value="Red"/>
+                                                </Style>
+                                                <Style Selector="Button[IsDefault=True]:pointerover /template/ ContentPresenter">
+                                                    <Setter Property="Foreground" Value="Red"/>
+                                                </Style>
+                                            </Button.Styles>
+                                            <Button.IsDefault>
+                                                <Binding Path="NoteData.IsDeletePending"/>
+                                            </Button.IsDefault>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
             </Border>
 

@@ -370,6 +370,9 @@ public partial class NotesViewModel : ViewModelBase
         IsPdfViewerOpen = false;
         ActiveCbzBlob = null; // Libère le blob
         PdfStatusText = "Laissez vide pour conserver le document existant.";
+        
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
     }
     
     
