@@ -184,11 +184,8 @@ public partial class JournalViewModel : ViewModelBase
 
         var journalTrie = moduleVM.JournalDeTravail?.OrderByDescending(entree => entree.Date).ToList() ?? new List<Entree>();
 
-        foreach (var entree in journalTrie)
-        {
-            Journal.Add(entree);
-            totalDuree += entree.Duree;
-        }
+        Journal.ReplaceAll(journalTrie);
+        totalDuree = journalTrie.Sum(e => e.Duree);
 
         TotalHeures = $"{totalDuree:0.0}h";
     }
