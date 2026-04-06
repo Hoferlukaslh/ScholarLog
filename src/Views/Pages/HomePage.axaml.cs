@@ -49,9 +49,16 @@ public partial class HomePage : UserControl
 
     private ModuleViewModel? _lastSelectedModule = null;
 
+    
+    private Grid? _mjetGrid;
+    private Grid? _moduleGrid;
+    
     public HomePage()
     {
         InitializeComponent();
+        
+        _mjetGrid = this.FindControl<Grid>("MJETBrancheGraph");
+        _moduleGrid = this.FindControl<Grid>("ModuleEtJournal");
     }
 
     private void Vm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -82,6 +89,8 @@ public partial class HomePage : UserControl
             _lastSelectedModule = newVal;
         }
     }
+    
+    
 
     // applique les valeurs animées aux GridLength en temps réel
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -107,15 +116,15 @@ public partial class HomePage : UserControl
         else if (change.Property == RightPanelWidthStarProperty)
         {
             double val = Math.Max(0, change.GetNewValue<double>());
-            if (this.FindControl<Grid>("MJETBrancheGraph") is { } grid)
-                grid.ColumnDefinitions[1].Width = new GridLength(val, GridUnitType.Star);
+
+            _mjetGrid.ColumnDefinitions[1].Width = new GridLength(val, GridUnitType.Star);
         }
         // Panneau du bas (Journal)
         else if (change.Property == BottomPanelHeightStarProperty)
         {
             double val = Math.Max(0, change.GetNewValue<double>());
-            if (this.FindControl<Grid>("ModuleEtJournal") is { } grid)
-                grid.RowDefinitions[1].Height = new GridLength(val, GridUnitType.Star);
+            
+            _moduleGrid.RowDefinitions[1].Height = new GridLength(val, GridUnitType.Star);
         }
     }
 

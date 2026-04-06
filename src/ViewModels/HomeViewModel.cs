@@ -23,6 +23,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using ScholarLog.Data;
 using ScholarLog.Components.DonutDiagram;
@@ -72,54 +73,53 @@ public partial class HomeViewModel : ViewModelBase
 
         DisplayedModule = value;
 
-        // tri du journal
-        var journalTrie = value.JournalDeTravail?.OrderByDescending(e => e.Date).ToList() ?? new List<Entree>();
-
-        // regroupement pour le graphique Donut
-        var typesTravailCalcules = value.JournalDeTravail?
-            .Where(e => e.Type != null)
-            .GroupBy(e => e.Type)
-            .Select(g => new TypeTravailViewModel
-            {
-                Id = g.Key.Id,
-                Nom = g.Key.Nom,
-                ModuleId = g.Key.ModuleId,
-                Somme = g.Sum(e => e.Duree)
-            }).ToList() ?? new List<TypeTravailViewModel>();
-
-        // dispatching des branches (Théorie vs Modules)
-        var branchesTM = new List<BrancheViewModel>();
-        var branchesM = new List<BrancheViewModel>();
-
-        if (value.Branches != null)
+        Task.Run(() =>
         {
-            foreach (var branche in value.Branches)
-            {
-                double moy = branche.CalculerMoyenne();
-                var vm = new BrancheViewModel
-                {
-                    Nom = branche.Nom,
-                    Moyenne = Math.Round(moy, 1),
-                    Type = branche.Type,
-                    Notes = branche.Notes?.ToList() ?? new List<Note>(),
-                    BrancheTrend = AppDataService.Instance.DeterminerTendance(new List<Branche> { branche }, moy)
-                };
+            var journalTrie = value.JournalDeTravail?
+                .OrderByDescending(e => e.Date)
+                .ToList() ?? new();
 
-                if (branche.Type == TypeCours.TM) branchesTM.Add(vm);
-                else if (branche.Type == TypeCours.M) branchesM.Add(vm);
+            var typesTravailCalcules = value.JournalDeTravail?
+                .Where(e => e.Type != null)
+                .GroupBy(e => e.Type)
+                .Select(g => new DonutItem
+                {
+                    Label = g.Key.Nom,
+                    Value = g.Sum(e => e.Duree)
+                }).ToList() ?? new();
+
+            var branchesTM = new List<BrancheViewModel>();
+            var branchesM = new List<BrancheViewModel>();
+
+            if (value.Branches != null)
+            {
+                foreach (var branche in value.Branches)
+                {
+                    double moy = branche.CalculerMoyenne();
+
+                    var vm = new BrancheViewModel
+                    {
+                        Nom = branche.Nom,
+                        Moyenne = Math.Round(moy, 1),
+                        Type = branche.Type,
+                        Notes = branche.Notes?.ToList() ?? new(),
+                        BrancheTrend = AppDataService.Instance
+                            .DeterminerTendance(new List<Branche> { branche }, moy)
+                    };
+
+                    if (branche.Type == TypeCours.TM) branchesTM.Add(vm);
+                    else if (branche.Type == TypeCours.M) branchesM.Add(vm);
+                }
             }
-        }
-        
-        // injection des données
-        BranchesTM.ReplaceAll(branchesTM);
-        BranchesM.ReplaceAll(branchesM);
-        Journal.ReplaceAll(journalTrie);
-        
-        GraphiqueDonnees.ReplaceAll(typesTravailCalcules.Select(t => new DonutItem 
-        { 
-            Label = t.Nom, 
-            Value = t.Somme 
-        }));
+
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                BranchesTM.ReplaceAll(branchesTM);
+                BranchesM.ReplaceAll(branchesM);
+                Journal.ReplaceAll(journalTrie);
+                GraphiqueDonnees.ReplaceAll(typesTravailCalcules);
+            });
+        });
     }
 
     [RelayCommand]
