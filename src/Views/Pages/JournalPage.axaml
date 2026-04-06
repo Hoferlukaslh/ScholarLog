@@ -382,41 +382,8 @@
                 </Border>
             </Grid>
         </Grid>
-        
+
         <!-- Modal pour l'exportation des données en MD-CSV-JSON -->
-        <Grid Background="Transparent" ZIndex="103" IsVisible="{Binding IsModalGraphOpen}" >
-            <Grid ColumnDefinitions="*, 3*, *" RowDefinitions="*, 3*, *">
-                <Border Grid.Column="1" Grid.Row="1"
-                        MinWidth="500" MinHeight="450"
-                        Background="{DynamicResource ModalBackground}" 
-                        CornerRadius="8"
-                        BorderBrush="{DynamicResource CardBorder}" 
-                        BorderThickness="1"
-                        BoxShadow="0 0 50 0 #50000000">
-            
-                    <Grid RowDefinitions="Auto, *">
-                        <StackPanel Grid.Row="0" Margin="20" Spacing="15">
-                            <Grid>
-                                <TextBlock Text="Répartition des heures" 
-                                           FontSize="{DynamicResource FontSizeNormal}" 
-                                           FontWeight="SemiBold" 
-                                           FontFamily="{DynamicResource Helvetica}"
-                                           VerticalAlignment="Center"/>
-                                <Button Content="✕" Background="Transparent" HorizontalAlignment="Right" Command="{Binding FermerModalGraphiqueCommand}"/>
-                            </Grid>
-                            <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5"/>
-                        </StackPanel>
-
-                        <Grid Grid.Row="1" Margin="20,0,20,20">
-                            <controls:DonutChartControl ItemsSource="{Binding GraphiqueDonnees}" 
-                                                        HorizontalAlignment="Stretch"
-                                                        VerticalAlignment="Stretch" />
-                        </Grid>
-                    </Grid>
-                </Border>
-            </Grid>
-        </Grid>
-
         <Grid Background="#A0000000" ZIndex="104" IsVisible="{Binding IsExportModalOpen}">
             <Grid ColumnDefinitions="*, 3*, *" RowDefinitions="*, 3*, *">
                 <Border Grid.Column="1" Grid.Row="1"
