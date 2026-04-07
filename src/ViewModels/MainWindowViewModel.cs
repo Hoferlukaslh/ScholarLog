@@ -16,132 +16,95 @@
         - Gère la progression asynchrone (ChargerDonneesInitialesAsync) au démarrage de l'application.
 */
 
-
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
-using ScholarLog.Views.Pages;
 using ScholarLog.Data;
-
 
 namespace ScholarLog.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    // cache des viewModel
-    private HomeViewModel? _homeViewModel;
-    private NotesViewModel? _notesViewModel;
-    private JournalViewModel? _journalViewModel;
-    private SettingsViewModel? _settingsViewModel;
+    // Cache des ViewModels (instanciation unique)
+    private readonly HomeViewModel     _home     = new();
+    private readonly NotesViewModel    _notes    = new();
+    private readonly JournalViewModel  _journal  = new();
+    private readonly SettingsViewModel _settings = new();
 
-    // etat de l'interface
-
+    // État de l'interface
     [ObservableProperty] private ViewModelBase? _currentPage;
+    [ObservableProperty] private int            _currentPageIndex = 0;
+    [ObservableProperty] private bool           _isSidebarOpen    = true;
 
-    [ObservableProperty] private int _currentPageIndex = 0;
-
-    [ObservableProperty] private bool _isSidebarOpen = true;
-
-
-    [ObservableProperty] private double _splashOpacity = 1.0;
-
-    // etat de chargement 
-
-    [ObservableProperty] private bool _isLoading = true;
-
-    [ObservableProperty] private int _loadingProgress = 0;
-
-    [ObservableProperty] private string _loadingText = "Initialisation...";
+    // État du splash screen
+    [ObservableProperty] private double _splashOpacity   = 1.0;
+    [ObservableProperty] private bool   _isLoading       = true;
+    [ObservableProperty] private int    _loadingProgress = 0;
+    [ObservableProperty] private string _loadingText     = "Initialisation...";
 
     public MainWindowViewModel()
     {
-        // Initialiser la page d'accueil par défaut
-        _homeViewModel = new HomeViewModel();
-
-
-        CurrentPage = _homeViewModel;
-
-        WeakReferenceMessenger.Default.Register<ModuleNavigationMessage>(this, (recipient, message) =>
-        {
-            // 1. On prépare la page du journal
-            _journalViewModel ??= new JournalViewModel();
-
-            // 2. On lui donne le module qu'on a reçu dans le message
-            _journalViewModel.SelectedModule = message.Module;
-
-            // 3. On bascule l'affichage et on met à jour l'index du menu (2 = Journaux)
-            CurrentPage = _journalViewModel;
-            CurrentPageIndex = 2;
-        });
+        CurrentPage = _home;
+        
+        WeakReferenceMessenger.Default.Register<ModuleNavigationMessage>(
+            this,
+            (recipient, message) =>
+            {
+                _journal.SelectedModule = message.Module;
+                CurrentPage      = _journal;
+                CurrentPageIndex = 2;
+            });
     }
 
-
-    // commandes (Remplacent les événements Click)
+    // Commandes
 
     [RelayCommand]
-    private void ToggleSidebar()
-    {
-        IsSidebarOpen = !IsSidebarOpen;
-    }
+    private void ToggleSidebar() => IsSidebarOpen = !IsSidebarOpen;
 
     [RelayCommand]
     private void Navigate(string destination)
     {
-        switch (destination)
+        (CurrentPage, CurrentPageIndex) = destination switch
         {
-            case "Accueil":
-                _homeViewModel ??= new HomeViewModel();
-                CurrentPage = _homeViewModel;
-                CurrentPageIndex = 0;
-                break;
-            case "Notes":
-                _notesViewModel ??= new NotesViewModel();
-                CurrentPage = _notesViewModel;
-                CurrentPageIndex = 1;
-                break;
-            case "Journaux":
-                _journalViewModel ??= new JournalViewModel();
-                CurrentPage = _journalViewModel;
-                CurrentPageIndex = 2;
-                break;
-            case "Settings":
-                _settingsViewModel ??= new SettingsViewModel();
-                CurrentPage = _settingsViewModel;
-                CurrentPageIndex = 3;
-                break;
-        }
+            "Accueil"  => (_home     as ViewModelBase, 0),
+            "Notes"    => (_notes    as ViewModelBase, 1),
+            "Journaux" => (_journal  as ViewModelBase, 2),
+            "Settings" => (_settings as ViewModelBase, 3),
+            _          => (CurrentPage,                CurrentPageIndex),
+        };
     }
 
-    // logique métier
+    // Logique de chargement initial
+
     public async Task ChargerDonneesInitialesAsync()
     {
-        LoadingText = "Chargement des données globales... ";
+        LoadingText = "Chargement des données globales...";
 
         Task chargementTask = AppDataService.Instance.ChargerDonneesGlobalesAsync();
 
         for (int i = 0; i <= 100; i += 2)
         {
             LoadingProgress = i;
-            if (i >= 90 && !chargementTask.IsCompleted)
-            {
-                await chargementTask;
-            }
 
-            int delais = chargementTask.IsCompleted ? 5 : 70;
-            await Task.Delay(delais);
+            // On attend la fin réelle du chargement avant de dépasser 90 %
+            if (i >= 90 && !chargementTask.IsCompleted)
+                await chargementTask;
+
+            await Task.Delay(chargementTask.IsCompleted ? 5 : 70);
         }
 
         LoadingProgress = 100;
-        LoadingText = "Terminé !";
+        LoadingText     = "Terminé !";
+        SplashOpacity   = 0;
 
-        SplashOpacity = 0;
-
-        await Task.Delay(150); // attente de la fin de l'animation
-        IsLoading = false; // Le XAML réagira pour cacher le splash screen
+        await Task.Delay(150); // laisse l'animation d'opacité se terminer
+        IsLoading = false;
     }
 
-    public class ModuleNavigationMessage
+    // Message de navigation inter-pages
+
+    public sealed class ModuleNavigationMessage
     {
         public ModuleViewModel Module { get; }
 
