@@ -37,7 +37,7 @@
         TransparencyLevelHint="AcrylicBlur, Blur, Transparent"
 
         x:DataType="vm:MainWindowViewModel"
-        Icon="{DynamicResource AppIcon}"
+        Icon="{StaticResource AppIcon}"
         Title="ScholarLog"
         x:CompileBindings="True">
 
@@ -145,14 +145,14 @@
                     <StackPanel Grid.Row="0" Spacing="20">
                         <Grid ColumnDefinitions="40, *" Margin="12,12,0,0">
                             <Label Grid.Column="0"
-                                   FontFamily="{DynamicResource Phosphor}"
+                                   FontFamily="{StaticResource Phosphor}"
                                    Foreground="{DynamicResource PrimaryForeground}"
-                                   FontSize="{DynamicResource IconSizeLogo}"
-                                   Content="{DynamicResource IconeScholarHat}"
+                                   FontSize="{StaticResource IconSizeLogo}"
+                                   Content="{StaticResource IconeScholarHat}"
                                    HorizontalAlignment="Center" />
                             <Label x:Name="TextLogo" Classes="menu-text" Grid.Column="1"
-                                   FontFamily="{DynamicResource HelveticaBold}"
-                                   FontSize="{DynamicResource FontSizeLogo}"
+                                   FontFamily="{StaticResource Helvetica}"
+                                   FontSize="{StaticResource FontSizeLogo}"
                                    Foreground="{DynamicResource PrimaryForeground}"
                                    VerticalAlignment="Bottom" Margin="10,0,0,0" Content="ScholarLog" />
                         </Grid>
@@ -168,14 +168,14 @@
                                 CommandParameter="Accueil">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0"
-                                       FontFamily="{DynamicResource Phosphor}"
+                                       FontFamily="{StaticResource Phosphor}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       FontSize="{DynamicResource IconSizeMedium}"
-                                       Content="{DynamicResource IconeHome}"
+                                       FontSize="{StaticResource IconSizeMedium}"
+                                       Content="{StaticResource IconeHome}"
                                        HorizontalAlignment="Center" />
                                 <TextBlock x:Name="TextAccueil" Classes="menu-text" Grid.Column="1"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           FontSize="{StaticResource FontSizeNormal}"
                                            Text="Accueil" VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
                         </Button>
@@ -187,14 +187,14 @@
                                 CommandParameter="Notes">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0"
-                                       FontFamily="{DynamicResource Phosphor}"
+                                       FontFamily="{StaticResource Phosphor}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       FontSize="{DynamicResource IconSizeMedium}"
-                                       HorizontalAlignment="Center" Content="{DynamicResource IconeHashtag}" />
+                                       FontSize="{StaticResource IconSizeMedium}"
+                                       HorizontalAlignment="Center" Content="{StaticResource IconeHashtag}" />
                                 <TextBlock x:Name="TextNotes" Classes="menu-text" Grid.Column="1"
-                                           FontFamily="{DynamicResource Helvetica}"
+                                           FontFamily="{StaticResource Helvetica}"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           FontSize="{StaticResource FontSizeNormal}"
                                            Text="Notes"
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
@@ -206,14 +206,14 @@
                                 Command="{Binding NavigateCommand}"
                                 CommandParameter="Journaux">
                             <Grid ColumnDefinitions="40, *">
-                                <Label Grid.Column="0" FontFamily="{DynamicResource Phosphor}"
-                                       FontSize="{DynamicResource IconSizeMedium}"
+                                <Label Grid.Column="0" FontFamily="{StaticResource Phosphor}"
+                                       FontSize="{StaticResource IconSizeMedium}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       HorizontalAlignment="Center" Content="{DynamicResource IconePen}" />
+                                       HorizontalAlignment="Center" Content="{StaticResource IconePen}" />
                                 <TextBlock x:Name="TextJournaux" Classes="menu-text" Grid.Column="1"
-                                           FontFamily="{DynamicResource Helvetica}"
+                                           FontFamily="{StaticResource Helvetica}"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           FontSize="{StaticResource FontSizeNormal}"
                                            Text="Journaux"
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
@@ -229,18 +229,18 @@
                             <Grid ColumnDefinitions="40, *">
                                 <Label x:Name="ToggleIcon"
                                        Grid.Column="0"
-                                       FontFamily="{DynamicResource Phosphor}"
+                                       FontFamily="{StaticResource Phosphor}"
                                        Foreground="{DynamicResource SecondaryForeground}"
-                                       FontSize="{DynamicResource IconSizeMedium}"
-                                       Content="{DynamicResource IconeRetract}"
+                                       FontSize="{StaticResource IconSizeMedium}"
+                                       Content="{StaticResource IconeRetract}"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        RenderTransformOrigin="50%,50%" />
 
                                 <TextBlock x:Name="TextCollapse" Classes="menu-text" Grid.Column="1"
-                                           FontFamily="{DynamicResource Helvetica}"
+                                           FontFamily="{StaticResource Helvetica}"
                                            Foreground="{DynamicResource SecondaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           FontSize="{StaticResource FontSizeNormal}"
                                            Text="Fermer Menu"
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
@@ -253,16 +253,16 @@
                                 CommandParameter="Settings">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0"
-                                       FontFamily="{DynamicResource Phosphor}"
+                                       FontFamily="{StaticResource Phosphor}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       FontSize="{DynamicResource IconSizeMedium}" HorizontalAlignment="Center"
-                                       Content="{DynamicResource IconeGear}" />
+                                       FontSize="{StaticResource IconSizeMedium}" HorizontalAlignment="Center"
+                                       Content="{StaticResource IconeGear}" />
 
 
                                 <TextBlock x:Name="TextSettings" Classes="menu-text" Grid.Column="1"
-                                           FontFamily="{DynamicResource Helvetica}"
+                                           FontFamily="{StaticResource Helvetica}"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}"
+                                           FontSize="{StaticResource FontSizeNormal}"
                                            Text="Paramètres"
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
@@ -294,21 +294,22 @@
                                          Name="MainContentControler"
                                          Content="{Binding CurrentPage}" Padding="20">
                 <TransitioningContentControl.PageTransition>
-                    <CompositePageTransition>
+                     <CompositePageTransition>
                         <CrossFade Duration="0:0:0.3" />
-                        <local:MyPageSlide Duration="0:0:0.3"
+                      <local:MyPageSlide Duration="0:0:0.3"
                                            Orientation="Vertical"
-                                           Easing="CircularEaseOut" />
-                    </CompositePageTransition>
+                                           Easing="CircularEaseOut" /> 
+                     </CompositePageTransition> 
                 </TransitioningContentControl.PageTransition>
             </TransitioningContentControl>
+            
         </Grid>
 
         <!-- Écran de chargement -->
-        <Grid Background="{DynamicResource PrimaryBackground}"
+        <Grid Background="{StaticResource PrimaryBackground}"
               ZIndex="100"
-              IsVisible="{Binding IsLoading}"
-              Opacity="{Binding SplashOpacity}">
+              IsVisible="{CompiledBinding IsLoading}"
+              Opacity="{CompiledBinding SplashOpacity}">
 
             <Grid.Transitions>
                 <Transitions>
@@ -317,14 +318,14 @@
             </Grid.Transitions>
 
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
-                <Label FontFamily="{DynamicResource Phosphor}"
+                <Label FontFamily="{StaticResource Phosphor}"
                        FontSize="100"
                        Foreground="{DynamicResource PrimaryForeground}"
-                       Content="{DynamicResource IconeScholarHat}"
+                       Content="{StaticResource IconeScholarHat}"
                        HorizontalAlignment="Center" />
 
                 <TextBlock Text="ScholarLog"
-                           FontFamily="{DynamicResource HelveticaBold}"
+                           FontFamily="{StaticResource HelveticaBold}"
                            FontSize="40"
                            Foreground="{DynamicResource PrimaryForeground}"
                            HorizontalAlignment="Center" />
@@ -334,11 +335,11 @@
                              CornerRadius="4"
                              Minimum="0"
                              Maximum="100"
-                             Value="{Binding LoadingProgress}"
+                             Value="{CompiledBinding LoadingProgress}"
                              Foreground="{DynamicResource SecondaryForeground}"
                              ShowProgressText="False" />
 
-                <TextBlock Text="{Binding LoadingText}"
+                <TextBlock Text="{CompiledBinding LoadingText}"
                            HorizontalAlignment="Center"
                            Foreground="{DynamicResource SecondaryForeground}"
                            Opacity="0.8" />

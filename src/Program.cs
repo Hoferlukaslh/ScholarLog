@@ -13,6 +13,7 @@ sealed class Program
     {
         var builder = AppBuilder.Configure<App>()
             .UsePlatformDetect()
+            
 
             // Gestion stricte du moteur de rendu (Skia) pour la RAM / VRAM
             .With(new SkiaOptions

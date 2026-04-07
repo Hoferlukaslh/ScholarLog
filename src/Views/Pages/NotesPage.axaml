@@ -31,8 +31,8 @@
 
     <UserControl.Styles>
         <Style Selector="Button.icon-button">
-            <Setter Property="FontFamily" Value="{DynamicResource Phosphor}" />
-            <Setter Property="FontSize" Value="{DynamicResource IconSizeNormal}" />
+            <Setter Property="FontFamily" Value="{StaticResource Phosphor}" />
+            <Setter Property="FontSize" Value="{StaticResource IconSizeNormal}" />
             <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
             <Setter Property="Width" Value="35" />
             <Setter Property="Height" Value="35" />
@@ -47,8 +47,8 @@
         </Style>
 
         <Style Selector="Button.icon-button-small">
-            <Setter Property="FontFamily" Value="{DynamicResource Phosphor}" />
-            <Setter Property="FontSize" Value="{DynamicResource IconSizeSmall}" />
+            <Setter Property="FontFamily" Value="{StaticResource Phosphor}" />
+            <Setter Property="FontSize" Value="{StaticResource IconSizeSmall}" />
             <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Padding" Value="5" />
@@ -81,14 +81,14 @@
             <!-- Titre de la page -->
             <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto, Auto, Auto" Margin="10,20,10,20">
                 <TextBlock Grid.Column="0" Text="Mes résultats"
-                           FontSize="{DynamicResource FontSizeLarge}"
+                           FontSize="{StaticResource FontSizeLarge}"
                            Foreground="{DynamicResource PrimaryForeground}"
                            VerticalAlignment="Center" />
 
 
                 <!-- Sélection module -->
                 <ComboBox Grid.Column="2"
-                          IsVisible="{Binding !IsListView}"
+                          IsVisible="{CompiledBinding !IsListView}"
                           ItemsSource="{Binding Modules}"
                           SelectedItem="{Binding SelectedModule}"
                           Width="350" VerticalAlignment="Center"
@@ -97,7 +97,7 @@
                           PlaceholderText="Sélectionner un module...">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="data:ModuleViewModel">
-                            <TextBlock Text="{Binding Nom}" />
+                            <TextBlock Text="{CompiledBinding Nom}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -106,12 +106,12 @@
                 <Border Grid.Column="3" Background="{DynamicResource CardBackground}" CornerRadius="8" Padding="3"
                         Margin="0,0,15,0">
                     <StackPanel Orientation="Horizontal">
-                        <RadioButton Classes="view-toggle" IsChecked="{Binding IsListView}" GroupName="ViewMode">
+                        <RadioButton Classes="view-toggle" IsChecked="{CompiledBinding IsListView}" GroupName="ViewMode">
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <TextBlock Text="Liste" />
                             </StackPanel>
                         </RadioButton>
-                        <RadioButton Classes="view-toggle" IsChecked="{Binding !IsListView}" GroupName="ViewMode">
+                        <RadioButton Classes="view-toggle" IsChecked="{CompiledBinding !IsListView}" GroupName="ViewMode">
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <TextBlock Text="Par module" />
                             </StackPanel>
@@ -121,13 +121,13 @@
 
 
                 <!-- Bouton d'ajout de note -->
-                <Button Grid.Column="4" Content="{DynamicResource IconePlus}"
+                <Button Grid.Column="4" Content="{StaticResource IconePlus}"
                         Classes="icon-button" Command="{Binding OuvrirModalAjoutCommand}" Padding="0 0 1 0 " />
             </Grid>
 
-            <Border Grid.Row="1" IsVisible="{Binding IsListView}" Margin="10,0,10,10"
+            <Border Grid.Row="1" IsVisible="{CompiledBinding IsListView}" Margin="10,0,10,10"
                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
-                    CornerRadius="{DynamicResource CardCornerRadius}"
+                    CornerRadius="{StaticResource CardCornerRadius}"
                     Background="{DynamicResource CardBackground}">
 
                 <Grid RowDefinitions="Auto,*">
@@ -164,43 +164,43 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="data:NoteViewModel">
                                 <Grid ColumnDefinitions="1.5*, 1*, 2*, 2*, 1*, 120" Margin="20,10">
-                                    <TextBlock Grid.Column="0" Text="{Binding BrancheNom}"
+                                    <TextBlock Grid.Column="0" Text="{CompiledBinding BrancheNom}"
                                                TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding BrancheNom}"
                                                Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}"
                                                VerticalAlignment="Center" />
 
                                     <TextBlock Grid.Column="1"
-                                               Text="{Binding NoteData.Date, StringFormat={}{0:dd.MM.yyyy}}"
+                                               Text="{CompiledBinding NoteData.Date, StringFormat={}{0:dd.MM.yyyy}}"
                                                Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}"
                                                VerticalAlignment="Center" />
 
-                                    <TextBlock Grid.Column="2" Text="{Binding ModuleNom}"
+                                    <TextBlock Grid.Column="2" Text="{CompiledBinding ModuleNom}"
                                                TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding ModuleNom}"
                                                Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}"
                                                VerticalAlignment="Center" />
 
-                                    <TextBlock Grid.Column="3" Text="{Binding NoteData.titre}"
+                                    <TextBlock Grid.Column="3" Text="{CompiledBinding NoteData.titre}"
                                                TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding NoteData.titre}"
                                                Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}"
                                                VerticalAlignment="Center" />
 
-                                    <TextBlock Grid.Column="4" Text="{Binding NoteData.Valeur, StringFormat={}{0:0.0}}"
+                                    <TextBlock Grid.Column="4" Text="{CompiledBinding NoteData.Valeur, StringFormat={}{0:0.0}}"
                                                Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}"
                                                VerticalAlignment="Center" />
 
                                     <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
-                                        <Button Content="{DynamicResource IconeDocument}" Classes="icon-button-small"
-                                                IsVisible="{Binding NoteData.HasDocument}"
+                                        <Button Content="{StaticResource IconeDocument}" Classes="icon-button-small"
+                                                IsVisible="{CompiledBinding NoteData.HasDocument}"
                                                 Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirLecteurPdfCommand}"
                                                 CommandParameter="{Binding NoteData}"
                                                 ToolTip.Tip="Lire le PDF" />
 
-                                        <Button Content="{DynamicResource IconeCrayon}" Classes="icon-button-small"
+                                        <Button Content="{StaticResource IconeCrayon}" Classes="icon-button-small"
                                                 Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirModalModificationCommand}"
                                                 CommandParameter="{Binding NoteData}" />
 
-                                        <Button Content="{DynamicResource IconeTrash}" Classes="icon-button-small"
+                                        <Button Content="{StaticResource IconeTrash}" Classes="icon-button-small"
                                                 Tapped="BoutonSupprimer_Tapped">
                                             <Button.Styles>
                                                 <Style Selector="Button">
@@ -227,40 +227,40 @@
                 </Grid>
             </Border>
 
-            <ScrollViewer Grid.Row="1" Margin="10,0,10,10" IsVisible="{Binding !IsListView}">
+            <ScrollViewer Grid.Row="1" Margin="10,0,10,10" IsVisible="{CompiledBinding !IsListView}">
                 <ItemsControl ItemsSource="{Binding SelectedModuleBranchesWithNotes}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="data:Branche">
                             <Border Margin="0,0,0,15"
                                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
-                                    CornerRadius="{DynamicResource CardCornerRadius}"
+                                    CornerRadius="{StaticResource CardCornerRadius}"
                                     Background="{DynamicResource CardBackground}" Padding="20">
                                 <StackPanel>
-                                    <TextBlock Text="{Binding Nom}" FontSize="{DynamicResource FontSizeMedium}"
+                                    <TextBlock Text="{CompiledBinding Nom}" FontSize="{StaticResource FontSizeMedium}"
                                                FontWeight="Bold" Foreground="{DynamicResource PrimaryForeground}" />
                                     <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,10,0,15" />
 
                                     <Grid ColumnDefinitions="3*, 1.5*, 1*, 120" Margin="0,0,0,10">
                                         <TextBlock Grid.Column="0" Text="Titre de l'évaluation"
-                                                   Foreground="{DynamicResource SecondaryForeground}"
-                                                   FontSize="{DynamicResource FontSizeSmall}" />
+                                                   Foreground="{StaticResource SecondaryForeground}"
+                                                   FontSize="{StaticResource FontSizeSmall}" />
                                         <TextBlock Grid.Column="1" Text="Date"
-                                                   Foreground="{DynamicResource SecondaryForeground}"
-                                                   FontSize="{DynamicResource FontSizeSmall}" />
+                                                   Foreground="{StaticResource SecondaryForeground}"
+                                                   FontSize="{StaticResource FontSizeSmall}" />
                                         <TextBlock Grid.Column="2" Text="Note"
-                                                   Foreground="{DynamicResource SecondaryForeground}"
-                                                   FontSize="{DynamicResource FontSizeSmall}" TextAlignment="Right"
+                                                   Foreground="{StaticResource SecondaryForeground}"
+                                                   FontSize="{StaticResource FontSizeSmall}" TextAlignment="Right"
                                                    Margin="0,0,20,0" />
                                         <TextBlock Grid.Column="3" Text="Action"
-                                                   Foreground="{DynamicResource SecondaryForeground}"
-                                                   FontSize="{DynamicResource FontSizeSmall}" TextAlignment="Right" />
+                                                   Foreground="{StaticResource SecondaryForeground}"
+                                                   FontSize="{StaticResource FontSizeSmall}" TextAlignment="Right" />
                                     </Grid>
 
                                     <ItemsControl ItemsSource="{Binding Notes}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate x:DataType="data:Note">
                                                 <Grid ColumnDefinitions="3*, 1.5*, 1*, 120" Margin="0,5">
-                                                    <TextBlock Grid.Column="0" Text="{Binding titre}"
+                                                    <TextBlock Grid.Column="0" Text="{CompiledBinding titre}"
                                                                TextTrimming="CharacterEllipsis"
                                                                ToolTip.Tip="{Binding titre}"
                                                                Margin="0,0,15,0"
@@ -268,31 +268,31 @@
                                                                VerticalAlignment="Center" />
 
                                                     <TextBlock Grid.Column="1"
-                                                               Text="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}"
+                                                               Text="{CompiledBinding Date, StringFormat={}{0:dd.MM.yyyy}}"
                                                                Margin="0,0,15,0"
-                                                               Foreground="{DynamicResource SecondaryForeground}"
+                                                               Foreground="{StaticResource SecondaryForeground}"
                                                                VerticalAlignment="Center" />
 
                                                     <TextBlock Grid.Column="2"
-                                                               Text="{Binding Valeur, StringFormat={}{0:0.0}}"
+                                                               Text="{CompiledBinding Valeur, StringFormat={}{0:0.0}}"
                                                                Margin="0,0,15,0" FontWeight="Bold"
                                                                Foreground="{DynamicResource PrimaryForeground}"
                                                                VerticalAlignment="Center" TextAlignment="Right" />
 
                                                     <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="5"
                                                                 HorizontalAlignment="Right">
-                                                        <Button Content="{DynamicResource IconeDocument}"
+                                                        <Button Content="{StaticResource IconeDocument}"
                                                                 Classes="icon-button-small"
-                                                                IsVisible="{Binding HasDocument}"
+                                                                IsVisible="{CompiledBinding HasDocument}"
                                                                 Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirLecteurPdfCommand}"
                                                                 CommandParameter="{Binding}" />
 
-                                                        <Button Content="{DynamicResource IconeCrayon}"
+                                                        <Button Content="{StaticResource IconeCrayon}"
                                                                 Classes="icon-button-small"
                                                                 Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirModalModificationCommand}"
                                                                 CommandParameter="{Binding}" />
 
-                                                        <Button Content="{DynamicResource IconeTrash}"
+                                                        <Button Content="{StaticResource IconeTrash}"
                                                                 Classes="icon-button-small"
                                                                 Tapped="BoutonSupprimer_Tapped">
                                                             <Button.Styles>
@@ -325,14 +325,14 @@
             </ScrollViewer>
         </Grid>
 
-        <Grid Background="#A0000000" ZIndex="100" IsVisible="{Binding IsModalOpen}">
+        <Grid Background="#A0000000" ZIndex="100" IsVisible="{CompiledBinding IsModalOpen}">
             <Border Width="550" Background="{DynamicResource ModalBackground}"
                     CornerRadius="8" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                     BoxShadow="0 10 30 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                 <StackPanel Margin="20" Spacing="15">
                     <Grid>
-                        <TextBlock Text="{Binding ModalTitle}" FontSize="{DynamicResource FontSizeNormal}"
+                        <TextBlock Text="{CompiledBinding ModalTitle}" FontSize="{StaticResource FontSizeNormal}"
                                    FontWeight="SemiBold" VerticalAlignment="Center"
                                    Foreground="{DynamicResource PrimaryForeground}" />
                         <Button Content="✕" Background="Transparent" HorizontalAlignment="Right"
@@ -341,52 +341,52 @@
 
                     <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5" />
 
-                    <TextBlock Text="Module" FontSize="{DynamicResource FontSizeSmall}"
-                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
+                    <TextBlock Text="Module" FontSize="{StaticResource FontSizeSmall}"
+                               Foreground="{StaticResource SecondaryForeground}" Margin="0,0,0,-10" />
                     <ComboBox ItemsSource="{Binding Modules}" SelectedItem="{Binding ModalSelectedModule}"
                               HorizontalAlignment="Stretch">
                         <ComboBox.ItemTemplate>
                             <DataTemplate x:DataType="data:ModuleViewModel">
-                                <TextBlock Text="{Binding Nom}" />
+                                <TextBlock Text="{CompiledBinding Nom}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <TextBlock Text="Branche" FontSize="{DynamicResource FontSizeSmall}"
-                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
+                    <TextBlock Text="Branche" FontSize="{StaticResource FontSizeSmall}"
+                               Foreground="{StaticResource SecondaryForeground}" Margin="0,0,0,-10" />
                     <ComboBox ItemsSource="{Binding ModalBranches}" SelectedItem="{Binding ModalSelectedBranche}"
                               HorizontalAlignment="Stretch" PlaceholderText="Sélectionner une branche">
                         <ComboBox.ItemTemplate>
                             <DataTemplate x:DataType="data:Branche">
-                                <TextBlock Text="{Binding Nom}" />
+                                <TextBlock Text="{CompiledBinding Nom}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <TextBlock Text="Titre de l'évaluation" FontSize="{DynamicResource FontSizeSmall}"
-                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
-                    <TextBox Text="{Binding EditingNote.titre}" HorizontalAlignment="Stretch"
+                    <TextBlock Text="Titre de l'évaluation" FontSize="{StaticResource FontSizeSmall}"
+                               Foreground="{StaticResource SecondaryForeground}" Margin="0,0,0,-10" />
+                    <TextBox Text="{CompiledBinding EditingNote.titre}" HorizontalAlignment="Stretch"
                              Watermark="Ex: TE01 - Gravité" />
 
-                    <TextBlock Text="Date" FontSize="{DynamicResource FontSizeSmall}"
-                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
+                    <TextBlock Text="Date" FontSize="{StaticResource FontSizeSmall}"
+                               Foreground="{StaticResource SecondaryForeground}" Margin="0,0,0,-10" />
                     <CalendarDatePicker SelectedDateFormat="Custom" CustomDateFormatString="dd.MM.yyyy"
-                                        DisplayDateStart="2024-01-01" SelectedDate="{Binding EditingNote.Date}"
+                                        DisplayDateStart="2024-01-01" SelectedDate="{CompiledBinding EditingNote.Date}"
                                         SelectedDateChanged="CalendarDatePicker_OnSelectedDateChanged"
                                         Watermark="JJ.MM.AAAA" UseFloatingWatermark="False"
                                         HorizontalAlignment="Stretch" />
 
-                    <TextBlock Text="Note (1 à 6)" FontSize="{DynamicResource FontSizeSmall}"
-                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
-                    <NumericUpDown Value="{Binding EditingNote.Valeur}" Minimum="1.0" Maximum="6.0" Increment="0.5"
+                    <TextBlock Text="Note (1 à 6)" FontSize="{StaticResource FontSizeSmall}"
+                               Foreground="{StaticResource SecondaryForeground}" Margin="0,0,0,-10" />
+                    <NumericUpDown Value="{CompiledBinding EditingNote.Valeur}" Minimum="1.0" Maximum="6.0" Increment="0.5"
                                    FormatString="0.0" HorizontalAlignment="Stretch" />
 
-                    <TextBlock Text="Document PDF (Optionnel)" FontSize="{DynamicResource FontSizeSmall}"
-                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
+                    <TextBlock Text="Document PDF (Optionnel)" FontSize="{StaticResource FontSizeSmall}"
+                               Foreground="{StaticResource SecondaryForeground}" Margin="0,0,0,-10" />
                     <Border Margin="0,0,0,5" Background="{DynamicResource CardBackground}" CornerRadius="8"
                             Padding="10">
                         <Grid ColumnDefinitions="*, Auto">
-                            <TextBlock Grid.Column="0" Text="{Binding PdfStatusText}" VerticalAlignment="Center"
+                            <TextBlock Grid.Column="0" Text="{CompiledBinding PdfStatusText}" VerticalAlignment="Center"
                                        Foreground="{DynamicResource PrimaryForeground}"
                                        TextTrimming="CharacterEllipsis" Margin="0,0,10,0" />
 
@@ -395,9 +395,9 @@
                                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                                     Padding="5" Cursor="Hand" ToolTip.Tip="Joindre un PDF">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <TextBlock Text="{DynamicResource IconeFolder}"
-                                               FontFamily="{DynamicResource Phosphor}"
-                                               FontSize="{DynamicResource IconSizeNormal}" VerticalAlignment="Center" />
+                                    <TextBlock Text="{StaticResource IconeFolder}"
+                                               FontFamily="{StaticResource Phosphor}"
+                                               FontSize="{StaticResource IconSizeNormal}" VerticalAlignment="Center" />
                                     <TextBlock Text="Parcourir" VerticalAlignment="Center"
                                                Foreground="{DynamicResource PrimaryForeground}" />
                                 </StackPanel>
@@ -408,19 +408,19 @@
                     <Button Command="{Binding SauvegarderNoteCommand}" HorizontalAlignment="Right" Margin="0,10,0,0"
                             Padding="15,8" Background="{DynamicResource CardBackground}"
                             Foreground="{DynamicResource PrimaryForeground}"
-                            CornerRadius="{DynamicResource FieldCornerRadius}" Cursor="Hand">
+                            CornerRadius="{StaticResource FieldCornerRadius}" Cursor="Hand">
                         <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="{DynamicResource IconeSave}" FontFamily="{DynamicResource Phosphor}"
-                                       FontSize="{DynamicResource IconSizeNormal}" VerticalAlignment="Center" />
-                            <TextBlock Text="Sauvegarder" FontFamily="{DynamicResource Helvetica}"
-                                       FontSize="{DynamicResource FontSizeNormal}" VerticalAlignment="Center" />
+                            <TextBlock Text="{StaticResource IconeSave}" FontFamily="{StaticResource Phosphor}"
+                                       FontSize="{StaticResource IconSizeNormal}" VerticalAlignment="Center" />
+                            <TextBlock Text="Sauvegarder" FontFamily="{StaticResource Helvetica}"
+                                       FontSize="{StaticResource FontSizeNormal}" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </StackPanel>
             </Border>
         </Grid>
 
-        <Grid Background="#A0000000" ZIndex="101" IsVisible="{Binding IsPdfViewerOpen}">
+        <Grid Background="#A0000000" ZIndex="101" IsVisible="{CompiledBinding IsPdfViewerOpen}">
             <Border Background="{DynamicResource ModalBackground}"
                     CornerRadius="8"
                     Padding="10"
@@ -435,22 +435,22 @@
                     <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,10">
 
                         <TextBlock Grid.Column="0"
-                                   Text="{Binding ActiveDocumentTitle, StringFormat='Aperçu : {0}'}"
+                                   Text="{CompiledBinding ActiveDocumentTitle, StringFormat='Aperçu : {0}'}"
                                    VerticalAlignment="Center"
                                    Foreground="{DynamicResource PrimaryForeground}"
-                                   FontSize="{DynamicResource FontSizeMedium}"
+                                   FontSize="{StaticResource FontSizeMedium}"
                                    FontWeight="SemiBold"
                                    TextTrimming="CharacterEllipsis"
                                    Margin="0,0,20,0" />
 
                         <Button Grid.Column="1" Command="{Binding FermerPdfCommand}" Classes="icon-button-small">
-                            <TextBlock Text="{DynamicResource IconeClose}" FontFamily="{DynamicResource Phosphor}" />
+                            <TextBlock Text="{StaticResource IconeClose}" FontFamily="{StaticResource Phosphor}" />
                         </Button>
                     </Grid>
 
                     <controls:PdfViewerControl Grid.Row="1"
-                                               CbzData="{Binding ActiveCbzBlob}"
-                                               DocumentTitle="{Binding ActiveDocumentTitle}" />
+                                               CbzData="{CompiledBinding ActiveCbzBlob}"
+                                               DocumentTitle="{CompiledBinding ActiveDocumentTitle}" />
                 </Grid>
             </Border>
         </Grid>

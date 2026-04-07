@@ -51,21 +51,21 @@
         </Style>
 
         <Style Selector="TextBlock.trendIcon">
-            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
-            <Setter Property="FontFamily" Value="{DynamicResource Phosphor}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSizeNormal}" />
+            <Setter Property="FontFamily" Value="{StaticResource Phosphor}" />
             <Setter Property="FontWeight" Value="Bold" />
         </Style>
 
         <Style Selector="TextBlock.trendIcon[Tag=Up]">
-            <Setter Property="Text" Value="{DynamicResource IconeUp}" />
+            <Setter Property="Text" Value="{StaticResource IconeUp}" />
             <Setter Property="Foreground" Value="#4caf50" />
         </Style>
         <Style Selector="TextBlock.trendIcon[Tag=Down]">
-            <Setter Property="Text" Value="{DynamicResource IconeDown}" />
+            <Setter Property="Text" Value="{StaticResource IconeDown}" />
             <Setter Property="Foreground" Value="#f44336" />
         </Style>
         <Style Selector="TextBlock.trendIcon[Tag=Stable]">
-            <Setter Property="Text" Value="{DynamicResource IconeStable}" />
+            <Setter Property="Text" Value="{StaticResource IconeStable}" />
             <Setter Property="Foreground" Value="#ff9800" />
         </Style>
 
@@ -150,20 +150,20 @@
                             <Grid ColumnDefinitions="Auto, *, Auto">
 
                                 <TextBlock Grid.Column="0"
-                                           Text="{Binding ShortName}"
+                                           Text="{CompiledBinding ShortName}"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}"
-                                           FontFamily="{DynamicResource Helvetica}"
+                                           FontSize="{StaticResource FontSizeNormal}"
+                                           FontFamily="{StaticResource Helvetica}"
                                            VerticalAlignment="Center" />
 
                                 <Grid Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                                       RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto">
 
                                     <TextBlock Grid.Row="0" Grid.Column="0"
-                                               Text="{Binding AvgTheory, StringFormat=\{0:0.0\}}"
+                                               Text="{CompiledBinding AvgTheory, StringFormat=\{0:0.0\}}"
                                                Foreground="{DynamicResource PrimaryForeground}"
-                                               FontFamily="{DynamicResource Helvetica}"
-                                               FontSize="{DynamicResource FontSizeNormal}"
+                                               FontFamily="{StaticResource Helvetica}"
+                                               FontSize="{StaticResource FontSizeNormal}"
                                                Margin="0,0,20,15"
                                                TextAlignment="Right" />
 
@@ -173,10 +173,10 @@
                                                Margin="0,0,0,15" />
 
                                     <TextBlock Grid.Row="1" Grid.Column="0"
-                                               Text="{Binding TravailModule, StringFormat=\{0:0.0\}}"
+                                               Text="{CompiledBinding TravailModule, StringFormat=\{0:0.0\}}"
                                                Foreground="{DynamicResource PrimaryForeground}"
-                                               FontSize="{DynamicResource FontSizeNormal}"
-                                               FontFamily="{DynamicResource Helvetica}"
+                                               FontSize="{StaticResource FontSizeNormal}"
+                                               FontFamily="{StaticResource Helvetica}"
                                                Margin="0,0,20,0"
                                                TextAlignment="Right" />
 
@@ -187,10 +187,10 @@
                                 </Grid>
 
                                 <TextBlock Grid.Column="2"
-                                           Text="{Binding GlobalAverage, StringFormat=\{0:0.0\}}"
+                                           Text="{CompiledBinding GlobalAverage, StringFormat=\{0:0.0\}}"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{DynamicResource FontSizeNormal}"
-                                           FontFamily="{DynamicResource Helvetica}"
+                                           FontSize="{StaticResource FontSizeNormal}"
+                                           FontFamily="{StaticResource Helvetica}"
                                            FontWeight="Bold"
                                            VerticalAlignment="Center" />
                             </Grid>
@@ -203,12 +203,12 @@
             <!-- Panneau d'affichage du journal -->
             <Panel Grid.Row="1"
                    ClipToBounds="True"
-                   IsVisible="{Binding DisplayedModule, Converter={x:Static ObjectConverters.IsNotNull}}">
+                   IsVisible="{CompiledBinding DisplayedModule, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <Border Margin="10"
                         VerticalAlignment="Stretch"
                         BorderBrush="{DynamicResource CardBorder}"
                         BorderThickness="1"
-                        CornerRadius="{DynamicResource CardCornerRadius}"
+                        CornerRadius="{StaticResource CardCornerRadius}"
                         Background="{DynamicResource CardBackground}">
 
                     <Grid RowDefinitions="Auto,*">
@@ -229,18 +229,18 @@
                                         Command="{Binding AllerAuxJournauxCommand}"
                                         Background="{DynamicResource CardBackground}"
                                         Foreground="{DynamicResource PrimaryForeground}"
-                                        CornerRadius="{DynamicResource ControlCornerRadius}"
+                                        CornerRadius="{StaticResource ControlCornerRadius}"
                                         Padding="10,5"
                                         Cursor="Hand"
                                         VerticalAlignment="Center">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <TextBlock Text="{DynamicResource IconeFoward}"
-                                                   FontFamily="{DynamicResource Phosphor}"
-                                                   FontSize="{DynamicResource IconSizeNormal}"
+                                        <TextBlock Text="{StaticResource IconeFoward}"
+                                                   FontFamily="{StaticResource Phosphor}"
+                                                   FontSize="{StaticResource IconSizeNormal}"
                                                    Foreground="{DynamicResource PrimaryForeground}"
                                                    VerticalAlignment="Center" />
-                                        <TextBlock Text="Journaux" FontFamily="{DynamicResource Helvetica}"
-                                                   FontSize="{DynamicResource FontSizeNormal}"
+                                        <TextBlock Text="Journaux" FontFamily="{StaticResource Helvetica}"
+                                                   FontSize="{StaticResource FontSizeNormal}"
                                                    Foreground="{DynamicResource PrimaryForeground}"
                                                    VerticalAlignment="Center" />
                                     </StackPanel>
@@ -262,22 +262,22 @@
                                     <Grid ColumnDefinitions="1.5*, 1*, 2*, 4*" Margin="20,10,20,10">
 
                                         <TextBlock Grid.Column="0"
-                                                   Text="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}"
+                                                   Text="{CompiledBinding Date, StringFormat='{}{0:dd.MM.yyyy}'}"
                                                    Foreground="{DynamicResource PrimaryForeground}"
                                                    VerticalAlignment="Center" />
 
                                         <TextBlock Grid.Column="1"
-                                                   Text="{Binding Duree, StringFormat={}{0}h}"
+                                                   Text="{CompiledBinding Duree, StringFormat={}{0}h}"
                                                    Foreground="{DynamicResource PrimaryForeground}"
                                                    VerticalAlignment="Center" />
 
                                         <TextBlock Grid.Column="2"
-                                                   Text="{Binding Type.Nom}"
+                                                   Text="{CompiledBinding Type.Nom}"
                                                    Foreground="{DynamicResource PrimaryForeground}"
                                                    VerticalAlignment="Center" />
 
                                         <TextBlock Grid.Column="3"
-                                                   Text="{Binding Description}"
+                                                   Text="{CompiledBinding Description}"
                                                    Foreground="{DynamicResource PrimaryForeground}"
                                                    TextWrapping="Wrap"
                                                    VerticalAlignment="Center" />
@@ -294,7 +294,7 @@
         <!-- Panneau graphique et moyennes par branches -->
         <Panel Grid.Column="1"
                ClipToBounds="True"
-               IsVisible="{Binding DisplayedModule, Converter={x:Static ObjectConverters.IsNotNull}}">
+               IsVisible="{CompiledBinding DisplayedModule, Converter={x:Static ObjectConverters.IsNotNull}}">
 
             <Grid HorizontalAlignment="Stretch"
                   RowDefinitions="57*, 43*"
@@ -302,14 +302,14 @@
 
                 <Border Grid.Row="0"
                         BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
-                        CornerRadius="{DynamicResource CardCornerRadius}"
+                        CornerRadius="{StaticResource CardCornerRadius}"
                         Background="{DynamicResource CardBackground}"
                         Padding="15"
                         Margin="0, 5, 0, 0">
 
                     <Grid RowDefinitions="Auto, *">
                         <TextBlock Grid.Row="0" Text="MOYENNES PAR BRANCHE"
-                                   FontSize="{DynamicResource FontSizeSmall}"
+                                   FontSize="{StaticResource FontSizeSmall}"
                                    Foreground="{DynamicResource SecondaryForeground}"
                                    FontWeight="Bold" Margin="0,0,0,15" HorizontalAlignment="Center" />
 
@@ -323,17 +323,17 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate x:DataType="data:BrancheViewModel">
                                             <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,5">
-                                                <TextBlock Grid.Column="0" Text="{Binding Nom}"
+                                                <TextBlock Grid.Column="0" Text="{CompiledBinding Nom}"
                                                            VerticalAlignment="Center"
-                                                           FontSize="{DynamicResource FontSizeNormal}"
+                                                           FontSize="{StaticResource FontSizeNormal}"
                                                            Foreground="{DynamicResource PrimaryForeground}" />
                                                 <TextBlock Grid.Column="1"
-                                                           Text="{Binding Moyenne, StringFormat=\{0:0.0\}}"
+                                                           Text="{CompiledBinding Moyenne, StringFormat=\{0:0.0\}}"
                                                            FontWeight="Bold" Width="40" TextAlignment="Right"
                                                            VerticalAlignment="Center" Margin="10,0"
                                                            Foreground="{DynamicResource PrimaryForeground}" />
                                                 <TextBlock Grid.Column="2" Classes="trendIcon"
-                                                           Tag="{Binding BrancheTrend}" VerticalAlignment="Center" />
+                                                           Tag="{CompiledBinding BrancheTrend}" VerticalAlignment="Center" />
                                             </Grid>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -347,12 +347,12 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate x:DataType="data:BrancheViewModel">
                                             <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,5">
-                                                <TextBlock Grid.Column="0" Text="{Binding Nom}"
+                                                <TextBlock Grid.Column="0" Text="{CompiledBinding Nom}"
                                                            VerticalAlignment="Center"
-                                                           FontSize="{DynamicResource FontSizeNormal}"
+                                                           FontSize="{StaticResource FontSizeNormal}"
                                                            Foreground="{DynamicResource PrimaryForeground}" />
                                                 <TextBlock Grid.Column="1"
-                                                           Text="{Binding Moyenne, StringFormat=\{0:0.0\}}"
+                                                           Text="{CompiledBinding Moyenne, StringFormat=\{0:0.0\}}"
                                                            FontWeight="Bold" Width="40" TextAlignment="Right"
                                                            VerticalAlignment="Center" Margin="10,0"
                                                            Foreground="{DynamicResource PrimaryForeground}" />
@@ -370,7 +370,7 @@
                 <!-- Graphique donut -->
                 <Border Grid.Row="1" Margin="0,10,0,0"
                         BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
-                        CornerRadius="{DynamicResource CardCornerRadius}"
+                        CornerRadius="{StaticResource CardCornerRadius}"
                         Background="{DynamicResource CardBackground}"
                         Padding="10">
 

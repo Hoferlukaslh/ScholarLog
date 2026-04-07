@@ -15,7 +15,7 @@
             <Setter Property="Background" Value="{DynamicResource CardBackground}" />
             <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="{DynamicResource FieldCornerRadius}" />
+            <Setter Property="CornerRadius" Value="{StaticResource FieldCornerRadius}" />
         </Style>
 
         <Style Selector="Button.zoom">
@@ -45,40 +45,40 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" Margin="0" Padding="10"
-                    CornerRadius="{DynamicResource FieldCornerRadius}"
+                    CornerRadius="{StaticResource FieldCornerRadius}"
                     Background="{DynamicResource CardBackground}"
                     BorderBrush="{DynamicResource CardBorder}"
                     BorderThickness="1">
 
                 <StackPanel Orientation="Vertical">
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal">
-                        <TextBlock Padding="0,0,3,0" FontFamily="{DynamicResource Phosphor}"
-                                   FontSize="{DynamicResource IconSizeSmall}"
+                        <TextBlock Padding="0,0,3,0" FontFamily="{StaticResource Phosphor}"
+                                   FontSize="{StaticResource IconSizeSmall}"
                                    Foreground="{DynamicResource PrimaryForeground}"
-                                   Text="{DynamicResource IconeBDD}" />
+                                   Text="{StaticResource IconeBDD}" />
 
-                        <TextBlock Padding="0,3,0,0" FontFamily="{DynamicResource Helvetica}"
-                                   FontSize="{DynamicResource FontSizeMedium}"
+                        <TextBlock Padding="0,3,0,0" FontFamily="{StaticResource Helvetica}"
+                                   FontSize="{StaticResource FontSizeMedium}"
                                    Foreground="{DynamicResource PrimaryForeground}"
                                    Text="Base de données" />
                     </StackPanel>
 
-                    <TextBlock Padding="2,3,0,0" FontFamily="{DynamicResource Helvetica}"
-                               FontSize="{DynamicResource FontSizeSmall}"
-                               Foreground="{DynamicResource SecondaryForeground}"
+                    <TextBlock Padding="2,3,0,0" FontFamily="{StaticResource Helvetica}"
+                               FontSize="{StaticResource FontSizeSmall}"
+                               Foreground="{StaticResource SecondaryForeground}"
                                Text="Configurez l'emplacement du fichier de sauvegarde SQLite" />
 
                     <TextBlock
                         Padding="0,20,0,0"
-                        FontFamily="{DynamicResource Helvetica}"
-                        FontSize="{DynamicResource FontSizeNormal}"
+                        FontFamily="{StaticResource Helvetica}"
+                        FontSize="{StaticResource FontSizeNormal}"
                         Foreground="{DynamicResource PrimaryForeground}"
                         FontStyle="Normal"
                         Text="Chemin du fichier (.db) :" />
 
                     <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,5,0,0">
                         <Border Grid.Column="0" Margin="0,0,10,0" Padding="5,2"
-                                CornerRadius="{DynamicResource FieldCornerRadius}"
+                                CornerRadius="{StaticResource FieldCornerRadius}"
                                 Background="{DynamicResource CardBackground}"
                                 BorderBrush="{DynamicResource CardBorder}">
 
@@ -88,19 +88,19 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" VerticalAlignment="Center" Padding="5,0,5,3"
-                                           FontFamily="{DynamicResource Phosphor}"
-                                           FontSize="{DynamicResource IconSizeNormal}"
+                                           FontFamily="{StaticResource Phosphor}"
+                                           FontSize="{StaticResource IconSizeNormal}"
                                            Foreground="{DynamicResource PrimaryForeground}"
-                                           Text="{DynamicResource IconeHDD}" />
+                                           Text="{StaticResource IconeHDD}" />
 
                                 <TextBlock Grid.Column="1"
                                            Name="userbddPath"
                                            VerticalAlignment="Center"
                                            Padding="5,0,5,0"
-                                           FontFamily="{DynamicResource Helvetica}"
-                                           FontSize="{DynamicResource FontSizeNormal}"
-                                           Foreground="{DynamicResource SecondaryForeground}"
-                                           Text="{Binding PathToBDD}">
+                                           FontFamily="{StaticResource Helvetica}"
+                                           FontSize="{StaticResource FontSizeNormal}"
+                                           Foreground="{StaticResource SecondaryForeground}"
+                                           Text="{CompiledBinding PathToBDD}">
 
                                     <FlyoutBase.AttachedFlyout>
                                         <Flyout FlyoutPresenterClasses="alerteDanger">
@@ -108,34 +108,34 @@
                                                 <Grid ColumnDefinitions="*,Auto,*" HorizontalAlignment="Stretch"
                                                       MinWidth="250">
                                                     <TextBlock Grid.Column="0"
-                                                               Text="{DynamicResource IconeDanger}"
-                                                               FontFamily="{DynamicResource Phosphor}"
-                                                               FontSize="{DynamicResource IconSizeNormal}"
-                                                               Foreground="{DynamicResource ErrorForeground}"
+                                                               Text="{StaticResource IconeDanger}"
+                                                               FontFamily="{StaticResource Phosphor}"
+                                                               FontSize="{StaticResource IconSizeNormal}"
+                                                               Foreground="{StaticResource ErrorForeground}"
                                                                HorizontalAlignment="Left"
                                                                VerticalAlignment="Center" />
                                                     <TextBlock Grid.Column="1"
                                                                Text="Le fichier est introuvable"
-                                                               FontFamily="{DynamicResource Helvetica}"
-                                                               FontSize="{DynamicResource FontSizeNormal}"
+                                                               FontFamily="{StaticResource Helvetica}"
+                                                               FontSize="{StaticResource FontSizeNormal}"
                                                                FontWeight="Bold"
-                                                               Foreground="{DynamicResource ErrorForeground}"
+                                                               Foreground="{StaticResource ErrorForeground}"
                                                                HorizontalAlignment="Center"
                                                                VerticalAlignment="Center"
                                                                Margin="15,0,15,0" />
                                                     <TextBlock Grid.Column="2"
-                                                               Text="{DynamicResource IconeDanger}"
-                                                               FontFamily="{DynamicResource Phosphor}"
-                                                               FontSize="{DynamicResource IconSizeNormal}"
-                                                               Foreground="{DynamicResource ErrorForeground}"
+                                                               Text="{StaticResource IconeDanger}"
+                                                               FontFamily="{StaticResource Phosphor}"
+                                                               FontSize="{StaticResource IconSizeNormal}"
+                                                               Foreground="{StaticResource ErrorForeground}"
                                                                HorizontalAlignment="Right"
                                                                VerticalAlignment="Center" />
                                                 </Grid>
 
                                                 <TextBlock Text="La modification n'a pas été enregistrée"
-                                                           FontFamily="{DynamicResource Helvetica}"
-                                                           FontSize="{DynamicResource FontSizeNormal}"
-                                                           Foreground="{DynamicResource SecondaryForeground}"
+                                                           FontFamily="{StaticResource Helvetica}"
+                                                           FontSize="{StaticResource FontSizeNormal}"
+                                                           Foreground="{StaticResource SecondaryForeground}"
                                                            HorizontalAlignment="Center" />
                                             </StackPanel>
                                         </Flyout>
@@ -145,7 +145,7 @@
                         </Border>
 
                         <Button Grid.Column="1" Click="BrowseFile_Click"
-                                CornerRadius="{DynamicResource FieldCornerRadius}" Margin="0,0,10,0"
+                                CornerRadius="{StaticResource FieldCornerRadius}" Margin="0,0,10,0"
                                 Classes="zoom"
                                 Background="{DynamicResource CardBackground}"
                                 BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
@@ -153,18 +153,18 @@
                                 Padding="12,7" Cursor="Hand">
                             <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                                 <TextBlock Padding="0,5,0,0"
-                                           FontFamily="{DynamicResource Phosphor}"
-                                           FontSize="{DynamicResource FontSizeMedium}"
-                                           Text="{DynamicResource IconeSearch}" />
+                                           FontFamily="{StaticResource Phosphor}"
+                                           FontSize="{StaticResource FontSizeMedium}"
+                                           Text="{StaticResource IconeSearch}" />
                                 <TextBlock
                                     Padding="0,0,0,0"
-                                    FontFamily="{DynamicResource HelveticaBold}"
-                                    FontSize="{DynamicResource FontSizeNormal}"
+                                    FontFamily="{StaticResource HelveticaBold}"
+                                    FontSize="{StaticResource FontSizeNormal}"
                                     Text="Parcourir" />
                             </StackPanel>
                         </Button>
 
-                        <Button Grid.Column="2" CornerRadius="{DynamicResource FieldCornerRadius}" Margin="0"
+                        <Button Grid.Column="2" CornerRadius="{StaticResource FieldCornerRadius}" Margin="0"
                                 Classes="zoom"
                                 Command="{Binding SavePathCommand}"
                                 Background="{DynamicResource CardBackground}"
@@ -174,14 +174,14 @@
                             <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                                 <TextBlock
                                     Padding="0,5,0,0"
-                                    FontFamily="{DynamicResource Phosphor}"
-                                    FontSize="{DynamicResource FontSizeMedium}"
-                                    Text="{DynamicResource IconeSave}" />
+                                    FontFamily="{StaticResource Phosphor}"
+                                    FontSize="{StaticResource FontSizeMedium}"
+                                    Text="{StaticResource IconeSave}" />
 
                                 <TextBlock
                                     Padding="0,0,0,0"
-                                    FontFamily="{DynamicResource HelveticaBold}"
-                                    FontSize="{DynamicResource FontSizeNormal}"
+                                    FontFamily="{StaticResource HelveticaBold}"
+                                    FontSize="{StaticResource FontSizeNormal}"
                                     Text="Sauvegarder" />
                             </StackPanel>
                         </Button>
@@ -190,7 +190,7 @@
             </Border>
 
             <Border Grid.Column="1" Margin="0" Padding="15"
-                    CornerRadius="{DynamicResource FieldCornerRadius}"
+                    CornerRadius="{StaticResource FieldCornerRadius}"
                     Background="{DynamicResource CardBackground}"
                     BorderBrush="{DynamicResource CardBorder}"
                     BorderThickness="1">
@@ -198,22 +198,22 @@
                 <Grid RowDefinitions="Auto, *, Auto" VerticalAlignment="Stretch">
                     <StackPanel Grid.Row="0" VerticalAlignment="Top">
                         <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
-                            <TextBlock FontFamily="{DynamicResource Phosphor}"
-                                       FontSize="{DynamicResource IconSizeSmall}"
+                            <TextBlock FontFamily="{StaticResource Phosphor}"
+                                       FontSize="{StaticResource IconSizeSmall}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       Text="{DynamicResource IconePalette}"
+                                       Text="{StaticResource IconePalette}"
                                        VerticalAlignment="Center" />
 
-                            <TextBlock FontFamily="{DynamicResource HelveticaBold}"
-                                       FontSize="{DynamicResource FontSizeMedium}"
+                            <TextBlock FontFamily="{StaticResource HelveticaBold}"
+                                       FontSize="{StaticResource FontSizeMedium}"
                                        Foreground="{DynamicResource PrimaryForeground}"
                                        Text="Apparence"
                                        VerticalAlignment="Center" />
                         </StackPanel>
 
-                        <TextBlock FontFamily="{DynamicResource Helvetica}"
-                                   FontSize="{DynamicResource FontSizeSmall}"
-                                   Foreground="{DynamicResource SecondaryForeground}"
+                        <TextBlock FontFamily="{StaticResource Helvetica}"
+                                   FontSize="{StaticResource FontSizeSmall}"
+                                   Foreground="{StaticResource SecondaryForeground}"
                                    Text="Basculez entre le mode clair et le mode sombre"
                                    TextWrapping="Wrap" />
                     </StackPanel>
@@ -224,24 +224,24 @@
                           ColumnDefinitions="Auto, Auto, Auto">
 
                         <TextBlock Grid.Column="0"
-                                   FontFamily="{DynamicResource Phosphor}"
-                                   FontSize="{DynamicResource IconSizeSmall}"
+                                   FontFamily="{StaticResource Phosphor}"
+                                   FontSize="{StaticResource IconSizeSmall}"
                                    Foreground="{DynamicResource PrimaryForeground}"
-                                   Text="{DynamicResource IconeMoon}"
+                                   Text="{StaticResource IconeMoon}"
                                    VerticalAlignment="Center"
                                    Margin="0,0,20,0" />
 
                         <ToggleSwitch Grid.Column="1"
-                                      IsChecked="{Binding !IsDarkModeEnabled, Mode=TwoWay}"
+                                      IsChecked="{CompiledBinding !IsDarkModeEnabled, Mode=TwoWay}"
                                       OnContent=""
                                       OffContent=""
                                       VerticalAlignment="Center" />
 
                         <TextBlock Grid.Column="2"
-                                   FontFamily="{DynamicResource Phosphor}"
-                                   FontSize="{DynamicResource IconSizeSmall}"
+                                   FontFamily="{StaticResource Phosphor}"
+                                   FontSize="{StaticResource IconSizeSmall}"
                                    Foreground="{DynamicResource PrimaryForeground}"
-                                   Text="{DynamicResource IconeSun}"
+                                   Text="{StaticResource IconeSun}"
                                    VerticalAlignment="Center"
                                    Margin="10,0,0,0" />
                     </Grid>
@@ -251,20 +251,20 @@
 
         <StackPanel Grid.Row="1" Margin="0,0,0,15">
             <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,5">
-                <TextBlock FontFamily="{DynamicResource Phosphor}"
-                           FontSize="{DynamicResource IconSizeMedium}"
+                <TextBlock FontFamily="{StaticResource Phosphor}"
+                           FontSize="{StaticResource IconSizeMedium}"
                            Foreground="{DynamicResource PrimaryForeground}"
-                           Text="{DynamicResource IconeFolder}"
+                           Text="{StaticResource IconeFolder}"
                            VerticalAlignment="Center" />
-                <TextBlock FontFamily="{DynamicResource HelveticaBold}"
-                           FontSize="{DynamicResource FontSizeMedium}"
+                <TextBlock FontFamily="{StaticResource HelveticaBold}"
+                           FontSize="{StaticResource FontSizeMedium}"
                            Foreground="{DynamicResource PrimaryForeground}"
                            Text="Cours"
                            VerticalAlignment="Center" />
             </StackPanel>
-            <TextBlock FontFamily="{DynamicResource Helvetica}"
-                       FontSize="{DynamicResource FontSizeSmall}"
-                       Foreground="{DynamicResource SecondaryForeground}"
+            <TextBlock FontFamily="{StaticResource Helvetica}"
+                       FontSize="{StaticResource FontSizeSmall}"
+                       Foreground="{StaticResource SecondaryForeground}"
                        Text="Configurez les modules et les branches" />
         </StackPanel>
 
@@ -278,7 +278,7 @@
                 <ItemsControl ItemsSource="{Binding Modules}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="{Binding $parent[Pages:SettingsPage].GridColumns}" />
+                            <UniformGrid Columns="{CompiledBinding $parent[Pages:SettingsPage].GridColumns}" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
 
@@ -288,7 +288,7 @@
                             <Border MinWidth="200" Height="200" Margin="7.5,0,7.5,15"
                                     Padding="15"
                                     HorizontalAlignment="Stretch"
-                                    CornerRadius="{DynamicResource FieldCornerRadius}"
+                                    CornerRadius="{StaticResource FieldCornerRadius}"
                                     Background="{DynamicResource CardBackground}"
                                     BorderBrush="{DynamicResource CardBorder}"
                                     BorderThickness="1">
@@ -299,7 +299,7 @@
 
 
                                         <TextBlock Grid.Column="0"
-                                                   Text="{Binding ShortName}"
+                                                   Text="{CompiledBinding ShortName}"
                                                    FontWeight="Bold"
                                                    Foreground="{DynamicResource PrimaryForeground}"
                                                    TextWrapping="Wrap"
@@ -310,9 +310,9 @@
                                                 CornerRadius="100"
                                                 Padding="8,2"
                                                 Margin="10,0">
-                                            <TextBlock Text="{Binding Branches.Count, StringFormat='{}{0} Branches'}"
+                                            <TextBlock Text="{CompiledBinding Branches.Count, StringFormat='{}{0} Branches'}"
                                                        FontSize="11"
-                                                       Foreground="{DynamicResource SecondaryForeground}"
+                                                       Foreground="{StaticResource SecondaryForeground}"
                                                        VerticalAlignment="Center" />
                                         </Border>
 
@@ -323,10 +323,10 @@
                                                 Cursor="Hand"
                                                 Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).EditModuleCommand}"
                                                 CommandParameter="{Binding}">
-                                            <TextBlock FontFamily="{DynamicResource Phosphor}"
-                                                       Text="{DynamicResource IconeCrayon}"
+                                            <TextBlock FontFamily="{StaticResource Phosphor}"
+                                                       Text="{StaticResource IconeCrayon}"
                                                        Foreground="{DynamicResource PrimaryForeground}"
-                                                       FontSize="{DynamicResource IconSizeSmall}" />
+                                                       FontSize="{StaticResource IconSizeSmall}" />
                                         </Button>
 
                                         <Button Grid.Column="3"
@@ -337,10 +337,10 @@
                                                 Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).PromptDeleteModuleCommand}"
                                                 CommandParameter="{Binding}"
                                                 ToolTip.Tip="Supprimer le module">
-                                            <TextBlock FontFamily="{DynamicResource Phosphor}"
-                                                       Text="{DynamicResource IconeTrash}"
+                                            <TextBlock FontFamily="{StaticResource Phosphor}"
+                                                       Text="{StaticResource IconeTrash}"
                                                        Foreground="{DynamicResource PrimaryForeground}"
-                                                       FontSize="{DynamicResource IconSizeSmall}" />
+                                                       FontSize="{StaticResource IconSizeSmall}" />
                                         </Button>
 
                                     </Grid>
@@ -355,14 +355,14 @@
                                                     <Grid ColumnDefinitions="Auto, *, Auto" Margin="0,6">
 
                                                         <TextBlock Grid.Column="0"
-                                                                   FontFamily="{DynamicResource Phosphor}"
-                                                                   Text="{DynamicResource IconeScreen}"
-                                                                   Foreground="{DynamicResource SecondaryForeground}"
+                                                                   FontFamily="{StaticResource Phosphor}"
+                                                                   Text="{StaticResource IconeScreen}"
+                                                                   Foreground="{StaticResource SecondaryForeground}"
                                                                    Margin="0,0,10,0"
                                                                    VerticalAlignment="Center" />
 
                                                         <TextBlock Grid.Column="1"
-                                                                   Text="{Binding Nom}"
+                                                                   Text="{CompiledBinding Nom}"
                                                                    Foreground="{DynamicResource PrimaryForeground}"
                                                                    VerticalAlignment="Center"
                                                                    TextWrapping="Wrap" />
@@ -378,10 +378,10 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <UniformGrid Columns="{Binding $parent[Pages:SettingsPage].GridColumns}">
+                <UniformGrid Columns="{CompiledBinding $parent[Pages:SettingsPage].GridColumns}">
 
                     <Border Height="200" Margin="7.5,0,7.5,15"
-                            CornerRadius="{DynamicResource FieldCornerRadius}"
+                            CornerRadius="{StaticResource FieldCornerRadius}"
                             Background="{DynamicResource CardBackground}"
                             BorderBrush="{DynamicResource CardBorder}"
                             BorderThickness="1"
@@ -394,15 +394,15 @@
                                 Command="{Binding AddModuleCommand}">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
 
-                                <TextBlock Text="{DynamicResource IconePlus}"
-                                           FontFamily="{DynamicResource Phosphor}"
+                                <TextBlock Text="{StaticResource IconePlus}"
+                                           FontFamily="{StaticResource Phosphor}"
                                            FontSize="30"
-                                           Foreground="{DynamicResource SecondaryForeground}"
+                                           Foreground="{StaticResource SecondaryForeground}"
                                            HorizontalAlignment="Center" />
 
                                 <TextBlock Text="Ajouter un module"
-                                           Foreground="{DynamicResource SecondaryForeground}"
-                                           FontSize="{DynamicResource FontSizeMedium}"
+                                           Foreground="{StaticResource SecondaryForeground}"
+                                           FontSize="{StaticResource FontSizeMedium}"
                                            HorizontalAlignment="Center" />
 
                             </StackPanel>
@@ -415,11 +415,11 @@
             </StackPanel>
         </ScrollViewer>
 
-        <Grid Grid.RowSpan="3" IsVisible="{Binding IsConfirmDialogOpen}" Background="#B3000000" ZIndex="1000">
+        <Grid Grid.RowSpan="3" IsVisible="{CompiledBinding IsConfirmDialogOpen}" Background="#B3000000" ZIndex="1000">
             <Border Background="{DynamicResource ModalBackground}"
                     BorderBrush="{DynamicResource CardBorder}"
                     BorderThickness="1"
-                    CornerRadius="{DynamicResource FieldCornerRadius}"
+                    CornerRadius="{StaticResource FieldCornerRadius}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Padding="25"
@@ -428,21 +428,21 @@
                 <StackPanel Spacing="15">
 
                     <StackPanel Orientation="Horizontal" Spacing="10">
-                        <TextBlock FontFamily="{DynamicResource Phosphor}"
-                                   Text="{DynamicResource IconeDanger}"
-                                   FontSize="{DynamicResource IconSizeMedium}"
-                                   Foreground="{DynamicResource ErrorForeground}" />
+                        <TextBlock FontFamily="{StaticResource Phosphor}"
+                                   Text="{StaticResource IconeDanger}"
+                                   FontSize="{StaticResource IconSizeMedium}"
+                                   Foreground="{StaticResource ErrorForeground}" />
                         <TextBlock Text="Confirmation requise"
-                                   FontFamily="{DynamicResource HelveticaBold}"
-                                   FontSize="{DynamicResource FontSizeMedium}"
+                                   FontFamily="{StaticResource HelveticaBold}"
+                                   FontSize="{StaticResource FontSizeMedium}"
                                    Foreground="{DynamicResource PrimaryForeground}"
                                    VerticalAlignment="Center" />
                     </StackPanel>
 
                     <TextBlock Text="{Binding ConfirmDialogMessage}"
-                               Foreground="{DynamicResource SecondaryForeground}"
-                               FontFamily="{DynamicResource Helvetica}"
-                               FontSize="{DynamicResource FontSizeNormal}"
+                               Foreground="{StaticResource SecondaryForeground}"
+                               FontFamily="{StaticResource Helvetica}"
+                               FontSize="{StaticResource FontSizeNormal}"
                                TextWrapping="Wrap" />
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="15" Margin="0,15,0,0">
@@ -455,10 +455,10 @@
                         <Button Content="Supprimer"
                                 Command="{Binding ConfirmDeleteCommand}"
                                 Classes="zoom"
-                                Background="{DynamicResource ErrorForeground}"
+                                Background="{StaticResource ErrorForeground}"
                                 Foreground="White"
                                 Cursor="Hand"
-                                CornerRadius="{DynamicResource ControlCornerRadius}"
+                                CornerRadius="{StaticResource ControlCornerRadius}"
                                 Padding="15,8" />
                     </StackPanel>
                 </StackPanel>
@@ -466,7 +466,7 @@
         </Grid>
 
 
-        <Grid Grid.RowSpan="3" Background="#B3000000" ZIndex="999" IsVisible="{Binding IsEditModuleModalOpen}">
+        <Grid Grid.RowSpan="3" Background="#B3000000" ZIndex="999" IsVisible="{CompiledBinding IsEditModuleModalOpen}">
             <Border Width="450" Background="{DynamicResource ModalBackground}"
                     CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center"
                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
@@ -475,7 +475,7 @@
                 <StackPanel Margin="20" Spacing="15">
 
                     <Grid>
-                        <TextBlock Text="Éditer le module" FontSize="{DynamicResource FontSizeNormal}"
+                        <TextBlock Text="Éditer le module" FontSize="{StaticResource FontSizeNormal}"
                                    FontWeight="SemiBold" VerticalAlignment="Center"
                                    Foreground="{DynamicResource PrimaryForeground}" />
                         <Button Content="✕" Background="Transparent" HorizontalAlignment="Right"
@@ -485,13 +485,13 @@
 
                     <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5" />
 
-                    <TextBlock Text="Nom du module" FontSize="{DynamicResource FontSizeSmall}"
-                               Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
+                    <TextBlock Text="Nom du module" FontSize="{StaticResource FontSizeSmall}"
+                               Foreground="{StaticResource SecondaryForeground}" Margin="0,0,0,-10" />
                     <Grid ColumnDefinitions="*, Auto">
-                        <TextBox Grid.Column="0" Text="{Binding EditingModule.Nom}" VerticalAlignment="Center"
+                        <TextBox Grid.Column="0" Text="{CompiledBinding EditingModule.Nom}" VerticalAlignment="Center"
                                  Margin="0,0,10,0" />
-                        <Button Grid.Column="1" Content="{DynamicResource IconeSave}"
-                                FontFamily="{DynamicResource Phosphor}" FontSize="{DynamicResource IconSizeNormal}"
+                        <Button Grid.Column="1" Content="{StaticResource IconeSave}"
+                                FontFamily="{StaticResource Phosphor}" FontSize="{StaticResource IconSizeNormal}"
                                 Foreground="{DynamicResource PrimaryForeground}" Background="Transparent" Padding="5"
                                 Cursor="Hand"
                                 Command="{Binding SaveModuleNameCommand}" ToolTip.Tip="Sauvegarder le nom du module" />
@@ -504,10 +504,10 @@
                                  VerticalAlignment="Center" Margin="0,0,10,0" />
                         <Button Grid.Column="1" Content="Ajouter" Command="{Binding AddBrancheToEditingModuleCommand}"
                                 Background="#3A3A3A" Foreground="White"
-                                CornerRadius="{DynamicResource ControlCornerRadius}" />
+                                CornerRadius="{StaticResource ControlCornerRadius}" />
                     </Grid>
 
-                    <TextBlock Text="Branches existantes" FontSize="{DynamicResource FontSizeMedium}"
+                    <TextBlock Text="Branches existantes" FontSize="{StaticResource FontSizeMedium}"
                                FontWeight="SemiBold" Margin="0,10,0,0" Foreground="{DynamicResource PrimaryForeground}" />
 
                     <ScrollViewer MaxHeight="250">
@@ -516,22 +516,22 @@
                                 <DataTemplate>
                                     <Grid ColumnDefinitions="*, Auto, Auto" Margin="0,5">
 
-                                        <TextBox Grid.Column="0" Text="{Binding Nom}" Margin="0,0,10,0"
+                                        <TextBox Grid.Column="0" Text="{CompiledBinding Nom}" Margin="0,0,10,0"
                                                  VerticalAlignment="Center" />
 
-                                        <Button Grid.Column="1" Content="{DynamicResource IconeSave}"
+                                        <Button Grid.Column="1" Content="{StaticResource IconeSave}"
                                                 Foreground="{DynamicResource PrimaryForeground}"
-                                                FontFamily="{DynamicResource Phosphor}"
-                                                FontSize="{DynamicResource IconSizeNormal}"
+                                                FontFamily="{StaticResource Phosphor}"
+                                                FontSize="{StaticResource IconSizeNormal}"
                                                 Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).RenameBrancheCommand}"
                                                 CommandParameter="{Binding}"
                                                 Background="Transparent" Padding="5" Cursor="Hand"
                                                 ToolTip.Tip="Sauvegarder le nom" />
 
-                                        <Button Grid.Column="2" Content="{DynamicResource IconeTrash}"
-                                                FontFamily="{DynamicResource Phosphor}"
+                                        <Button Grid.Column="2" Content="{StaticResource IconeTrash}"
+                                                FontFamily="{StaticResource Phosphor}"
                                                 Foreground="{DynamicResource PrimaryForeground}"
-                                                FontSize="{DynamicResource IconSizeNormal}"
+                                                FontSize="{StaticResource IconSizeNormal}"
                                                 Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).PromptDeleteBrancheCommand}"
                                                 CommandParameter="{Binding}"
                                                 Background="Transparent" Padding="5" Cursor="Hand"
