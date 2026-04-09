@@ -4,66 +4,42 @@
 
     Description  :
         Code-behind de la vue HomePage.
-        Initialise la collection de modules affichés dans la page
-        principale en récupérant les données depuis la base SQLite de manière asynchrone.
+        Gère les animations d'ouverture/fermeture des panneaux droit et bas
+        via MaxWidth/MaxHeight + Transitions Avalonia.
 
     Auteur       :  Lukas Hofer - TINF2
     Date         :  19.03.2026
 */
 
-
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using ScholarLog.Data;
 using ScholarLog.ViewModels;
-using ScholarLog.Views.Pages;
 
 namespace ScholarLog.Views.Pages;
 
 public partial class HomePage : UserControl
 {
     
-    
+    private const double JournalTargetHeight = 300.0;   // Hauteur cible du panneau journal
+    private const double RightPanelTargetWidth = 350.0; // Largeur cible du panneau droit 
+
     private CancellationTokenSource? _closeCts;
 
-    //  propriété d'animation UI
-
-    public static readonly StyledProperty<double> RightPanelWidthStarProperty =
-        AvaloniaProperty.Register<HomePage, double>(nameof(RightPanelWidthStar), 0.0);
-
-    public static readonly StyledProperty<double> BottomPanelHeightStarProperty =
-        AvaloniaProperty.Register<HomePage, double>(nameof(BottomPanelHeightStar), 0.0);
-
-    public double RightPanelWidthStar
-    {
-        get => GetValue(RightPanelWidthStarProperty);
-        set => SetValue(RightPanelWidthStarProperty, value);
-    }
-
-    public double BottomPanelHeightStar
-    {
-        get => GetValue(BottomPanelHeightStarProperty);
-        set => SetValue(BottomPanelHeightStarProperty, value);
-    }
+    private Panel?  _rightPanel;
+    private Border? _bottomPanel;
 
     private ModuleViewModel? _lastSelectedModule = null;
-
-
-    private Grid? _mjetGrid;
-    private Grid? _moduleGrid;
 
     public HomePage()
     {
         InitializeComponent();
 
-        _mjetGrid = this.FindControl<Grid>("MJETBrancheGraph");
-        _moduleGrid = this.FindControl<Grid>("ModuleEtJournal");
+        _rightPanel  = this.FindControl<Panel>("PanneauDroit");
+        _bottomPanel = this.FindControl<Border>("PanneauJournal");
     }
-
-    
 
     private void Vm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
@@ -71,24 +47,33 @@ public partial class HomePage : UserControl
         {
             var newVal = vm.SelectedModule;
 
-            // déclenche l'animation d'ouverture
+            // Ouverture : on fixe DisplayedModule APRÈS avoir lancé la transition
             if (_lastSelectedModule == null && newVal != null)
             {
                 _closeCts?.Cancel();
-                RightPanelWidthStar = 3.0;
-                BottomPanelHeightStar = 40.0;
+
+                // Mettre MaxWidth/MaxHeight à la valeur cible → déclenche la transition
+                _rightPanel!.MaxWidth   = RightPanelTargetWidth;
+                _bottomPanel!.MaxHeight = JournalTargetHeight;
+
+                // Mettre DisplayedModule à jour sur le prochain tick UI, après que la transition ait démarré
+                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                {
+                    vm.DisplayedModule = newVal;
+                }, Avalonia.Threading.DispatcherPriority.Render);
             }
-            // déclenche l'animation de fermeture
+            // Fermeture
             else if (_lastSelectedModule != null && newVal == null)
             {
-                RightPanelWidthStar = 0.0;
-                BottomPanelHeightStar = 0.0;
+                _rightPanel!.MaxWidth   = 0;
+                _bottomPanel!.MaxHeight = 0;
 
                 _closeCts?.Cancel();
                 _closeCts = new CancellationTokenSource();
                 var token = _closeCts.Token;
 
-                Task.Delay(350, token).ContinueWith(_ =>
+                // Effacer DisplayedModule après la fin de l'animation (150ms)
+                Task.Delay(200, token).ContinueWith(_ =>
                         Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
                         {
                             if (vm.SelectedModule == null) vm.DisplayedModule = null;
@@ -102,43 +87,26 @@ public partial class HomePage : UserControl
         }
     }
 
-
-    // applique les valeurs animées aux GridLength en temps réel
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
 
-        // Gestion du DataContext (Prévention des fuites de mémoire)
+        // Abonnement/désabonnement propre au DataContext (prévention des fuites mémoire)
         if (change.Property == DataContextProperty)
         {
             if (change.OldValue is HomeViewModel oldVm)
-            {
                 oldVm.PropertyChanged -= Vm_PropertyChanged;
-                
-            }
 
             if (change.NewValue is HomeViewModel newVm)
-            {
                 newVm.PropertyChanged += Vm_PropertyChanged;
-                
-            }
-        }
-        // Panneau de droite
-        else if (change.Property == RightPanelWidthStarProperty)
-        {
-            double val = Math.Max(0, change.GetNewValue<double>());
-
-            _mjetGrid.ColumnDefinitions[1].Width = new GridLength(val, GridUnitType.Star);
-        }
-        // Panneau du bas (Journal)
-        else if (change.Property == BottomPanelHeightStarProperty)
-        {
-            double val = Math.Max(0, change.GetNewValue<double>());
-
-            _moduleGrid.RowDefinitions[1].Height = new GridLength(val, GridUnitType.Star);
         }
     }
 
-
-    
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _closeCts?.Cancel();
+        _closeCts?.Dispose();
+        _closeCts = null;
+    }
 }

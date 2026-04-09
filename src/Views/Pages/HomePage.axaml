@@ -1,5 +1,5 @@
 <!--
-    Fichier      :  JournalPage.axaml
+    Fichier      :  HomePage.axaml
     Projet       :  ScholarLog
     
     Description  :
@@ -25,6 +25,7 @@
         - Les styles "trendIcon" adaptent automatiquement l'icône et la couleur 
           en fonction de la tendance (Up, Down, Stable).
         - Les ressources globales (polices, tailles, couleurs) proviennent de App.axaml.
+        - Les animations d'ouverture/fermeture utilisent MaxWidth/MaxHeight + Transitions
 -->
 
 <UserControl xmlns="https://github.com/avaloniaui"
@@ -41,14 +42,6 @@
              x:CompileBindings="True">
 
     <UserControl.Styles>
-        <Style Selector="Pages|HomePage">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition Property="RightPanelWidthStar" Duration="0:0:0.15" Easing="CubicEaseOut" />
-                    <DoubleTransition Property="BottomPanelHeightStar" Duration="0:0:0.15" Easing="CubicEaseOut" />
-                </Transitions>
-            </Setter>
-        </Style>
 
         <Style Selector="TextBlock.trendIcon">
             <Setter Property="FontSize" Value="{StaticResource FontSizeNormal}" />
@@ -98,11 +91,13 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid Name="MJETBrancheGraph" ColumnDefinitions="7*, 0*" Margin="0">
+    <!-- Grille principale : colonne gauche (modules + journal) | colonne droite (graphiques) -->
+    <Grid Name="MJETBrancheGraph" ColumnDefinitions="7*, Auto" Margin="0">
 
-        <Grid Name="ModuleEtJournal" Grid.Column="0" RowDefinitions="60*, 0*" Margin="0">
+        <!-- Colonne gauche : ListBox modules en haut, panneau journal en bas -->
+        <Grid Name="ModuleEtJournal" Grid.Column="0" RowDefinitions="*, Auto" Margin="0">
 
-
+            <!-- Row 0 : Liste des modules -->
             <ListBox Grid.Row="0"
                      ScrollViewer.VerticalScrollBarVisibility="Visible"
                      ItemsSource="{Binding Modules}"
@@ -114,13 +109,10 @@
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem Border.moduleCard">
                         <Setter Property="Opacity" Value="1.0" />
-
                     </Style>
-
                     <Style Selector="ListBox.hasSelection ListBoxItem:not(:selected) Border.moduleCard">
                         <Setter Property="Opacity" Value="0.4" />
                     </Style>
-
                     <Style Selector="ListBoxItem:selected Border.moduleCard">
                         <Setter Property="BorderBrush" Value="#4A90E2" />
                         <Setter Property="BorderThickness" Value="2" />
@@ -132,7 +124,6 @@
                         <UniformGrid Columns="3" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
-
 
                 <ListBox.ItemTemplate>
                     <DataTemplate x:DataType="data:ModuleViewModel">
@@ -199,11 +190,19 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
+            <!-- Row 1 : Panneau journal — animé via MaxHeight -->
+            <Border Name="PanneauJournal"
+                    Grid.Row="1"
+                    Height="300"
+                    MaxHeight="0"
+                    ClipToBounds="True">
 
-            <!-- Panneau d'affichage du journal -->
-            <Panel Grid.Row="1"
-                   ClipToBounds="True"
-                   IsVisible="{CompiledBinding DisplayedModule, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="MaxHeight" Duration="0:0:0.15" Easing="CubicEaseOut" />
+                    </Transitions>
+                </Border.Transitions>
+
                 <Border Margin="10"
                         VerticalAlignment="Stretch"
                         BorderBrush="{DynamicResource CardBorder}"
@@ -211,8 +210,9 @@
                         CornerRadius="{StaticResource CardCornerRadius}"
                         Background="{DynamicResource CardBackground}">
 
-                    <Grid RowDefinitions="Auto,*">
+                    <Grid RowDefinitions="Auto, *">
 
+                        <!-- En-tête du journal -->
                         <Grid Grid.Row="0" ColumnDefinitions="1.5*, 1*, 2*, 4*" Margin="20,20,20,10">
                             <TextBlock Grid.Column="0" Text="Date" FontWeight="Bold"
                                        Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center" />
@@ -251,20 +251,21 @@
                         <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}"
                                 VerticalAlignment="Bottom" Margin="10,0" />
 
+                        <!-- Liste des entrées du journal -->
                         <ListBox Grid.Row="1"
                                  Margin="0,5,0,10"
                                  ItemsSource="{Binding Journal}"
                                  Background="Transparent"
                                  BorderThickness="0"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                            
+
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <VirtualizingStackPanel />
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
+
                             <ListBox.ItemTemplate>
-                                
                                 <DataTemplate>
                                     <Grid ColumnDefinitions="1.5*, 1*, 2*, 4*" Margin="20,10,20,10">
 
@@ -295,24 +296,34 @@
                         </ListBox>
                     </Grid>
                 </Border>
-            </Panel>
+            </Border>
+
         </Grid>
 
-        <!-- Panneau graphique et moyennes par branches -->
-        <Panel Grid.Column="1"
+        <!-- Colonne droite : graphiques et moyennes par branche — animé via MaxWidth -->
+        <Panel Name="PanneauDroit"
+               Grid.Column="1"
                ClipToBounds="True"
-               IsVisible="{CompiledBinding DisplayedModule, Converter={x:Static ObjectConverters.IsNotNull}}">
+               MaxWidth="0"
+               Width="350">
+
+            <Panel.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="MaxWidth" Duration="0:0:0.15" Easing="CubicEaseOut" />
+                </Transitions>
+            </Panel.Transitions>
 
             <Grid HorizontalAlignment="Stretch"
                   RowDefinitions="57*, 43*"
                   Margin="0,10,10,10">
 
+                <!-- Moyennes par branche -->
                 <Border Grid.Row="0"
                         BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                         CornerRadius="{StaticResource CardCornerRadius}"
                         Background="{DynamicResource CardBackground}"
                         Padding="15"
-                        Margin="0, 5, 0, 0">
+                        Margin="0,5,0,0">
 
                     <Grid RowDefinitions="Auto, *">
                         <TextBlock Grid.Row="0" Text="MOYENNES PAR BRANCHE"
@@ -321,7 +332,6 @@
                                    FontWeight="Bold" Margin="0,0,0,15" HorizontalAlignment="Center" />
 
                         <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible">
-
                             <StackPanel Spacing="10">
 
                                 <TextBlock Text="THÉORIE" FontSize="10"
@@ -373,7 +383,6 @@
                     </Grid>
                 </Border>
 
-
                 <!-- Graphique donut -->
                 <Border Grid.Row="1" Margin="0,10,0,0"
                         BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
@@ -388,6 +397,7 @@
                 </Border>
             </Grid>
         </Panel>
+
     </Grid>
 
 </UserControl>
