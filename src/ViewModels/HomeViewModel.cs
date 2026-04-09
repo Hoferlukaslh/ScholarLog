@@ -47,9 +47,9 @@ public partial class HomeViewModel : ViewModelBase
     [ObservableProperty] private ObservableRangeCollection<Entree> _journal = new();
 
     [ObservableProperty] private ObservableRangeCollection<DonutItem> _graphiqueDonnees = new();
-
-    // événement pour communiquer avec MainWindow (sans couplage fort)
-    public event EventHandler<ModuleViewModel>? NavigationVersJournalDemandee;
+    
+    
+  
 
     public HomeViewModel()
     {
@@ -118,9 +118,6 @@ public partial class HomeViewModel : ViewModelBase
     private void AllerAuxJournaux()
     {
         if (DisplayedModule != null)
-        {
-            // diffuse le message dans toute l'application
             WeakReferenceMessenger.Default.Send(new MainWindowViewModel.ModuleNavigationMessage(DisplayedModule));
-        }
     }
 }

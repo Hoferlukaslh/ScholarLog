@@ -25,8 +25,7 @@ namespace ScholarLog.Views.Pages;
 
 public partial class HomePage : UserControl
 {
-    // évenement de navigation 
-    public event EventHandler<ModuleViewModel>? NavigationVersJournalDemandee;
+    
     
     private CancellationTokenSource? _closeCts;
 
@@ -115,13 +114,13 @@ public partial class HomePage : UserControl
             if (change.OldValue is HomeViewModel oldVm)
             {
                 oldVm.PropertyChanged -= Vm_PropertyChanged;
-                oldVm.NavigationVersJournalDemandee -= Vm_NavigationVersJournalDemandee;
+                
             }
 
             if (change.NewValue is HomeViewModel newVm)
             {
                 newVm.PropertyChanged += Vm_PropertyChanged;
-                newVm.NavigationVersJournalDemandee += Vm_NavigationVersJournalDemandee;
+                
             }
         }
         // Panneau de droite
@@ -140,8 +139,6 @@ public partial class HomePage : UserControl
         }
     }
 
-    private void Vm_NavigationVersJournalDemandee(object? sender, ModuleViewModel module)
-    {
-        NavigationVersJournalDemandee?.Invoke(this, module);
-    }
+
+    
 }
