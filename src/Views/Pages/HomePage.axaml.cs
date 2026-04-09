@@ -13,6 +13,7 @@
 
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -26,6 +27,8 @@ public partial class HomePage : UserControl
 {
     // évenement de navigation 
     public event EventHandler<ModuleViewModel>? NavigationVersJournalDemandee;
+    
+    private CancellationTokenSource? _closeCts;
 
     //  propriété d'animation UI
 
@@ -61,6 +64,8 @@ public partial class HomePage : UserControl
         _moduleGrid = this.FindControl<Grid>("ModuleEtJournal");
     }
 
+    
+
     private void Vm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(HomeViewModel.SelectedModule) && this.DataContext is HomeViewModel vm)
@@ -70,6 +75,7 @@ public partial class HomePage : UserControl
             // déclenche l'animation d'ouverture
             if (_lastSelectedModule == null && newVal != null)
             {
+                _closeCts?.Cancel();
                 RightPanelWidthStar = 3.0;
                 BottomPanelHeightStar = 40.0;
             }
@@ -79,11 +85,18 @@ public partial class HomePage : UserControl
                 RightPanelWidthStar = 0.0;
                 BottomPanelHeightStar = 0.0;
 
-                Task.Delay(350).ContinueWith(_ =>
-                    Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
-                    {
-                        if (vm.SelectedModule == null) vm.DisplayedModule = null;
-                    }));
+                _closeCts?.Cancel();
+                _closeCts = new CancellationTokenSource();
+                var token = _closeCts.Token;
+
+                Task.Delay(350, token).ContinueWith(_ =>
+                        Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            if (vm.SelectedModule == null) vm.DisplayedModule = null;
+                        }),
+                    token,
+                    TaskContinuationOptions.OnlyOnRanToCompletion,
+                    TaskScheduler.Default);
             }
 
             _lastSelectedModule = newVal;

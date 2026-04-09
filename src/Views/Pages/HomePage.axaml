@@ -257,7 +257,14 @@
                                  Background="Transparent"
                                  BorderThickness="0"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
                             <ListBox.ItemTemplate>
+                                
                                 <DataTemplate>
                                     <Grid ColumnDefinitions="1.5*, 1*, 2*, 4*" Margin="20,10,20,10">
 
