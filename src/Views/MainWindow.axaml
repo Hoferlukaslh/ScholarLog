@@ -30,7 +30,7 @@
         mc:Ignorable="d"
         d:DesignWidth="960" d:DesignHeight="720"
 
-        MinWidth="960"
+        MinWidth="860"
         MinHeight="560"
 
         x:Class="ScholarLog.Views.MainWindow"
