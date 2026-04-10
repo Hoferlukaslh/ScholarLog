@@ -24,7 +24,7 @@ public partial class HomePage : UserControl
 {
     
     private const double JournalTargetHeight = 300.0;   // Hauteur cible du panneau journal
-    private const double RightPanelTargetWidth = 350.0; // Largeur cible du panneau droit 
+    private const double RightPanelTargetWidth = 250.0; // Largeur cible du panneau droit 
 
     private CancellationTokenSource? _closeCts;
 

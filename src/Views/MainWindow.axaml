@@ -134,7 +134,7 @@
                     BorderThickness="0,0,1,0"
                     Padding="10">
 
-                <Grid x:Name="Sidebar" Width="212" RowDefinitions="Auto, *, Auto">
+                <Grid x:Name="Sidebar" Width="190" RowDefinitions="Auto, *, Auto">
                     <Grid.Transitions>
                         <Transitions>
                             <DoubleTransition Property="Width" Duration="0:0:0.3" Easing="CubicEaseOut" />
@@ -143,7 +143,7 @@
 
                     <!-- Logo de l'application -->
                     <StackPanel Grid.Row="0" Spacing="20">
-                        <Grid ColumnDefinitions="40, *" Margin="12,12,0,0">
+                        <Grid ColumnDefinitions="40, *" Margin="0,12,0,0">
                             <Label Grid.Column="0"
                                    FontFamily="{StaticResource Phosphor}"
                                    Foreground="{DynamicResource PrimaryForeground}"
@@ -292,7 +292,7 @@
             <!-- Controleur de contenu -->
             <TransitioningContentControl Grid.Column="1"
                                          Name="MainContentControler"
-                                         Content="{Binding CurrentPage}" Padding="20">
+                                         Content="{Binding CurrentPage}" Padding="10">
                 <TransitioningContentControl.PageTransition>
                      <CompositePageTransition>
                         <CrossFade Duration="0:0:0.3" />

@@ -95,7 +95,8 @@
     <Grid Name="MJETBrancheGraph" ColumnDefinitions="7*, Auto" Margin="0">
 
         <!-- Colonne gauche : ListBox modules en haut, panneau journal en bas -->
-        <Grid Name="ModuleEtJournal" Grid.Column="0" RowDefinitions="*, Auto" Margin="0">
+        <Grid Name="ModuleEtJournal" Grid.Column="0" RowDefinitions="*, Auto" Margin="0"
+              VerticalAlignment="Stretch">
 
             <!-- Row 0 : Liste des modules -->
             <ListBox Grid.Row="0"
@@ -104,6 +105,8 @@
                      SelectedItem="{Binding SelectedModule, Mode=TwoWay}"
                      SelectionMode="Single, Toggle"
                      BorderThickness="0"
+                     VerticalAlignment="Stretch"
+                     HorizontalAlignment="Stretch"
                      Margin="10">
 
                 <ListBox.Styles>
@@ -121,10 +124,10 @@
 
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="3" />
+                        <UniformGrid Columns="3" VerticalAlignment="Stretch" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
-
+                
                 <ListBox.ItemTemplate>
                     <DataTemplate x:DataType="data:ModuleViewModel">
                         <Border Classes="moduleCard"
@@ -213,13 +216,13 @@
                     <Grid RowDefinitions="Auto, *">
 
                         <!-- En-tête du journal -->
-                        <Grid Grid.Row="0" ColumnDefinitions="1.5*, 1*, 2*, 4*" Margin="20,20,20,10">
+                       <Grid Grid.Row="0" ColumnDefinitions="1.1*, 1*, 2*, 4.4*" Margin="20,20,20,10">
                             <TextBlock Grid.Column="0" Text="Date" FontWeight="Bold"
                                        Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center" />
                             <TextBlock Grid.Column="1" Text="Temps" FontWeight="Bold"
-                                       Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center" />
+                                       Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center" HorizontalAlignment="Center" />
                             <TextBlock Grid.Column="2" Text="Type de travail" FontWeight="Bold"
-                                       Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center" />
+                                       Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"  HorizontalAlignment="Center"/>
 
                             <Grid Grid.Column="3" ColumnDefinitions="*, Auto">
                                 <TextBlock Grid.Column="0" Text="Description" FontWeight="Bold"
@@ -267,22 +270,25 @@
 
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid ColumnDefinitions="1.5*, 1*, 2*, 4*" Margin="20,10,20,10">
+                                    <Grid ColumnDefinitions="1.1*, 1*, 2*, 4.4*" Margin="20,10,20,10">
 
                                         <TextBlock Grid.Column="0"
-                                                   Text="{CompiledBinding Date, StringFormat='{}{0:dd.MM.yyyy}'}"
+                                                   Text="{CompiledBinding Date, StringFormat='{}{0:dd.MM.yy}'}"
                                                    Foreground="{DynamicResource PrimaryForeground}"
-                                                   VerticalAlignment="Center" />
+                                                   VerticalAlignment="Center" 
+                                                   HorizontalAlignment="Left"/>
 
                                         <TextBlock Grid.Column="1"
                                                    Text="{CompiledBinding Duree, StringFormat={}{0}h}"
                                                    Foreground="{DynamicResource PrimaryForeground}"
-                                                   VerticalAlignment="Center" />
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"/>
 
                                         <TextBlock Grid.Column="2"
                                                    Text="{CompiledBinding Type.Nom}"
                                                    Foreground="{DynamicResource PrimaryForeground}"
-                                                   VerticalAlignment="Center" />
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"/>
 
                                         <TextBlock Grid.Column="3"
                                                    Text="{CompiledBinding Description}"
