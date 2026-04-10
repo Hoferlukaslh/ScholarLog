@@ -103,9 +103,14 @@
     </Window.DataTemplates>
 
     <Grid>
-        <Canvas x:Name="BackgroundCanvas" ClipToBounds="True">
+        <Canvas x:Name="BackgroundCanvas" ClipToBounds="True" IsHitTestVisible="False">
             <Ellipse x:Name="Light1" Classes="ambient-light" Width="600" Height="600" Opacity="0.4"
                      Canvas.Left="0" Canvas.Top="0">
+                
+                <Ellipse.CacheMode>
+                    <BitmapCache RenderAtScale="1" />
+                </Ellipse.CacheMode>
+                
                 <Ellipse.Fill>
                     <RadialGradientBrush Center="50%,50%" GradientOrigin="50%,50%" RadiusX="50%" RadiusY="50%">
                         <GradientStop Color="#804A90E2" Offset="0" />
@@ -294,6 +299,7 @@
         <!-- Écran de chargement -->
         <Grid Background="{StaticResource PrimaryBackground}"
               ZIndex="100"
+              IsHitTestVisible="{CompiledBinding IsLoading}"
               IsVisible="{CompiledBinding IsLoading}"
               Opacity="{CompiledBinding SplashOpacity}">
 
