@@ -42,6 +42,10 @@
         x:CompileBindings="True">
 
     <Window.Styles>
+        
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
 
         <Style Selector="Label.menu-text, TextBlock.menu-text">
             <Setter Property="Opacity" Value="1" />
