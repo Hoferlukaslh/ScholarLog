@@ -38,8 +38,8 @@ Développer une application de bureau permettant à un élève de gérer et suiv
 | Catégorie        | Technologie    | Détails                   | Version   |
 |---               |---             |---                        |---        |
 | Langage          | C#             | Développement principal   | 14.0      |
-| Framework UI     | Avalonia UI    | Interface multiplateforme | 11.3.11   |
-| Base de données  | SQLite         | Stockage local            | 10.0.4    |
+| Framework UI     | Avalonia UI    | Interface multiplateforme | 12.0      |
+| Base de données  | EF core        | Stockage local de la BDD  | 10.0.5    |
 
 ## Utilisateurs cibles
 - Usage individuel
@@ -51,7 +51,7 @@ Développer une application de bureau permettant à un élève de gérer et suiv
   - Notes
   - Cours
   - Modules
-  - Projets
+  - Projets (Journal)
 
 ### Suivi
 - Calcul automatique des moyennes
@@ -71,7 +71,7 @@ Développer une application de bureau permettant à un élève de gérer et suiv
 | <img src="Images/Logos_Icones/PenpotLogo.svg" width="48"/> | [**Penpot**](https://penpot.app) | 2.13.0 | Outil de conception d’interfaces (UI/UX) utilisé pour la création des maquettes. | AGPL-3.0 |
 | <img src="Images/Logos_Icones/DrawIo.svg" width="48"/> | [**Draw.io**](https://github.com/jgraph/drawio) | 29.3.6 | Outil de conception de diagrammes. Utilisé pour la conception UML. | Apache 2.0 |
 | <img src="Images/Logos_Icones/Looping.svg" width="48"/> | [**Looping**](https://www.looping-mcd.fr/) | 4.1 | Logiciel de modélisation conceptuelle de données (MCD). | Freeware |
-| <img src="Images/Logos_Icones/JetBrainRider.svg" width="48"/> | [**JetBrains Rider**](https://www.jetbrains.com/rider/) | 2025.3.2 | Environnement de développement (IDE) utilisé pour le développement et le débogage des applications .NET. | Propriétaire |
+| <img src="Images/Logos_Icones/JetBrainRider.svg" width="48"/> | [**JetBrains Rider**](https://www.jetbrains.com/rider/) | 2026.1 | Environnement de développement (IDE) utilisé pour le développement et le débogage des applications .NET. | Propriétaire |
 
 ## Police d'écriture
 | Logo      | Nom       | Lien                                      | Utilité               | 
