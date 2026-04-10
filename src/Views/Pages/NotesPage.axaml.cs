@@ -34,20 +34,6 @@ public partial class NotesPage : UserControl
     public NotesPage()
     {
         InitializeComponent();
-    
-        this.DataContextChanged += (s, e) =>
-        {
-            if (DataContext is NotesViewModel vm)
-            {
-                Console.WriteLine($"=== DataContext attaché ===");
-                Console.WriteLine($"AllNotes.Count = {vm.AllNotes.Count}");
-            
-                vm.AllNotes.CollectionChanged += (s2, e2) =>
-                {
-                    Console.WriteLine($"AllNotes changé! Action={e2.Action}, Count={vm.AllNotes.Count}");
-                };
-            }
-        };
     }
 
     // gestion de la sécurité sur la date (logique de contrôle UI)
