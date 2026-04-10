@@ -43,9 +43,14 @@
 
     <Window.Styles>
         
-        <Style Selector="Button">
+        <Style Selector="Button.nav-btn:pointerover">
             <Setter Property="CornerRadius" Value="0" />
         </Style>
+        
+        <Style Selector="Button.nav-btn:pressed">
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+
 
         <Style Selector="Label.menu-text, TextBlock.menu-text">
             <Setter Property="Opacity" Value="1" />
@@ -219,6 +224,7 @@
                     <StackPanel Grid.Row="2" Margin="0,0,0,10" Spacing="5">
                         <!-- Bouton pour rétracter le menu -->
                         <Button x:Name="ToggleButton" 
+                                Classes="nav-btn"
                                 HorizontalAlignment="Stretch" Background="Transparent"
                                 Command="{Binding ToggleSidebarCommand}">
                             <Grid ColumnDefinitions="40, *">
