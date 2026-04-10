@@ -124,7 +124,7 @@ public partial class MainWindow : Window
 
         if (isOpen)
         {
-            sidebar.Width = 190;
+            sidebar.Width = 155;
             toggleIcon.Classes.Remove("rotated");
             SetMenuTextOpacity(1);
         }

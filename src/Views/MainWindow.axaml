@@ -134,32 +134,15 @@
                     BorderThickness="0,0,1,0"
                     Padding="10">
 
-                <Grid x:Name="Sidebar" Width="190" RowDefinitions="Auto, *, Auto">
+                <Grid x:Name="Sidebar" Width="155" RowDefinitions="Auto, *, Auto">
                     <Grid.Transitions>
                         <Transitions>
                             <DoubleTransition Property="Width" Duration="0:0:0.3" Easing="CubicEaseOut" />
                         </Transitions>
                     </Grid.Transitions>
 
-                    <!-- Logo de l'application -->
-                    <StackPanel Grid.Row="0" Spacing="20">
-                        <Grid ColumnDefinitions="40, *" Margin="0,12,0,0">
-                            <Label Grid.Column="0"
-                                   FontFamily="{StaticResource Phosphor}"
-                                   Foreground="{DynamicResource PrimaryForeground}"
-                                   FontSize="{StaticResource IconSizeLogo}"
-                                   Content="{StaticResource IconeScholarHat}"
-                                   HorizontalAlignment="Center" />
-                            <Label x:Name="TextLogo" Classes="menu-text" Grid.Column="1"
-                                   FontFamily="{StaticResource Helvetica}"
-                                   FontSize="{StaticResource FontSizeLogo}"
-                                   Foreground="{DynamicResource PrimaryForeground}"
-                                   VerticalAlignment="Bottom" Margin="10,0,0,0" Content="ScholarLog" />
-                        </Grid>
-                    </StackPanel>
-
                     <!-- Boutons de navigation -->
-                    <StackPanel Grid.Row="1" Spacing="5" Margin="0,30,0,0">
+                    <StackPanel Grid.Row="1" Spacing="5" Margin="0,5,0,0">
 
                         <!-- Button Accueil -->
                         <Button HorizontalAlignment="Stretch" Background="Transparent" Name="ButtonAccueil"
@@ -241,7 +224,7 @@
                                            FontFamily="{StaticResource Helvetica}"
                                            Foreground="{DynamicResource SecondaryForeground}"
                                            FontSize="{StaticResource FontSizeNormal}"
-                                           Text="Fermer Menu"
+                                           Text="Replier"
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
                         </Button>

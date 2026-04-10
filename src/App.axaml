@@ -46,14 +46,14 @@
             <System:Double x:Key="FontSizeMedium">18</System:Double>
             <System:Double x:Key="FontSizeNormal">16</System:Double>
             <System:Double x:Key="FontSizeSmall">13</System:Double>
-            <System:Double x:Key="FontSizeLogo">25</System:Double>
+            <System:Double x:Key="FontSizeLogo">22</System:Double>
 
             <!-- Taille des icones -->
             <System:Double x:Key="IconSizeLarge">32</System:Double>
             <System:Double x:Key="IconSizeMedium">28</System:Double>
             <System:Double x:Key="IconSizeNormal">25</System:Double>
             <System:Double x:Key="IconSizeSmall">20</System:Double>
-            <System:Double x:Key="IconSizeLogo">35</System:Double>
+            <System:Double x:Key="IconSizeLogo">30</System:Double>
 
             <!-- Bords arrondies -->
             <CornerRadius x:Key="CardCornerRadius">12</CornerRadius>
