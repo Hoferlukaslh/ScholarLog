@@ -42,11 +42,22 @@
              x:CompileBindings="True">
 
     <UserControl.Styles>
+        
+        <Style Selector="TextBlock.Card-Text">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSizeNormal}" />
+            <Setter Property="FontFamily" Value="{StaticResource Helvetica}" />
+        </Style>
 
         <Style Selector="TextBlock.trendIcon">
             <Setter Property="FontSize" Value="{StaticResource FontSizeNormal}" />
             <Setter Property="FontFamily" Value="{StaticResource Phosphor}" />
             <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        
+        <Style Selector="TextBlock.Journal-column">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
         </Style>
 
         <Style Selector="TextBlock.trendIcon[Tag=Up]">
@@ -143,21 +154,15 @@
 
                             <Grid ColumnDefinitions="Auto, *, Auto">
 
-                                <TextBlock Grid.Column="0"
+                                <TextBlock Grid.Column="0" Classes="Card-Text"
                                            Text="{CompiledBinding ShortName}"
-                                           Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{StaticResource FontSizeNormal}"
-                                           FontFamily="{StaticResource Helvetica}"
                                            VerticalAlignment="Center" />
 
                                 <Grid Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                                       RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto">
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0"
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Classes="Card-Text"
                                                Text="{CompiledBinding AvgTheory, StringFormat=\{0:0.0\}}"
-                                               Foreground="{DynamicResource PrimaryForeground}"
-                                               FontFamily="{StaticResource Helvetica}"
-                                               FontSize="{StaticResource FontSizeNormal}"
                                                Margin="0,0,20,15"
                                                TextAlignment="Right" />
 
@@ -166,11 +171,8 @@
                                                Tag="{Binding TheoryTrend}"
                                                Margin="0,0,0,15" />
 
-                                    <TextBlock Grid.Row="1" Grid.Column="0"
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Classes="Card-Text"
                                                Text="{CompiledBinding TravailModule, StringFormat=\{0:0.0\}}"
-                                               Foreground="{DynamicResource PrimaryForeground}"
-                                               FontSize="{StaticResource FontSizeNormal}"
-                                               FontFamily="{StaticResource Helvetica}"
                                                Margin="0,0,20,0"
                                                TextAlignment="Right" />
 
@@ -180,11 +182,8 @@
                                                Tag=" " />
                                 </Grid>
 
-                                <TextBlock Grid.Column="2"
+                                <TextBlock Grid.Column="2" Classes="Card-Text"
                                            Text="{CompiledBinding GlobalAverage, StringFormat=\{0:0.0\}}"
-                                           Foreground="{DynamicResource PrimaryForeground}"
-                                           FontSize="{StaticResource FontSizeNormal}"
-                                           FontFamily="{StaticResource Helvetica}"
                                            FontWeight="Bold"
                                            VerticalAlignment="Center" />
                             </Grid>
@@ -215,19 +214,16 @@
 
                     <Grid RowDefinitions="Auto, *">
 
-                        <!-- En-tête du journal -->
+                        <!-- En-tête du journal --> 
                        <Grid Grid.Row="0" ColumnDefinitions="1.1*, 1*, 2*, 4.4*" Margin="20,20,20,10">
-                            <TextBlock Grid.Column="0" Text="Date" FontWeight="Bold"
-                                       Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Text="Temps" FontWeight="Bold"
-                                       Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <TextBlock Grid.Column="0" Text="Date" FontWeight="Bold" Classes="Journal-Column" />
+                            <TextBlock Grid.Column="1" Text="Temps" FontWeight="Bold" Classes="Journal-Column" HorizontalAlignment="Center" />
                             <TextBlock Grid.Column="2" Text="Type de travail" FontWeight="Bold"
-                                       Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center"  HorizontalAlignment="Center"/>
+                                         HorizontalAlignment="Center"/>
 
                             <Grid Grid.Column="3" ColumnDefinitions="*, Auto">
-                                <TextBlock Grid.Column="0" Text="Description" FontWeight="Bold"
-                                           Foreground="{DynamicResource PrimaryForeground}" VerticalAlignment="Center" />
-
+                                <TextBlock Grid.Column="0" Text="Description" FontWeight="Bold" Classes="Journal-Column"/>
+                                
                                 <Button Grid.Column="1"
                                         Command="{Binding AllerAuxJournauxCommand}"
                                         Background="{DynamicResource CardBackground}"
@@ -236,6 +232,7 @@
                                         Padding="10,5"
                                         Cursor="Hand"
                                         VerticalAlignment="Center">
+                                    
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <TextBlock Text="{StaticResource IconeFoward}"
                                                    FontFamily="{StaticResource Phosphor}"
@@ -272,30 +269,21 @@
                                 <DataTemplate>
                                     <Grid ColumnDefinitions="1.1*, 1*, 2*, 4.4*" Margin="20,10,20,10">
 
-                                        <TextBlock Grid.Column="0"
+                                        <TextBlock Grid.Column="0" Classes="Journal-column"
                                                    Text="{CompiledBinding Date, StringFormat='{}{0:dd.MM.yy}'}"
-                                                   Foreground="{DynamicResource PrimaryForeground}"
-                                                   VerticalAlignment="Center" 
                                                    HorizontalAlignment="Left"/>
-
-                                        <TextBlock Grid.Column="1"
+                                        
+                                        <TextBlock Grid.Column="1" Classes="Journal-column"
                                                    Text="{CompiledBinding Duree, StringFormat={}{0}h}"
-                                                   Foreground="{DynamicResource PrimaryForeground}"
-                                                   VerticalAlignment="Center"
                                                    HorizontalAlignment="Center"/>
 
-                                        <TextBlock Grid.Column="2"
+                                        <TextBlock Grid.Column="2" Classes="Journal-column"
                                                    Text="{CompiledBinding Type.Nom}"
-                                                   Foreground="{DynamicResource PrimaryForeground}"
-                                                   VerticalAlignment="Center"
                                                    HorizontalAlignment="Center"/>
 
-                                        <TextBlock Grid.Column="3"
+                                        <TextBlock Grid.Column="3" Classes="Journal-column"
                                                    Text="{CompiledBinding Description}"
-                                                   Foreground="{DynamicResource PrimaryForeground}"
-                                                   TextWrapping="Wrap"
-                                                   VerticalAlignment="Center" />
-
+                                                   TextWrapping="Wrap"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
