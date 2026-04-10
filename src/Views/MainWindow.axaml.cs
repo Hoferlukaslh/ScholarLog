@@ -9,6 +9,7 @@
             - Animation du menu latéral et opacité des textes
             - Positionnement du curseur de navigation
             - Direction de l'animation de changement de page (Haut/Bas)
+            - Mode overlay du menu si la fenêtre fait < 960px de large
 */
 
 using System;
@@ -25,6 +26,7 @@ using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using ScholarLog.ViewModels;
 using Avalonia.Media.Transformation;
+using Avalonia.Reactive;
 
 namespace ScholarLog.Views;
 
@@ -32,38 +34,47 @@ public partial class MainWindow : Window
 {
     private DispatcherTimer? _lightTimer;
     private readonly Random _random = new Random();
-    private int _lastPageIndex = 0; // Pour calculer le sens de l'animation des pages
+    private int _lastPageIndex = 0;
+
+    // Seuil en-dessous duquel le menu passe en mode overlay
+    private const double OverlayThreshold = 960.0;
+
+    // Référence au Border qui contient la sidebar (colonne 0 de la grille principale)
+    private Border? _sidebarBorder;
+    private Grid?   _mainGrid;      // la grille ColumnDefinitions="Auto, *"
+    private bool    _isOverlayMode = false;
 
     public MainWindow()
     {
         InitializeComponent();
 
         this.Loaded += MainWindow_Loaded;
-        // On s'abonne au changement de DataContext pour écouter le ViewModel
         this.DataContextChanged += MainWindow_DataContextChanged;
+
+        // Écoute les changements de taille de la fenêtre
+        this.SizeChanged += (_, e) => OnWindowResized(e.NewSize.Width);
     }
 
     private void MainWindow_DataContextChanged(object? sender, EventArgs e)
     {
         if (DataContext is MainWindowViewModel vm)
-        {
-            // Dès qu'une propriété du ViewModel change, on vérifie si on doit animer l'UI
             vm.PropertyChanged += ViewModel_PropertyChanged;
-        }
     }
 
     private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         var vm = (MainWindowViewModel)DataContext!;
 
-        // Si la page a changé : on met à jour la direction de l'animation et le curseur
         if (e.PropertyName == nameof(MainWindowViewModel.CurrentPageIndex))
         {
             UpdatePageTransitionDirection(vm.CurrentPageIndex);
             MoveNavCursor(vm.CurrentPageIndex);
             _lastPageIndex = vm.CurrentPageIndex;
+
+            // En mode overlay : refermer le menu après navigation
+            if (_isOverlayMode && vm.IsSidebarOpen)
+                vm.IsSidebarOpen = false;
         }
-        // Si l'état du menu a changé : on lance l'animation de la barre latérale
         else if (e.PropertyName == nameof(MainWindowViewModel.IsSidebarOpen))
         {
             AnimateSidebar(vm.IsSidebarOpen);
@@ -72,53 +83,86 @@ public partial class MainWindow : Window
 
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
-        // Timer pour les lumières de fond animées
-        _lightTimer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromSeconds(7.5)
-        };
+        // Récupère les références aux contrôles structurels
+        _sidebarBorder = this.FindControl<Border>("SidebarBorder");  // à nommer dans le AXAML si besoin
+        _mainGrid      = this.FindControl<Grid>("MainLayoutGrid");    // idem
+
+        _lightTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(7.5) };
         _lightTimer.Tick += (s, ev) => MoveLights();
         _lightTimer.Start();
         MoveLights();
 
-        // Positionnement initial du curseur de navigation
         MoveNavCursor(0);
 
-        // Déclenche le chargement depuis le ViewModel
+        // Applique le mode initial selon la taille au démarrage
+        OnWindowResized(this.Bounds.Width);
+
         if (DataContext is MainWindowViewModel vm)
-        {
             await vm.ChargerDonneesInitialesAsync();
-        }
     }
 
-
-    // logique purement visuelle (animations & geométrie) 
-    private void MoveLights()
+    private void OnWindowResized(double width)
     {
-        double windowWidth = this.Bounds.Width > 0 ? this.Bounds.Width : 1280;
-        double windowHeight = this.Bounds.Height > 0 ? this.Bounds.Height : 720;
+        var sidebar      = this.FindControl<Grid>("Sidebar");
+        var sidebarBorder = this.FindControl<Border>("SidebarBorder") 
+                           ?? FindSidebarBorder();
 
-        void SetRandomPosition(Ellipse light)
+        if (sidebar == null || sidebarBorder == null) return;
+
+        bool shouldBeOverlay = width < OverlayThreshold;
+
+        if (shouldBeOverlay == _isOverlayMode) return; // rien à changer
+
+        _isOverlayMode = shouldBeOverlay;
+
+        if (_isOverlayMode)
         {
-            double newX = _random.NextDouble() * windowWidth - (light.Width / 2);
-            double newY = _random.NextDouble() * windowHeight - (light.Height / 2);
+            // Passe en overlay : le Border de la sidebar sort du flux de la grille
+            // et flotte par-dessus le contenu
+            sidebarBorder.ZIndex = 50;
 
-            // Formatage neutre obligatoire pour Avalonia (évite les virgules suisses/françaises "10,5px" qui font crasher le parser)
-            string xStr = newX.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            string yStr = newY.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            // Réduit le margin négatif pour que la grille principale ne réserve plus de place
+            // On simule en mettant la colonne Auto à largeur 0 via la sidebar
+            var vm = DataContext as MainWindowViewModel;
+            if (vm?.IsSidebarOpen == true)
+                vm.IsSidebarOpen = false; // force la fermeture → sidebar en mode icônes seulement
 
-            // Déplacement matériel ultra-léger
-            light.RenderTransform = TransformOperations.Parse($"translate({xStr}px, {yStr}px)");
+            // En mode overlay replié, la sidebar affiche seulement les icônes (55px)
+            // et est positionnée en absolu par-dessus le contenu
+            Grid.SetColumn(sidebarBorder, 0);
+        }
+        else
+        {
+            // Retour en mode normal : réintègre dans le flux
+            sidebarBorder.ZIndex = 0;
         }
 
-        if (this.FindControl<Ellipse>("Light1") is { } l1) SetRandomPosition(l1);
-        if (this.FindControl<Ellipse>("Light2") is { } l2) SetRandomPosition(l2);
+        UpdateSidebarOverlayPosition();
+    }
+
+    private void UpdateSidebarOverlayPosition()
+    {
+        // En mode overlay, le Border de la sidebar doit s'afficher par-dessus
+        // le contenu principal. On le gère via le ZIndex uniquement —
+        // Avalonia gère le reflow automatiquement via la colonne Auto.
+        // Rien de plus à faire ici pour le positionnement.
+    }
+
+    /// <summary>
+    /// Trouve le Border parent de la Sidebar par remontée de l'arbre visuel.
+    /// Utilisé si le Border n'a pas de nom dans le AXAML.
+    /// </summary>
+    private Border? FindSidebarBorder()
+    {
+        var sidebar = this.FindControl<Grid>("Sidebar");
+        return sidebar?.Parent as Border;
     }
 
     private void AnimateSidebar(bool isOpen)
     {
-        var sidebar = this.FindControl<Grid>("Sidebar");
-        var toggleIcon = this.FindControl<Label>("ToggleIcon");
+        var sidebar     = this.FindControl<Grid>("Sidebar");
+        var toggleIcon  = this.FindControl<Label>("ToggleIcon");
+        var sidebarBorder = FindSidebarBorder();
 
         if (sidebar == null || toggleIcon == null) return;
 
@@ -127,13 +171,16 @@ public partial class MainWindow : Window
             sidebar.Width = 155;
             toggleIcon.Classes.Remove("rotated");
             SetMenuTextOpacity(1);
+
+            // En mode overlay ouvert : élève le ZIndex pour passer au-dessus du contenu
+            if (_isOverlayMode && sidebarBorder != null)
+                sidebarBorder.ZIndex = 50;
         }
         else
         {
             sidebar.Width = 55;
             if (!toggleIcon.Classes.Contains("rotated"))
                 toggleIcon.Classes.Add("rotated");
-
             SetMenuTextOpacity(0);
         }
     }
@@ -149,18 +196,15 @@ public partial class MainWindow : Window
         foreach (var name in controlNames)
         {
             if (this.FindControl<Control>(name) is { } control)
-            {
                 control.Opacity = opacity;
-            }
         }
     }
 
     private void MoveNavCursor(int pageIndex)
     {
-        var sidebar = this.FindControl<Grid>("Sidebar");
+        var sidebar   = this.FindControl<Grid>("Sidebar");
         var navCursor = this.FindControl<Border>("NavCursor");
 
-        // On associe l'index à son bouton physique
         Button? targetButton = pageIndex switch
         {
             0 => this.FindControl<Button>("ButtonAccueil"),
@@ -176,7 +220,7 @@ public partial class MainWindow : Window
 
         if (pointRelatif.HasValue)
         {
-            double yPos = pointRelatif.Value.Y;
+            double yPos    = pointRelatif.Value.Y;
             double decalage = targetButton.Bounds.Height > 0
                 ? (targetButton.Bounds.Height - navCursor.Height) / 2
                 : 6;
@@ -193,19 +237,31 @@ public partial class MainWindow : Window
         {
             var slideTransition = compositeTransition.PageTransitions.OfType<MyPageSlide>().FirstOrDefault();
             if (slideTransition != null)
-            {
-                // Si on descend dans le menu (index plus grand), l'animation glisse vers le bas, et inversement
                 slideTransition.SensManuel = newIndex > _lastPageIndex;
-            }
         }
     }
-    
-   
+
+    private void MoveLights()
+    {
+        double windowWidth  = this.Bounds.Width  > 0 ? this.Bounds.Width  : 1280;
+        double windowHeight = this.Bounds.Height > 0 ? this.Bounds.Height : 720;
+
+        void SetRandomPosition(Ellipse light)
+        {
+            double newX = _random.NextDouble() * windowWidth  - (light.Width  / 2);
+            double newY = _random.NextDouble() * windowHeight - (light.Height / 2);
+
+            string xStr = newX.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            string yStr = newY.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+            light.RenderTransform = TransformOperations.Parse($"translate({xStr}px, {yStr}px)");
+        }
+
+        if (this.FindControl<Ellipse>("Light1") is { } l1) SetRandomPosition(l1);
+        if (this.FindControl<Ellipse>("Light2") is { } l2) SetRandomPosition(l2);
+    }
 }
 
-/// <summary>
-/// Animation de transition entre les pages
-/// </summary>
 public class MyPageSlide : PageSlide
 {
     private Easing _easing = new LinearEasing();
@@ -223,12 +279,10 @@ public class MyPageSlide : PageSlide
 
     public MyPageSlide()
     {
-        SlideInEasing = _easing;
+        SlideInEasing  = _easing;
         SlideOutEasing = _easing;
     }
 
     public override Task Start(Visual? from, Visual? to, bool forward, CancellationToken cancellationToken)
-    {
-        return base.Start(from, to, SensManuel, cancellationToken);
-    }
+        => base.Start(from, to, SensManuel, cancellationToken);
 }

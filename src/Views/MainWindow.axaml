@@ -128,11 +128,13 @@
 
         <Grid ColumnDefinitions="Auto, *">
             <!-- Bar de navigation -->
-            <Border Grid.Column="0"
-                    Background="{DynamicResource PrimaryBackgroundGradient}"
-                    BorderBrush="#25ffffff"
-                    BorderThickness="0,0,1,0"
-                    Padding="10">
+            <Border Name="SidebarBorder"
+                Grid.Column="0"
+                ZIndex="0"
+                Background="{DynamicResource PrimaryBackgroundGradient}"
+                BorderBrush="#25ffffff"
+                BorderThickness="0,0,1,0"
+                Padding="10">
 
                 <Grid x:Name="Sidebar" Width="155" RowDefinitions="Auto, *, Auto">
                     <Grid.Transitions>
