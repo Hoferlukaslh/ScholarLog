@@ -36,7 +36,7 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="Auto, Auto, *">
+    <Grid RowDefinitions="Auto, Auto, *" Margin="10">
 
         <Grid Grid.Row="0" Background="Transparent" ColumnSpacing="10" Margin="0,0,0,30">
             <Grid.ColumnDefinitions>
@@ -83,22 +83,14 @@
                                 BorderBrush="{DynamicResource CardBorder}">
 
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" MinWidth="30" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Padding="5,0,5,3"
-                                           FontFamily="{StaticResource Phosphor}"
-                                           FontSize="{StaticResource IconSizeNormal}"
-                                           Foreground="{DynamicResource PrimaryForeground}"
-                                           Text="{StaticResource IconeHDD}" />
 
-                                <TextBlock Grid.Column="1"
+
+                                <TextBlock 
                                            Name="userbddPath"
                                            VerticalAlignment="Center"
                                            Padding="5,0,5,0"
                                            FontFamily="{StaticResource Helvetica}"
-                                           FontSize="{StaticResource FontSizeNormal}"
+                                           FontSize="{StaticResource FontSizeSmall}"
                                            Foreground="{StaticResource SecondaryForeground}"
                                            Text="{CompiledBinding PathToBDD}">
 
