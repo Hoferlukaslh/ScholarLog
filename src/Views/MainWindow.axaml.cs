@@ -42,7 +42,7 @@ public partial class MainWindow : Window
     // Référence au Border qui contient la sidebar (colonne 0 de la grille principale)
     private Border? _sidebarBorder;
     private Grid?   _mainGrid;      // la grille ColumnDefinitions="Auto, *"
-    private bool    _isOverlayMode = false;
+    private bool    _isRetractedMode = false;
 
     public MainWindow()
     {
@@ -72,7 +72,7 @@ public partial class MainWindow : Window
             _lastPageIndex = vm.CurrentPageIndex;
 
             // En mode overlay : refermer le menu après navigation
-            if (_isOverlayMode && vm.IsSidebarOpen)
+            if (_isRetractedMode && vm.IsSidebarOpen)
                 vm.IsSidebarOpen = false;
         }
         else if (e.PropertyName == nameof(MainWindowViewModel.IsSidebarOpen))
@@ -103,50 +103,37 @@ public partial class MainWindow : Window
 
     private void OnWindowResized(double width)
     {
-        var sidebar      = this.FindControl<Grid>("Sidebar");
-        var sidebarBorder = this.FindControl<Border>("SidebarBorder") 
-                           ?? FindSidebarBorder();
+        var sidebar = this.FindControl<Grid>("Sidebar");
+        var sidebarBorder = this.FindControl<Border>("SidebarBorder") ?? FindSidebarBorder();
+        // Récupération du bouton de toggle
+        var toggleButton = this.FindControl<Button>("ToggleButton"); 
 
         if (sidebar == null || sidebarBorder == null) return;
 
-        bool shouldBeOverlay = width < OverlayThreshold;
+        bool shouldBeRetracted = width < OverlayThreshold;
 
-        if (shouldBeOverlay == _isOverlayMode) return; // rien à changer
+        if (shouldBeRetracted == _isRetractedMode) return; 
 
-        _isOverlayMode = shouldBeOverlay;
+        _isRetractedMode = shouldBeRetracted;
 
-        if (_isOverlayMode)
+        if (_isRetractedMode)
         {
-            // Passe en overlay : le Border de la sidebar sort du flux de la grille
-            // et flotte par-dessus le contenu
-            sidebarBorder.ZIndex = 50;
+            if (toggleButton != null) toggleButton.IsVisible = false;
 
-            // Réduit le margin négatif pour que la grille principale ne réserve plus de place
-            // On simule en mettant la colonne Auto à largeur 0 via la sidebar
             var vm = DataContext as MainWindowViewModel;
             if (vm?.IsSidebarOpen == true)
-                vm.IsSidebarOpen = false; // force la fermeture → sidebar en mode icônes seulement
+                vm.IsSidebarOpen = false; 
 
-            // En mode overlay replié, la sidebar affiche seulement les icônes (55px)
-            // et est positionnée en absolu par-dessus le contenu
             Grid.SetColumn(sidebarBorder, 0);
         }
         else
         {
-            // Retour en mode normal : réintègre dans le flux
-            sidebarBorder.ZIndex = 0;
+            // afficher le bouton en mode normal (> 960px)
+            if (toggleButton != null) toggleButton.IsVisible = true;
         }
-
-        UpdateSidebarOverlayPosition();
     }
 
-    private void UpdateSidebarOverlayPosition()
-    {
-        // En mode overlay, le Border de la sidebar doit s'afficher par-dessus
-        // le contenu principal. On le gère via le ZIndex uniquement —
-        // Avalonia gère le reflow automatiquement via la colonne Auto.
-        // Rien de plus à faire ici pour le positionnement.
-    }
+
 
     /// <summary>
     /// Trouve le Border parent de la Sidebar par remontée de l'arbre visuel.
@@ -168,12 +155,12 @@ public partial class MainWindow : Window
 
         if (isOpen)
         {
-            sidebar.Width = 155;
+            sidebar.Width = 145;
             toggleIcon.Classes.Remove("rotated");
             SetMenuTextOpacity(1);
 
             // En mode overlay ouvert : élève le ZIndex pour passer au-dessus du contenu
-            if (_isOverlayMode && sidebarBorder != null)
+            if (_isRetractedMode && sidebarBorder != null)
                 sidebarBorder.ZIndex = 50;
         }
         else

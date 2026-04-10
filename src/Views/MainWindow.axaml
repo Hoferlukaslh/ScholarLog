@@ -47,7 +47,7 @@
             <Setter Property="Opacity" Value="1" />
             <Setter Property="Transitions">
                 <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
                 </Transitions>
             </Setter>
         </Style>
@@ -64,7 +64,7 @@
             <Setter Property="RenderTransform" Value="rotate(0deg)" />
             <Setter Property="Transitions">
                 <Transitions>
-                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4" Easing="CubicEaseOut" />
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.35" Easing="CubicEaseOut" />
                 </Transitions>
             </Setter>
         </Style>
@@ -134,12 +134,12 @@
                 Background="{DynamicResource PrimaryBackgroundGradient}"
                 BorderBrush="#25ffffff"
                 BorderThickness="0,0,1,0"
-                Padding="10">
+                Padding="0, 5, 0, 5">
 
-                <Grid x:Name="Sidebar" Width="155" RowDefinitions="Auto, *, Auto">
+                <Grid x:Name="Sidebar" Width="145" RowDefinitions="Auto, *, Auto">
                     <Grid.Transitions>
                         <Transitions>
-                            <DoubleTransition Property="Width" Duration="0:0:0.3" Easing="CubicEaseOut" />
+                            <DoubleTransition Property="Width" Duration="0:0:0.25" Easing="CubicEaseOut" />
                         </Transitions>
                     </Grid.Transitions>
 
@@ -155,13 +155,13 @@
                                 <Label Grid.Column="0"
                                        FontFamily="{StaticResource Phosphor}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       FontSize="{StaticResource IconSizeMedium}"
+                                       FontSize="{StaticResource IconSizeNormal}"
                                        Content="{StaticResource IconeHome}"
                                        HorizontalAlignment="Center" />
                                 <TextBlock x:Name="TextAccueil" Classes="menu-text" Grid.Column="1"
                                            Foreground="{DynamicResource PrimaryForeground}"
                                            FontSize="{StaticResource FontSizeNormal}"
-                                           Text="Accueil" VerticalAlignment="Center" Margin="10,0,0,0" />
+                                           Text="Accueil" VerticalAlignment="Center" Margin="2,0,0,0" />
                             </Grid>
                         </Button>
 
@@ -174,14 +174,14 @@
                                 <Label Grid.Column="0"
                                        FontFamily="{StaticResource Phosphor}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       FontSize="{StaticResource IconSizeMedium}"
+                                       FontSize="{StaticResource IconSizeNormal}"
                                        HorizontalAlignment="Center" Content="{StaticResource IconeHashtag}" />
                                 <TextBlock x:Name="TextNotes" Classes="menu-text" Grid.Column="1"
                                            FontFamily="{StaticResource Helvetica}"
                                            Foreground="{DynamicResource PrimaryForeground}"
                                            FontSize="{StaticResource FontSizeNormal}"
                                            Text="Notes"
-                                           VerticalAlignment="Center" Margin="10,0,0,0" />
+                                           VerticalAlignment="Center" Margin="2,0,0,0" />
                             </Grid>
                         </Button>
 
@@ -192,7 +192,7 @@
                                 CommandParameter="Journaux">
                             <Grid ColumnDefinitions="40, *">
                                 <Label Grid.Column="0" FontFamily="{StaticResource Phosphor}"
-                                       FontSize="{StaticResource IconSizeMedium}"
+                                       FontSize="{StaticResource IconSizeNormal}"
                                        Foreground="{DynamicResource PrimaryForeground}"
                                        HorizontalAlignment="Center" Content="{StaticResource IconePen}" />
                                 <TextBlock x:Name="TextJournaux" Classes="menu-text" Grid.Column="1"
@@ -200,7 +200,7 @@
                                            Foreground="{DynamicResource PrimaryForeground}"
                                            FontSize="{StaticResource FontSizeNormal}"
                                            Text="Journaux"
-                                           VerticalAlignment="Center" Margin="10,0,0,0" />
+                                           VerticalAlignment="Center" Margin="2,0,0,0" />
                             </Grid>
                         </Button>
                     </StackPanel>
@@ -209,14 +209,15 @@
                     <!-- Éléments du bas -->
                     <StackPanel Grid.Row="2" Margin="0,0,0,10" Spacing="5">
                         <!-- Bouton pour rétracter le menu -->
-                        <Button HorizontalAlignment="Stretch" Background="Transparent"
+                        <Button x:Name="ToggleButton" 
+                                HorizontalAlignment="Stretch" Background="Transparent"
                                 Command="{Binding ToggleSidebarCommand}">
                             <Grid ColumnDefinitions="40, *">
                                 <Label x:Name="ToggleIcon"
                                        Grid.Column="0"
                                        FontFamily="{StaticResource Phosphor}"
                                        Foreground="{DynamicResource SecondaryForeground}"
-                                       FontSize="{StaticResource IconSizeMedium}"
+                                       FontSize="{StaticResource IconSizeNormal}"
                                        Content="{StaticResource IconeRetract}"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
@@ -227,7 +228,7 @@
                                            Foreground="{DynamicResource SecondaryForeground}"
                                            FontSize="{StaticResource FontSizeNormal}"
                                            Text="Replier"
-                                           VerticalAlignment="Center" Margin="10,0,0,0" />
+                                           VerticalAlignment="Center" Margin="2,0,0,0" />
                             </Grid>
                         </Button>
 
@@ -240,7 +241,7 @@
                                 <Label Grid.Column="0"
                                        FontFamily="{StaticResource Phosphor}"
                                        Foreground="{DynamicResource PrimaryForeground}"
-                                       FontSize="{StaticResource IconSizeMedium}" HorizontalAlignment="Center"
+                                       FontSize="{StaticResource IconSizeNormal}" HorizontalAlignment="Center"
                                        Content="{StaticResource IconeGear}" />
 
 
@@ -249,7 +250,7 @@
                                            Foreground="{DynamicResource PrimaryForeground}"
                                            FontSize="{StaticResource FontSizeNormal}"
                                            Text="Paramètres"
-                                           VerticalAlignment="Center" Margin="10,0,0,0" />
+                                           VerticalAlignment="Center" Margin="2,0,0,0" />
                             </Grid>
                         </Button>
                     </StackPanel>
@@ -277,7 +278,7 @@
             <!-- Controleur de contenu -->
             <TransitioningContentControl Grid.Column="1"
                                          Name="MainContentControler"
-                                         Content="{Binding CurrentPage}" Padding="10">
+                                         Content="{Binding CurrentPage}" Padding="5">
                 <TransitioningContentControl.PageTransition>
                      <CompositePageTransition>
                         <CrossFade Duration="0:0:0.3" />
