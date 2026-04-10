@@ -32,7 +32,7 @@ public partial class NotesViewModel : ViewModelBase
     // état de la vue
     [ObservableProperty] private bool _isListView = true;
 
-    [ObservableProperty] private ObservableRangeCollection<NoteViewModel> _allNotes = new();
+    [ObservableProperty] private System.Collections.ObjectModel.ObservableCollection<NoteViewModel> _allNotes = new();
 
     [ObservableProperty] private ObservableRangeCollection<Branche> _selectedModuleBranchesWithNotes = new();
 
@@ -70,15 +70,30 @@ public partial class NotesViewModel : ViewModelBase
 
     public NotesViewModel()
     {
-        // récupére les données depuis le service
         Modules = AppDataService.Instance.Modules;
 
-        if (Modules.Count > 0)
+        if (AppDataService.Instance.IsLoaded)
         {
-            SelectedModule = Modules[0];
+            // Données déjà prêtes (navigation vers la page après chargement)
+            if (Modules.Count > 0)
+                SelectedModule = Modules[0];
+            RefreshAllNotes();
+            _ = ActualiserIndicateursDocumentsAsync();
         }
+        else
+        {
+            // Données pas encore prêtes, on attend la notification unique de ReplaceAll
+            Modules.CollectionChanged += OnModulesLoaded;
+        }
+    }
 
+    private void OnModulesLoaded(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        Modules.CollectionChanged -= OnModulesLoaded;
+        if (Modules.Count > 0)
+            SelectedModule = Modules[0];
         RefreshAllNotes();
+        RefreshSelectedModuleBranches();
         _ = ActualiserIndicateursDocumentsAsync();
     }
 
@@ -126,7 +141,7 @@ public partial class NotesViewModel : ViewModelBase
 
     #region Logique Métier
 
-    // Ouvre le lecteur depuis la liste ---
+    // Ouvre le lecteur depuis la liste
     [RelayCommand]
     private async Task OuvrirLecteurPdf(Note noteCible)
     {
@@ -150,6 +165,8 @@ public partial class NotesViewModel : ViewModelBase
 
     private void RefreshAllNotes()
     {
+        AllNotes.Clear();
+    
         var listeTemporaire = new System.Collections.Generic.List<NoteViewModel>();
 
         foreach (var module in Modules)
@@ -170,7 +187,8 @@ public partial class NotesViewModel : ViewModelBase
             }
         }
 
-        AllNotes.ReplaceAll(listeTemporaire.OrderByDescending(n => n.NoteData.Date));
+        foreach (var nvm in listeTemporaire.OrderByDescending(n => n.NoteData.Date))
+            AllNotes.Add(nvm);
     }
 
     private void RefreshSelectedModuleBranches()

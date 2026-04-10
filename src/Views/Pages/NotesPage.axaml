@@ -145,21 +145,12 @@
                     <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}"
                             VerticalAlignment="Bottom" Margin="10,0" />
 
-                    <ItemsControl Grid.Row="1" Margin="0,5,0,10" ItemsSource="{Binding AllNotes}">
-                        <ItemsControl.Template>
-                            <ControlTemplate>
-                                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                                              VerticalScrollBarVisibility="Auto">
-                                    <ItemsPresenter />
-                                </ScrollViewer>
-                            </ControlTemplate>
-                        </ItemsControl.Template>
-
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
+                    <ListBox Grid.Row="1" Margin="0,5,0,10" 
+                             ItemsSource="{Binding AllNotes}"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                      
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="data:NoteViewModel">
@@ -223,7 +214,7 @@
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    </ListBox>
                 </Grid>
             </Border>
 

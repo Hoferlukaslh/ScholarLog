@@ -85,9 +85,7 @@ public class AppDataService
             }
         });
 
-        foreach (var mod in nouveauxModules)
-            Modules.Add(mod);
-
+        Modules.ReplaceAll(nouveauxModules);
         IsLoaded = true;
     }
 

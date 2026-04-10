@@ -21,7 +21,7 @@
         <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport> <!-- Pas de requette web -->
         <ServerGarbageCollection>false</ServerGarbageCollection>
         <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
-
+        
         <!-- Voir pour désactiver TRIM en cas de problèmes -->
         <PublishTrimmed>true</PublishTrimmed> 
         <TrimMode>partial</TrimMode> <!-- sûr : partial. Incertain : full-->
@@ -30,6 +30,8 @@
         <Nullable>enable</Nullable>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <OptimizationPreference>Speed</OptimizationPreference>
+
 
         <ApplicationIcon>Assets\Images\ScholarLogLogoEx.ico</ApplicationIcon>
         <Version>0.0.1</Version>
