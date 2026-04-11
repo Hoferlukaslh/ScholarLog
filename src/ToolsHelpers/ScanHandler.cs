@@ -38,8 +38,10 @@ public static class ImageProcessor
     /// <param name="maxPixels">Mp maximal que doit faire l'image de sortie</param>
     /// <param name="quality">Qualité du filtre (Medium par défaut pour soulager le CPU du GUI)</param>
     /// <returns>Image de sortie</returns>
-    public static async Task<SKBitmap> ResizeToMaxPixelsAsync(SKBitmap source, double maxPixels,
-        SKFilterQuality quality = SKFilterQuality.Medium)
+    public static async Task<SKBitmap> ResizeToMaxPixelsAsync(
+        SKBitmap source,
+        double maxPixels,
+        SKSamplingOptions? sampling = null)
     {
         double currentPixels = (double)source.Width * source.Height;
 
@@ -50,10 +52,20 @@ public static class ImageProcessor
         int newWidth = (int)Math.Round(source.Width * scale);
         int newHeight = (int)Math.Round(source.Height * scale);
 
-        // Offload le redimensionnement (CPU-bound) sur un thread d'arrière-plan
+        // Valeur par défaut (équivalent "high quality")
+        sampling ??= new SKSamplingOptions(SKFilterMode.Linear, SKMipmapMode.Linear);
+
         return await Task.Run(() =>
-            source.Resize(new SKImageInfo(newWidth, newHeight), quality));
-    }
+        {
+            // On récupère les infos de l'image (type de couleur, canal alpha) et on applique la nouvelle taille
+            var info = new SKImageInfo(newWidth, newHeight, source.ColorType, source.AlphaType, source.ColorSpace);
+        
+            // Resize crée et retourne directement un nouveau SKBitmap redimensionné
+            var resized = source.Resize(info, sampling.Value);
+
+            return resized;
+        });
+    } 
 
     /// <summary>
     /// Fonction utilitaire pour appliquer le redimensionnement asynchrone sur un flux d'images.

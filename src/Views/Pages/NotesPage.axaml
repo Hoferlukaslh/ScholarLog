@@ -357,14 +357,14 @@
                     <TextBlock Text="Titre de l'évaluation" FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource SecondaryForeground}" Margin="0,0,0,-10" />
                     <TextBox Text="{CompiledBinding EditingNote.titre}" HorizontalAlignment="Stretch"
-                             Watermark="Ex: TE01 - Gravité" />
+                             PlaceholderText="Ex: TE01 - Gravité" />
 
                     <TextBlock Text="Date" FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource SecondaryForeground}" Margin="0,0,0,-10" />
                     <CalendarDatePicker SelectedDateFormat="Custom" CustomDateFormatString="dd.MM.yyyy"
                                         DisplayDateStart="2024-01-01" SelectedDate="{CompiledBinding EditingNote.Date}"
                                         SelectedDateChanged="CalendarDatePicker_OnSelectedDateChanged"
-                                        Watermark="JJ.MM.AAAA" UseFloatingWatermark="False"
+                                        PlaceholderText="JJ.MM.AAAA" UseFloatingPlaceholder="False"
                                         HorizontalAlignment="Stretch" />
 
                     <TextBlock Text="Note (1 à 6)" FontSize="{StaticResource FontSizeSmall}"

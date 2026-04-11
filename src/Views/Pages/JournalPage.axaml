@@ -264,8 +264,8 @@
                         DisplayDateStart="2024-01-01"
                         SelectedDate="{CompiledBinding EditingEntree.Date}"
                         SelectedDateChanged="CalendarDatePicker_OnSelectedDateChanged"
-                        Watermark="JJ.MM.AAAA"
-                        UseFloatingWatermark="False"
+                        PlaceholderText="JJ.MM.AAAA"
+                        UseFloatingPlaceholder="False"
                         HorizontalAlignment="Stretch">
                     </CalendarDatePicker>
 
@@ -336,7 +336,7 @@
                     <Border Height="1" Background="{DynamicResource CardBorder}" Margin="0,0,0,5" />
 
                     <Grid ColumnDefinitions="*, Auto">
-                        <TextBox Grid.Column="0" Text="{CompiledBinding NouveauTypeNom}" Watermark="Nouvelle catégorie..."
+                        <TextBox Grid.Column="0" Text="{CompiledBinding NouveauTypeNom}" PlaceholderText="Nouvelle catégorie..."
                                  VerticalAlignment="Center" Margin="0,0,10,0" />
                         <Button Grid.Column="1" Content="Ajouter" Command="{Binding AjouterNouveauTypeCommand}"
                                 Background="#3A3A3A" Foreground="White"
