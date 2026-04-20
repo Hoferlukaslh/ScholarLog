@@ -145,11 +145,25 @@
                     <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}"
                             VerticalAlignment="Bottom" Margin="10,0" />
 
-                    <ListBox Grid.Row="1" Margin="0,5,0,10" 
-                             ItemsSource="{Binding AllNotes}"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl Grid.Row="1" Margin="0,5,0,10" 
+                                  ItemsSource="{Binding AllNotes}"
+                                  Background="Transparent"
+                                  BorderThickness="0">
+                        
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                              VerticalScrollBarVisibility="Auto">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
                       
 
                         <ItemsControl.ItemTemplate>
@@ -214,12 +228,27 @@
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
-                    </ListBox>
+                    </ItemsControl>
                 </Grid>
             </Border>
 
             <ScrollViewer Grid.Row="1" Margin="10,0,10,10" IsVisible="{CompiledBinding !IsListView}">
                 <ItemsControl ItemsSource="{Binding SelectedModuleBranchesWithNotes}">
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                          VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="data:Branche">
                             <Border Margin="0,0,0,15"
