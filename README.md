@@ -19,7 +19,7 @@
 - [Technologies](#technologies)
 - [Utilisateurs cibles](#utilisateurs-cibles)
 - [Fonctionnalités principales](#fonctionnalités-principales)
-- [Ressources utilisées](#ressources-utilisées)
+- [Ressources utilisées](#ressources-utilisées) 
   - [Logiciels](#logiciels)
   - [Police d'écriture](#police-décriture)
 
