@@ -97,6 +97,15 @@ public partial class JournalViewModel : ViewModelBase
         {
             SelectedModule = Modules[0];
         }
+        
+        // En cas d'actualisation des modules
+        Modules.CollectionChanged += (s, e) => 
+        {
+            if (SelectedModule == null && Modules.Count > 0)
+            {
+                SelectedModule = Modules[0];
+            }
+        };
     }
 
     // déclencheurs

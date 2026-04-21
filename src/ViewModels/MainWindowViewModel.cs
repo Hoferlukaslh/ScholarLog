@@ -76,7 +76,6 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     // Logique de chargement initial
-
     public async Task ChargerDonneesInitialesAsync()
     {
         LoadingText = "Chargement des données globales...";
