@@ -40,12 +40,34 @@ public class AppSettingsService
         Path.Combine(ConfigDirectory, "settings.json");
 
     /// <summary>
-    /// Chemin effectif de la BDD : celui choisi par l'user, ou le défaut dans AppData.
+    /// Chemin effectif de la BDD.
+    /// Si le chemin sauvegardé est invalide, crée la BDD à côté de l'exécutable
+    /// et met à jour le fichier de settings automatiquement.
     /// </summary>
-    public string EffectiveDatabasePath =>
-        !string.IsNullOrWhiteSpace(Current.DatabasePath) && File.Exists(Current.DatabasePath)
-            ? Current.DatabasePath
-            : Path.Combine(ConfigDirectory, "BDD.db");
+    public string EffectiveDatabasePath
+    {
+        get
+        {
+            // Chemin sauvegardé valide → on l'utilise directement
+            if (!string.IsNullOrWhiteSpace(Current.DatabasePath) && File.Exists(Current.DatabasePath))
+                return Current.DatabasePath;
+
+            // Fallback : à côté de l'exécutable
+            string cheminParDefaut = Path.Combine(AppContext.BaseDirectory, "BDD.db");
+
+            // Si le chemin sauvegardé était différent (BDD déplacée ou settings corrompus),
+            // on met à jour et on persiste pour ne pas recréer à chaque lancement
+            if (Current.DatabasePath != cheminParDefaut)
+            {
+                Console.WriteLine($"[Settings] BDD introuvable à '{Current.DatabasePath}'. " +
+                                  $"Réinitialisation vers : {cheminParDefaut}");
+                Current.DatabasePath = cheminParDefaut;
+                Save();
+            }
+
+            return cheminParDefaut;
+        }
+    }
 
     private AppSettingsService()
     {
@@ -95,6 +117,8 @@ public class AppSettingsService
         var ext = Path.GetExtension(path).ToLowerInvariant();
         return ext is ".db" or ".sqlite" or ".sqlite3";
     }
+    
+    
 }
 
 

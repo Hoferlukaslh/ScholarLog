@@ -92,6 +92,8 @@ public partial class JournalViewModel : ViewModelBase
     public JournalViewModel()
     {
         Modules = AppDataService.Instance.Modules;
+        
+        AppDataService.Instance.DonneesRechargees += OnDonneesRechargees;
 
         if (Modules.Count > 0)
         {
@@ -106,6 +108,20 @@ public partial class JournalViewModel : ViewModelBase
                 SelectedModule = Modules[0];
             }
         };
+    }
+    
+    private void OnDonneesRechargees()
+    {
+        SelectedModule = Modules.FirstOrDefault();
+
+        if (SelectedModule != null)
+            ActualiserJournalTypeTravail(SelectedModule);
+        else
+        {
+            Journal.Clear();
+            TypesTravail.Clear();
+            TotalHeures = "0.0h";
+        }
     }
 
     // déclencheurs
@@ -237,14 +253,15 @@ public partial class JournalViewModel : ViewModelBase
 
         EditingEntree = new Entree
         {
-            Date = DateTime.Today,
-            Duree = 1.0,
-            Module = SelectedModule,
+            Date     = DateTime.Today,
+            Duree    = 1.0,
+            Module   = SelectedModule,
             ModuleId = SelectedModule?.Id ?? 0
         };
 
+        DureeEdition       = 1.0; 
         ModalSelectedModule = SelectedModule;
-        IsModalOpen = true;
+        IsModalOpen         = true;
     }
 
     [RelayCommand]
@@ -258,19 +275,32 @@ public partial class JournalViewModel : ViewModelBase
 
         EditingEntree = new Entree
         {
-            Id = entreeAModifier.Id,
-            Date = entreeAModifier.Date,
-            Duree = entreeAModifier.Duree,
-            Description = entreeAModifier.Description,
-            Module = entreeAModifier.Module,
-            ModuleId = entreeAModifier.ModuleId,
-            Type = entreeAModifier.Type,
+            Id            = entreeAModifier.Id,
+            Date          = entreeAModifier.Date,
+            Duree         = entreeAModifier.Duree,
+            Description   = entreeAModifier.Description,
+            Module        = entreeAModifier.Module,
+            ModuleId      = entreeAModifier.ModuleId,
+            Type          = entreeAModifier.Type,
             TypeTravailId = entreeAModifier.TypeTravailId
         };
 
-        ModalSelectedModule = Modules.FirstOrDefault(m => m.Id == entreeAModifier.ModuleId);
-        EditingEntree.TypeTravailId = entreeAModifier.TypeTravailId;
-        IsModalOpen = true;
+        DureeEdition = entreeAModifier.Duree; 
+        ModalSelectedModule          = Modules.FirstOrDefault(m => m.Id == entreeAModifier.ModuleId);
+        EditingEntree.TypeTravailId  = entreeAModifier.TypeTravailId;
+        IsModalOpen                  = true;
+    }
+    
+    // Propriété intermédiaire nullable pour le NumericUpDown
+    private double? _dureeEdition;
+    public double? DureeEdition
+    {
+        get => _dureeEdition;
+        set
+        {
+            if (SetProperty(ref _dureeEdition, value))
+                EditingEntree.Duree = value ?? 0.5; // null → valeur par défaut
+        }
     }
 
     [RelayCommand]
@@ -282,6 +312,7 @@ public partial class JournalViewModel : ViewModelBase
         try
         {
             if (string.IsNullOrWhiteSpace(EditingEntree?.Description)) return;
+            if (EditingEntree.Duree <= 0) EditingEntree.Duree = 0.5; // Valeur si erreur
 
             if (EditingEntree.Module != null) EditingEntree.ModuleId = EditingEntree.Module.Id;
             if (EditingEntree.TypeTravailId <= 0 && ModalTypesTravail?.Count > 0)

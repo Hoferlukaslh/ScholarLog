@@ -71,6 +71,7 @@ public partial class NotesViewModel : ViewModelBase
     public NotesViewModel()
     {
         Modules = AppDataService.Instance.Modules;
+        AppDataService.Instance.DonneesRechargees += OnDonneesRechargees;
 
         if (AppDataService.Instance.IsLoaded)
         {
@@ -85,6 +86,14 @@ public partial class NotesViewModel : ViewModelBase
             // Données pas encore prêtes, on attend la notification unique de ReplaceAll
             Modules.CollectionChanged += OnModulesLoaded;
         }
+    }
+    
+    private void OnDonneesRechargees()
+    {
+        SelectedModule = Modules.FirstOrDefault();
+        RefreshAllNotes();
+        RefreshSelectedModuleBranches();
+        _ = ActualiserIndicateursDocumentsAsync();
     }
 
     private void OnModulesLoaded(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

@@ -271,7 +271,10 @@
 
                     <TextBlock Text="Temps (heures)" FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{DynamicResource SecondaryForeground}" Margin="0,0,0,-10" />
-                    <NumericUpDown Value="{CompiledBinding EditingEntree.Duree}" Increment="0.5" Minimum="0" FormatString="0.0"
+                    
+                    <NumericUpDown Value="{Binding DureeEdition, TargetNullValue=0}" 
+                                   Increment="0.5" Minimum="0"
+                                   FormatString="0.0"
                                    HorizontalAlignment="Stretch" />
 
                     <TextBlock Text="Type de travail" FontSize="{StaticResource FontSizeSmall}"

@@ -54,10 +54,9 @@ public partial class HomeViewModel : ViewModelBase
     public HomeViewModel()
     {
         Modules = AppDataService.Instance.Modules;
+        
     }
-
-    // déclencheurs automatiques
-
+    
 
     partial void OnSelectedModuleChanged(ModuleViewModel? value)
     {

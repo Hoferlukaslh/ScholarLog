@@ -47,6 +47,9 @@ public class AppDataService
     private AppDataService()
     {
     }
+    
+    /// <summary> Déclenché après chaque rechargement complet des données. </summary>
+    public event Action? DonneesRechargees;
 
     /// <summary>
     /// Charge les données depuis la base SQLite de manière asynchrone.
@@ -96,6 +99,8 @@ public class AppDataService
 
         Modules.ReplaceAll(nouveauxModules);
         IsLoaded = true;
+        
+        DonneesRechargees?.Invoke();
     }
 
     /// <summary>
