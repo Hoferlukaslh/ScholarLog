@@ -47,15 +47,16 @@ public class MonDbContext : DbContext
     /// <param name="options">Constructeur d'options pour le contexte.</param>
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        // Définit le chemin de la base de données dans le répertoire de l'exécutable
-        string dbPath = Path.Combine(AppContext.BaseDirectory, "BDD.db");
+        // Utilise le chemin choisi par l'utilisateur, ou le défaut dans AppData
+        string dbPath = AppSettingsService.Instance.EffectiveDatabasePath;
 
-        // Journalisation du chemin pour le débogage console
         Console.WriteLine($"Base de données située à : {dbPath}");
+
+        // S'assure que le dossier parent existe (cas d'un premier lancement)
+        Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
 
         options
             .UseSqlite($"Data Source={dbPath}")
-            // Utilisation du modèle compilé pour accélérer le démarrage de l'application
             .UseModel(ScholarLog.Data.CompiledModels.MonDbContextModel.Instance);
 
         /* Note de maintenance :

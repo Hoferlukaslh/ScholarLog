@@ -37,17 +37,7 @@ public class DataRepository : IDisposable
     public DataRepository()
     {
         _context = new MonDbContext();
-
         InitialiserBaseDeDonnees();
-
-        try
-        {
-            _context.Database.ExecuteSqlRaw("VACUUM;");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Nettoyage base de données ignoré : {ex.Message}");
-        }
     }
 
     /// <summary>

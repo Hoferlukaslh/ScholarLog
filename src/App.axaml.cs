@@ -1,3 +1,6 @@
+using System;
+using ScholarLog.Data;
+
 namespace ScholarLog;
 
 using Avalonia;
@@ -25,17 +28,29 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-            // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-
             desktop.MainWindow = new MainWindow
             {
                 DataContext = new MainWindowViewModel(),
+            };
+
+            desktop.Exit += (sender, e) =>
+            {
+                try
+                {
+                    using var repo = new DataRepository();
+                    repo.OptimiserBaseDeDonneesAsync().GetAwaiter().GetResult();
+                    Console.WriteLine("VACUUM exécuté à la fermeture.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"VACUUM ignoré : {ex.Message}");
+                }
             };
         }
 
         base.OnFrameworkInitializationCompleted();
     }
-
+    
+   
 
 }

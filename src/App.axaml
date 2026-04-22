@@ -99,6 +99,10 @@
             <x:String x:Key="IconeNavBack">&#xE5A4;</x:String>
             <x:String x:Key="IconeNavFoward">&#xE5A6;</x:String>
             <x:String x:Key="IconeFolder">&#xE24A;</x:String>
+            
+            <x:String x:Key="IconeEclair">&#xE2DE;</x:String>
+            
+            
 
 
             <!-- Couleurs text-->
@@ -111,6 +115,7 @@
                 <!-- Thème sombre -->
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="PrimaryBackground">#DD14172D</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryBackgroundSolid">#14172D</SolidColorBrush>
 
                     <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
                         <GradientStop Offset="0" Color="#CC111214"></GradientStop>
@@ -132,7 +137,7 @@
                 <!-- Thème clair -->
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="PrimaryBackground">#DDF0F2F8</SolidColorBrush>
-                    <SolidColorBrush x:Key="PrimaryBackgroundLinux">#F7F0F2F8</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryBackgroundSolid">#F0F2F8</SolidColorBrush>
 
                     <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
                         <GradientStop Offset="0" Color="#CCDDE1F0"></GradientStop>

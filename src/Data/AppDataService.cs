@@ -34,6 +34,15 @@ public class AppDataService
 
     /// <summary> Indique si le chargement initial a déjà été effectué. </summary>
     public bool IsLoaded { get; private set; }
+    
+    /// <summary>
+    /// Vide le cache mémoire pour forcer un rechargement depuis la nouvelle BDD.
+    /// </summary>
+    public void Reset()
+    {
+        Modules.Clear();
+        IsLoaded = false;
+    }
 
     private AppDataService()
     {

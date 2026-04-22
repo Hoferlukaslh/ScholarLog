@@ -24,9 +24,11 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
+using Avalonia.Media;
 using ScholarLog.ViewModels;
 using Avalonia.Media.Transformation;
 using Avalonia.Reactive;
+using ScholarLog.Data;
 
 namespace ScholarLog.Views;
 
@@ -43,6 +45,8 @@ public partial class MainWindow : Window
     private Border? _sidebarBorder;
     private Grid?   _mainGrid;      // la grille ColumnDefinitions="Auto, *"
     private bool    _isRetractedMode = false;
+    
+    private IDisposable? _backgroundSubscription;
 
     public MainWindow()
     {
@@ -83,6 +87,8 @@ public partial class MainWindow : Window
 
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
+        AppliquerEffets(!AppSettingsService.Instance.Current.DisableEffects);
+        
         // Récupère les références aux contrôles structurels
         _sidebarBorder = this.FindControl<Border>("SidebarBorder");  // à nommer dans le AXAML si besoin
         _mainGrid      = this.FindControl<Grid>("MainLayoutGrid");    // idem
@@ -99,6 +105,56 @@ public partial class MainWindow : Window
 
         if (DataContext is MainWindowViewModel vm)
             await vm.ChargerDonneesInitialesAsync();
+    }
+    
+    /// <summary> Active ou désactive les lumières animées et le flou de fenêtre. </summary>
+    public void AppliquerEffets(bool activer)
+    {
+        var light1 = this.FindControl<Ellipse>("Light1");
+        var light2 = this.FindControl<Ellipse>("Light2");
+
+        if (activer)
+        {
+            _backgroundSubscription?.Dispose();
+            _backgroundSubscription = null;
+
+            this.ClearValue(BackgroundProperty);
+            if (light1 != null) light1.IsVisible = true;
+            if (light2 != null) light2.IsVisible = true;
+
+            this.TransparencyLevelHint = new[]
+            {
+                WindowTransparencyLevel.AcrylicBlur,
+                WindowTransparencyLevel.Blur,
+                WindowTransparencyLevel.Transparent
+            };
+
+            // Remet la liaison dynamique du Style (thème-aware + transparent)
+            this.ClearValue(BackgroundProperty);
+
+            _lightTimer?.Stop();
+            _lightTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(7.5) };
+            _lightTimer.Tick += (s, ev) => MoveLights();
+            _lightTimer.Start();
+            MoveLights();
+        }
+        else
+        {
+            _lightTimer?.Stop();
+            _lightTimer = null;
+
+            if (light1 != null) light1.IsVisible = false;
+            if (light2 != null) light2.IsVisible = false;
+
+            this.TransparencyLevelHint = new[] { WindowTransparencyLevel.None };
+            
+            _backgroundSubscription?.Dispose();
+            _backgroundSubscription = this
+                .GetResourceObservable("PrimaryBackgroundSolid")
+                .Subscribe(new AnonymousObserver<object?>(
+                    brush => this.Background = brush as IBrush
+                ));
+        }
     }
 
     private void OnWindowResized(double width)
