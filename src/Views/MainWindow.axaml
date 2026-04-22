@@ -293,7 +293,7 @@
         </Grid>
 
         <!-- Écran de chargement -->
-        <Grid Background="{StaticResource PrimaryBackground}"
+        <Grid Background="{DynamicResource PrimaryBackground}"
               ZIndex="100"
               IsHitTestVisible="{CompiledBinding IsLoading}"
               IsVisible="{CompiledBinding IsLoading}"

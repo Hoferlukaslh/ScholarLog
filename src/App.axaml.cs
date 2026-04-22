@@ -1,4 +1,5 @@
 using System;
+using Avalonia.Styling;
 using ScholarLog.Data;
 
 namespace ScholarLog;
@@ -26,6 +27,9 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        var savedTheme = AppSettingsService.Instance.Current.IsDarkMode;
+        RequestedThemeVariant = savedTheme ? ThemeVariant.Dark : ThemeVariant.Light;
+        
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow

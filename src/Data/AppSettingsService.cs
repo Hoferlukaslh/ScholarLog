@@ -132,4 +132,6 @@ public class AppSettings
     
     /// <summary> Désactive les effets visuels énergivores (lumières animées, flou). </summary>
     public bool DisableEffects { get; set; } = false;
+    
+    public bool IsDarkMode { get; set; } = true; // dark par défaut
 }

@@ -166,7 +166,8 @@ public partial class SettingsViewModel : ViewModelBase
     {
         if (Application.Current != null)
         {
-            IsDarkModeEnabled = Application.Current.ActualThemeVariant == ThemeVariant.Dark;
+            //IsDarkModeEnabled = Application.Current.ActualThemeVariant == ThemeVariant.Dark;
+            IsDarkModeEnabled = AppSettingsService.Instance.Current.IsDarkMode;
             Modules           = AppDataService.Instance.Modules;
         }
 
@@ -182,7 +183,14 @@ public partial class SettingsViewModel : ViewModelBase
     partial void OnIsDarkModeEnabledChanged(bool value)
     {
         if (Application.Current != null)
+        {
+            //Application.Current.RequestedThemeVariant = value ? ThemeVariant.Dark : ThemeVariant.Light;
+            
             Application.Current.RequestedThemeVariant = value ? ThemeVariant.Dark : ThemeVariant.Light;
+            AppSettingsService.Instance.Current.IsDarkMode = value;
+            AppSettingsService.Instance.Save();
+        }
+           
     }
 
     // -------------------------------------------------------------------------
