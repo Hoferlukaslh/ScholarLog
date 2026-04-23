@@ -1,0 +1,157 @@
+﻿<!--
+    Fichier      :  ModalExport.axaml
+    Projet       :  ScholarLog
+
+    Description  :
+        Composant réutilisable pour l'exportation de données textuelles.
+        Affiche un overlay modal avec sélecteur de format (MD / CSV / JSON),
+        un aperçu du contenu, un bouton copie presse-papier et un bouton
+        d'enregistrement sur disque.
+
+    Auteur       :  Lukas Hofer - TINF2
+    Date         :  23.04.2026
+
+    Utilisation  :
+        <export:ModalExport
+            ZIndex="104"
+            IsOpen="{Binding IsExportModalOpen}"
+            PreviewText="{Binding ExportPreviewText}"
+            Title="Exporter les entrées"
+            SuggestedFileBaseName="{Binding SuggestedExportFileBaseName}"
+            CloseCommand="{Binding FermerModalExportationCommand}"
+            FormatChangedCommand="{Binding ChangerFormatExportationCommand}" />
+-->
+
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Name="This"
+             x:Class="ScholarLog.Components.ModalExport.ModalExport">
+
+    <UserControl.Styles>
+        <Style Selector="RadioButton.export-toggle">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryForeground}" />
+            <Setter Property="Padding" Value="0,8" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="CornerRadius" Value="7" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="RadioButton.export-toggle:checked">
+            <Setter Property="Background" Value="{DynamicResource CardBorder}" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
+        </Style>
+    </UserControl.Styles>
+
+    <!-- Overlay complet : IsVisible piloté par la StyledProperty IsOpen -->
+    <Grid Background="#A0000000" IsVisible="{Binding #This.IsOpen}">
+        <Grid ColumnDefinitions="*, 3*, *" RowDefinitions="*, 3*, *">
+            <Border Grid.Column="1" Grid.Row="1"
+                    MinWidth="550" MinHeight="450"
+                    Background="{DynamicResource ModalBackground}"
+                    CornerRadius="8"
+                    BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
+                    BoxShadow="0 10 30 0 #40000000">
+
+                <Grid RowDefinitions="Auto, Auto, *, Auto" Margin="20">
+
+                    <!-- En-tête : titre + bouton fermeture -->
+                    <Grid Grid.Row="0" Margin="0,0,0,15">
+                        <TextBlock Text="{Binding #This.Title}"
+                                   FontSize="{StaticResource FontSizeMedium}"
+                                   FontWeight="SemiBold" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource PrimaryForeground}" />
+                        <Button Content="✕" Background="Transparent" HorizontalAlignment="Right"
+                                Command="{Binding #This.CloseCommand}" Cursor="Hand" />
+                    </Grid>
+                    <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}"
+                            VerticalAlignment="Bottom" Margin="-20,0" />
+
+                    <!-- Sélecteur de format MD / CSV / JSON -->
+                    <Border Grid.Row="1" Margin="0,20,0,15"
+                            Background="{DynamicResource CardBackground}"
+                            CornerRadius="8" Padding="2">
+                        <Grid ColumnDefinitions="*,*,*">
+                            <RadioButton x:Name="RbMd"
+                                         Grid.Column="0" Classes="export-toggle"
+                                         Content="MD"
+                                         Command="{Binding #This.FormatChangedCommand}"
+                                         CommandParameter="MD"
+                                         GroupName="ExportFormat"
+                                         IsChecked="True" />
+
+                            <RadioButton Grid.Column="1" Classes="export-toggle"
+                                         Content="CSV"
+                                         Command="{Binding #This.FormatChangedCommand}"
+                                         CommandParameter="CSV"
+                                         GroupName="ExportFormat" />
+
+                            <RadioButton Grid.Column="2" Classes="export-toggle"
+                                         Content="JSON"
+                                         Command="{Binding #This.FormatChangedCommand}"
+                                         CommandParameter="JSON"
+                                         GroupName="ExportFormat" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Zone d'aperçu + bouton copier -->
+                    <Grid Grid.Row="2" Margin="0,0,0,15">
+                        <Border Background="#0A0A0A" CornerRadius="8"
+                                BorderBrush="#333" BorderThickness="1">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Auto"
+                                          Margin="15">
+                                <TextBlock Text="{Binding #This.PreviewText}"
+                                           FontFamily="Consolas, Courier New, Monospace"
+                                           Foreground="#CCCCCC"
+                                           FontSize="{StaticResource FontSizeSmall}" />
+                            </ScrollViewer>
+                        </Border>
+
+                        <Button Click="BoutonCopier_Click"
+                                Background="{DynamicResource CardBackground}"
+                                Foreground="{DynamicResource PrimaryForeground}"
+                                CornerRadius="{StaticResource ControlCornerRadius}"
+                                Padding="8"
+                                HorizontalAlignment="Right" VerticalAlignment="Top"
+                                Margin="10" Cursor="Hand"
+                                ToolTip.Tip="Copier dans le presse-papier">
+                            <ContentControl Content="{StaticResource IconeCopy}"
+                                            FontFamily="{StaticResource Phosphor}"
+                                            Foreground="#FFF" />
+                        </Button>
+                    </Grid>
+
+                    <!-- Bouton enregistrer sur disque -->
+                    <Button Grid.Row="3" Click="BoutonSauvegarder_Click"
+                            Background="{DynamicResource CardBackground}"
+                            Foreground="{DynamicResource PrimaryForeground}"
+                            CornerRadius="{StaticResource CardCornerRadius}"
+                            Padding="10" HorizontalAlignment="Right"
+                            Cursor="Hand"
+                            ToolTip.Tip="Enregistrer sur l'ordinateur">
+                        <ContentControl Content="{StaticResource IconeSave}"
+                                        FontFamily="{StaticResource Phosphor}"
+                                        FontSize="{StaticResource IconSizeNormal}" />
+                    </Button>
+
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+
+</UserControl>

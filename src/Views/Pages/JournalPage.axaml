@@ -22,6 +22,7 @@
              xmlns:vm="clr-namespace:ScholarLog.ViewModels"
              xmlns:System="clr-namespace:System;assembly=System.Runtime"
              xmlns:controls="clr-namespace:ScholarLog.Components.DonutDiagram"
+             xmlns:export="clr-namespace:ScholarLog.Components.ModalExport"
              x:Class="ScholarLog.Views.Pages.JournalPage"
              x:DataType="vm:JournalViewModel"
              x:CompileBindings="True">
@@ -446,82 +447,14 @@
         </Grid>
 
         <!-- Modal pour l'exportation des données en MD-CSV-JSON -->
-        <Grid Background="#A0000000" ZIndex="104" IsVisible="{CompiledBinding IsExportModalOpen}">
-            <Grid ColumnDefinitions="*, 3*, *" RowDefinitions="*, 3*, *">
-                <Border Grid.Column="1" Grid.Row="1"
-                        MinWidth="550" MinHeight="450"
-                        Background="{DynamicResource ModalBackground}"
-                        CornerRadius="8"
-                        BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
-                        BoxShadow="0 10 30 0 #40000000">
-
-                    <Grid RowDefinitions="Auto, Auto, *, Auto" Margin="20">
-
-                        <Grid Grid.Row="0" Margin="0,0,0,15">
-                            <TextBlock Text="Exporter les entrées" FontSize="{StaticResource FontSizeMedium}"
-                                       FontWeight="SemiBold" VerticalAlignment="Center" />
-                            <Button Content="✕" Background="Transparent" HorizontalAlignment="Right"
-                                    Command="{Binding FermerModalExportationCommand}" Cursor="Hand" />
-                        </Grid>
-                        <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}"
-                                VerticalAlignment="Bottom" Margin="-20,0" />
-
-                        <Border Grid.Row="1" Margin="0,20,0,15"
-                                Background="{DynamicResource CardBackground}"
-                                CornerRadius="8"
-                                Padding="2">
-                            <Grid ColumnDefinitions="*,*,*">
-                                <RadioButton Name="RbExportMd" Grid.Column="0" Classes="export-toggle"
-                                             Content="MD" Command="{Binding ChangerFormatExportationCommand}"
-                                             CommandParameter="MD" GroupName="ExportFormat" />
-
-                                <RadioButton Name="RbExportCsv" Grid.Column="1" Classes="export-toggle"
-                                             Content="CSV" Command="{Binding ChangerFormatExportationCommand}"
-                                             CommandParameter="CSV" GroupName="ExportFormat" />
-
-                                <RadioButton Name="RbExportJson" Grid.Column="2" Classes="export-toggle"
-                                             Content="JSON" Command="{Binding ChangerFormatExportationCommand}"
-                                             CommandParameter="JSON" GroupName="ExportFormat" />
-                            </Grid>
-                        </Border>
-
-                        <Grid Grid.Row="2" Margin="0,0,0,15">
-                            <Border Background="#0A0A0A" CornerRadius="8" BorderBrush="#333" BorderThickness="1">
-                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                                              Margin="15">
-                                    <TextBlock Text="{CompiledBinding ExportPreviewText}"
-                                               FontFamily="Consolas, Courier New, Monospace"
-                                               Foreground="#CCCCCC"
-                                               FontSize="{StaticResource FontSizeSmall}" />
-                                </ScrollViewer>
-                            </Border>
-
-                            <Button Click="CopierPressePapier"
-                                    Background="{DynamicResource CardBackground}"
-                                    Foreground="{DynamicResource PrimaryForeground}"
-                                    CornerRadius="{StaticResource ControlCornerRadius}" Padding="8"
-                                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"
-                                    ToolTip.Tip="Copier le texte">
-                                <ContentControl Content="{StaticResource IconeCopy}"
-                                                FontFamily="{StaticResource Phosphor}"
-                                                Foreground="#FFF" />
-                            </Button>
-                        </Grid>
-
-                        <Button Grid.Row="3" Click="SauvegarderFichierExportation"
-                                Background="{DynamicResource CardBackground}"
-                                Foreground="{DynamicResource PrimaryForeground}"
-                                CornerRadius="{StaticResource CardCornerRadius}" Padding="10"
-                                HorizontalAlignment="Right" ToolTip.Tip="Enregistrer sur l'ordinateur">
-                            <ContentControl Content="{StaticResource IconeSave}"
-                                            FontFamily="{StaticResource Phosphor}"
-                                            FontSize="{StaticResource IconSizeNormal}" />
-                        </Button>
-
-                    </Grid>
-                </Border>
-            </Grid>
-        </Grid>
+        <export:ModalExport
+            x:Name="ExportModal"
+            ZIndex="104"
+            IsOpen="{CompiledBinding IsExportModalOpen}"
+            PreviewText="{CompiledBinding ExportPreviewText}"
+            Title="Exporter les entrées"
+            CloseCommand="{CompiledBinding FermerModalExportationCommand}"
+            FormatChangedCommand="{CompiledBinding ChangerFormatExportationCommand}" />
 
 
     </Grid>

@@ -5,25 +5,24 @@
     Description  :
         Code-behind de la vue JournalPage.
         Gère la logique purement visuelle et les interactions avec les services
-        système (Presse-papier, Sélecteur de fichiers) qui ne peuvent pas être
-        faits directement dans le ViewModel.
+        système (Sélecteur de fichiers) qui ne peuvent pas être faits directement
+        dans le ViewModel.
 
     Auteur       :  Lukas Hofer - TINF2
     Date         :  19.03.2026
 
     Remarques    :
+        - La gestion du presse-papier et de l'enregistrement sur disque a été
+          déplacée dans le composant ModalExport (ModalExport.axaml.cs).
         - Gère le compte à rebours visuel de 3s pour la suppression sécurisée.
-        - Utilise le StorageProvider d'Avalonia pour l'exportation de fichiers.
+        - BoutonExporter_Tapped n'a plus besoin de retrouver le radio-bouton
+          par nom (FindControl) : le composant ModalExport le réinitialise
+          automatiquement à l'ouverture via OnPropertyChanged.
 */
 
-
 using System;
-using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input.Platform;
-using Avalonia.Interactivity;
-using Avalonia.Platform.Storage;
 using ScholarLog.Data;
 using ScholarLog.ViewModels;
 
@@ -36,7 +35,10 @@ public partial class JournalPage : UserControl
         InitializeComponent();
     }
 
-    // gestion visuelle de la suppression (3s)
+    // -------------------------------------------------------------------------
+    // Suppression sécurisée (compte à rebours visuel de 3 secondes)
+    // -------------------------------------------------------------------------
+
     private async void BoutonSupprimer_Tapped(object? sender, Avalonia.Input.TappedEventArgs e)
     {
         if (sender is Button btn && btn.DataContext is Entree entree && this.DataContext is JournalViewModel vm)
@@ -58,6 +60,10 @@ public partial class JournalPage : UserControl
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Validation de la date via le contrôle calendrier
+    // -------------------------------------------------------------------------
+
     private void CalendarDatePicker_OnSelectedDateChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (sender is CalendarDatePicker picker && this.DataContext is JournalViewModel vm)
@@ -75,7 +81,10 @@ public partial class JournalPage : UserControl
         }
     }
 
-    // exportation et systeme de fichier
+    // -------------------------------------------------------------------------
+    // Ouverture du modal d'exportation
+    // -------------------------------------------------------------------------
+
     private void BoutonExporter_Tapped(object? sender, Avalonia.Input.TappedEventArgs e)
     {
         if (this.DataContext is JournalViewModel vm)
@@ -86,60 +95,19 @@ public partial class JournalPage : UserControl
 
             vm.SetExportAllModules(exportAll);
 
-            // coche le bouton radio dans l'UI (Code-behind)
-            this.FindControl<RadioButton>("RbExportMd").IsChecked = true;
+            // Calcul du nom de fichier suggéré (logique trigramme conservée ici
+            // pour éviter d'ajouter une propriété au ViewModel).
+            string trigramme = "ALL";
+            if (!exportAll)
+            {
+                string nomModule = vm.SelectedModule?.ShortName ?? "MOD";
+                trigramme = nomModule.Length >= 3 ? nomModule[..3].ToUpper() : nomModule.ToUpper();
+            }
+            ExportModal.SuggestedFileBaseName = $"JournalDeTravail_{trigramme}";
 
+            // Le composant ModalExport réinitialise le radio-bouton à MD automatiquement.
             vm.ChangerFormatExportationCommand.Execute("MD");
             vm.IsExportModalOpen = true;
-        }
-    }
-
-    public async void CopierPressePapier(object? sender, RoutedEventArgs e)
-    {
-        if (this.DataContext is JournalViewModel vm && !string.IsNullOrEmpty(vm.ExportPreviewText))
-        {
-            var topLevel = TopLevel.GetTopLevel(this);
-            if (topLevel?.Clipboard != null)
-                await topLevel.Clipboard.SetTextAsync(vm.ExportPreviewText);
-        }
-    }
-
-    public async void SauvegarderFichierExportation(object? sender, RoutedEventArgs e)
-    {
-        if (this.DataContext is JournalViewModel vm && !string.IsNullOrEmpty(vm.ExportPreviewText))
-        {
-            try
-            {
-                var topLevel = TopLevel.GetTopLevel(this);
-                if (topLevel == null) return;
-
-                string extension = vm.GetCurrentExportFormat().ToLower();
-                string trigramme = "ALL";
-
-                if (!vm.GetExportAllModules())
-                {
-                    string nomModule = vm.SelectedModule?.ShortName ?? "MOD";
-                    trigramme = nomModule.Length >= 3 ? nomModule.Substring(0, 3).ToUpper() : nomModule.ToUpper();
-                }
-
-                var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-                {
-                    Title = "Exporter le journal de travail",
-                    SuggestedFileName = $"JournalDeTravail_{trigramme}.{extension}",
-                    DefaultExtension = extension
-                });
-
-                if (file != null)
-                {
-                    await using var stream = await file.OpenWriteAsync();
-                    using var writer = new System.IO.StreamWriter(stream, Encoding.UTF8);
-                    await writer.WriteAsync(vm.ExportPreviewText);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erreur sauvegarde: {ex.Message}");
-            }
         }
     }
 }
