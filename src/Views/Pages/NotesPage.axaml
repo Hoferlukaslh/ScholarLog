@@ -92,7 +92,7 @@
                           IsVisible="{CompiledBinding !IsListView}"
                           ItemsSource="{Binding Modules}"
                           SelectedItem="{Binding SelectedModule}"
-                          Width="350" VerticalAlignment="Center"
+                          Width="250" VerticalAlignment="Center"
                           HorizontalAlignment="Center"
                           Margin="0,0,15,0"
                           PlaceholderText="Sélectionner un module...">
