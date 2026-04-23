@@ -67,6 +67,210 @@ public partial class NotesViewModel : ViewModelBase
     [ObservableProperty] private bool _isPdfViewerOpen = false; // Pour swapper le modal
 
     [ObservableProperty] private byte[]? _activeCbzBlob = null; // Pour liaison directe au lecteur PDF
+    
+
+
+    public void SetExportContext(bool exportAll)
+    {
+        _isExportingAll = exportAll;
+    }
+    
+    private double CalculerNoteModuleExacte(System.Collections.Generic.List<Branche> branches)
+    {
+        if (!branches.Any()) return 0;
+
+        // Séparer les branches classiques de la branche Projet de Module (PM)
+        var branchesClassiques = branches.Where(b => b.Type != TypeCours.PM).ToList();
+        var branchePM = branches.FirstOrDefault(b => b.Type == TypeCours.PM);
+
+        double moyenneBranches = 0;
+
+        // 1. Moyenne des moyennes de branches (qui sont déjà arrondies à 0.5 via CalculerMoyenne)
+        if (branchesClassiques.Any())
+        {
+            moyenneBranches = branchesClassiques.Average(b => b.CalculerMoyenne());
+            
+            // Arrondi intermédiaire à 0.5 de la "Moyenne Théorique"
+            moyenneBranches = Math.Round(moyenneBranches * 2.0, MidpointRounding.AwayFromZero) / 2.0;
+        }
+
+        double notePreArrondi = 0;
+
+        // 2. Intégrer le PM selon la règle : (Moyenne Théorique arrondie + Note PM) / 2
+        if (branchePM != null)
+        {
+            double notePM = branchePM.CalculerMoyenne(); // Déjà arrondie à 0.5 par nature
+            notePreArrondi = branchesClassiques.Any() ? (moyenneBranches + notePM) / 2.0 : notePM;
+        }
+        else
+        {
+            // S'il n'y a pas de PM, la note est juste la moyenne théorique
+            notePreArrondi = moyenneBranches;
+        }
+
+        // 3. Arrondi final à 0.5 de la note globale du module
+        return Math.Round(notePreArrondi * 2.0, MidpointRounding.AwayFromZero) / 2.0;
+    }
+
+    private void GenererTexteExportation(string format)
+    {
+        if (_isExportingAll)
+        {
+            // LOGIQUE 1 : L'utilisateur est dans la vue de base (IsListView == true)
+            // -> Récupère 'AllNotes', trie par Date.
+            // -> Calcule la moyenne de chaque branche et de chaque module.
+            ExportPreviewText = GenererExportGlobal(format);
+        }
+        else
+        {
+            // LOGIQUE 2 : L'utilisateur est dans la vue module (!IsListView)
+            // -> Utilise 'SelectedModule' et ses branches.
+            // -> Calcule la moyenne des branches et la moyenne globale du module.
+            ExportPreviewText = GenererExportModule(format);
+        }
+    }
+
+    private string GenererExportGlobal(string format)
+    {
+        if (format != "MD") return "Format non supporté.";
+        if (!Modules.Any()) return "Aucune donnée à exporter.";
+
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine("# Rapport Global des Résultats");
+        sb.AppendLine();
+
+        sb.AppendLine("## Résumé des moyennes par module");
+        sb.AppendLine();
+
+        foreach (var module in Modules)
+        {
+            sb.AppendLine($"### Module : {module.Nom}");
+            
+            var branchesDuModule = module.Branches.Where(b => b.Notes != null && b.Notes.Any()).ToList();
+            if (!branchesDuModule.Any())
+            {
+                sb.AppendLine("*Aucune note pour ce module.*");
+                sb.AppendLine();
+                continue;
+            }
+
+            var moyennesBranches = branchesDuModule.Select(b => new { 
+                Nom = b.Nom ?? "Inconnu", 
+                Moyenne = b.CalculerMoyenne() 
+            }).ToList();
+            
+            double noteModule = CalculerNoteModuleExacte(branchesDuModule);
+
+            string labelModule = "**NOTE DU MODULE**";
+            int maxB = Math.Max(labelModule.Length, moyennesBranches.Max(m => m.Nom.Length));
+
+            sb.AppendLine($"| {"Branche".PadRight(maxB)} | Moyenne |");
+            sb.AppendLine($"| {new string('-', maxB)} | ------- |");
+
+            foreach (var mb in moyennesBranches)
+            {
+                sb.AppendLine($"| {mb.Nom.PadRight(maxB)} | {mb.Moyenne.ToString("0.0").PadRight(7)} |");
+            }
+            
+            sb.AppendLine($"| {labelModule.PadRight(maxB)} | {($"**{noteModule:0.0}**").PadRight(7)} |");
+            sb.AppendLine();
+        }
+
+        sb.AppendLine("## Historique détaillé de toutes les épreuves");
+        sb.AppendLine();
+        sb.Append(GenererTableauDetaille(AllNotes.ToList()));
+
+        return sb.ToString();
+    }
+    
+    private string GenererTableauDetaille(System.Collections.Generic.List<NoteViewModel> notes)
+    {
+        if (!notes.Any()) return "*Aucune note enregistrée.*\n";
+
+        var sb = new System.Text.StringBuilder();
+        int maxBranche = Math.Max(7, notes.Max(n => (n.BrancheNom ?? "").Length));
+        int maxModule = Math.Max(6, notes.Max(n => (n.ModuleNom ?? "").Length));
+        int maxTitre = Math.Max(5, notes.Max(n => (n.NoteData.titre ?? "").Length));
+        
+        sb.AppendLine($"| {"Branche".PadRight(maxBranche)} | Date       | {"Module".PadRight(maxModule)} | {"Titre".PadRight(maxTitre)} | Note    |");
+        sb.AppendLine($"| {new string('-', maxBranche)} | ---------- | {new string('-', maxModule)} | {new string('-', maxTitre)} | ------- |");
+
+        foreach (var n in notes)
+        {
+            //  ** autour de la note, puis PadRight
+            string noteFormattee = $"**{n.NoteData.Valeur:0.0}**".PadRight(7);
+            
+            sb.AppendLine($"| {(n.BrancheNom ?? "").PadRight(maxBranche)} | {n.NoteData.Date:dd.MM.yyyy} | {(n.ModuleNom ?? "").PadRight(maxModule)} | {(n.NoteData.titre ?? "").PadRight(maxTitre)} | {noteFormattee} |");
+        }
+        return sb.ToString();
+    }
+
+    private string GenererExportModule(string format)
+    {
+        if (format != "MD" || SelectedModule == null) return "Export impossible.";
+
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine($"# Export Module : {SelectedModule.Nom}");
+        sb.AppendLine();
+
+        sb.AppendLine("## Résumé du module");
+        
+        var branches = SelectedModuleBranchesWithNotes.ToList();
+        if (!branches.Any())
+        {
+            sb.AppendLine("*Aucune note pour ce module.*");
+            sb.AppendLine();
+        }
+        else
+        {
+            var moyennes = branches.Select(b => new { 
+                Nom = b.Nom ?? "Inconnu", 
+                Moyenne = b.CalculerMoyenne() 
+            }).ToList();
+            
+            double noteModule = CalculerNoteModuleExacte(branches);
+
+            string labelModule = "**NOTE DU MODULE**";
+            int maxB = Math.Max(labelModule.Length, moyennes.Max(m => m.Nom.Length));
+
+            sb.AppendLine($"| {"Branche".PadRight(maxB)} | Moyenne |");
+            sb.AppendLine($"| {new string('-', maxB)} | ------- |");
+
+            foreach (var m in moyennes)
+                sb.AppendLine($"| {m.Nom.PadRight(maxB)} | {m.Moyenne.ToString("0.0").PadRight(7)} |");
+            
+            sb.AppendLine($"| {labelModule.PadRight(maxB)} | {($"**{noteModule:0.0}**").PadRight(7)} |");
+            sb.AppendLine();
+        }
+
+        sb.AppendLine("## Liste des épreuves");
+        var toutesLesNotes = AllNotes.Where(n => n.ModuleNom == SelectedModule.Nom).ToList();
+        sb.Append(GenererTableauDetaille(toutesLesNotes));
+
+        return sb.ToString();
+    }
+
+    private bool _isExportingAll; // Stocke l'intention de l'utilisateur
+    
+    
+    [ObservableProperty] private bool _isExportModalOpen = false;
+
+    [ObservableProperty] private string _exportPreviewText = string.Empty;
+    
+    [RelayCommand]
+    private void FermerModalExportation()
+    {
+        IsExportModalOpen = false;
+    }
+
+    [RelayCommand]
+    private void ChangerFormatExportation(string format)
+    {
+        if (format != null)
+        {
+            GenererTexteExportation(format);
+        }
+    }
 
     public NotesViewModel()
     {

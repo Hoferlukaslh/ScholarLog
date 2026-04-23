@@ -107,4 +107,35 @@ public partial class NotesPage : UserControl
             await vm.TraiterPdfAttacheAsync(files[0].Path.LocalPath, files[0].Name);
         }
     }
+    
+    // -------------------------------------------------------------------------
+    // Ouverture du modal d'exportation des notes
+    // -------------------------------------------------------------------------
+    private void BoutonExporter_Tapped(object? sender, Avalonia.Input.TappedEventArgs e)
+    {
+        if (this.DataContext is NotesViewModel vm)
+        {
+            // Détermine le contexte d'export :
+            // Si l'utilisateur est sur la vue Liste -> Exporte tout
+            // Si l'utilisateur est sur la vue par Module -> Exporte le module sélectionné
+            bool exportAll = vm.IsListView;
+
+            // Transmet l'intention au ViewModel
+            vm.SetExportContext(exportAll);
+
+            // Construction du nom de fichier
+            string trigramme = "ALL";
+            if (!exportAll && vm.SelectedModule != null)
+            {
+                string nomModule = vm.SelectedModule.Nom ?? "MOD";
+                trigramme = nomModule.Length >= 3 ? nomModule[..3].ToUpper() : nomModule.ToUpper();
+            }
+            
+            ExportModal.SuggestedFileBaseName = $"MesNotes_{trigramme}";
+
+            // Par défaut on affiche en Markdown à l'ouverture
+            vm.ChangerFormatExportationCommand.Execute("MD");
+            vm.IsExportModalOpen = true;
+        }
+    }
 }

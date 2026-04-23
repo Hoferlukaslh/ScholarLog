@@ -22,6 +22,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Pages="clr-namespace:ScholarLog.Views.Pages"
              xmlns:controls="clr-namespace:ScholarLog.Components.PdfReader"
+             xmlns:export="clr-namespace:ScholarLog.Components.ModalExport"
              xmlns:data="clr-namespace:ScholarLog.Data"
              xmlns:vm="using:ScholarLog.ViewModels"
              mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
@@ -120,9 +121,23 @@
                 </Border>
 
 
-                <!-- Bouton d'ajout de note -->
-                <Button Grid.Column="4" Content="{StaticResource IconePlus}"
-                        Classes="icon-button" Command="{Binding OuvrirModalAjoutCommand}" Padding="0 0 1 0 " />
+                <!-- Bouton d'ajout de note et export -->
+                <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                    <Button Content="{StaticResource IconePlus}"
+                            Classes="icon-button" Command="{Binding OuvrirModalAjoutCommand}" Padding="0 0 1 0" />
+
+                    <Button Tapped="BoutonExporter_Tapped"
+                            Background="{DynamicResource CardBackground}" Height="35"
+                            CornerRadius="{StaticResource ControlCornerRadius}" VerticalContentAlignment="Center"
+                            Padding="15,0" Cursor="Hand">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="Exporter" VerticalAlignment="Center" />
+                            <ContentControl Content="{StaticResource IconeExport}"
+                                            FontFamily="{StaticResource Phosphor}"
+                                            FontSize="{StaticResource IconSizeNormal}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
             </Grid>
 
             <Border Grid.Row="1" IsVisible="{CompiledBinding IsListView}" Margin="10,0,10,10"
@@ -474,5 +489,14 @@
                 </Grid>
             </Border>
         </Grid>
+        
+        <export:ModalExport
+            x:Name="ExportModal"
+            ZIndex="105"
+            IsOpen="{CompiledBinding IsExportModalOpen}"
+            PreviewText="{CompiledBinding ExportPreviewText}"
+            Title="Exporter les notes"
+            CloseCommand="{CompiledBinding FermerModalExportationCommand}"
+            FormatChangedCommand="{CompiledBinding ChangerFormatExportationCommand}" />
     </Grid>
 </UserControl>
