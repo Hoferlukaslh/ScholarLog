@@ -314,7 +314,7 @@
 
             <Grid HorizontalAlignment="Stretch"
                   RowDefinitions="57*, Auto, 43*" 
-                  Margin="0,10,10,10">
+                  Margin="0,5,8,10">
 
                 <!-- Moyennes par branche -->
                 <Border Grid.Row="0"

@@ -11,7 +11,6 @@ namespace ScholarLog.Components.DonutDiagram;
 
 public partial class DonutChartControl : UserControl
 {
-    // Déclaration de la propriété Avalonia pour lier les données
     public static readonly StyledProperty<IEnumerable<DonutItem>?> ItemsSourceProperty =
         AvaloniaProperty.Register<DonutChartControl, IEnumerable<DonutItem>?>(nameof(ItemsSource));
 
@@ -21,57 +20,184 @@ public partial class DonutChartControl : UserControl
         set => SetValue(ItemsSourceProperty, value);
     }
 
+    private readonly string[] _colorPalette = 
+        { "#CC4A90E2", "#CC50E3C2", "#CCF5A623", "#CCD0021B", "#CCBD10E0", "#CCB8E986", "#CC8B572A" };
+
+    private bool? _estModeLarge = null;
+
     public DonutChartControl()
     {
         InitializeComponent();
     }
 
-    // Écoute les changements de la propriété ItemsSource pour redessiner le graphique
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
 
         if (change.Property == ItemsSourceProperty)
         {
-            // 1. Si l'ancienne liste était "Observable", on se désabonne pour éviter les fuites mémoire
             if (change.OldValue is INotifyCollectionChanged oldObservable)
-            {
                 oldObservable.CollectionChanged -= OnItemsSourceCollectionChanged;
-            }
 
-            // 2. Si la nouvelle liste est "Observable", on s'abonne à ses changements (Add/Clear)
             if (change.NewValue is INotifyCollectionChanged newObservable)
-            {
                 newObservable.CollectionChanged += OnItemsSourceCollectionChanged;
-            }
 
-            // 3. On redessine dans tous les cas
-            DessinerGraphique();
+            RafraichirCompletement();
         }
     }
 
-// Cette méthode est appelée dès que vous faites .Clear() ou .Add() dans HomePage.axaml.cs
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
+    {
+        base.OnSizeChanged(e);
+        AdapterMiseEnPage(e.NewSize.Width, e.NewSize.Height);
+    }
+
+    private void AdapterMiseEnPage(double w, double h)
+    {
+        if (w <= 0 || h <= 0) return;
+
+        bool doitEtreLarge = (w >= h * 1.2) && (w > 250);
+
+        if (doitEtreLarge)
+        {
+            LegendScroll.MaxHeight = Math.Max(50, h - 20); 
+            LegendScroll.MaxWidth = Math.Max(50, w * 0.45); 
+        }
+        else
+        {
+            LegendScroll.MaxHeight = Math.Max(50, h * 0.45); 
+            LegendScroll.MaxWidth = double.PositiveInfinity;
+        }
+
+        if (_estModeLarge.HasValue && _estModeLarge.Value == doitEtreLarge) return;
+        _estModeLarge = doitEtreLarge;
+
+        if (doitEtreLarge)
+        {
+            MainGrid.RowDefinitions = RowDefinitions.Parse("*, 0");
+            MainGrid.ColumnDefinitions = ColumnDefinitions.Parse("*, Auto");
+
+            Grid.SetRow(DonutCanvas, 0);
+            Grid.SetColumn(DonutCanvas, 0);
+            Grid.SetRowSpan(DonutCanvas, 2);
+            Grid.SetColumnSpan(DonutCanvas, 1);
+            DonutCanvas.Margin = new Thickness(0, 0, 15, 0); 
+
+            Grid.SetRow(LegendScroll, 0);
+            Grid.SetColumn(LegendScroll, 1);
+            Grid.SetRowSpan(LegendScroll, 2);
+            Grid.SetColumnSpan(LegendScroll, 1);
+            
+            LegendPanel.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left;
+            LegendPanel.Margin = new Thickness(0, 10, 10, 10);
+        }
+        else
+        {
+            MainGrid.RowDefinitions = RowDefinitions.Parse("*, Auto");
+            MainGrid.ColumnDefinitions = ColumnDefinitions.Parse("*, 0");
+
+            Grid.SetRow(DonutCanvas, 0);
+            Grid.SetColumn(DonutCanvas, 0);
+            Grid.SetRowSpan(DonutCanvas, 1);
+            Grid.SetColumnSpan(DonutCanvas, 2);
+            DonutCanvas.Margin = new Thickness(0, 0, 0, 15);
+
+            Grid.SetRow(LegendScroll, 1);
+            Grid.SetColumn(LegendScroll, 0);
+            Grid.SetRowSpan(LegendScroll, 1);
+            Grid.SetColumnSpan(LegendScroll, 2);
+            
+            LegendPanel.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center;
+            LegendPanel.Margin = new Thickness(0, 0, 0, 10);
+        }
+    }
+
     private void OnItemsSourceCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        DessinerGraphique();
+        RafraichirCompletement();
     }
 
     private void OnDonutCanvasSizeChanged(object? sender, SizeChangedEventArgs e)
     {
-        DessinerGraphique();
+        DessinerDonut();
     }
 
-    private void DessinerGraphique()
+    private void RafraichirCompletement()
+    {
+        GenererLegende();
+        DessinerDonut();
+    }
+
+    private void GenererLegende()
+    {
+        LegendPanel.Children.Clear();
+
+        var donnees = ItemsSource;
+        if (donnees == null || !donnees.Any()) return;
+
+        double total = donnees.Sum(d => d.Value);
+        if (total <= 0) return;
+
+        IBrush? texteBrush = null;
+        if (this.TryFindResource("PrimaryForeground", out var fgRes) && fgRes is IBrush brush)
+            texteBrush = brush;
+
+        int colorIndex = 0;
+        foreach (var item in donnees)
+        {
+            if (item.Value <= 0) continue;
+
+            double proportion = item.Value / total;
+            var sliceColor = SolidColorBrush.Parse(_colorPalette[colorIndex % _colorPalette.Length]);
+
+            var legendItem = new Grid
+            {
+                ColumnDefinitions = ColumnDefinitions.Parse("Auto, *"),
+                Margin = new Thickness(5, 2)
+            };
+
+            var colorBox = new Border
+            {
+                Width = 10, Height = 10,
+                CornerRadius = new CornerRadius(5),
+                Background = sliceColor,
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top, 
+                Margin = new Thickness(0, 3, 8, 0)
+            };
+            Grid.SetColumn(colorBox, 0);
+
+            var label = new TextBlock
+            {
+                Text = $"{item.Label} : {item.Value:0.#}h ({proportion * 100:0.#}%)",
+                FontSize = 12,
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top,
+                TextWrapping = Avalonia.Media.TextWrapping.Wrap 
+            };
+            
+            if (texteBrush != null)
+                label.Foreground = texteBrush;
+            
+            Grid.SetColumn(label, 1);
+
+            legendItem.Children.Add(colorBox);
+            legendItem.Children.Add(label);
+            LegendPanel.Children.Add(legendItem);
+
+            colorIndex++;
+        }
+    }
+
+    private void DessinerDonut()
     {
         DonutCanvas.Children.Clear();
-        LegendPanel.Children.Clear();
 
         var donnees = ItemsSource;
         if (donnees == null || !donnees.Any()) return;
 
         double largeur = DonutCanvas.Bounds.Width;
         double hauteur = DonutCanvas.Bounds.Height;
-        if (largeur <= 0 || hauteur <= 0) return;
+        
+        if (largeur <= 10 || hauteur <= 10) return; 
 
         double total = donnees.Sum(d => d.Value);
         if (total <= 0) return;
@@ -81,13 +207,10 @@ public partial class DonutChartControl : UserControl
         double dimensionMinimale = Math.Min(largeur, hauteur);
 
         double outerRadius = (dimensionMinimale / 2) - 5;
-        if (outerRadius <= 0) return;
+        if (outerRadius <= 5) return; 
 
         double innerRadius = outerRadius * 0.6;
         double currentAngle = -Math.PI / 2;
-
-        string[] colorPalette =
-            { "#CC4A90E2", "#CC50E3C2", "#CCF5A623", "#CCD0021B", "#CCBD10E0", "#CCB8E986", "#CC8B572A" };
         int colorIndex = 0;
 
         foreach (var item in donnees)
@@ -103,11 +226,11 @@ public partial class DonutChartControl : UserControl
             double nextAngle = currentAngle + angleProportion;
             int isLargeArc = angleProportion > Math.PI ? 1 : 0;
 
-            // Calculs trigonométriques
             double startX_Outer = centerX + outerRadius * Math.Cos(currentAngle);
             double startY_Outer = centerY + outerRadius * Math.Sin(currentAngle);
             double endX_Outer = centerX + outerRadius * Math.Cos(nextAngle);
             double endY_Outer = centerY + outerRadius * Math.Sin(nextAngle);
+            
             double endX_Inner = centerX + innerRadius * Math.Cos(nextAngle);
             double endY_Inner = centerY + innerRadius * Math.Sin(nextAngle);
             double startX_Inner = centerX + innerRadius * Math.Cos(currentAngle);
@@ -118,7 +241,7 @@ public partial class DonutChartControl : UserControl
                 startX_Outer, startY_Outer, outerRadius, isLargeArc, endX_Outer, endY_Outer,
                 endX_Inner, endY_Inner, innerRadius, startX_Inner, startY_Inner);
 
-            var sliceColor = SolidColorBrush.Parse(colorPalette[colorIndex % colorPalette.Length]);
+            var sliceColor = SolidColorBrush.Parse(_colorPalette[colorIndex % _colorPalette.Length]);
 
             var path = new Path
             {
@@ -131,58 +254,26 @@ public partial class DonutChartControl : UserControl
             ToolTip.SetTip(path, $"{item.Label} : {item.Value:0.#}h ({proportion * 100:0.#}%)");
             DonutCanvas.Children.Add(path);
 
-            // Création de la légende
-            var legendItem = new StackPanel
-            {
-                Orientation = Avalonia.Layout.Orientation.Horizontal,
-                Spacing = 5,
-                Margin = new Thickness(10, 2),
-                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
-            };
-
-            var colorBox = new Border
-            {
-                Width = 10, Height = 10,
-                CornerRadius = new CornerRadius(5),
-                Background = sliceColor,
-                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
-            };
-
-            var label = new TextBlock
-            {
-                Text = $"{item.Label} : {item.Value:0.#}h ({proportion * 100:0.#}%)",
-                FontSize = 12,
-                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
-            };
-
-            if (this.TryFindResource("PrimaryForeground", out var fgRes) && fgRes is IBrush fgBrush)
-                label.Foreground = fgBrush;
-
-            legendItem.Children.Add(colorBox);
-            legendItem.Children.Add(label);
-            LegendPanel.Children.Add(legendItem);
-
             currentAngle = nextAngle;
             colorIndex++;
         }
 
-        // Ajout de la somme des heures
+        double fontSizeCalculee = Math.Max(10, Math.Min(dimensionMinimale * 0.15, innerRadius * 0.8));
+        
         var texteTotal = new TextBlock
         {
             Text = total.ToString("0.#h"),
-            FontSize = dimensionMinimale * 0.12, // Taille de police dynamique en fonction de la taille du donut
+            FontSize = fontSizeCalculee, 
             FontWeight = FontWeight.Bold,
             HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
             VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
         };
 
-        // Appliquer la même couleur de texte que la légende, si définie
         if (this.TryFindResource("PrimaryForeground", out var totalFgRes) && totalFgRes is IBrush totalFgBrush)
         {
             texteTotal.Foreground = totalFgBrush;
         }
 
-        // Le conteneur fait exactement la taille du trou intérieur du donut
         var conteneurCentral = new Border
         {
             Width = innerRadius * 2,
@@ -190,7 +281,6 @@ public partial class DonutChartControl : UserControl
             Child = texteTotal
         };
 
-        // On positionne le conteneur en haut à gauche de la zone du cercle intérieur
         Canvas.SetLeft(conteneurCentral, centerX - innerRadius);
         Canvas.SetTop(conteneurCentral, centerY - innerRadius);
 
