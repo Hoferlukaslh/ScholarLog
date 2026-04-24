@@ -59,7 +59,7 @@
         <Style Selector="RadioButton.view-toggle">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{DynamicResource SecondaryForeground}" />
-            <Setter Property="Padding" Value="15,8" />
+            <Setter Property="Padding" Value="15,5" />
             <Setter Property="CornerRadius" Value="6" />
             <Setter Property="Template">
                 <ControlTemplate>
@@ -84,17 +84,18 @@
                 <TextBlock Grid.Column="0" Text="Mes résultats"
                            FontSize="{StaticResource FontSizeLarge}"
                            Foreground="{DynamicResource PrimaryForeground}"
-                           VerticalAlignment="Center" />
+                           VerticalAlignment="Center" 
+                           Margin="0,0,30,0"/>
 
 
                 <!-- Sélection module -->
-                <ComboBox Grid.Column="2"
+                <ComboBox Grid.Column="1" 
                           IsVisible="{CompiledBinding !IsListView}"
                           ItemsSource="{Binding Modules}"
                           SelectedItem="{Binding SelectedModule}"
                           Width="250" VerticalAlignment="Center"
-                          HorizontalAlignment="Center"
-                          Margin="0,0,15,0"
+                          HorizontalAlignment="Left"
+                          
                           PlaceholderText="Sélectionner un module...">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="data:ModuleViewModel">
@@ -104,7 +105,7 @@
                 </ComboBox>
 
                 <!-- Sélection du mode d'affichage -->
-                <Border Grid.Column="3" Background="{DynamicResource CardBackground}" CornerRadius="8" Padding="3"
+                <Border Grid.Column="2" Background="{DynamicResource CardBackground}" CornerRadius="8" Padding="3"
                         BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                         Margin="0,0,15,0">
                     <StackPanel Orientation="Horizontal">
@@ -123,7 +124,7 @@
 
 
                 <!-- Bouton d'ajout de note et export -->
-                <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                     <Button Content="{StaticResource IconePlus}"
                             Classes="icon-button" Command="{Binding OuvrirModalAjoutCommand}" Padding="0 0 1 0" 
                             BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"/>

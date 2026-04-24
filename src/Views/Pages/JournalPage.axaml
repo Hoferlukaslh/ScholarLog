@@ -72,11 +72,8 @@
         </Style>
     </UserControl.Styles>
 
-
     <Grid>
-
         <Grid RowDefinitions="Auto, *">
-
             <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto, *, Auto" Margin="10,20,10,20">
 
                 <TextBlock Grid.Column="0" Text="Mes Journaux" FontSize="{StaticResource FontSizeLarge}"
