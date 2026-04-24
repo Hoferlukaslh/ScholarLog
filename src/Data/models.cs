@@ -280,9 +280,8 @@ public class ModuleViewModel : ScholarLog.Data.Module
 /// </summary>
 public class NoteViewModel : Note
 {
-    public Note NoteData { get; set; } = new();
     public string BrancheNom { get; set; } = string.Empty;
     public string ModuleNom { get; set; } = string.Empty;
 }
 
-# endregion
+#endregion

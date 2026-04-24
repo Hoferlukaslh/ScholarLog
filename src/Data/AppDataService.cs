@@ -61,46 +61,54 @@ public class AppDataService
 
         var nouveauxModules = new List<ModuleViewModel>();
 
-        await Task.Run(async () =>
+        try
         {
-            using (var repo = new DataRepository())
+            await Task.Run(async () =>
             {
-                var rawModules = await repo.GetModulesAsync();
-
-                if (!rawModules.Any())
+                using (var repo = new DataRepository())
                 {
-                    await CreerModulesParDefautAsync(repo);
-                    rawModules = await repo.GetModulesAsync();
-                }
+                    var rawModules = await repo.GetModulesAsync();
 
-                foreach (var mod in rawModules)
-                {
-                    // Filtrage utilisant l'énumération TypeCours
-                    var branchesTM = mod.Branches.Where(b => b.Type == TypeCours.TM).ToList();
-                    var module = mod.Branches.FirstOrDefault(b => b.Type == TypeCours.M) ?? new Branche();
-
-                    double avgTM = ObtenirMoyenne(branchesTM);
-                    double noteModule = module.Notes.Count == 1 ? module.Notes[0].Valeur : 0;
-
-                    nouveauxModules.Add(new ModuleViewModel
+                    if (!rawModules.Any())
                     {
-                        Id = mod.Id,
-                        Nom = mod.Nom,
-                        AvgTheory = Math.Round(avgTM, 1),
-                        TravailModule = noteModule,
-                        TheoryTrend = DeterminerTendance(branchesTM, avgTM),
-                        Branches = mod.Branches.ToList(),
-                        JournalDeTravail = mod.JournalDeTravail.ToList(),
-                        TypesDeTravail = mod.TypesDeTravail.ToList()
-                    });
-                }
-            }
-        });
+                        await CreerModulesParDefautAsync(repo);
+                        rawModules = await repo.GetModulesAsync();
+                    }
 
-        Modules.ReplaceAll(nouveauxModules);
-        IsLoaded = true;
-        
-        DonneesRechargees?.Invoke();
+                    foreach (var mod in rawModules)
+                    {
+                        // Filtrage utilisant l'énumération TypeCours
+                        var branchesTM = mod.Branches.Where(b => b.Type == TypeCours.TM).ToList();
+                        var module = mod.Branches.FirstOrDefault(b => b.Type == TypeCours.M) ?? new Branche();
+
+                        double avgTM = ObtenirMoyenne(branchesTM);
+                        double noteModule = module.Notes.Count == 1 ? module.Notes[0].Valeur : 0;
+
+                        nouveauxModules.Add(new ModuleViewModel
+                        {
+                            Id = mod.Id,
+                            Nom = mod.Nom,
+                            AvgTheory = Math.Round(avgTM, 1),
+                            TravailModule = noteModule,
+                            TheoryTrend = DeterminerTendance(branchesTM, avgTM),
+                            Branches = mod.Branches.ToList(),
+                            JournalDeTravail = mod.JournalDeTravail.ToList(),
+                            TypesDeTravail = mod.TypesDeTravail.ToList()
+                        });
+                    }
+                }
+            });
+
+            Modules.ReplaceAll(nouveauxModules);
+            IsLoaded = true;
+            
+            DonneesRechargees?.Invoke();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[AppDataService] Erreur chargement : {ex.Message}");
+            throw; // propage pour que le ViewModel puisse afficher un message d'erreur
+        }
     }
 
     /// <summary>

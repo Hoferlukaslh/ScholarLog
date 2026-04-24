@@ -62,7 +62,7 @@ public partial class NotesPage : UserControl
             Note? noteASupprimer = null;
 
             if (btn.DataContext is NoteViewModel nd)
-                noteASupprimer = nd.NoteData;
+                noteASupprimer = nd;
             else if (btn.DataContext is Note n)
                 noteASupprimer = n;
 

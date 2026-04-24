@@ -20,7 +20,18 @@ public class AppSettingsService
 {
     // Singleton
     private static AppSettingsService? _instance;
-    public static AppSettingsService Instance => _instance ??= new AppSettingsService();
+    
+    private static readonly object _lock = new();
+
+    public static AppSettingsService Instance
+    {
+        get
+        {
+            if (_instance == null)
+                lock (_lock) { _instance ??= new AppSettingsService(); }
+            return _instance;
+        }
+    }
     
 
     /// <summary> Settings chargés en mémoire. </summary>

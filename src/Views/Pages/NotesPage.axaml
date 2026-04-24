@@ -193,7 +193,7 @@
                                                VerticalAlignment="Center" />
 
                                     <TextBlock Grid.Column="1"
-                                               Text="{CompiledBinding NoteData.Date, StringFormat={}{0:dd.MM.yyyy}}"
+                                               Text="{CompiledBinding Date, StringFormat={}{0:dd.MM.yyyy}}"
                                                Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}"
                                                VerticalAlignment="Center" />
 
@@ -202,26 +202,28 @@
                                                Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}"
                                                VerticalAlignment="Center" />
 
-                                    <TextBlock Grid.Column="3" Text="{CompiledBinding NoteData.titre}"
-                                               TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding NoteData.titre}"
+                                    <TextBlock Grid.Column="3" Text="{CompiledBinding titre}"
+                                               TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding titre}"
                                                Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}"
                                                VerticalAlignment="Center" />
 
-                                    <TextBlock Grid.Column="4" Text="{CompiledBinding NoteData.Valeur, StringFormat={}{0:0.0}}"
+                                    <TextBlock Grid.Column="4" Text="{CompiledBinding Valeur, StringFormat={}{0:0.0}}"
                                                Margin="0,0,15,0" Foreground="{DynamicResource PrimaryForeground}"
                                                VerticalAlignment="Center" />
 
                                     <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="10"
                                                 HorizontalAlignment="Right">
+                                        <!-- Bouton PDF -->
                                         <Button Content="{StaticResource IconeDocument}" Classes="icon-button-small"
-                                                IsVisible="{CompiledBinding NoteData.HasDocument}"
+                                                IsVisible="{CompiledBinding HasDocument}"
                                                 Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirLecteurPdfCommand}"
-                                                CommandParameter="{Binding NoteData}"
+                                                CommandParameter="{Binding}"
                                                 ToolTip.Tip="Lire le PDF" />
 
+                                        <!-- Bouton modifier -->
                                         <Button Content="{StaticResource IconeCrayon}" Classes="icon-button-small"
                                                 Command="{Binding $parent[UserControl].((vm:NotesViewModel)DataContext).OuvrirModalModificationCommand}"
-                                                CommandParameter="{Binding NoteData}" />
+                                                CommandParameter="{Binding}" />
 
                                         <Button Content="{StaticResource IconeTrash}" Classes="icon-button-small"
                                                 Tapped="BoutonSupprimer_Tapped">
@@ -239,7 +241,7 @@
                                                 </Style>
                                             </Button.Styles>
                                             <Button.IsDefault>
-                                                <Binding Path="NoteData.IsDeletePending" />
+                                                <Binding Path="IsDeletePending" />
                                             </Button.IsDefault>
                                         </Button>
                                     </StackPanel>

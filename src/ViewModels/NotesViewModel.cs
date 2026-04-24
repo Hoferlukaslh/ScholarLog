@@ -186,29 +186,25 @@ public partial class NotesViewModel : ViewModelBase
     private void RefreshAllNotes()
     {
         AllNotes.Clear();
-    
-        var listeTemporaire = new System.Collections.Generic.List<NoteViewModel>();
 
-        foreach (var module in Modules)
-        {
-            if (module.Branches == null) continue;
-            foreach (var branche in module.Branches)
-            {
-                if (branche.Notes == null) continue;
-                foreach (var note in branche.Notes)
-                {
-                    listeTemporaire.Add(new NoteViewModel
+        var listeTemporaire = AppDataService.Instance.Modules
+            .Where(module => module.Branches != null)
+            .SelectMany(module => module.Branches
+                .Where(branche => branche.Notes != null)
+                .SelectMany(branche => branche.Notes
+                    .Select(note => new NoteViewModel
                     {
-                        NoteData = note,
+                        Id        = note.Id,
+                        Valeur    = note.Valeur,
+                        Date      = note.Date,
+                        titre     = note.titre,
+                        BrancheId = note.BrancheId,
                         BrancheNom = branche.Nom,
-                        ModuleNom = module.Nom
-                    });
-                }
-            }
-        }
+                        ModuleNom  = module.Nom
+                    })))
+            .OrderByDescending(n => n.Date);
 
-        foreach (var nvm in listeTemporaire.OrderByDescending(n => n.NoteData.Date))
-            AllNotes.Add(nvm);
+        foreach (var nvm in listeTemporaire) AllNotes.Add(nvm);
     }
 
     private void RefreshSelectedModuleBranches()
@@ -550,10 +546,10 @@ public partial class NotesViewModel : ViewModelBase
         foreach (var n in AllNotes)
         {
             string branche = n.BrancheNom ?? "";
-            string date = n.NoteData.Date.ToString("dd.MM.yyyy");
+            string date = n.Date.ToString("dd.MM.yyyy");
             string module = n.ModuleNom ?? "";
-            string titre = (n.NoteData.titre ?? "").Replace(";", ","); // Sécurité CSV
-            string note = n.NoteData.Valeur.ToString("0.0");
+            string titre = (n.titre ?? "").Replace(";", ","); // Sécurité CSV
+            string note = n.Valeur.ToString("0.0");
 
             sb.AppendLine($"{branche};{date};{module};{titre};{note}");
         }
@@ -574,10 +570,10 @@ public partial class NotesViewModel : ViewModelBase
         foreach (var n in notesDuModule)
         {
             string branche = n.BrancheNom ?? "";
-            string date = n.NoteData.Date.ToString("dd.MM.yyyy");
+            string date = n.Date.ToString("dd.MM.yyyy");
             string module = n.ModuleNom ?? "";
-            string titre = (n.NoteData.titre ?? "").Replace(";", ","); // Sécurité CSV
-            string note = n.NoteData.Valeur.ToString("0.0");
+            string titre = (n.titre ?? "").Replace(";", ","); // Sécurité CSV
+            string note = n.Valeur.ToString("0.0");
 
             sb.AppendLine($"{branche};{date};{module};{titre};{note}");
         }
@@ -754,7 +750,7 @@ public partial class NotesViewModel : ViewModelBase
         var sb = new System.Text.StringBuilder();
         int maxBranche = Math.Max(7, notes.Max(n => (n.BrancheNom ?? "").Length));
         int maxModule = Math.Max(6, notes.Max(n => (n.ModuleNom ?? "").Length));
-        int maxTitre = Math.Max(5, notes.Max(n => (n.NoteData.titre ?? "").Length));
+        int maxTitre = Math.Max(5, notes.Max(n => (n.titre ?? "").Length));
         
         sb.AppendLine($"| {"Branche".PadRight(maxBranche)} | Date       | {"Module".PadRight(maxModule)} | {"Titre".PadRight(maxTitre)} | Note    |");
         sb.AppendLine($"| {new string('-', maxBranche)} | ---------- | {new string('-', maxModule)} | {new string('-', maxTitre)} | ------- |");
@@ -762,9 +758,9 @@ public partial class NotesViewModel : ViewModelBase
         foreach (var n in notes)
         {
             //  ** autour de la note, puis PadRight
-            string noteFormattee = $"**{n.NoteData.Valeur:0.0}**".PadRight(7);
+            string noteFormattee = $"**{n.Valeur:0.0}**".PadRight(7);
             
-            sb.AppendLine($"| {(n.BrancheNom ?? "").PadRight(maxBranche)} | {n.NoteData.Date:dd.MM.yyyy} | {(n.ModuleNom ?? "").PadRight(maxModule)} | {(n.NoteData.titre ?? "").PadRight(maxTitre)} | {noteFormattee} |");
+            sb.AppendLine($"| {(n.BrancheNom ?? "").PadRight(maxBranche)} | {n.Date:dd.MM.yyyy} | {(n.ModuleNom ?? "").PadRight(maxModule)} | {(n.titre ?? "").PadRight(maxTitre)} | {noteFormattee} |");
         }
         return sb.ToString();
     }
