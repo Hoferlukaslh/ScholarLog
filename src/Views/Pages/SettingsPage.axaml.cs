@@ -18,6 +18,7 @@
         - Assure la mise à jour du chemin local de la BDD après sélection.
 */
 
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -81,23 +82,45 @@ public partial class SettingsPage : UserControl
 
     public async void BrowseFile_Click(object? sender, RoutedEventArgs e)
     {
-        var topLevel = TopLevel.GetTopLevel(this);
-        if (topLevel == null) return;
-
-        var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        // Le try/catch est VITAL ici pour macOS. S'il y a une erreur de droits, 
+        // l'application ne crashera pas, elle ira dans le catch.
+        try
         {
-            Title = "Sélectionner la base de données",
-            AllowMultiple = false,
-            FileTypeFilter = new[]
+            var topLevel = TopLevel.GetTopLevel(this);
+            if (topLevel == null) return;
+
+            var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
-                new FilePickerFileType("SQLite") { Patterns = new[] { "*.db", "*.sqlite" } }
-            }
-        });
+                Title = "Sélectionner la base de données",
+                AllowMultiple = false,
+                FileTypeFilter = new[]
+                {
+                    new FilePickerFileType("SQLite") 
+                    { 
+                        Patterns = new[] { "*.db", "*.sqlite" },
+                        // Indispensable pour que macOS comprenne le filtre
+                        AppleUniformTypeIdentifiers = new[] { "public.database", "public.data", "public.item" }
+                    }
+                }
+            });
 
-        if (files != null && files.Count > 0 && this.DataContext is SettingsViewModel vm)
+            if (files != null && files.Count > 0 && this.DataContext is SettingsViewModel vm)
+            {
+                string? localPath = files[0].TryGetLocalPath();
+                if (!string.IsNullOrEmpty(localPath))
+                {
+                    // ON UTILISE AWAIT ! Et on appelle le bon nom de méthode (Update au lieu de Change)
+                    await vm.UpdateDatabasePathAsync(localPath);
+                }
+            }
+        }
+        catch (Exception ex)
         {
-            // met à jour la propriété du ViewModel directement
-            vm.PathToBDD = files[0].Path.LocalPath;
+            Console.WriteLine($"[SettingsPage] Erreur critique interceptée : {ex}");
+            if (this.DataContext is SettingsViewModel vm)
+            {
+                vm.StatusMessage = "Erreur système lors de la lecture du fichier.";
+            }
         }
     }
 }

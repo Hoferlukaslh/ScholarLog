@@ -10,13 +10,13 @@
         <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
         <EnableUnsafeAssemblyLoadSupport>false</EnableUnsafeAssemblyLoadSupport>
 
-        <DebugSymbols>false</DebugSymbols>
-        <DebugType>none</DebugType>
+        <!-- <DebugSymbols>false</DebugSymbols> -->
+        <!-- <DebugType>none</DebugType> -->
         <StackTraceSupport>true</StackTraceSupport> <!-- Mieux pour la prod -->
-        <DebuggerSupport>false</DebuggerSupport>
-        <EventSourceSupport>false</EventSourceSupport>
-        <MetricsSupport>false</MetricsSupport>
-        <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+        <!-- <DebuggerSupport>false</DebuggerSupport> -->
+        <!-- <EventSourceSupport>false</EventSourceSupport> -->
+        <!-- <MetricsSupport>false</MetricsSupport> -->
+        <!-- <MetadataUpdaterSupport>false</MetadataUpdaterSupport> -->
 
         <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport> <!-- Pas de requette web -->
         <ServerGarbageCollection>false</ServerGarbageCollection>

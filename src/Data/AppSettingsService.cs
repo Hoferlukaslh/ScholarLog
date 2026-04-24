@@ -53,7 +53,7 @@ public class AppSettingsService
                 return Current.DatabasePath;
 
             // Fallback : à côté de l'exécutable
-            string cheminParDefaut = Path.Combine(AppContext.BaseDirectory, "BDD.db");
+            string cheminParDefaut = Path.Combine(ConfigDirectory, "BDD.db");
 
             // Si le chemin sauvegardé était différent (BDD déplacée ou settings corrompus),
             // on met à jour et on persiste pour ne pas recréer à chaque lancement

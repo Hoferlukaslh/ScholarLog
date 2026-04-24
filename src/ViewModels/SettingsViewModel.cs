@@ -97,21 +97,25 @@ public partial class SettingsViewModel : ViewModelBase
     public string? PathToBDD
     {
         get => _pathToBDD;
-        set
+        // Le setter fait uniquement son travail : stocker la valeur
+        set => SetProperty(ref _pathToBDD, value);
+    }
+    
+    [RelayCommand]
+    public async Task UpdateDatabasePathAsync(string newPath)
+    {
+        if (!AppSettingsService.IsValidDatabasePath(newPath))
         {
-            if (!AppSettingsService.IsValidDatabasePath(value))
-            {
-                ShowPathError = true;
-                return;
-            }
-
-            if (SetProperty(ref _pathToBDD, value))
-            {
-                AppSettingsService.Instance.Current.DatabasePath = value;
-                AppSettingsService.Instance.Save();
-                _ = RechargerDonneesAsync(); // fire-and-forget avec feedback visuel
-            }
+            ShowPathError = true;
+            return;
         }
+
+        PathToBDD = newPath;
+        AppSettingsService.Instance.Current.DatabasePath = newPath;
+        AppSettingsService.Instance.Save();
+
+        // Ici, nous sommes dans une méthode Async, on peut utiliser "await" en toute sécurité !
+        await RechargerDonneesAsync(); 
     }
     
     private async Task RechargerDonneesAsync()
