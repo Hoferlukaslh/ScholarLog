@@ -32,7 +32,6 @@ public class DataRepository : IDisposable
 
     /// <summary>
     /// Initialise une nouvelle instance du dépôt et s'assure que la base de données est prête à l'emploi.
-    /// Nettoie la base de donnée.
     /// </summary>
     public DataRepository()
     {
@@ -43,15 +42,21 @@ public class DataRepository : IDisposable
     /// <summary>
     /// Vérifie si la base de données et ses tables existent. 
     /// Si ce n'est pas le cas, génère le schéma nécessaire pour stocker les données.
+    /// 
+    /// IMPORTANT : La connexion est ouverte manuellement via OpenConnection() et doit
+    /// impérativement être refermée dans le bloc finally. Sans ça, EF Core hérite d'une
+    /// connexion déjà ouverte lors des requêtes suivantes, ce qui cause un segfault sur
+    /// macOS avec le driver SQLite natif.
     /// </summary>
     private void InitialiserBaseDeDonnees()
     {
         _context.Database.EnsureCreated();
 
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
+        _context.Database.OpenConnection();
+        try
         {
+            using var command = _context.Database.GetDbConnection().CreateCommand();
             command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='module';";
-            _context.Database.OpenConnection();
 
             var result = command.ExecuteScalar();
 
@@ -62,6 +67,12 @@ public class DataRepository : IDisposable
                 databaseCreator.CreateTables();
                 Console.WriteLine("Tables créées dans la base existante.");
             }
+        }
+        finally
+        {
+            // VITAL : ferme la connexion dans tous les cas (succès ou exception),
+            // afin qu'EF Core puisse gérer son propre cycle de connexion par la suite.
+            _context.Database.CloseConnection();
         }
     }
 
@@ -214,7 +225,7 @@ public class DataRepository : IDisposable
 
         _context.Note.Remove(n); // supprime la note elle-même
 
-        // 4. On valide les changements dans la base (exécutera les deux suppressions d'un coup)
+        // On valide les changements dans la base (exécutera les deux suppressions d'un coup)
         await _context.SaveChangesAsync();
     }
 
@@ -272,7 +283,7 @@ public class DataRepository : IDisposable
     /// <param name="cbzData">Blob de données</param>
     public async Task SauvegarderArchiveCbzAsync(int noteId, byte[] cbzData)
     {
-        //  On cherche si la note possède déjà une archive
+        // On cherche si la note possède déjà une archive
         var archiveExistante = await _context.NoteArchive.FirstOrDefaultAsync(a => a.NoteId == noteId);
 
         if (archiveExistante != null)
