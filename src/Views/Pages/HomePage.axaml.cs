@@ -6,15 +6,17 @@
         Code-behind de la vue HomePage.
         Gère les animations d'ouverture/fermeture des panneaux droit et bas
         via MaxWidth/MaxHeight + Transitions Avalonia.
+        Les dimensions s'adaptent dynamiquement en pourcentage de la fenêtre sans lag.
 
     Auteur       :  Lukas Hofer - TINF2
-    Date         :  19.03.2026
+    Date         :  25.04.2026
 */
 
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Animation; // Ajout nécessaire pour la classe Transitions
 using ScholarLog.Data;
 using ScholarLog.ViewModels;
 
@@ -22,14 +24,17 @@ namespace ScholarLog.Views.Pages;
 
 public partial class HomePage : UserControl
 {
-    
-    private const double JournalTargetHeight = 300.0;   // Hauteur cible du panneau journal
-    private const double RightPanelTargetWidth = 250.0; // Largeur cible du panneau droit 
+    private const double JournalHeightPercentage = 0.35;   // 35% de la hauteur totale
+    private const double RightPanelWidthPercentage = 0.30; // 30% de la largeur totale
 
     private CancellationTokenSource? _closeCts;
 
     private Panel?  _rightPanel;
     private Border? _bottomPanel;
+    
+    // On sauvegarde les transitions définies dans le XAML
+    private Transitions? _rightPanelTransitions;
+    private Transitions? _bottomPanelTransitions;
 
     private ModuleViewModel? _lastSelectedModule = null;
 
@@ -39,6 +44,10 @@ public partial class HomePage : UserControl
 
         _rightPanel  = this.FindControl<Panel>("PanneauDroit");
         _bottomPanel = this.FindControl<Border>("PanneauJournal");
+
+        // Récupération des transitions XAML à l'initialisation
+        _rightPanelTransitions = _rightPanel!.Transitions;
+        _bottomPanelTransitions = _bottomPanel!.Transitions;
     }
 
     private void Vm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -47,16 +56,20 @@ public partial class HomePage : UserControl
         {
             var newVal = vm.SelectedModule;
 
-            // Ouverture : on fixe DisplayedModule APRÈS avoir lancé la transition
+            // Ouverture
             if (_lastSelectedModule == null && newVal != null)
             {
                 _closeCts?.Cancel();
 
-                // Mettre MaxWidth/MaxHeight à la valeur cible → déclenche la transition
-                _rightPanel!.MaxWidth   = RightPanelTargetWidth;
-                _bottomPanel!.MaxHeight = JournalTargetHeight;
+                double targetWidth = this.Bounds.Width * RightPanelWidthPercentage;
+                double targetHeight = this.Bounds.Height * JournalHeightPercentage;
 
-                // Mettre DisplayedModule à jour sur le prochain tick UI, après que la transition ait démarré
+                _rightPanel!.Width = targetWidth;
+                _bottomPanel!.Height = targetHeight;
+
+                _rightPanel!.MaxWidth = targetWidth;
+                _bottomPanel!.MaxHeight = targetHeight;
+
                 Avalonia.Threading.Dispatcher.UIThread.Post(() =>
                 {
                     vm.DisplayedModule = newVal;
@@ -72,7 +85,6 @@ public partial class HomePage : UserControl
                 _closeCts = new CancellationTokenSource();
                 var token = _closeCts.Token;
 
-                // Effacer DisplayedModule après la fin de l'animation (150ms)
                 Task.Delay(200, token).ContinueWith(_ =>
                         Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
                         {
@@ -91,7 +103,32 @@ public partial class HomePage : UserControl
     {
         base.OnPropertyChanged(change);
 
-        // Abonnement/désabonnement propre au DataContext (prévention des fuites mémoire)
+        // --- GESTION DU REDIMENSIONNEMENT DE LA FENÊTRE ---
+        if (change.Property == BoundsProperty && _lastSelectedModule != null)
+        {
+            var newBounds = (Rect)change.NewValue!;
+            double newWidth = newBounds.Width * RightPanelWidthPercentage;
+            double newHeight = newBounds.Height * JournalHeightPercentage;
+
+            // 1. On coupe temporairement les animations pour éviter l'effet "élastique"
+            _rightPanel!.Transitions = null;
+            _bottomPanel!.Transitions = null;
+
+            // 2. On redimensionne instantanément
+            _rightPanel.Width = newWidth;
+            _rightPanel.MaxWidth = newWidth;
+
+            _bottomPanel.Height = newHeight;
+            _bottomPanel.MaxHeight = newHeight;
+
+            // 3. On remet les animations actives pour la prochaine fermeture (via Post pour attendre la fin du rendu en cours)
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                if (_rightPanel != null) _rightPanel.Transitions = _rightPanelTransitions;
+                if (_bottomPanel != null) _bottomPanel.Transitions = _bottomPanelTransitions;
+            }, Avalonia.Threading.DispatcherPriority.Render);
+        }
+
         if (change.Property == DataContextProperty)
         {
             if (change.OldValue is HomeViewModel oldVm)
