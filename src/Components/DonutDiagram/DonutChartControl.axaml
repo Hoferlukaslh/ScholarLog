@@ -2,21 +2,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ScholarLog.Components.DonutDiagram.DonutChartControl">
 
-    <Grid RowDefinitions="60*, Auto">
+    <Grid RowDefinitions="*, Auto">
+        
         <Canvas Name="DonutCanvas"
                 Grid.Row="0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Background="Transparent"
-                Margin="0,0,0,10"
+                Margin="0,0,0,15"
+                MinHeight="50" MinWidth="50"
                 SizeChanged="OnDonutCanvasSizeChanged" />
 
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled">
-            <StackPanel Name="LegendPanel"
-                        HorizontalAlignment="Center"
-                        Orientation="Vertical" />
+                      HorizontalScrollBarVisibility="Disabled"
+                      MaxHeight="150">
+             <StackPanel Name="LegendPanel"
+                         HorizontalAlignment="Center"
+                         Orientation="Vertical" />
         </ScrollViewer>
+        
     </Grid>
 </UserControl>
