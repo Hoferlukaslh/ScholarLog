@@ -105,6 +105,7 @@
 
                 <!-- Sélection du mode d'affichage -->
                 <Border Grid.Column="3" Background="{DynamicResource CardBackground}" CornerRadius="8" Padding="3"
+                        BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                         Margin="0,0,15,0">
                     <StackPanel Orientation="Horizontal">
                         <RadioButton Classes="view-toggle" IsChecked="{CompiledBinding IsListView}" GroupName="ViewMode">
@@ -124,11 +125,13 @@
                 <!-- Bouton d'ajout de note et export -->
                 <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                     <Button Content="{StaticResource IconePlus}"
-                            Classes="icon-button" Command="{Binding OuvrirModalAjoutCommand}" Padding="0 0 1 0" />
+                            Classes="icon-button" Command="{Binding OuvrirModalAjoutCommand}" Padding="0 0 1 0" 
+                            BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"/>
 
                     <Button Tapped="BoutonExporter_Tapped"
                             Background="{DynamicResource CardBackground}" Height="35"
                             CornerRadius="{StaticResource ControlCornerRadius}" VerticalContentAlignment="Center"
+                            BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                             Padding="15,0" Cursor="Hand">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Exporter" VerticalAlignment="Center" />
@@ -443,7 +446,8 @@
                     <Button Command="{Binding SauvegarderNoteCommand}" HorizontalAlignment="Right" Margin="0,10,0,0"
                             Padding="15,8" Background="{DynamicResource CardBackground}"
                             Foreground="{DynamicResource PrimaryForeground}"
-                            CornerRadius="{StaticResource FieldCornerRadius}" Cursor="Hand">
+                            CornerRadius="{StaticResource FieldCornerRadius}" Cursor="Hand"
+                            BorderBrush="{DynamicResource CardBorder}" BorderThickness="1">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="{StaticResource IconeSave}" FontFamily="{StaticResource Phosphor}"
                                        FontSize="{StaticResource IconSizeNormal}" VerticalAlignment="Center" />

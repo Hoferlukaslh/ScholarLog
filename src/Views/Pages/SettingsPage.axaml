@@ -344,6 +344,7 @@
                                         <Border Grid.Column="1"
                                                 Background="{DynamicResource CardBackground}"
                                                 CornerRadius="100"
+                                                BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                                                 Padding="8,2"
                                                 Margin="10,0">
                                             <TextBlock Text="{CompiledBinding Branches.Count, StringFormat='{}{0} Branches'}"
@@ -359,6 +360,7 @@
                                                 Cursor="Hand"
                                                 Command="{Binding $parent[UserControl].((vm:SettingsViewModel)DataContext).EditModuleCommand}"
                                                 CommandParameter="{Binding}">
+
                                             <TextBlock FontFamily="{StaticResource Phosphor}"
                                                        Text="{StaticResource IconeCrayon}"
                                                        Foreground="{DynamicResource PrimaryForeground}"

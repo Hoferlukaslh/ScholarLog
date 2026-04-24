@@ -37,6 +37,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
             <Setter Property="CornerRadius" Value="{StaticResource ControlCornerRadius}" />
             <Setter Property="Padding" Value="-0.5, 0, 0,0" />
         </Style>
@@ -117,6 +118,7 @@
                     <Button Tapped="BoutonExporter_Tapped"
                             Background="{DynamicResource CardBackground}" Height="35"
                             CornerRadius="{StaticResource ControlCornerRadius}" VerticalContentAlignment="Center"
+                            BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                             Padding="15,0">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Exporter" VerticalAlignment="Center" />
@@ -303,7 +305,8 @@
                             Padding="15,8"
                             Background="{DynamicResource CardBackground}"
                             Foreground="{DynamicResource PrimaryForeground}"
-                            CornerRadius="{StaticResource ControlCornerRadius}">
+                            CornerRadius="{StaticResource ControlCornerRadius}"
+                            BorderBrush="{DynamicResource CardBorder}" BorderThickness="1">
 
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="{StaticResource IconeSave}"

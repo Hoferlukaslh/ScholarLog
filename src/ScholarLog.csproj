@@ -34,7 +34,7 @@
 
 
         <ApplicationIcon>Assets\Images\ScholarLogLogoEx.ico</ApplicationIcon>
-        <Version>0.0a</Version>
+        <Version>0.01</Version>
         <Title>ScholarLog</Title>
         <Authors>Lukas Hofer</Authors>
         <Description>Interface de gestions de résultats scolaire</Description>
@@ -77,7 +77,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="PDFtoImage" Version="4.0.0" /> <!-- Conflit avec SkiaSharp, V5 fonctionne pas sur linux -->
+        <PackageReference Include="PDFtoImage" Version="5.2.1" /> <!-- Conflit avec SkiaSharp, V5 fonctionne pas sur linux -->
     </ItemGroup>
 
     <ItemGroup>
