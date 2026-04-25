@@ -32,6 +32,16 @@ public partial class HomePage : UserControl
 
     private ModuleViewModel? _lastSelectedModule = null;
 
+    // --- NOUVEAU : Gestion responsive des colonnes ---
+    public static readonly StyledProperty<int> GridColumnsProperty =
+        AvaloniaProperty.Register<HomePage, int>(nameof(GridColumns), 3);
+
+    public int GridColumns
+    {
+        get => GetValue(GridColumnsProperty);
+        set => SetValue(GridColumnsProperty, value);
+    }
+
     public HomePage()
     {
         InitializeComponent();
@@ -45,6 +55,18 @@ public partial class HomePage : UserControl
 
         _rightPanelTransitions = _rightPanel!.Transitions;
         _bottomPanelTransitions = _bottomPanel!.Transitions;
+    }
+
+    // Événement déclenché à chaque fois que la place pour les modules change
+    private void ModulesListBox_SizeChanged(object? sender, SizeChangedEventArgs e)
+    {
+        double width = e.NewSize.Width;
+        
+        // Paliers adaptatifs
+        if (width < 300) GridColumns = 1;
+        else if (width < 500) GridColumns = 2;
+        else if (width < 1200) GridColumns = 3;
+        else GridColumns = 3; // 3 pour l'instant ça me plait
     }
 
     private void Vm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

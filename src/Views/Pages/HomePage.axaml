@@ -1,33 +1,3 @@
-<!--
-    Fichier      :  HomePage.axaml
-    Projet       :  ScholarLog
-    
-    Description  :
-        Vue principale affichant un aperçu des modules de l'utilisateur.
-        Chaque module est présenté sous forme de carte contenant :
-            - Le nom du module (raccourcis à trois lettres)
-            - La moyenne théorique
-            - La note du travail du module
-            - La moyenne du module
-            - L'évolution (trend) des notes
-
-       Les cartes sont générées dynamiquement à partir d'une
-       collection liée au ViewModel.
-       
-       A l'ouverture de la page, aucun module est sélectionné. L'utilisateur voit uniquement les cartes
-       Dès que l'utilisateur clique sur un module (carte) -> affiche le Journal, moy. branche et diagramme.
-
-    Auteur       :  Lukas Hofer - TINF2
-    Date         :  25.04.2026
-
-    Remarques    :
-        - Utilise un ItemsControl avec WrapPanel pour afficher les modules.
-        - Les styles "trendIcon" adaptent automatiquement l'icône et la couleur 
-          en fonction de la tendance (Up, Down, Stable).
-        - Les ressources globales (polices, tailles, couleurs) proviennent de App.axaml.
-        - Les animations d'ouverture/fermeture utilisent MaxWidth/MaxHeight + Transitions
--->
-
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -84,7 +54,7 @@
             </Setter>
         </Style>
         <Style Selector="Border.moduleCard:pointerover">
-            <Setter Property="RenderTransform" Value="scale(1.02)" />
+            <Setter Property="RenderTransform" Value="scale(1.01)" />
         </Style>
 
         <Style Selector="ListBox">
@@ -102,15 +72,13 @@
         </Style>
     </UserControl.Styles>
 
-    <!-- Grille principale : colonne gauche (modules + journal) | colonne droite (graphiques) -->
     <Grid Name="MJETBrancheGraph" ColumnDefinitions="*, Auto, Auto" Margin="0">
 
-        <!-- Colonne gauche : ListBox modules en haut, panneau journal en bas -->
         <Grid Name="ModuleEtJournal" Grid.Column="0" RowDefinitions="*, Auto, Auto" Margin="0"
               VerticalAlignment="Stretch">
 
-            <!-- Row 0 : Liste des modules -->
             <ListBox Grid.Row="0"
+                     SizeChanged="ModulesListBox_SizeChanged"
                      ScrollViewer.VerticalScrollBarVisibility="Visible"
                      ItemsSource="{Binding Modules}"
                      SelectedItem="{Binding SelectedModule, Mode=TwoWay}"
@@ -135,7 +103,7 @@
 
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="3" VerticalAlignment="Stretch" />
+                        <UniformGrid Columns="{CompiledBinding $parent[Pages:HomePage].GridColumns}" VerticalAlignment="Stretch" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 
@@ -195,7 +163,6 @@
             <GridSplitter Grid.Row="1" Height="1" Background="#00FFFFFF" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0" Margin="0"
                           IsVisible="{Binding SelectedModule, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
-            <!-- Row 2 : Panneau journal — animé via MaxHeight -->
             <Border Name="PanneauJournal"
                     Grid.Row="2"
                     MaxHeight="0"
@@ -216,8 +183,7 @@
 
                     <Grid RowDefinitions="Auto, *">
 
-                        <!-- En-tête du journal --> 
-                       <Grid Grid.Row="0" ColumnDefinitions="1.1*, 1*, 2*, 4.4*" Margin="20,20,20,10">
+                        <Grid Grid.Row="0" ColumnDefinitions="1.1*, 1*, 2*, 4.4*" Margin="20,20,20,10">
                             <TextBlock Grid.Column="0" Text="Date" FontWeight="Bold" Classes="Journal-Column" />
                             <TextBlock Grid.Column="1" Text="Temps" FontWeight="Bold" Classes="Journal-Column" HorizontalAlignment="Center" />
                             <TextBlock Grid.Column="2" Text="Type de travail" FontWeight="Bold"
@@ -254,7 +220,6 @@
                         <Border Grid.Row="0" Height="1" Background="{DynamicResource CardBorder}"
                                 VerticalAlignment="Bottom" Margin="10,0" />
 
-                        <!-- Liste des entrées du journal -->
                         <ListBox Grid.Row="1"
                                  Margin="0,5,0,10"
                                  ItemsSource="{Binding Journal}"
@@ -275,7 +240,7 @@
                                         <TextBlock Grid.Column="0" Classes="Journal-column"
                                                    Text="{CompiledBinding Date, StringFormat='{}{0:dd.MM.yy}'}"
                                                    HorizontalAlignment="Left"/>
-                                        
+                                         
                                         <TextBlock Grid.Column="1" Classes="Journal-column"
                                                    Text="{CompiledBinding Duree, StringFormat={}{0}h}"
                                                    HorizontalAlignment="Center"/>
@@ -300,7 +265,6 @@
         <GridSplitter Grid.Column="1" Width="1" Background="#00FFFFFF" Padding="0" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Stretch"
                       IsVisible="{Binding SelectedModule, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
-        <!-- Colonne droite : graphiques et moyennes par branche — animé via MaxWidth -->
         <Panel Name="PanneauDroit"
                Grid.Column="2"
                ClipToBounds="True"
@@ -316,7 +280,6 @@
                   RowDefinitions="57*, Auto, 43*" 
                   Margin="0,5,8,10">
 
-                <!-- Moyennes par branche -->
                 <Border Grid.Row="0"
                         BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                         CornerRadius="{StaticResource CardCornerRadius}"
@@ -388,7 +351,6 @@
                               HorizontalAlignment="Stretch" 
                               Cursor="SizeNorthSouth" />
 
-                <!-- Graphique donut -->
                 <Border Grid.Row="2" Margin="0,5,0,0"
                         BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                         CornerRadius="{StaticResource CardCornerRadius}"
