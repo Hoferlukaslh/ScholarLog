@@ -45,22 +45,30 @@ Développer une application de bureau permettant à un élève de gérer et suiv
 - Usage individuel
 - Élève en formation ES
 
-## Fonctionnalités principales
-### Gestion scolaire
-- Ajout et modification de :
-  - Notes
-  - Cours
-  - Modules
-  - Projets (Journal)
+## fonctionnalités principales
 
-### Suivi
-- Calcul automatique des moyennes
-- Journal de travail (suivi journalisé)
+### Gestion des résultats (Notes)
+* **Structure hiérarchique :** Organisation logique par Modules et Branches.
+* **Calcul automatisé  :** Moyennes des branches calculées dynamiquement et arrondies au 0.5 le plus proche.
+* **Aperçu PDF intégré :** Possibilité de joindre et de lire directement les documents PDF (ex: évaluations scannées) liés à une note grâce à une visionneuse intégrée.
 
-### Exportation
-- Export des données en :
-  - Fichier tableur (type Excel)
-  - Fichier CSV
+### Journal de travail (Time Tracking)
+* **Suivi journalisé :** Enregistrement des entrées documentant le temps passé par module, incluant la date, la durée et une description.
+* **Catégorisation dynamique :** Création et gestion de catégories de travail (ex: Programmation, Recherche, Documentation) personnalisables pour chaque module.
+* **Visualisation :** Tableau de bord interactif avec un diagramme en secteurs (Donut Chart) illustrant la répartition des heures par type de travail.
+
+### Exportation Universelle
+* **Formats supportés :**
+    * **Markdown (MD) :** Tableaux parfaitement alignés et résumés structurés des moyennes.
+    * **CSV :** Format brut optimisé pour l'importation sur Excel ou d'autres tableurs.
+    * **JSON :** Structure hiérarchique propre.
+* Possibilité de copier les données directement dans le presse-papier ou de les sauvegarder sur le disque local.
+
+### Interface & Technique
+* **Tableau de bord :** Vue d'ensemble des modules avec indicateurs de tendance visuels (en hausse, en baisse, stable) pour voir la tendance des notes.
+* **Thème et Ergonomie :** Interface moderne avec thème sombre réduisant la fatigue visuelle. 
+* **Données 100% Locales :** Base de données SQLite embarquée. Possibilité de configurer l'emplacement du fichier de sauvegarde depuis les paramètres.
+* **Multi-plateforme :** Développé avec le framework Avalonia UI en C#, garantissant un fonctionnement natif sur Windows, macOS et Linux.
 
 # Ressources utilisées
 ## Logiciels
