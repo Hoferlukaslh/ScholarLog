@@ -23,7 +23,6 @@ public partial class HomePage : UserControl
     private Panel?  _rightPanel;
     private Border? _bottomPanel;
     
-    // Récupération des grilles pour contrôler les colonnes/lignes du GridSplitter
     private Grid? _mainGrid;
     private Grid? _journalGrid;
     
@@ -32,7 +31,6 @@ public partial class HomePage : UserControl
 
     private ModuleViewModel? _lastSelectedModule = null;
 
-    // --- NOUVEAU : Gestion responsive des colonnes ---
     public static readonly StyledProperty<int> GridColumnsProperty =
         AvaloniaProperty.Register<HomePage, int>(nameof(GridColumns), 3);
 
@@ -49,7 +47,6 @@ public partial class HomePage : UserControl
         _rightPanel  = this.FindControl<Panel>("PanneauDroit");
         _bottomPanel = this.FindControl<Border>("PanneauJournal");
         
-        // Initialisation des grilles
         _mainGrid = this.FindControl<Grid>("MJETBrancheGraph");
         _journalGrid = this.FindControl<Grid>("ModuleEtJournal");
 
@@ -57,16 +54,14 @@ public partial class HomePage : UserControl
         _bottomPanelTransitions = _bottomPanel!.Transitions;
     }
 
-    // Événement déclenché à chaque fois que la place pour les modules change
     private void ModulesListBox_SizeChanged(object? sender, SizeChangedEventArgs e)
     {
         double width = e.NewSize.Width;
         
-        // Paliers adaptatifs
         if (width < 300) GridColumns = 1;
         else if (width < 500) GridColumns = 2;
         else if (width < 1200) GridColumns = 3;
-        else GridColumns = 3; // 3 pour l'instant ça me plait
+        else GridColumns = 3; 
     }
 
     private void Vm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -86,11 +81,9 @@ public partial class HomePage : UserControl
                 double targetWidth = this.Bounds.Width * RightPanelWidthPercentage;
                 double targetHeight = this.Bounds.Height * JournalHeightPercentage;
 
-                // 1. On s'assure que les colonnes sont en "Auto" pour s'enrouler autour de l'animation
                 _mainGrid!.ColumnDefinitions[2].Width = GridLength.Auto;
                 _journalGrid!.RowDefinitions[2].Height = GridLength.Auto;
 
-                // 2. On impose la taille cible pour l'animation
                 _rightPanel.Width = targetWidth;
                 _bottomPanel.Height = targetHeight;
 
@@ -99,18 +92,14 @@ public partial class HomePage : UserControl
 
                 Avalonia.Threading.Dispatcher.UIThread.Post(() => vm.DisplayedModule = newVal);
 
-                // Après l'animation (200ms)
                 Task.Delay(200).ContinueWith(_ => Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => {
                     if (vm.SelectedModule != null) {
                         _rightPanel.Transitions = null;
                         _bottomPanel.Transitions = null;
 
-                        // 3.  On donne la taille actuelle aux définitions de la grille...
                         _mainGrid.ColumnDefinitions[2].Width = new GridLength(_rightPanel.Bounds.Width, GridUnitType.Pixel);
                         _journalGrid.RowDefinitions[2].Height = new GridLength(_bottomPanel.Bounds.Height, GridUnitType.Pixel);
 
-                        // 4. ...et on EFFACE la contrainte du composant ! 
-                        // C'est ce qui permet au GridSplitter de redimensionner le panneau librement.
                         _rightPanel.Width = double.NaN;
                         _bottomPanel.Height = double.NaN;
 
@@ -119,7 +108,6 @@ public partial class HomePage : UserControl
                     }
                 }));
             }
-            
             // FERMETURE
             else if (_lastSelectedModule != null && newVal == null) 
             {
@@ -130,21 +118,17 @@ public partial class HomePage : UserControl
                 _rightPanel!.Transitions = null;
                 _bottomPanel!.Transitions = null;
 
-                // 1. On fige la taille actuelle du panneau (telle que redimensionnée par l'utilisateur)
                 _rightPanel.Width = _rightPanel.Bounds.Width;
                 _bottomPanel.Height = _bottomPanel.Bounds.Height;
                 
                 _rightPanel.MaxWidth = _rightPanel.Bounds.Width;
                 _bottomPanel.MaxHeight = _bottomPanel.Bounds.Height;
 
-                // 2. CORRECTION CRUCIALE : On repasse les grilles en "Auto"
-                // Cela permet à la colonne de se réduire en même temps que le composant animé
                 _mainGrid!.ColumnDefinitions[2].Width = GridLength.Auto;
                 _journalGrid!.RowDefinitions[2].Height = GridLength.Auto;
 
                 Avalonia.Threading.Dispatcher.UIThread.Post(() => {
                     
-                    // 3. On remet les animations et on rétrécit à 0
                     _rightPanel.Transitions = _rightPanelTransitions;
                     _bottomPanel.Transitions = _bottomPanelTransitions;
 
@@ -162,6 +146,11 @@ public partial class HomePage : UserControl
                     TaskContinuationOptions.OnlyOnRanToCompletion,
                     TaskScheduler.Default);
             }
+            // CHANGEMENT DE MODULE ALORS QUE LES PANNEAUX SONT DÉJÀ OUVERTS
+            else if (_lastSelectedModule != null && newVal != null)
+            {
+                Avalonia.Threading.Dispatcher.UIThread.Post(() => vm.DisplayedModule = newVal);
+            }
             
             _lastSelectedModule = newVal;
         }
@@ -171,17 +160,14 @@ public partial class HomePage : UserControl
     {
         base.OnPropertyChanged(change);
 
-        // Gestion du redimmensionnement de la fenetre 
         if (change.Property == BoundsProperty && _lastSelectedModule != null)
         {
-            // On ne redimensionne proportionnellement QUE si aucune animation n'est en cours
             if (_rightPanel!.Transitions == null)
             {
                 var newBounds = (Rect)change.NewValue!;
                 double newWidth = newBounds.Width * RightPanelWidthPercentage;
                 double newHeight = newBounds.Height * JournalHeightPercentage;
 
-                // On modifie la grille, et non le composant direct, pour respecter la logique du GridSplitter
                 _mainGrid!.ColumnDefinitions[2].Width = new GridLength(newWidth, GridUnitType.Pixel);
                 _journalGrid!.RowDefinitions[2].Height = new GridLength(newHeight, GridUnitType.Pixel);
             }
@@ -193,7 +179,13 @@ public partial class HomePage : UserControl
                 oldVm.PropertyChanged -= Vm_PropertyChanged;
 
             if (change.NewValue is HomeViewModel newVm)
+            {
+                // Quand on revient sur la page, on force l'oubli du module pour se calquer sur le visuel
+                newVm.SelectedModule = null;
+                _lastSelectedModule = null;
+
                 newVm.PropertyChanged += Vm_PropertyChanged;
+            }
         }
     }
 
@@ -203,5 +195,11 @@ public partial class HomePage : UserControl
         _closeCts?.Cancel();
         _closeCts?.Dispose();
         _closeCts = null;
+
+        // Prévention des fuites de mémoire
+        if (this.DataContext is HomeViewModel vm)
+        {
+            vm.PropertyChanged -= Vm_PropertyChanged;
+        }
     }
 }

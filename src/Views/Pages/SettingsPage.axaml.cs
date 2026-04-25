@@ -67,15 +67,29 @@ public partial class SettingsPage : UserControl
     {
         if (this.DataContext is SettingsViewModel vm)
         {
-            vm.PropertyChanged += (s, args) =>
-            {
-                // si le ViewModel dit qu'il y a une erreur, on affiche le Flyout
-                if (args.PropertyName == nameof(SettingsViewModel.ShowPathError) && vm.ShowPathError)
-                {
-                    FlyoutBase.ShowAttachedFlyout(this.FindControl<TextBlock>("userbddPath"));
-                    vm.ShowPathError = false;
-                }
-            };
+            // On s'abonne avec une vraie méthode nommée
+            vm.PropertyChanged += Vm_PropertyChanged;
+        }
+    }
+    
+    // On sort la logique dans une méthode à part
+    private void Vm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs args)
+    {
+        if (sender is SettingsViewModel vm && args.PropertyName == nameof(SettingsViewModel.ShowPathError) && vm.ShowPathError)
+        {
+            FlyoutBase.ShowAttachedFlyout(this.FindControl<TextBlock>("userbddPath"));
+            vm.ShowPathError = false;
+        }
+    }
+    
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        
+        if (this.DataContext is SettingsViewModel vm)
+        {
+            // On coupe le lien quand on quitte la page des paramètres
+            vm.PropertyChanged -= Vm_PropertyChanged;
         }
     }
 
