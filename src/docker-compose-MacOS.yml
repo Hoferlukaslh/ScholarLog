@@ -1,0 +1,27 @@
+services:
+  macos:
+    image: dockurr/macos
+    container_name: macos
+    environment:
+      VERSION: "14"
+      DISK_SIZE: "128G"
+      RAM_SIZE: "12G"
+      CPU_CORES: "16"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    devices:
+      - /dev/kvm
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8006:8006
+      - 5900:5900/tcp
+      - 5900:5900/udp
+    volumes:
+      - ./macos:/storage
+    restart: always
+    stop_grace_period: 2m
+
+# docker compose -f ./docker-compose-MacOS.yml up -d
