@@ -1,0 +1,32 @@
+app-id: com.HoferLukas.ScholarLog
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+command: ScholarLog
+
+# Options de sécurité (Sandbox) :
+finish-args:
+  - --share=ipc
+  - --socket=x11         # On force l'accès au serveur d'affichage
+  - --socket=wayland     # On garde Wayland pour les systèmes modernes
+  - --device=dri         # INDISPENSABLE pour Avalonia (Accès matériel/GPU)
+  - --share=network
+  - --filesystem=host    # Pour que lapp puisse lire/écrire la BDD
+  
+
+modules:
+  - name: ScholarLog
+    buildsystem: simple
+    build-commands:
+      # On copie l'exécutable dans /app/bin/
+      - install -D ScholarLog /app/bin/ScholarLog
+      # On copie le fichier .desktop et l'icône dans les dossiers standards de Flatpak
+      - install -D com.HoferLukas.ScholarLog.desktop /app/share/applications/com.HoferLukas.ScholarLog.desktop
+      - install -D com.HoferLukas.ScholarLog.png /app/share/icons/hicolor/256x256/apps/com.HoferLukas.ScholarLog.png
+    sources:
+      - type: file
+        path: ScholarLog
+      - type: file
+        path: com.HoferLukas.ScholarLog.desktop
+      - type: file
+        path: com.HoferLukas.ScholarLog.png
