@@ -1,0 +1,7 @@
+Package: scholarlog
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: arch
+Maintainer: Hofer Lukas <lukas.hofer.ju@gmail.com>
+Description: Logiciel GUI (mono-utilisateur) d'inscription de notes et de journal de travail.

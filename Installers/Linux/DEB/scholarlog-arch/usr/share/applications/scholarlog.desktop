@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=ScholarLog
+Comment=Gestionnaire de logs scolaires
+Exec=ScholarLog
+Icon=ScholarLog
+Terminal=false
+Categories=Education;Utility;
