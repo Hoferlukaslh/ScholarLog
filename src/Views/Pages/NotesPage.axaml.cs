@@ -138,4 +138,24 @@ public partial class NotesPage : UserControl
             vm.IsExportModalOpen = true;
         }
     }
+
+    /// <summary>
+    /// Sécurisation de la saisie de note : empêche la valeur null et clamp entre 1 et 6
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void NoteNumericUpDown_ValueChanged(object? sender, NumericUpDownValueChangedEventArgs e)
+    {
+        if (sender is NumericUpDown nud)
+        {
+            if (nud.Value == null || nud.Value < 1.0m)
+            {
+                nud.Value = 1.0m;
+            }
+            else if (nud.Value > 6.0m)
+            {
+                nud.Value = 6.0m;
+            }
+        }
+    }
 }

@@ -254,6 +254,12 @@ public partial class NotesViewModel : ViewModelBase
             if (ModalSelectedBranche == null || string.IsNullOrWhiteSpace(EditingNote.titre))
                 return;
 
+            // Sécurisation : clamp de la valeur entre 1 et 6 si l'utilisateur a réussi à entrer null
+            if (EditingNote.Valeur < 1.0 || EditingNote.Valeur > 6.0)
+            {
+                EditingNote.Valeur = Math.Clamp(EditingNote.Valeur, 1.0, 6.0);
+            }
+            
             EditingNote.BrancheId = ModalSelectedBranche.Id;
 
             using (var repo = new DataRepository())
@@ -262,7 +268,7 @@ public partial class NotesViewModel : ViewModelBase
                 if (_isEditingExisting) await repo.ModifierNoteAsync(EditingNote);
                 else await repo.AjouterNoteAsync(EditingNote);
 
-                // NOUVEAU : Sauvegarde de l'archive si un fichier a été généré
+                // Sauvegarde de l'archive si un fichier a été généré
                 if (_pendingCbzData != null)
                 {
                     // L'ID de EditingNote est maintenant garanti grâce à EF Core
@@ -385,7 +391,7 @@ public partial class NotesViewModel : ViewModelBase
                 ActiveCbzBlob = await repo.GetArchiveCbzPourNoteAsync(EditingNote.Id);
                 if (ActiveCbzBlob != null)
                 {
-                    IsPdfViewerOpen = true; // --- NOUVEAU : Swap visuel vers le lecteur ---
+                    IsPdfViewerOpen = true; // Swap visuel vers le lecteur
                 }
             }
         }
