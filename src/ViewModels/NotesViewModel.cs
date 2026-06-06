@@ -124,11 +124,18 @@ public partial class NotesViewModel : ViewModelBase
             using var repo = new DataRepository();
             var idsAvecDocument = await repo.GetNoteIdsWithArchiveAsync();
 
+            // Vue "Par module" : met à jour les Note des branches 
             foreach (var module in Modules)
             foreach (var branche in module.Branches)
             foreach (var note in branche.Notes)
             {
                 note.HasDocument = idsAvecDocument.Contains(note.Id);
+            }
+
+            // Vue "Liste" : met à jour les NoteViewModel de AllNotes 
+            foreach (var nvm in AllNotes)
+            {
+                nvm.HasDocument = idsAvecDocument.Contains(nvm.Id);
             }
         }
         catch
@@ -200,7 +207,8 @@ public partial class NotesViewModel : ViewModelBase
                         titre     = note.titre,
                         BrancheId = note.BrancheId,
                         BrancheNom = branche.Nom,
-                        ModuleNom  = module.Nom
+                        ModuleNom  = module.Nom,
+                        HasDocument = note.HasDocument
                     })))
             .OrderByDescending(n => n.Date);
 
