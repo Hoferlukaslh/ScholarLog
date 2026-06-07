@@ -1,5 +1,12 @@
 1. choissez architecture : amd64, arm64, armhf
 2. Renomez le dossier en mettant l'architecture à la fin. EX : scholarlog-x64, scholarlog-ARM64, scholarlog-ARM.
-3. Ajoutez l'executable dans le dossier scholarlog-arch/usr/bin/.
+3. Ajoutez l'executable "ScholarLog" dans le dossier scholarlog-arch/usr/bin/.
 4. Editez le fichier /DEBIAN/control -> modifier avec l'architecture choisi.
-5. Compilez : dpkg-deb --build scholarlog-arch
+
+5. modifier les droits : 
+chmod 755 scholarlog-ARM64/DEBIAN
+chmod 644 scholarlog-ARM64/DEBIAN/control
+chmod 755 scholarlog-ARM64
+chmod 755 scholarlog-ARM64/usr/bin/ScholarLog
+
+5. Compilez : dpkg-deb --build scholarlog-ARM64
