@@ -43,10 +43,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 ; Fichiers spécifiques pour Windows x86 (32-bit)
-Source: "{#BuildPath}\WINx86\{#MyAppExeName}"; DestDir: "{app}"; Check: IsX86; Flags: ignoreversion
+Source: "{#BuildPath}\WIN_x86\{#MyAppExeName}"; DestDir: "{app}"; Check: IsX86; Flags: ignoreversion
 
 ; Fichiers spécifiques pour Windows x64 (Remplacement de IsX64 par IsX64OS)
-Source: "{#BuildPath}\WINx64\{#MyAppExeName}"; DestDir: "{app}"; Check: IsX64OS; Flags: ignoreversion
+Source: "{#BuildPath}\WIN_x64\{#MyAppExeName}"; DestDir: "{app}"; Check: IsX64OS; Flags: ignoreversion
 
 ; Fichiers spécifiques pour Windows ARM64
 Source: "{#BuildPath}\WIN_ARM64\{#MyAppExeName}"; DestDir: "{app}"; Check: IsArm64; Flags: ignoreversion
