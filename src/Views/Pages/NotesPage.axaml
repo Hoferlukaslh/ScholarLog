@@ -130,6 +130,7 @@
                             BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"/>
 
                     <Button Tapped="BoutonExporter_Tapped"
+                            ToolTip.Tip="Exporter (Ctrl/Maj/Alt + Clic pour tout exporter)"
                             Background="{DynamicResource CardBackground}" Height="35"
                             CornerRadius="{StaticResource ControlCornerRadius}" VerticalContentAlignment="Center"
                             BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
@@ -227,6 +228,7 @@
                                                 CommandParameter="{Binding}" />
 
                                         <Button Content="{StaticResource IconeTrash}" Classes="icon-button-small"
+                                                ToolTip.Tip="Supprimer (Clic: Sécurité 3s | Ctrl+Clic: Immédiat)"
                                                 Tapped="BoutonSupprimer_Tapped">
                                             <Button.Styles>
                                                 <Style Selector="Button">

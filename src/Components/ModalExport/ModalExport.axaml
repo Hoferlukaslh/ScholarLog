@@ -88,6 +88,7 @@
                             CornerRadius="8" Padding="2">
                         <Grid ColumnDefinitions="*,*,*">
                             <RadioButton x:Name="RbMd"
+                                         ToolTip.Tip="Format Markdown"
                                          Grid.Column="0" Classes="export-toggle"
                                          Content="MD"
                                          Command="{Binding #This.FormatChangedCommand}"
@@ -96,12 +97,14 @@
                                          IsChecked="True" />
 
                             <RadioButton Grid.Column="1" Classes="export-toggle"
+                                         ToolTip.Tip="Format CSV (Tableur)"
                                          Content="CSV"
                                          Command="{Binding #This.FormatChangedCommand}"
                                          CommandParameter="CSV"
                                          GroupName="ExportFormat" />
 
                             <RadioButton Grid.Column="2" Classes="export-toggle"
+                                         ToolTip.Tip="Format JSON (Données brutes)"
                                          Content="JSON"
                                          Command="{Binding #This.FormatChangedCommand}"
                                          CommandParameter="JSON"

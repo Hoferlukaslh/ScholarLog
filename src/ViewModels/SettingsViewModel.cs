@@ -58,6 +58,8 @@ public partial class SettingsViewModel : ViewModelBase
     
     [ObservableProperty] private bool _isReloading = false;
     
+    [ObservableProperty] private Branche? _selectedPratiqueBranche;
+    
     
 
     // Stockage temporaire pour l'action de suppression en attente
@@ -316,9 +318,12 @@ public partial class SettingsViewModel : ViewModelBase
     private void EditModule(ModuleViewModel module)
     {
         if (module == null) return;
-
         EditingModule    = module;
         ModalBranches    = new ObservableCollection<Branche>(module.Branches ?? new List<Branche>());
+    
+        // Charge la branche pratique existante (PM)
+        SelectedPratiqueBranche = ModalBranches.FirstOrDefault(b => b.Type == ScholarLog.Data.TypeCours.PM);
+    
         IsEditModuleModalOpen = true;
     }
 
@@ -451,5 +456,37 @@ public partial class SettingsViewModel : ViewModelBase
         {
             Console.WriteLine($"Erreur : {ex.Message}");
         }
+    }
+    
+    partial void OnSelectedPratiqueBrancheChanged(Branche? value)
+    {
+        if (EditingModule?.Branches == null) return;
+        if (value == null && !IsEditModuleModalOpen) return; // Évite les bugs à la fermeture du modal
+
+        Task.Run(async () =>
+        {
+            using var repo = new DataRepository();
+            bool hasChanged = false;
+
+            foreach (var b in EditingModule.Branches)
+            {
+                var newType = (value != null && b.Id == value.Id) ? ScholarLog.Data.TypeCours.PM : ScholarLog.Data.TypeCours.TM;
+                if (b.Type != newType)
+                {
+                    b.Type = newType;
+                    await repo.ModifierBrancheAsync(b);
+                    hasChanged = true;
+                }
+            }
+
+            if (hasChanged)
+            {
+                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                {
+                    var index = Modules.IndexOf(EditingModule);
+                    if (index >= 0) Modules[index] = EditingModule;
+                });
+            }
+        });
     }
 }
