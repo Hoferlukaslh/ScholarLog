@@ -286,7 +286,12 @@ public partial class NotesViewModel : ViewModelBase
     [ObservableProperty] private string _activeDocumentTitle = "Document PDF";
 
     [RelayCommand]
-    private void FermerModal() => IsModalOpen = false;
+    private void FermerModal()
+    {
+        _pdfCts?.Cancel();  // annule tout traitement PDF en cours lors de la fermeture
+        
+        IsModalOpen = false;
+    }
 
     [RelayCommand(CanExecute = nameof(CanSaveNote))]
     private async Task SauvegarderNote()
@@ -391,23 +396,35 @@ public partial class NotesViewModel : ViewModelBase
     /// <summary>
     /// Récupère le PDF, le redimensionne et le convertit en CBZ In-Memory
     /// </summary>
+    /// <summary>
+    /// Récupère le PDF, le redimensionne et le convertit en CBZ In-Memory
+    /// </summary>
     public async Task TraiterPdfAttacheAsync(string pdfPath, string fileName)
     {
+        // On annule et on nettoie l'ancien jeton proprement
+        _pdfCts?.Cancel();
+        _pdfCts?.Dispose(); 
+        _pdfCts = new System.Threading.CancellationTokenSource();
+        
+        // On capture le jeton exact de CETTE exécution
+        var tokenUtilise = _pdfCts.Token;
+
         IsPdfProcessing = true;
         PdfStatusText = $"Compression de '{fileName}' en cours...";
         _pendingCbzData = null;
 
-        _pdfCts?.Cancel();
-        _pdfCts = new System.Threading.CancellationTokenSource();
-
         try
         {
-            var fluxImages = PdfManager.ExtractImagesAsync(pdfPath, _pdfCts.Token);
-            var fluxResized = ImageProcessor.ResizeImagesAsync(fluxImages, 2_000_000, _pdfCts.Token);
+            var fluxImages = PdfManager.ExtractImagesAsync(pdfPath, tokenUtilise);
+            var fluxResized = ImageProcessor.ResizeImagesAsync(fluxImages, 2_000_000, tokenUtilise);
 
-            // NE GARDER QU'UNE SEULE FOIS CE BLOC
-            _pendingCbzData = await ArchiveManager.CreateCbzInMemoryAsync(fluxResized,
-                SkiaSharp.SKEncodedImageFormat.Webp, 40, _pdfCts.Token);
+            var data = await ArchiveManager.CreateCbzInMemoryAsync(fluxResized,
+                SkiaSharp.SKEncodedImageFormat.Webp, 40, tokenUtilise);
+
+            // Si la tâche a été annulée juste avant la fin, on arrête ici
+            if (tokenUtilise.IsCancellationRequested) return;
+
+            _pendingCbzData = data;
             double sizeKb = _pendingCbzData.Length / 1024.0;
 
             PdfStatusText = $"Document prêt à être sauvegardé ({sizeKb:F0} Ko)";
@@ -415,15 +432,26 @@ public partial class NotesViewModel : ViewModelBase
         }
         catch (OperationCanceledException)
         {
-            PdfStatusText = "Opération annulée.";
+            // Met à jour l'UI UNIQUEMENT si c'est bien la tâche actuelle qui a été annulée
+            if (_pdfCts.Token == tokenUtilise)
+            {
+                PdfStatusText = "Opération annulée.";
+            }
         }
         catch (Exception ex)
         {
-            PdfStatusText = $"Erreur : {ex.Message}";
+            if (_pdfCts.Token == tokenUtilise)
+            {
+                PdfStatusText = $"Erreur : {ex.Message}";
+            }
         }
         finally
         {
-            IsPdfProcessing = false;
+            // Ne remet le flag à false que si c'est la tâche actuelle qui se termine
+            if (_pdfCts.Token == tokenUtilise)
+            {
+                IsPdfProcessing = false;
+            }
         }
     }
 
