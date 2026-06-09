@@ -9,7 +9,7 @@
         la validation des dates via le contrôle calendrier.
 
     Auteur       :  Lukas Hofer - TINF2
-    Date         :  19.03.2026
+    Date         :  09.06.2026
 
     Remarques    :
         - Utilise un système de confirmation visuelle (IsDeletePending) de 3 secondes

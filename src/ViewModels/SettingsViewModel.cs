@@ -320,10 +320,10 @@ public partial class SettingsViewModel : ViewModelBase
         if (module == null) return;
         EditingModule    = module;
         ModalBranches    = new ObservableCollection<Branche>(module.Branches ?? new List<Branche>());
-    
-        // Charge la branche pratique existante (PM)
-        SelectedPratiqueBranche = ModalBranches.FirstOrDefault(b => b.Type == ScholarLog.Data.TypeCours.PM);
-    
+
+        // On cherche explicitement le type 'M' (Module) 
+        SelectedPratiqueBranche = ModalBranches.FirstOrDefault(b => b.Type == ScholarLog.Data.TypeCours.M);
+
         IsEditModuleModalOpen = true;
     }
 
@@ -468,13 +468,27 @@ public partial class SettingsViewModel : ViewModelBase
             using var repo = new DataRepository();
             bool hasChanged = false;
 
-            foreach (var b in EditingModule.Branches)
+            // On cherche l'ancienne branche définie comme 'M' (qui n'est pas la nouvelle sélection)
+            var ancienneBrancheM = EditingModule.Branches.FirstOrDefault(b => b.Type == ScholarLog.Data.TypeCours.M);
+        
+            if (ancienneBrancheM != null && (value == null || ancienneBrancheM.Id != value.Id))
             {
-                var newType = (value != null && b.Id == value.Id) ? ScholarLog.Data.TypeCours.PM : ScholarLog.Data.TypeCours.TM;
-                if (b.Type != newType)
+                // On la rétrograde en 'TM' (ou PM selon votre préférence par défaut, ici TM)
+                ancienneBrancheM.Type = ScholarLog.Data.TypeCours.TM;
+                await repo.ModifierBrancheAsync(ancienneBrancheM);
+                hasChanged = true;
+            }
+
+            // On promeut la nouvelle branche sélectionnée en 'M'
+            if (value != null)
+            {
+                // On la récupère depuis la liste du module pour être sûr d'avoir la bonne référence
+                var nouvelleBrancheM = EditingModule.Branches.FirstOrDefault(b => b.Id == value.Id);
+            
+                if (nouvelleBrancheM != null && nouvelleBrancheM.Type != ScholarLog.Data.TypeCours.M)
                 {
-                    b.Type = newType;
-                    await repo.ModifierBrancheAsync(b);
+                    nouvelleBrancheM.Type = ScholarLog.Data.TypeCours.M;
+                    await repo.ModifierBrancheAsync(nouvelleBrancheM);
                     hasChanged = true;
                 }
             }
@@ -488,5 +502,13 @@ public partial class SettingsViewModel : ViewModelBase
                 });
             }
         });
+    }
+    
+    [RelayCommand]
+    private void ClearPratiqueBranche()
+    {
+        // Le fait de définir à null déclenche OnSelectedPratiqueBrancheChanged.
+        // Étant donné que value sera null, toutes les branches repasseront en type 'TM'.
+        SelectedPratiqueBranche = null;
     }
 }
