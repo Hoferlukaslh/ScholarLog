@@ -80,6 +80,33 @@ public partial class NotesViewModel : ViewModelBase
         _isExportingAll = exportAll;
     }
     
+    
+    
+    
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SauvegarderNoteCommand))]
+    private bool _isPdfProcessing = false;
+
+    public string EditingNoteTitre
+    {
+        get => EditingNote?.titre ?? string.Empty;
+        set
+        {
+            if (EditingNote != null)
+            {
+                EditingNote.titre = value;
+                OnPropertyChanged();
+                SauvegarderNoteCommand.NotifyCanExecuteChanged();
+            }
+        }
+    }
+
+    public bool CanSaveNote => ModalSelectedBranche != null && !string.IsNullOrWhiteSpace(EditingNote?.titre) && !IsPdfProcessing;
+
+    partial void OnModalSelectedBrancheChanged(Branche? value)
+    {
+        SauvegarderNoteCommand.NotifyCanExecuteChanged();
+    }
    
 
     public NotesViewModel()
@@ -248,6 +275,9 @@ public partial class NotesViewModel : ViewModelBase
             Valeur = 4.0,
             titre = string.Empty
         };
+        
+        OnPropertyChanged(nameof(EditingNoteTitre));
+        SauvegarderNoteCommand.NotifyCanExecuteChanged();
 
         ModalSelectedModule = SelectedModule ?? Modules.FirstOrDefault();
         IsModalOpen = true;
@@ -258,7 +288,7 @@ public partial class NotesViewModel : ViewModelBase
     [RelayCommand]
     private void FermerModal() => IsModalOpen = false;
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanSaveNote))]
     private async Task SauvegarderNote()
     {
         try
@@ -363,6 +393,7 @@ public partial class NotesViewModel : ViewModelBase
     /// </summary>
     public async Task TraiterPdfAttacheAsync(string pdfPath, string fileName)
     {
+        IsPdfProcessing = true;
         PdfStatusText = $"Compression de '{fileName}' en cours...";
         _pendingCbzData = null;
 
@@ -389,6 +420,10 @@ public partial class NotesViewModel : ViewModelBase
         catch (Exception ex)
         {
             PdfStatusText = $"Erreur : {ex.Message}";
+        }
+        finally
+        {
+            IsPdfProcessing = false;
         }
     }
 

@@ -408,7 +408,7 @@
 
                     <TextBlock Text="Titre de l'évaluation" FontSize="{StaticResource FontSizeSmall}"
                                Foreground="{StaticResource SecondaryForeground}" Margin="0,0,0,-10" />
-                    <TextBox Text="{CompiledBinding EditingNote.titre}" HorizontalAlignment="Stretch"
+                    <TextBox Text="{Binding EditingNoteTitre}" HorizontalAlignment="Stretch"
                              PlaceholderText="Ex: TE01 - Gravité" />
 
                     <TextBlock Text="Date" FontSize="{StaticResource FontSizeSmall}"
