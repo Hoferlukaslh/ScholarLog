@@ -8,7 +8,7 @@
         (Create, Read, Update, Delete) et l'initialisation du schéma de la base.
 
     Auteur       :  Lukas Hofer - TINF2
-    Date         :  18.03.2026
+    Date         :  09.06.2026
 */
 
 
@@ -304,5 +304,20 @@ public class DataRepository : IDisposable
         }
 
         await _context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Supprime l'archive CBZ associée à une note.
+    /// </summary>
+    /// <param name="noteId">Identifiant de la note</param>
+    public async Task SupprimerArchiveCbzAsync(int noteId)
+    {
+        var archiveAssociee = await _context.NoteArchive.FirstOrDefaultAsync(a => a.NoteId == noteId);
+
+        if (archiveAssociee != null)
+        {
+            _context.NoteArchive.Remove(archiveAssociee);
+            await _context.SaveChangesAsync();
+        }
     }
 }

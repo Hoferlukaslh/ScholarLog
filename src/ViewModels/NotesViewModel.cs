@@ -64,6 +64,9 @@ public partial class NotesViewModel : ViewModelBase
     private byte[]? _pendingCbzData = null;
     private System.Threading.CancellationTokenSource? _pdfCts;
 
+    // Indique que le document existant doit être supprimé lors de la prochaine sauvegarde
+    private bool _supprimerDocumentExistant = false;
+
     [ObservableProperty] private bool _isDocumentAttached = false; // Pour la visibilité de l'icône
 
     [ObservableProperty] private bool _isPdfViewerOpen = false; // Pour swapper le modal
@@ -236,6 +239,7 @@ public partial class NotesViewModel : ViewModelBase
         PdfStatusText = "Aucun document joint.";
         IsDocumentAttached = false;
         _pendingCbzData = null;
+        _supprimerDocumentExistant = false;
 
 
         EditingNote = new Note
@@ -281,6 +285,11 @@ public partial class NotesViewModel : ViewModelBase
                 {
                     // L'ID de EditingNote est maintenant garanti grâce à EF Core
                     await repo.SauvegarderArchiveCbzAsync(EditingNote.Id, _pendingCbzData);
+                }
+                else if (_supprimerDocumentExistant && _isEditingExisting)
+                {
+                    // Suppression du document existant demandée explicitement par l'utilisateur
+                    await repo.SupprimerArchiveCbzAsync(EditingNote.Id);
                 }
             }
 
@@ -383,6 +392,19 @@ public partial class NotesViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Marque le document lié pour suppression et réinitialise l'état visuel.
+    /// La suppression effective en base est effectuée lors de la sauvegarde de la note.
+    /// </summary>
+    [RelayCommand]
+    private void SupprimerDocument()
+    {
+        _pendingCbzData = null;
+        _supprimerDocumentExistant = true;
+        IsDocumentAttached = false;
+        PdfStatusText = "Document supprimé. Sauvegardez pour confirmer.";
+    }
+
     [RelayCommand]
     private async Task AfficherDocument()
     {
@@ -460,6 +482,7 @@ public partial class NotesViewModel : ViewModelBase
         IsPdfViewerOpen = false;
         PdfStatusText = "Laissez vide pour conserver le document existant.";
         _pendingCbzData = null;
+        _supprimerDocumentExistant = false;
         IsModalOpen = true; // Ouvre l'overlay
 
         // 4. Interroge la base de données en arrière-plan pour savoir s'il y a un PDF

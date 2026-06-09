@@ -428,12 +428,27 @@
                                Foreground="{StaticResource SecondaryForeground}" Margin="0,0,0,-10" />
                     <Border Margin="0,0,0,5" Background="{DynamicResource CardBackground}" CornerRadius="8"
                             Padding="10">
-                        <Grid ColumnDefinitions="*, Auto">
+                        <Grid ColumnDefinitions="*, Auto, Auto">
                             <TextBlock Grid.Column="0" Text="{CompiledBinding PdfStatusText}" VerticalAlignment="Center"
                                        Foreground="{DynamicResource PrimaryForeground}"
                                        TextTrimming="CharacterEllipsis" Margin="0,0,10,0" />
 
-                            <Button Grid.Column="1" Click="BoutonJoindrePdf_Click"
+                            <!-- Bouton supprimer le document lié -->
+                            <Button Grid.Column="1"
+                                    Command="{Binding SupprimerDocumentCommand}"
+                                    IsVisible="{CompiledBinding IsDocumentAttached}"
+                                    Background="{DynamicResource CardBackground}"
+                                    BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
+                                    Padding="7" Cursor="Hand" ToolTip.Tip="Supprimer le document"
+                                    Margin="0,0,8,0">
+                                <TextBlock Text="{StaticResource IconeTrash}"
+                                           FontFamily="{StaticResource Phosphor}"
+                                           FontSize="{StaticResource IconSizeNormal}"
+                                           VerticalAlignment="Center"
+                                           Foreground="#E05252" />
+                            </Button>
+
+                            <Button Grid.Column="2" Click="BoutonJoindrePdf_Click"
                                     Background="{DynamicResource CardBackground}"
                                     BorderBrush="{DynamicResource CardBorder}" BorderThickness="1"
                                     Padding="5" Cursor="Hand" ToolTip.Tip="Joindre un PDF">
